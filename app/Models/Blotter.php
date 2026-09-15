@@ -7,6 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Blotter extends Model
 {
-    /** @use HasFactory<\Database\Factories\BlotterFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'complainant',
+        'respondent',
+        'incident',
+        'incident_date',
+        'status',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'incident_date' => 'date',
+        ];
+    }
 }
