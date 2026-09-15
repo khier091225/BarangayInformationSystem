@@ -5,20 +5,14 @@ namespace Database\Factories;
 use App\Models\Household;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Household>
- */
 class HouseholdFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            //
+            'household_number' => 'HH-' . fake()->unique()->numerify('2026-####'),
+            'household_head'   => fake()->name(),
+            'address'          => fake()->streetAddress() . ', Purok ' . fake()->numberBetween(1, 7),
         ];
     }
 }
