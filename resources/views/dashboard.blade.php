@@ -21,7 +21,7 @@
                <a href="{{ route('households.index') }}"><i data-lucide="house"></i> Households</a>
                 <a href="#certificates" data-section="certificates"><i data-lucide="files" aria-hidden="true"></i> Certificates <span class="nav-count" id="pending-count" aria-label="6 pending requests">6</span></a>
                 <a href="{{ route('blotters.index') }}"><i data-lucide="notebook-pen" aria-hidden="true"></i> Blotter records</a>
-                <a href="#officials" data-section="officials"><i data-lucide="badge-check" aria-hidden="true"></i> Officials</a>
+               <a href="{{ route('officials.index') }}"><i data-lucide="badge-check" aria-hidden="true"></i> Officials</a>
                 <span class="nav-group-label">Community</span>
                 <a href="#reports" data-section="reports"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i> Reports</a>
             </nav>

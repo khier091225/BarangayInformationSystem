@@ -22,7 +22,7 @@
                 <a href="{{ route('households.index') }}"><i data-lucide="house"></i> Households</a>
                 <a href="{{ route('dashboard') }}#certificates"><i data-lucide="files"></i> Certificates</a>
                 <a href="{{ route('blotters.index') }}"><i data-lucide="notebook-pen"></i> Blotter records</a>
-                <a href="{{ route('dashboard') }}#officials"><i data-lucide="badge-check"></i> Officials</a>
+                <a href="{{ route('officials.index') }}"><i data-lucide="badge-check"></i> Officials</a>
             </nav>
         </aside>
 
