@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class DemoWorkspaceTest extends TestCase
+class DashboardTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -24,6 +24,7 @@ class DemoWorkspaceTest extends TestCase
             ->assertSee('Recent Blotter Cases')
             ->assertSee('Newly Registered Residents')
             ->assertDontSee('Sample data')
+            ->assertDontSee('Demo')
             ->assertDontSee('This is a demo')
             ->assertDontSee('Illustrative community snapshot');
     }
@@ -48,3 +49,4 @@ class DemoWorkspaceTest extends TestCase
             ->assertDontSee('data-demo-entry', false);
     }
 }
+

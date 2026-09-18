@@ -9,9 +9,9 @@ use App\Models\Official;
 use App\Models\Resident;
 use Illuminate\View\View;
 
-class DemoWorkspaceController extends Controller
+class DashboardController extends Controller
 {
-    public function dashboard(): View
+    public function index(): View
     {
         $residentCount = Resident::count();
         $householdCount = Household::count();
@@ -37,3 +37,4 @@ class DemoWorkspaceController extends Controller
         ));
     }
 }
+
