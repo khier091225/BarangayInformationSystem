@@ -20,7 +20,7 @@
                 <span class="nav-group-label">BARANGAY MANAGEMENT</span>
                 <a href="{{ route('residents.index') }}"><i data-lucide="users-round"></i> Residents</a>
                 <a href="{{ route('households.index') }}"><i data-lucide="house"></i> Households</a>
-                <a href="{{ route('dashboard') }}#certificates"><i data-lucide="files"></i> Certificates</a>
+                <a href="{{ route('certificates.index') }}"><i data-lucide="files"></i> Certificates</a>
                 <a href="{{ route('blotters.index') }}"><i data-lucide="notebook-pen"></i> Blotter records</a>
                 <a href="{{ route('officials.index') }}" class="selected"><i data-lucide="badge-check"></i> Officials</a>
             </nav>
