@@ -10,7 +10,7 @@
     <body class="workspace-page">
         <!-- Sidebar Navigation -->
         <aside class="workspace-sidebar">
-            <a href="{{ route('home') }}" class="brand workspace-brand">
+            <a href="{{ route('dashboard') }}" class="brand workspace-brand">
                 <span class="brand-mark"><i data-lucide="landmark"></i></span>
                 <span class="brand-name">Barangay<span>INFORMATION SYSTEM</span></span>
             </a>
@@ -24,9 +24,6 @@
                 <a href="{{ route('blotters.index') }}"><i data-lucide="notebook-pen"></i> Blotter records</a>
                 <a href="{{ route('dashboard') }}#officials"><i data-lucide="badge-check"></i> Officials</a>
             </nav>
-            <div class="sidebar-bottom">
-                <a class="public-site-link" href="{{ route('home') }}"><i data-lucide="globe"></i> Public website</a>
-            </div>
         </aside>
 
         <div class="workspace-shell">

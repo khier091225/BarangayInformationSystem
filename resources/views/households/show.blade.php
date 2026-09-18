@@ -10,7 +10,7 @@
     <body class="workspace-page">
         <!-- Sidebar Navigation -->
         <aside class="workspace-sidebar">
-            <a href="{{ route('home') }}" class="brand workspace-brand">
+            <a href="{{ route('dashboard') }}" class="brand workspace-brand">
                 <span class="brand-mark"><i data-lucide="landmark"></i></span>
                 <span class="brand-name">Barangay<span>INFORMATION SYSTEM</span></span>
             </a>
