@@ -5,20 +5,22 @@ namespace Database\Factories;
 use App\Models\Official;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Official>
- */
 class OfficialFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            //
+            'name'           => fake()->name(),
+            'position'       => fake()->randomElement([
+                'Barangay Captain',
+                'Barangay Kagawad',
+                'SK Chairman',
+                'Barangay Secretary',
+                'Barangay Treasurer',
+            ]),
+            'contact_number' => fake()->numerify('09#########'),
+            'term_start'     => '2023-11-01',
+            'term_end'       => '2025-11-01',
         ];
     }
 }

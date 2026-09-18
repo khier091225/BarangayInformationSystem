@@ -5,20 +5,16 @@ namespace Database\Factories;
 use App\Models\Blotter;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Blotter>
- */
 class BlotterFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            //
+            'complainant'   => fake()->name(),
+            'respondent'    => fake()->name(),
+            'incident'      => fake()->sentence(10),
+            'incident_date' => fake()->date(),
+            'status'        => fake()->randomElement(['Pending', 'Settled', 'Dismissed']),
         ];
     }
 }
