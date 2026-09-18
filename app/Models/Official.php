@@ -21,7 +21,7 @@ class Official extends Model
     {
         return [
             'term_start' => 'date',
-            'term_end'   => 'date',
+            'term_end' => 'date',
         ];
     }
 }

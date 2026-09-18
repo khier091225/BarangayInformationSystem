@@ -5,6 +5,7 @@
 .workspace-nav { padding-inline: .75rem; }
 .workspace-nav > a { display: flex; align-items: center; gap: .75rem; min-height: 2.875rem; padding: .625rem .875rem; margin-bottom: .25rem; border-radius: var(--radius); color: var(--muted); }
 .workspace-nav > a:hover, .public-site-link:hover { color: var(--accent); background: var(--accent-soft); }
+.workspace-nav > a:hover { color: var(--accent); background: var(--accent-soft); }
 .workspace-nav > a.selected { color: var(--accent); background: var(--accent-soft); font-weight: 600; }
 .nav-group-label { display: block; padding: 1rem .875rem .5rem; font-size: .875rem; color: var(--muted); }
 .nav-count { margin-left: auto; font-size: .875rem; min-width: 1.75rem; text-align: center; border-radius: .25rem; color: var(--status-wait); background: var(--status-wait-bg); }
@@ -18,6 +19,8 @@
 .sidebar-profile form { margin-left: auto; }
 .signout-button, .notification-button { display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 1px solid transparent; border-radius: var(--radius); background: transparent; color: var(--muted); }
 .signout-button:hover, .notification-button:hover { background: var(--accent-soft); color: var(--accent); }
+.notification-button { display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 1px solid transparent; border-radius: var(--radius); background: transparent; color: var(--muted); margin-left: auto; }
+.notification-button:hover { background: var(--accent-soft); color: var(--accent); }
 .workspace-shell { margin-left: 17rem; min-width: 0; }
 .workspace-topbar { min-height: 4.5rem; border-bottom: 1px solid var(--line); background: var(--surface); display: flex; align-items: center; justify-content: space-between; padding: .75rem 2rem; gap: 1rem; }
 .workspace-breadcrumb { display: flex; align-items: center; gap: .625rem; font-size: .875rem; color: var(--muted); min-width: 0; }

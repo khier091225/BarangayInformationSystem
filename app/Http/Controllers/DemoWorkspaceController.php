@@ -9,6 +9,7 @@ use Illuminate\View\View;
 class DemoWorkspaceController extends Controller
 {
     public function login(Request $request): View|RedirectResponse
+    public function dashboard(): View
     {
         if ($request->session()->get('demo_workspace') === true) {
             return redirect()->route('dashboard');

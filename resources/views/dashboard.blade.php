@@ -13,6 +13,7 @@
         <button class="sidebar-backdrop" aria-label="Close navigation" type="button" hidden></button>
         <aside class="workspace-sidebar" id="workspace-navigation" aria-label="Workspace navigation">
             <a href="{{ route('home') }}" class="brand workspace-brand"><span class="brand-mark"><i data-lucide="landmark" aria-hidden="true"></i></span><span class="brand-name">Barangay<span>Information System</span></span></a>
+            <a href="{{ route('dashboard') }}" class="brand workspace-brand"><span class="brand-mark"><i data-lucide="landmark" aria-hidden="true"></i></span><span class="brand-name">Barangay<span>Information System</span></span></a>
             <div class="workspace-label">Staff workspace <span class="sample-label">Demo</span></div>
             <nav class="workspace-nav" aria-label="Main workspace">
                 <a href="#overview" data-section="overview" class="selected" aria-current="page"><i data-lucide="layout-dashboard" aria-hidden="true"></i> Overview</a>
@@ -28,6 +29,7 @@
             <div class="sidebar-bottom">
                 <a class="public-site-link" href="{{ route('home') }}"><i data-lucide="globe" aria-hidden="true"></i> Public website <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
                 <div class="sidebar-profile"><span class="staff-avatar" aria-hidden="true">BS</span><span><strong>Barangay staff</strong><small>Demo session</small></span><form method="POST" action="{{ route('logout') }}">@csrf<button class="signout-button" title="Sign out" aria-label="Sign out" type="submit"><i data-lucide="log-out" aria-hidden="true"></i></button></form></div>
+                <div class="sidebar-profile"><span class="staff-avatar" aria-hidden="true">BS</span><span><strong>Barangay staff</strong><small>Active workspace</small></span></div>
             </div>
         </aside>
         <div class="workspace-shell">
