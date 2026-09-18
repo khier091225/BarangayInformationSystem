@@ -30,7 +30,13 @@ class DemoWorkspaceTest extends TestCase
         $this->get(route('dashboard'))
             ->assertOk()
             ->assertSee('Sample data')
-            ->assertSee('Recent certificate requests');
+            ->assertSee('Recent certificate requests')
+            ->assertSee('Illustrative community snapshot')
+            ->assertSee('Added residents last until you reload.')
+            ->assertSee('id="workspace-main" tabindex="-1"', false)
+            ->assertSee('id="records-filter"', false)
+            ->assertSee('View chart data')
+            ->assertSee('id="first-name-error"', false);
 
         $this->assertGuest();
     }

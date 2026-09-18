@@ -3,32 +3,36 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#164f3d">
-        <title>Staff Login | Barangay Information System</title>
+        <meta name="theme-color" content="#11665e">
+        <title>Demo workspace | Barangay Information System</title>
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="login-page">
-        <img class="login-background" src="{{ asset('images/community.jpg') }}" alt="" width="1800" height="1000">
-        <header class="login-header">
-            <a href="{{ route('home') }}" class="brand"><span class="brand-mark"><i data-lucide="landmark" aria-hidden="true"></i></span><span class="brand-name">Barangay<span>INFORMATION SYSTEM</span></span></a>
-            <a href="{{ route('home') }}" class="login-back"><i data-lucide="arrow-left" aria-hidden="true"></i> Back to website</a>
+    <body class="demo-entry-page">
+        <a class="skip-link" href="#main">Skip to content</a>
+        <header class="demo-entry-header container">
+            <a href="{{ route('home') }}" class="brand" aria-label="Barangay Information System home"><span class="brand-mark"><i data-lucide="landmark" aria-hidden="true"></i></span><span class="brand-name">Barangay<span>Information System</span></span></a>
+            <a href="{{ route('home') }}" class="text-link"><i data-lucide="arrow-left" aria-hidden="true"></i> Back to website</a>
         </header>
-        <main class="login-main">
-            <section class="login-panel" aria-labelledby="login-heading">
-                <span class="login-emblem"><i data-lucide="landmark" aria-hidden="true"></i></span>
-                <div class="eyebrow">BARANGAY STAFF PORTAL</div>
-                <h1 id="login-heading">Welcome back.</h1>
-                <p class="login-intro">A better day of service starts here.<br>Your barangay workspace is ready.</p>
-                <div class="login-identity"><span class="staff-avatar"><i data-lucide="user-round" aria-hidden="true"></i></span><span><strong>Barangay staff</strong><small>Demo workspace</small></span><span class="identity-indicator"><i data-lucide="check" aria-hidden="true"></i></span></div>
-                <form method="POST" action="{{ route('demo.enter') }}">
+        <main id="main" class="demo-entry-main container" tabindex="-1">
+            <section class="demo-entry-panel" aria-labelledby="login-heading">
+                <h1 id="login-heading">Demo workspace</h1>
+                <p class="demo-entry-intro">Explore the everyday work of a barangay office, without an account.</p>
+                <div class="demo-entry-description">
+                    <p>Browse sample resident records, review document requests, and try community workflows.</p>
+                    <ul>
+                        <li><i data-lucide="check" aria-hidden="true"></i><span>This is a demonstration, not an authenticated staff session.</span></li>
+                        <li><i data-lucide="check" aria-hidden="true"></i><span>Changes are temporary. Sample data resets when you reload the workspace.</span></li>
+                        <li><i data-lucide="check" aria-hidden="true"></i><span>Use fictional information only. Nothing is sent to a barangay office.</span></li>
+                    </ul>
+                </div>
+                <form method="POST" action="{{ route('demo.enter') }}" data-demo-entry>
                     @csrf
-                    <button type="submit" class="button button-primary login-submit">Enter dashboard <i data-lucide="arrow-right" aria-hidden="true"></i></button>
+                    <button type="submit" class="button button-primary demo-entry-submit">Enter dashboard <i data-lucide="arrow-right" aria-hidden="true"></i></button>
                 </form>
-                <p class="login-note"><i data-lucide="info" aria-hidden="true"></i> No credentials required. Sample data only.</p>
-                <div class="login-panel-footer"><i data-lucide="hand-heart" aria-hidden="true"></i> Local service. Lasting impact.</div>
+                <p class="demo-entry-note"><i data-lucide="info" aria-hidden="true"></i><span>No credentials required. Sample data only.</span></p>
             </section>
         </main>
-        <footer class="login-footer"><span>&copy; {{ date('Y') }} Barangay Information System</span><span>For the people. For the community.</span></footer>
+        <footer class="demo-entry-footer container"><span>&copy; {{ date('Y') }} Barangay Information System</span><span>Demonstration only</span></footer>
     </body>
 </html>
