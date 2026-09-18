@@ -152,23 +152,50 @@ export default function initializeWorkspace() {
             body.append(tr);
         }
         select('#request-summary').textContent = `Showing ${rows.length} of 5 recent requests`;
-        createIcons({ icons: { ArrowUpRight } });
+        createIcons({ icons: { ArrowUpRight }, root: body });
     }
     select('#request-search').addEventListener('input', renderRecent);
     select('#request-status').addEventListener('change', renderRecent);
 
+    select('#reset-requests').addEventListener('click', () => {
+        select('#request-search').value = '';
+        select('#request-status').value = 'all';
+        renderRecent();
+    });
+
     let currentSection = 'overview';
+    const filterKeys = { residents: 'purok', households: 'purok', certificates: 'status', blotter: 'status' };
     function filteredRecords() {
         const query = select('#records-search').value.trim().toLowerCase();
-        return datasets[currentSection].rows.filter(row => Object.values(row).join(' ').toLowerCase().includes(query));
+        const filter = select('#records-filter').value;
+        const key = filterKeys[currentSection];
+        return datasets[currentSection].rows.filter(row => Object.values(row).join(' ').toLowerCase().includes(query) && (!key || filter === 'all' || row[key] === filter));
+    }
+
+    function configureFilter() {
+        const key = filterKeys[currentSection];
+        select('#records-filter-field').hidden = !key;
+        const filter = select('#records-filter');
+        filter.replaceChildren();
+        if (!key) return;
+        select('#records-filter-label').textContent = key === 'purok' ? 'Purok' : 'Status';
+        const all = element('option', '', key === 'purok' ? 'All puroks' : 'All statuses');
+        all.value = 'all';
+        filter.append(all);
+        [...new Set(datasets[currentSection].rows.map(row => row[key]))].sort().forEach(value => filter.append(element('option', '', value)));
     }
 
     function renderRecords() {
         const dataset = datasets[currentSection];
         const rows = filteredRecords();
         const header = element('tr');
-        for (const [, label] of dataset.columns) header.append(element('th', '', label));
+        for (const [, label] of dataset.columns) {
+            const cell = element('th', '', label);
+            cell.scope = 'col';
+            header.append(cell);
+        }
         const actionHeader = element('th');
+        actionHeader.scope = 'col';
         actionHeader.append(element('span', 'sr-only', 'Details'));
         header.append(actionHeader);
         select('#records-head').replaceChildren(header);
@@ -188,10 +215,17 @@ export default function initializeWorkspace() {
             body.append(row);
         }
         select('#records-empty').hidden = rows.length > 0;
-        select('#records-count').textContent = `${rows.length} of ${dataset.rows.length} records`;
-        createIcons({ icons: { ArrowUpRight } });
+        select('#records-count').textContent = `Showing ${rows.length} of ${dataset.rows.length} sample records`;
+        select('#export-records').disabled = rows.length === 0;
+        createIcons({ icons: { ArrowUpRight }, root: body });
     }
     select('#records-search').addEventListener('input', renderRecords);
+    select('#records-filter').addEventListener('change', renderRecords);
+    select('#reset-records').addEventListener('click', () => {
+        select('#records-search').value = '';
+        select('#records-filter').value = 'all';
+        renderRecords();
+    });
 
     const sidebar = select('.workspace-sidebar');
     const sidebarToggle = select('.sidebar-toggle');
@@ -216,12 +250,25 @@ export default function initializeWorkspace() {
             if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
         }
     });
-    window.matchMedia('(min-width: 961px)').addEventListener('change', event => {
-        if (event.matches) setSidebar(false);
+    let lastFocusedElement = document.activeElement;
+    document.addEventListener('focusin', event => { lastFocusedElement = event.target; });
+    window.matchMedia('(min-width: 960px)').addEventListener('change', event => {
+        const focusWasInSidebar = sidebar.contains(lastFocusedElement);
+        const focusWasOnToggle = lastFocusedElement === sidebarToggle;
+        setSidebar(false);
+        if (!event.matches && focusWasInSidebar) sidebarToggle.focus();
+        if (event.matches && focusWasOnToggle) select('#workspace-title').focus();
     });
-    sidebar.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setSidebar(false)));
+    sidebar.querySelectorAll('[data-section]').forEach(link => link.addEventListener('click', () => {
+        setSidebar(false);
+        if (location.hash === link.hash) select('#workspace-title').focus();
+    }));
+    select('.skip-link').addEventListener('click', event => {
+        event.preventDefault();
+        select('#workspace-main').focus();
+    });
 
-    function showSection() {
+    function showSection(moveFocus = false) {
         const requested = location.hash.slice(1);
         currentSection = Object.hasOwn(datasets, requested) || requested === 'reports' ? requested : 'overview';
         const overview = currentSection === 'overview';
@@ -229,10 +276,11 @@ export default function initializeWorkspace() {
         select('#overview-view').hidden = !overview;
         select('#records-view').hidden = overview || reports;
         select('#reports-view').hidden = !reports;
-        const title = overview ? 'Dashboard' : reports ? 'Reports & analytics' : datasets[currentSection].title;
+        const title = overview ? 'Overview' : reports ? 'Reports' : datasets[currentSection].title;
+        select('[data-new-resident]').hidden = !overview && currentSection !== 'residents';
         select('#workspace-title').textContent = title;
         select('#breadcrumb-current').textContent = overview ? 'Overview' : title;
-        select('#workspace-subtitle').textContent = overview ? "Welcome back. Here's what's happening in your barangay." : reports ? 'Community information that helps you see the bigger picture.' : datasets[currentSection].description;
+        select('#workspace-subtitle').textContent = overview ? 'Explore sample records and everyday barangay workflows.' : reports ? 'Illustrative community figures, separate from the sample directories.' : datasets[currentSection].description;
         document.title = `${title} | Barangay Information System`;
         sidebar.querySelectorAll('[data-section]').forEach(link => {
             const selected = link.dataset.section === currentSection;
@@ -242,13 +290,15 @@ export default function initializeWorkspace() {
         });
         if (!overview && !reports) {
             select('#records-heading').textContent = datasets[currentSection].heading;
-            select('#records-description').textContent = datasets[currentSection].description;
+            select('#records-description').textContent = filterKeys[currentSection] ? 'Sample directory · Search, filter, view details, or export results.' : 'Sample directory · Search, view details, or export results.';
             select('#records-search').value = '';
+            configureFilter();
             renderRecords();
         }
         setSidebar(false);
+        if (moveFocus) select('#workspace-title').focus();
     }
-    window.addEventListener('hashchange', showSection);
+    window.addEventListener('hashchange', () => showSection(true));
 
     function renderChart() {
         const recent = select('#chart-period').value === 'recent';
@@ -256,20 +306,24 @@ export default function initializeWorkspace() {
         const values = recent ? [30, 36, 41, 39, 48, 48] : [26, 31, 36, 38, 37, 44];
         const bars = select('#chart-bars');
         bars.replaceChildren();
+        const table = select('#chart-data');
+        table.replaceChildren();
         months.forEach((month, index) => {
+            const year = recent ? 2026 : index < 3 ? 2025 : 2026;
+            const row = element('tr');
+            row.append(element('td', '', `${month} ${year}`), element('td', '', values[index]));
+            table.append(row);
             const column = element('div', 'chart-column');
             const bar = element('div', 'chart-bar');
-            bar.style.height = `calc((100% - 23px) * ${values[index] / 60})`;
-            bar.tabIndex = 0;
-            bar.setAttribute('aria-label', `${month}: ${values[index]} certificates`);
+            bar.style.height = `calc((100% - 2rem) * ${values[index] / 60})`;
             bar.title = `${month}: ${values[index]} certificates`;
             bar.append(element('span', 'chart-value', values[index]));
             column.append(bar, element('span', 'chart-month', month));
             bars.append(column);
         });
-        select('#chart-total').textContent = values.reduce((sum, value) => sum + value, 0);
-        select('#chart-trend').hidden = !recent;
-        select('#certificate-chart').setAttribute('aria-label', `Monthly certificates issued: ${months.map((month, index) => `${month} ${values[index]}`).join(', ')}.`);
+        const total = values.reduce((sum, value) => sum + value, 0);
+        select('#chart-total').textContent = total;
+        select('#chart-trend').textContent = `${values.at(-1)} issued in ${months.at(-1)} 2026 · Illustrative data`;
     }
     select('#chart-period').addEventListener('change', renderChart);
 
@@ -310,31 +364,49 @@ export default function initializeWorkspace() {
         select('#workspace-toast').hidden = false;
         toastTimer = setTimeout(() => { select('#workspace-toast').hidden = true; }, 4500);
     }
-    document.querySelectorAll('[data-new-resident]').forEach(button => button.addEventListener('click', () => openDialog(residentDialog)));
-    select('#resident-form').addEventListener('submit', event => {
+    const residentForm = select('#resident-form');
+    const residentFields = [...residentForm.querySelectorAll('input, select')];
+    function validateField(field) {
+        const message = field.value.trim() ? '' : ({ firstName: 'Enter a first name.', lastName: 'Enter a last name.', purok: 'Choose a purok.', gender: 'Choose a gender option.' })[field.name];
+        const error = document.getElementById(field.getAttribute('aria-describedby'));
+        field.setAttribute('aria-invalid', String(Boolean(message)));
+        error.textContent = message;
+        error.hidden = !message;
+        return !message;
+    }
+    document.querySelectorAll('[data-new-resident]').forEach(button => button.addEventListener('click', () => {
+        residentForm.reset();
+        residentFields.forEach(field => {
+            field.removeAttribute('aria-invalid');
+            document.getElementById(field.getAttribute('aria-describedby')).hidden = true;
+        });
+        openDialog(residentDialog);
+    }));
+    residentForm.addEventListener('submit', event => {
         event.preventDefault();
-        const form = event.currentTarget;
-        for (const field of [form.elements.firstName, form.elements.lastName]) {
-            field.setCustomValidity(field.value.trim() ? '' : 'Enter a name.');
-        }
-        if (!form.reportValidity()) return;
-        const data = new FormData(form);
+        const invalid = residentFields.filter(field => !validateField(field));
+        if (invalid.length) { invalid[0].focus(); return; }
+        const data = new FormData(residentForm);
         datasets.residents.rows.unshift({ name: `${data.get('firstName').trim()} ${data.get('lastName').trim()}`, reference: `DEMO-${String(datasets.residents.rows.length + 1).padStart(3, '0')}`, purok: data.get('purok'), gender: data.get('gender'), status: 'Active' });
         residentDialog.close();
-        form.reset();
-        location.hash = 'residents';
-        showSection();
-        notify('Demo resident added. This entry lasts until the page is reloaded.');
+        residentForm.reset();
+        if (location.hash === '#residents') showSection(true);
+        else location.hash = 'residents';
+        notify('Demo resident added to the sample directory. This entry resets on reload.');
     });
-    select('#resident-form').addEventListener('input', event => {
-        if (event.target instanceof HTMLInputElement) event.target.setCustomValidity('');
-    });
+    residentFields.forEach(field => field.addEventListener('change', () => {
+        if (field.hasAttribute('aria-invalid')) validateField(field);
+    }));
+    const pendingCount = sampleRequests.filter(row => row.status === 'Pending').length;
+    select('#pending-count').textContent = pendingCount;
+    select('#pending-count').setAttribute('aria-label', `${pendingCount} pending requests`);
+    select('#pending-summary').textContent = `${pendingCount} pending`;
     select('[data-workspace-detail="notifications"]').addEventListener('click', () => {
         select('#workspace-dialog-title').textContent = 'Notifications';
         const content = select('#workspace-dialog-content');
         content.replaceChildren();
         const list = element('dl', 'detail-grid');
-        for (const [title, description] of [['Certificate requests', '6 sample requests awaiting review'], ['Upcoming hearings', '2 sample hearings scheduled'], ['Workspace', 'You are viewing demo information']]) {
+        for (const [title, description] of [['Certificate requests', `${pendingCount} sample requests awaiting review`], ['Sample hearings', `${datasets.blotter.rows.filter(row => row.status === 'Scheduled').length} hearings scheduled in the sample register · September 2026`], ['Workspace', 'You are viewing demo information, not live notifications']]) {
             const row = element('div');
             row.append(element('dt', '', title), element('dd', '', description));
             list.append(row);
