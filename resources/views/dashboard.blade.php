@@ -18,7 +18,7 @@
                 <a href="#overview" data-section="overview" class="selected" aria-current="page"><i data-lucide="layout-dashboard" aria-hidden="true"></i> Overview</a>
                 <span class="nav-group-label">Records</span>
                 <a href="#residents" data-section="residents"><i data-lucide="users-round" aria-hidden="true"></i> Residents</a>
-                <a href="#households" data-section="households"><i data-lucide="house" aria-hidden="true"></i> Households</a>
+               <a href="{{ route('households.index') }}"><i data-lucide="house"></i> Households</a>
                 <a href="#certificates" data-section="certificates"><i data-lucide="files" aria-hidden="true"></i> Certificates <span class="nav-count" id="pending-count" aria-label="6 pending requests">6</span></a>
                 <a href="{{ route('blotters.index') }}"><i data-lucide="notebook-pen" aria-hidden="true"></i> Blotter records</a>
                 <a href="#officials" data-section="officials"><i data-lucide="badge-check" aria-hidden="true"></i> Officials</a>

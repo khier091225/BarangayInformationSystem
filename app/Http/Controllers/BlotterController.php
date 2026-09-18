@@ -11,7 +11,7 @@ class BlotterController extends Controller
     {
         $query = Blotter::query();
 
-        // Search ayon sa pangalan o detalye
+        // Search by complainant, respondent, or incident details
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -21,7 +21,7 @@ class BlotterController extends Controller
             });
         }
 
-        // Filter ayon sa status (Pending, Settled, Dismissed)
+        // Filter by status (Pending, Settled, Dismissed)
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
@@ -49,7 +49,7 @@ class BlotterController extends Controller
         Blotter::create($validated);
 
         return redirect()->route('blotters.index')
-            ->with('success', 'Matagumpay na naitala ang blotter report!');
+            ->with('success', 'Blotter report recorded successfully!');
     }
 
     public function show(Blotter $blotter)
@@ -75,7 +75,7 @@ class BlotterController extends Controller
         $blotter->update($validated);
 
         return redirect()->route('blotters.index')
-            ->with('success', 'Matagumpay na na-update ang blotter record!');
+            ->with('success', 'Blotter record updated successfully!');
     }
 
     public function destroy(Blotter $blotter)
@@ -83,6 +83,6 @@ class BlotterController extends Controller
         $blotter->delete();
 
         return redirect()->route('blotters.index')
-            ->with('success', 'Matagumpay na nabura ang blotter record!');
+            ->with('success', 'Blotter record deleted successfully!');
     }
 }

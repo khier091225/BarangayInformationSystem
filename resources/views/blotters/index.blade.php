@@ -19,7 +19,7 @@
                 <a href="{{ route('dashboard') }}"><i data-lucide="layout-dashboard"></i> Overview</a>
                 <span class="nav-group-label">BARANGAY MANAGEMENT</span>
                 <a href="{{ route('dashboard') }}#residents"><i data-lucide="users-round"></i> Residents</a>
-                <a href="{{ route('dashboard') }}#households"><i data-lucide="house"></i> Households</a>
+                <a href="{{ route('households.index') }}"><i data-lucide="house"></i> Households</a>
                 <a href="{{ route('dashboard') }}#certificates"><i data-lucide="files"></i> Certificates</a>
                 <a href="{{ route('blotters.index') }}" class="selected"><i data-lucide="notebook-pen"></i> Blotter records</a>
                 <a href="{{ route('dashboard') }}#officials"><i data-lucide="badge-check"></i> Officials</a>
@@ -111,7 +111,7 @@
                                             <a href="{{ route('blotters.edit', $blotter) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
                                                 Edit
                                             </a>
-                                            <form method="POST" action="{{ route('blotters.destroy', $blotter) }}" onsubmit="return confirm('Sigurado ka bang nais mong burahin ang blotter record na ito?');" style="display: inline;">
+                                            <form method="POST" action="{{ route('blotters.destroy', $blotter) }}" onsubmit="return confirm('Are you sure you want to delete this blotter record?');" style="display: inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" style="background: none; border: 1px solid #eed0ce; color: #a43229; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
@@ -124,7 +124,7 @@
                             @empty
                                 <tr>
                                     <td colspan="7" style="text-align: center; padding: 40px; color: #829283;">
-                                        Walang nahanap na blotter record.
+                                        No blotter records found.
                                     </td>
                                 </tr>
                             @endforelse
