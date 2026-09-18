@@ -133,6 +133,12 @@
                 <a href="{{ route('blotters.index') }}"><i data-lucide="notebook-pen"></i> Blotter records</a>
                 <a href="{{ route('officials.index') }}"><i data-lucide="badge-check"></i> Officials</a>
             </nav>
+            <div class="sidebar-bottom">
+                <div class="sidebar-profile">
+                    <span class="staff-avatar" aria-hidden="true">BS</span>
+                    <span><strong>Barangay Staff</strong><small>Authorized Portal</small></span>
+                </div>
+            </div>
         </aside>
 
         <div class="workspace-shell">
