@@ -49,4 +49,3 @@ class DashboardTest extends TestCase
             ->assertDontSee('data-demo-entry', false);
     }
 }
-
