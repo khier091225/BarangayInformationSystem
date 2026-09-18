@@ -20,7 +20,7 @@
                 <a href="#residents" data-section="residents"><i data-lucide="users-round" aria-hidden="true"></i> Residents</a>
                 <a href="#households" data-section="households"><i data-lucide="house" aria-hidden="true"></i> Households</a>
                 <a href="#certificates" data-section="certificates"><i data-lucide="files" aria-hidden="true"></i> Certificates <span class="nav-count" id="pending-count" aria-label="6 pending requests">6</span></a>
-                <a href="#blotter" data-section="blotter"><i data-lucide="notebook-pen" aria-hidden="true"></i> Blotter records</a>
+                <a href="{{ route('blotters.index') }}"><i data-lucide="notebook-pen" aria-hidden="true"></i> Blotter records</a>
                 <a href="#officials" data-section="officials"><i data-lucide="badge-check" aria-hidden="true"></i> Officials</a>
                 <span class="nav-group-label">Community</span>
                 <a href="#reports" data-section="reports"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i> Reports</a>
@@ -46,7 +46,7 @@
                     <div class="workflow-links" aria-label="Workspace shortcuts">
                         <a href="#certificates"><i data-lucide="files" aria-hidden="true"></i><span><strong>Certificate requests</strong><small><span id="pending-summary">6 pending</span> in the sample directory</small></span><i data-lucide="arrow-right" aria-hidden="true"></i></a>
                         <a href="#residents"><i data-lucide="users-round" aria-hidden="true"></i><span><strong>Find a resident</strong><small>Search names, IDs, and puroks</small></span><i data-lucide="arrow-right" aria-hidden="true"></i></a>
-                        <a href="#blotter"><i data-lucide="notebook-pen" aria-hidden="true"></i><span><strong>Blotter records</strong><small>View sample cases and hearings</small></span><i data-lucide="arrow-right" aria-hidden="true"></i></a>
+                       <a href="{{ route('blotters.index') }}"><i data-lucide="notebook-pen" aria-hidden="true"></i><span><strong>Blotter records</strong><small>View live cases and hearings</small></span><i data-lucide="arrow-right" aria-hidden="true"></i></a>
                     </div>
                     <section class="requests-section workspace-panel" aria-labelledby="requests-heading">
                         <div class="workspace-section-heading"><div><h2 id="requests-heading">Recent certificate requests</h2><p>The five most recent sample requests.</p></div><a class="workspace-text-link" href="#certificates">View all requests <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
