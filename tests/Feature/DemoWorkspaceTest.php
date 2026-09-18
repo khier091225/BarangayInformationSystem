@@ -2,23 +2,30 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class DemoWorkspaceTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_dashboard_loads_directly_on_root(): void
     {
         $this->get('/')
             ->assertOk()
             ->assertSee('Overview')
-            ->assertSee('Sample data')
-            ->assertSee('Recent certificate requests')
-            ->assertSee('Illustrative community snapshot')
-            ->assertSee('Added residents last until you reload.')
-            ->assertSee('id="workspace-main" tabindex="-1"', false)
-            ->assertSee('id="records-filter"', false)
-            ->assertSee('View chart data')
-            ->assertSee('id="first-name-error"', false);
+            ->assertSee('Management Dashboard')
+            ->assertSee('BARANGAY ADMINISTRATION')
+            ->assertSee('Total Residents')
+            ->assertSee('Households')
+            ->assertSee('Certificates')
+            ->assertSee('Pending Blotters')
+            ->assertSee('Recent Certificate Requests')
+            ->assertSee('Recent Blotter Cases')
+            ->assertSee('Newly Registered Residents')
+            ->assertDontSee('Sample data')
+            ->assertDontSee('This is a demo')
+            ->assertDontSee('Illustrative community snapshot');
     }
 
     public function test_dashboard_path_redirects_to_root(): void
