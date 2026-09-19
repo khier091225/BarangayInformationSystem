@@ -138,8 +138,8 @@
         <!-- Republic Letterhead -->
         <div class="cert-header">
             <h3>Republic of the Philippines</h3>
-            <h3>Province of Example • Municipality of Example</h3>
-            <h2>BARANGAY LOCAL GOVERNMENT UNIT</h2>
+            <h3>Province of Laguna • Municipality of Calamba</h3>
+            <h2>BARANGAY KAY-ANLOG</h2>
             <h1>Office of the Punong Barangay</h1>
         </div>
 
