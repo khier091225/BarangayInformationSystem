@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title'){{ $resident->full_name }} | Barangay Information System@endsection
+@section('title')
+    {{ $resident->full_name }} | Barangay Information System
+@endsection
 
 @section('breadcrumb')
     <a href="{{ route('residents.index') }}" style="color: inherit; text-decoration: none;">Residents</a>

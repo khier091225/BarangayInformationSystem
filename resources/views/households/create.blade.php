@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title')Add Household | Barangay Information System@endsection
+@section('title')
+    Add Household | Barangay Information System
+@endsection
 
 @section('main-style', 'max-width: 700px;')
 

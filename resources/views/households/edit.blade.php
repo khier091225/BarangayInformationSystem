@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title')Edit Household {{ $household->household_number }} | Barangay Information System@endsection
+@section('title')
+    Edit Household {{ $household->household_number }} | Barangay Information System
+@endsection
 
 @section('main-style', 'max-width: 700px;')
 

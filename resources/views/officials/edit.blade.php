@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title')Edit Official | Barangay Information System@endsection
+@section('title')
+    Edit Official | Barangay Information System
+@endsection
 
 @section('main-style', 'max-width: 750px;')
 

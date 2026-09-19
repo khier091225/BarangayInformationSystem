@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title')Blotter Records | Barangay Information System@endsection
+@section('title')
+    Blotter Records | Barangay Information System
+@endsection
 
 @section('breadcrumb')
     <span>Workspace</span>

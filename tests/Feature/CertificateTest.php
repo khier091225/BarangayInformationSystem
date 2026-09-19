@@ -74,6 +74,9 @@ class CertificateTest extends TestCase
         $response->assertSee('GRACIANO');
         $response->assertSee('Certificate of Residency');
         $response->assertSee('BANK ACCOUNT REQUIREMENT');
+        $this->assertStringStartsWith('<!DOCTYPE html>', ltrim($response->getContent()));
+        $this->assertMatchesRegularExpression('/<title>\s*'.preg_quote($certificate->certificate_type.' - '.$resident->full_name, '/').'\s*<\/title>/', $response->getContent());
+        $response->assertDontSee('@endsection', false);
     }
 
     public function test_certificate_can_be_deleted(): void

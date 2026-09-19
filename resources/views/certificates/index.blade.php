@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title')Certificates & Clearances | Barangay Information System@endsection
+@section('title')
+    Certificates & Clearances | Barangay Information System
+@endsection
 
 @section('breadcrumb')
     <span>Workspace</span>

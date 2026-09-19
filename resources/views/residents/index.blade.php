@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title')Residents | Barangay Information System@endsection
+@section('title')
+    Residents | Barangay Information System
+@endsection
 
 @section('breadcrumb')
     <span>Workspace</span>

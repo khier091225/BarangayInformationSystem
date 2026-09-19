@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title')Household {{ $household->household_number }} | Barangay Information System@endsection
+@section('title')
+    Household {{ $household->household_number }} | Barangay Information System
+@endsection
 
 @section('breadcrumb')
     <a href="{{ route('households.index') }}" style="color: inherit; text-decoration: none;">Households</a>

@@ -11,7 +11,7 @@ class DashboardTest extends TestCase
 
     public function test_dashboard_loads_directly_on_root(): void
     {
-        $this->get('/')
+        $response = $this->get('/')
             ->assertOk()
             ->assertSee('Overview')
             ->assertSee('Management Dashboard')
@@ -27,6 +27,10 @@ class DashboardTest extends TestCase
             ->assertDontSee('Demo')
             ->assertDontSee('This is a demo')
             ->assertDontSee('Illustrative community snapshot');
+
+        $this->assertStringStartsWith('<!DOCTYPE html>', ltrim($response->getContent()));
+        $this->assertMatchesRegularExpression('/<title>\s*Dashboard \| Barangay Information System\s*<\/title>/', $response->getContent());
+        $response->assertDontSee('@endsection', false);
     }
 
     public function test_dashboard_path_redirects_to_root(): void

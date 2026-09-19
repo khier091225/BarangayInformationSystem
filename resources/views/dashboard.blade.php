@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title')Dashboard | Barangay Information System@endsection
+@section('title')
+    Dashboard | Barangay Information System
+@endsection
 
 @section('breadcrumb')
     <button type="button" class="icon-button sidebar-toggle" aria-label="Open sidebar" aria-controls="workspace-navigation" aria-expanded="false">

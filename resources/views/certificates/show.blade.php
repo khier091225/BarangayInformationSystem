@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title'){{ $certificate->certificate_type }} - {{ $certificate->resident->full_name }}@endsection
+@section('title')
+    {{ $certificate->certificate_type }} - {{ $certificate->resident->full_name }}
+@endsection
 
 @section('main-style', 'padding: 30px;')
 

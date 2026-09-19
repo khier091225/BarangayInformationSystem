@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title')File New Blotter | Barangay Information System@endsection
+@section('title')
+    File New Blotter | Barangay Information System
+@endsection
 
 @section('main-style', 'max-width: 800px;')
 

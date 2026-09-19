@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title')Edit Blotter #{{ $blotter->id }} | Barangay Information System@endsection
+@section('title')
+    Edit Blotter #{{ $blotter->id }} | Barangay Information System
+@endsection
 
 @section('main-style', 'max-width: 800px;')
 
