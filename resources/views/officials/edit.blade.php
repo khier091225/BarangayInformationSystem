@@ -28,67 +28,52 @@
 
             <!-- Full Name -->
             <div style="margin-bottom: 18px;">
-                <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                    Full Name <span style="color: red;">*</span>
-                </label>
-                <input type="text" name="name" value="{{ old('name', $official->name) }}" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                @error('name') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                <x-form.label for="name" required>Full Name</x-form.label>
+                <x-form.input type="text" name="name" value="{{ old('name', $official->name) }}" required />
+                <x-form.error :message="$errors->first('name')" />
             </div>
 
             <!-- Position & Contact -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Position / Title <span style="color: red;">*</span>
-                    </label>
-                    <select name="position" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; background: white; box-sizing: border-box;">
+                    <x-form.label for="position" required>Position / Title</x-form.label>
+                    <x-form.select name="position" required>
                         <option value="">-- Select Position --</option>
                         <option value="Barangay Captain" {{ old('position', $official->position) == 'Barangay Captain' ? 'selected' : '' }}>Barangay Captain (Punong Barangay)</option>
                         <option value="Barangay Kagawad" {{ old('position', $official->position) == 'Barangay Kagawad' ? 'selected' : '' }}>Barangay Kagawad (Councilor)</option>
                         <option value="SK Chairman" {{ old('position', $official->position) == 'SK Chairman' ? 'selected' : '' }}>SK Chairman</option>
                         <option value="Barangay Secretary" {{ old('position', $official->position) == 'Barangay Secretary' ? 'selected' : '' }}>Barangay Secretary</option>
                         <option value="Barangay Treasurer" {{ old('position', $official->position) == 'Barangay Treasurer' ? 'selected' : '' }}>Barangay Treasurer</option>
-                    </select>
-                    @error('position') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    </x-form.select>
+                    <x-form.error :message="$errors->first('position')" />
                 </div>
 
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Contact Number
-                    </label>
-                    <input type="text" name="contact_number" value="{{ old('contact_number', $official->contact_number) }}" placeholder="e.g. 09171234567" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                    @error('contact_number') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    <x-form.label for="contact_number">Contact Number</x-form.label>
+                    <x-form.input type="text" name="contact_number" value="{{ old('contact_number', $official->contact_number) }}" placeholder="e.g. 09171234567" />
+                    <x-form.error :message="$errors->first('contact_number')" />
                 </div>
             </div>
 
             <!-- Term of Office -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Term Start Date
-                    </label>
-                    <input type="date" name="term_start" value="{{ old('term_start', $official->term_start ? $official->term_start->format('Y-m-d') : '') }}" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                    @error('term_start') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    <x-form.label for="term_start">Term Start Date</x-form.label>
+                    <x-form.input type="date" name="term_start" value="{{ old('term_start', $official->term_start ? $official->term_start->format('Y-m-d') : '') }}" />
+                    <x-form.error :message="$errors->first('term_start')" />
                 </div>
 
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Term End Date
-                    </label>
-                    <input type="date" name="term_end" value="{{ old('term_end', $official->term_end ? $official->term_end->format('Y-m-d') : '') }}" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                    @error('term_end') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    <x-form.label for="term_end">Term End Date</x-form.label>
+                    <x-form.input type="date" name="term_end" value="{{ old('term_end', $official->term_end ? $official->term_end->format('Y-m-d') : '') }}" />
+                    <x-form.error :message="$errors->first('term_end')" />
                 </div>
             </div>
 
             <!-- Submit Buttons -->
-            <div style="display: flex; justify-content: flex-end; gap: 12px;">
-                <a href="{{ route('officials.index') }}" class="button" style="text-decoration: none; padding: 10px 18px; border: 1px solid #ccd5c8; border-radius: 6px; color: #555;">
-                    Cancel
-                </a>
-                <button type="submit" class="button button-primary" style="padding: 10px 22px; cursor: pointer;">
-                    Update Official
-                </button>
-            </div>
+            <x-form.actions :cancel-url="route('officials.index')">
+                <x-slot:submit>Update Official</x-slot:submit>
+            </x-form.actions>
         </form>
     </div>
 @endsection

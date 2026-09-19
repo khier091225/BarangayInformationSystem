@@ -27,63 +27,50 @@
 
             <!-- Select Resident -->
             <div style="margin-bottom: 18px;">
-                <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                    Select Resident <span style="color: red;">*</span>
-                </label>
-                <select name="resident_id" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; background: white; box-sizing: border-box;">
+                <x-form.label for="resident_id" required>Select Resident</x-form.label>
+                <x-form.select name="resident_id" required>
                     <option value="">-- Choose Resident --</option>
                     @foreach ($residents as $resident)
                         <option value="{{ $resident->id }}" {{ (old('resident_id', $selectedResidentId) == $resident->id) ? 'selected' : '' }}>
                             {{ $resident->last_name }}, {{ $resident->first_name }} {{ $resident->middle_name }} ({{ $resident->address }})
                         </option>
                     @endforeach
-                </select>
-                @error('resident_id') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                </x-form.select>
+                <x-form.error :message="$errors->first('resident_id')" />
             </div>
 
             <!-- Certificate Type & Date Issued -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Certificate Type <span style="color: red;">*</span>
-                    </label>
-                    <select name="certificate_type" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; background: white; box-sizing: border-box;">
+                    <x-form.label for="certificate_type" required>Certificate Type</x-form.label>
+                    <x-form.select name="certificate_type" required>
                         <option value="">-- Select Document Type --</option>
                         <option value="Barangay Clearance" {{ old('certificate_type') == 'Barangay Clearance' ? 'selected' : '' }}>Barangay Clearance</option>
                         <option value="Certificate of Residency" {{ old('certificate_type') == 'Certificate of Residency' ? 'selected' : '' }}>Certificate of Residency</option>
                         <option value="Certificate of Indigency" {{ old('certificate_type') == 'Certificate of Indigency' ? 'selected' : '' }}>Certificate of Indigency</option>
                         <option value="Business Clearance" {{ old('certificate_type') == 'Business Clearance' ? 'selected' : '' }}>Business Clearance</option>
-                    </select>
-                    @error('certificate_type') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    </x-form.select>
+                    <x-form.error :message="$errors->first('certificate_type')" />
                 </div>
 
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Date Issued <span style="color: red;">*</span>
-                    </label>
-                    <input type="date" name="date_issued" value="{{ old('date_issued', date('Y-m-d')) }}" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                    @error('date_issued') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    <x-form.label for="date_issued" required>Date Issued</x-form.label>
+                    <x-form.input type="date" name="date_issued" value="{{ old('date_issued', date('Y-m-d')) }}" required />
+                    <x-form.error :message="$errors->first('date_issued')" />
                 </div>
             </div>
 
             <!-- Purpose -->
             <div style="margin-bottom: 24px;">
-                <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                    Purpose / Reason <span style="color: red;">*</span>
-                </label>
-                <input type="text" name="purpose" value="{{ old('purpose') }}" required placeholder="e.g. Local Employment, Scholarship Application, Bank Account Requirement" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                @error('purpose') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                <x-form.label for="purpose" required>Purpose / Reason</x-form.label>
+                <x-form.input type="text" name="purpose" value="{{ old('purpose') }}" required placeholder="e.g. Local Employment, Scholarship Application, Bank Account Requirement" />
+                <x-form.error :message="$errors->first('purpose')" />
             </div>
 
             <!-- Submit Buttons -->
-            <div style="display: flex; justify-content: flex-end; gap: 12px;">
-                <a href="{{ route('certificates.index') }}" class="button" style="text-decoration: none; padding: 10px 18px; border: 1px solid #ccd5c8; border-radius: 6px; color: #555;">
-                    Cancel
-                </a>
-                <button type="submit" class="button button-primary" style="padding: 10px 22px; cursor: pointer;">
-                    Issue & Preview Certificate
-                </button>
-            </div>
+            <x-form.actions :cancel-url="route('certificates.index')">
+                <x-slot:submit>Issue & Preview Certificate</x-slot:submit>
+            </x-form.actions>
         </form>
     </div>
 @endsection

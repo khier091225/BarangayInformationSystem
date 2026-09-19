@@ -30,63 +30,48 @@
             <!-- Complainant & Respondent -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Complainant Name <span style="color: red;">*</span>
-                    </label>
-                    <input type="text" name="complainant" value="{{ old('complainant', $blotter->complainant) }}" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                    @error('complainant') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    <x-form.label for="complainant" required>Complainant Name</x-form.label>
+                    <x-form.input type="text" name="complainant" value="{{ old('complainant', $blotter->complainant) }}" required />
+                    <x-form.error :message="$errors->first('complainant')" />
                 </div>
 
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Respondent Name <span style="color: red;">*</span>
-                    </label>
-                    <input type="text" name="respondent" value="{{ old('respondent', $blotter->respondent) }}" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                    @error('respondent') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    <x-form.label for="respondent" required>Respondent Name</x-form.label>
+                    <x-form.input type="text" name="respondent" value="{{ old('respondent', $blotter->respondent) }}" required />
+                    <x-form.error :message="$errors->first('respondent')" />
                 </div>
             </div>
 
             <!-- Date & Status -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Incident Date <span style="color: red;">*</span>
-                    </label>
-                    <input type="date" name="incident_date" value="{{ old('incident_date', $blotter->incident_date ? $blotter->incident_date->format('Y-m-d') : '') }}" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                    @error('incident_date') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    <x-form.label for="incident_date" required>Incident Date</x-form.label>
+                    <x-form.input type="date" name="incident_date" value="{{ old('incident_date', $blotter->incident_date ? $blotter->incident_date->format('Y-m-d') : '') }}" required />
+                    <x-form.error :message="$errors->first('incident_date')" />
                 </div>
 
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Status <span style="color: red;">*</span>
-                    </label>
-                    <select name="status" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; background: white; box-sizing: border-box;">
+                    <x-form.label for="status" required>Status</x-form.label>
+                    <x-form.select name="status" required>
                         <option value="Pending" {{ old('status', $blotter->status) == 'Pending' ? 'selected' : '' }}>Pending (Ongoing hearing)</option>
                         <option value="Settled" {{ old('status', $blotter->status) == 'Settled' ? 'selected' : '' }}>Settled (Resolved)</option>
                         <option value="Dismissed" {{ old('status', $blotter->status) == 'Dismissed' ? 'selected' : '' }}>Dismissed (Dropped/Dismissed)</option>
-                    </select>
-                    @error('status') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    </x-form.select>
+                    <x-form.error :message="$errors->first('status')" />
                 </div>
             </div>
 
             <!-- Incident Narrative -->
             <div style="margin-bottom: 24px;">
-                <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                    Incident Details <span style="color: red;">*</span>
-                </label>
-                <textarea name="incident" rows="5" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box; line-height: 1.6;">{{ old('incident', $blotter->incident) }}</textarea>
-                @error('incident') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                <x-form.label for="incident" required>Incident Details</x-form.label>
+                <x-form.textarea name="incident" rows="5" required>{{ old('incident', $blotter->incident) }}</x-form.textarea>
+                <x-form.error :message="$errors->first('incident')" />
             </div>
 
             <!-- Submit Buttons -->
-            <div style="display: flex; justify-content: flex-end; gap: 12px;">
-                <a href="{{ route('blotters.index') }}" class="button" style="text-decoration: none; padding: 10px 18px; border: 1px solid #ccd5c8; border-radius: 6px; color: #555;">
-                    Cancel
-                </a>
-                <button type="submit" class="button button-primary" style="padding: 10px 22px; cursor: pointer;">
-                    Update Blotter Report
-                </button>
-            </div>
+            <x-form.actions :cancel-url="route('blotters.index')">
+                <x-slot:submit>Update Blotter Report</x-slot:submit>
+            </x-form.actions>
         </form>
     </div>
 @endsection

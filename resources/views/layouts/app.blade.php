@@ -18,13 +18,13 @@
             </a>
             <div class="workspace-label">STAFF WORKSPACE</div>
             <nav class="workspace-nav" aria-label="Main workspace">
-                <a href="{{ route('dashboard') }}" @class(['selected' => request()->routeIs('dashboard')]) @if (request()->routeIs('dashboard')) aria-current="page" @endif><i data-lucide="layout-dashboard"></i> Overview</a>
+                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" icon="layout-dashboard">Overview</x-nav-link>
                 <span class="nav-group-label">BARANGAY MANAGEMENT</span>
-                <a href="{{ route('residents.index') }}" @class(['selected' => request()->routeIs('residents.*')]) @if (request()->routeIs('residents.*')) aria-current="page" @endif><i data-lucide="users-round"></i> Residents</a>
-                <a href="{{ route('households.index') }}" @class(['selected' => request()->routeIs('households.*')]) @if (request()->routeIs('households.*')) aria-current="page" @endif><i data-lucide="house"></i> Households</a>
-                <a href="{{ route('certificates.index') }}" @class(['selected' => request()->routeIs('certificates.*')]) @if (request()->routeIs('certificates.*')) aria-current="page" @endif><i data-lucide="files"></i> Certificates</a>
-                <a href="{{ route('blotters.index') }}" @class(['selected' => request()->routeIs('blotters.*')]) @if (request()->routeIs('blotters.*')) aria-current="page" @endif><i data-lucide="notebook-pen"></i> Blotter records</a>
-                <a href="{{ route('officials.index') }}" @class(['selected' => request()->routeIs('officials.*')]) @if (request()->routeIs('officials.*')) aria-current="page" @endif><i data-lucide="badge-check"></i> Officials</a>
+                <x-nav-link :href="route('residents.index')" :active="request()->routeIs('residents.*')" icon="users-round">Residents</x-nav-link>
+                <x-nav-link :href="route('households.index')" :active="request()->routeIs('households.*')" icon="house">Households</x-nav-link>
+                <x-nav-link :href="route('certificates.index')" :active="request()->routeIs('certificates.*')" icon="files">Certificates</x-nav-link>
+                <x-nav-link :href="route('blotters.index')" :active="request()->routeIs('blotters.*')" icon="notebook-pen">Blotter records</x-nav-link>
+                <x-nav-link :href="route('officials.index')" :active="request()->routeIs('officials.*')" icon="badge-check">Officials</x-nav-link>
             </nav>
             <div class="sidebar-bottom">
                 <div class="sidebar-profile">
@@ -53,5 +53,6 @@
                 @yield('content')
             </main>
         </div>
+        @stack('scripts')
     </body>
 </html>

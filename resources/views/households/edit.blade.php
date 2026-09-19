@@ -28,40 +28,29 @@
 
             <!-- Household Number -->
             <div style="margin-bottom: 18px;">
-                <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                    Household Number <span style="color: red;">*</span>
-                </label>
-                <input type="text" name="household_number" value="{{ old('household_number', $household->household_number) }}" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                @error('household_number') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                <x-form.label for="household_number" required>Household Number</x-form.label>
+                <x-form.input type="text" name="household_number" value="{{ old('household_number', $household->household_number) }}" required />
+                <x-form.error :message="$errors->first('household_number')" />
             </div>
 
             <!-- Household Head -->
             <div style="margin-bottom: 18px;">
-                <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                    Household Head <span style="color: red;">*</span>
-                </label>
-                <input type="text" name="household_head" value="{{ old('household_head', $household->household_head) }}" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                @error('household_head') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                <x-form.label for="household_head" required>Household Head</x-form.label>
+                <x-form.input type="text" name="household_head" value="{{ old('household_head', $household->household_head) }}" required />
+                <x-form.error :message="$errors->first('household_head')" />
             </div>
 
             <!-- Address -->
             <div style="margin-bottom: 24px;">
-                <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                    Address / Purok <span style="color: red;">*</span>
-                </label>
-                <input type="text" name="address" value="{{ old('address', $household->address) }}" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                @error('address') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                <x-form.label for="address" required>Address / Purok</x-form.label>
+                <x-form.input type="text" name="address" value="{{ old('address', $household->address) }}" required />
+                <x-form.error :message="$errors->first('address')" />
             </div>
 
             <!-- Submit Buttons -->
-            <div style="display: flex; justify-content: flex-end; gap: 12px;">
-                <a href="{{ route('households.index') }}" class="button" style="text-decoration: none; padding: 10px 18px; border: 1px solid #ccd5c8; border-radius: 6px; color: #555;">
-                    Cancel
-                </a>
-                <button type="submit" class="button button-primary" style="padding: 10px 22px; cursor: pointer;">
-                    Update Household
-                </button>
-            </div>
+            <x-form.actions :cancel-url="route('households.index')">
+                <x-slot:submit>Update Household</x-slot:submit>
+            </x-form.actions>
         </form>
     </div>
 @endsection

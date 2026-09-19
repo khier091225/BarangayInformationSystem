@@ -28,102 +28,84 @@
             <!-- Full Name Row (3 columns) -->
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 18px;">
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        First Name <span style="color: red;">*</span>
-                    </label>
-                    <input type="text" name="first_name" value="{{ old('first_name') }}" required placeholder="e.g. Juan" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                    @error('first_name') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    <x-form.label for="first_name" required>First Name</x-form.label>
+                    <x-form.input type="text" name="first_name" value="{{ old('first_name') }}" required placeholder="e.g. Juan" />
+                    <x-form.error :message="$errors->first('first_name')" />
                 </div>
 
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Middle Name
-                    </label>
-                    <input type="text" name="middle_name" value="{{ old('middle_name') }}" placeholder="e.g. Santos" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                    @error('middle_name') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    <x-form.label for="middle_name">Middle Name</x-form.label>
+                    <x-form.input type="text" name="middle_name" value="{{ old('middle_name') }}" placeholder="e.g. Santos" />
+                    <x-form.error :message="$errors->first('middle_name')" />
                 </div>
 
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Last Name <span style="color: red;">*</span>
-                    </label>
-                    <input type="text" name="last_name" value="{{ old('last_name') }}" required placeholder="e.g. Dela Cruz" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                    @error('last_name') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    <x-form.label for="last_name" required>Last Name</x-form.label>
+                    <x-form.input type="text" name="last_name" value="{{ old('last_name') }}" required placeholder="e.g. Dela Cruz" />
+                    <x-form.error :message="$errors->first('last_name')" />
                 </div>
             </div>
 
             <!-- Household Association & Birthdate -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Household (Optional)
-                    </label>
-                    <select name="household_id" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; background: white; box-sizing: border-box;">
+                    <x-form.label for="household_id">Household (Optional)</x-form.label>
+                    <x-form.select name="household_id">
                         <option value="">-- No Household / Independent --</option>
                         @foreach ($households as $household)
                             <option value="{{ $household->id }}" {{ old('household_id') == $household->id ? 'selected' : '' }}>
                                 {{ $household->household_number }} (Head: {{ $household->household_head }})
                             </option>
                         @endforeach
-                    </select>
-                    @error('household_id') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    </x-form.select>
+                    <x-form.error :message="$errors->first('household_id')" />
                 </div>
 
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Birthdate <span style="color: red;">*</span>
-                    </label>
-                    <input type="date" name="birthdate" value="{{ old('birthdate') }}" required max="{{ date('Y-m-d') }}" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                    @error('birthdate') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    <x-form.label for="birthdate" required>Birthdate</x-form.label>
+                    <x-form.input type="date" name="birthdate" value="{{ old('birthdate') }}" required max="{{ date('Y-m-d') }}" />
+                    <x-form.error :message="$errors->first('birthdate')" />
                 </div>
             </div>
 
             <!-- Gender & Civil Status -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Gender <span style="color: red;">*</span>
-                    </label>
-                    <select name="gender" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; background: white; box-sizing: border-box;">
+                    <x-form.label for="gender" required>Gender</x-form.label>
+                    <x-form.select name="gender" required>
                         <option value="">-- Select Gender --</option>
                         <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
                         <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
-                    </select>
-                    @error('gender') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    </x-form.select>
+                    <x-form.error :message="$errors->first('gender')" />
                 </div>
 
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Civil Status <span style="color: red;">*</span>
-                    </label>
-                    <select name="civil_status" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; background: white; box-sizing: border-box;">
+                    <x-form.label for="civil_status" required>Civil Status</x-form.label>
+                    <x-form.select name="civil_status" required>
                         <option value="">-- Select Civil Status --</option>
                         <option value="Single" {{ old('civil_status') == 'Single' ? 'selected' : '' }}>Single</option>
                         <option value="Married" {{ old('civil_status') == 'Married' ? 'selected' : '' }}>Married</option>
                         <option value="Widowed" {{ old('civil_status') == 'Widowed' ? 'selected' : '' }}>Widowed</option>
                         <option value="Separated" {{ old('civil_status') == 'Separated' ? 'selected' : '' }}>Separated</option>
                         <option value="Divorced" {{ old('civil_status') == 'Divorced' ? 'selected' : '' }}>Divorced</option>
-                    </select>
-                    @error('civil_status') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    </x-form.select>
+                    <x-form.error :message="$errors->first('civil_status')" />
                 </div>
             </div>
 
             <!-- Address & Contact Number -->
             <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;">
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Address / Purok <span style="color: red;">*</span>
-                    </label>
-                    <input type="text" name="address" value="{{ old('address') }}" required placeholder="e.g. Purok 4, Ilang-Ilang St." style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                    @error('address') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    <x-form.label for="address" required>Address / Purok</x-form.label>
+                    <x-form.input type="text" name="address" value="{{ old('address') }}" required placeholder="e.g. Purok 4, Ilang-Ilang St." />
+                    <x-form.error :message="$errors->first('address')" />
                 </div>
 
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #2d3b30;">
-                        Contact Number
-                    </label>
-                    <input type="text" name="contact_number" value="{{ old('contact_number') }}" placeholder="e.g. 09171234567" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd5c8; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
-                    @error('contact_number') <span style="color: #c0392b; font-size: 12px;">{{ $message }}</span> @enderror
+                    <x-form.label for="contact_number">Contact Number</x-form.label>
+                    <x-form.input type="text" name="contact_number" value="{{ old('contact_number') }}" placeholder="e.g. 09171234567" />
+                    <x-form.error :message="$errors->first('contact_number')" />
                 </div>
             </div>
 
@@ -137,14 +119,9 @@
             </div>
 
             <!-- Submit Buttons -->
-            <div style="display: flex; justify-content: flex-end; gap: 12px;">
-                <a href="{{ route('residents.index') }}" class="button" style="text-decoration: none; padding: 10px 18px; border: 1px solid #ccd5c8; border-radius: 6px; color: #555;">
-                    Cancel
-                </a>
-                <button type="submit" class="button button-primary" style="padding: 10px 22px; cursor: pointer;">
-                    Save Resident
-                </button>
-            </div>
+            <x-form.actions :cancel-url="route('residents.index')">
+                <x-slot:submit>Save Resident</x-slot:submit>
+            </x-form.actions>
         </form>
     </div>
 @endsection
