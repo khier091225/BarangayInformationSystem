@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 
 class OfficialFactory extends Factory
 {
@@ -18,8 +19,8 @@ class OfficialFactory extends Factory
                 'Barangay Treasurer',
             ]),
             'contact_number' => fake()->numerify('09#########'),
-            'term_start' => '2023-11-01',
-            'term_end' => '2025-11-01',
+            'term_start' => now()->startOfYear()->toDateString(),
+            'term_end' => fn (array $attributes): string => Carbon::parse($attributes['term_start'])->addYears(3)->subDay()->toDateString(),
         ];
     }
 }

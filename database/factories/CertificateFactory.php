@@ -23,7 +23,7 @@ class CertificateFactory extends Factory
                 'Postal ID',
                 'Bank Account Opening',
             ]),
-            'date_issued' => fake()->date(),
+            'date_issued' => today()->toDateString(),
         ];
     }
 }
