@@ -5,11 +5,70 @@ namespace Tests\Feature;
 use App\Models\Certificate;
 use App\Models\Resident;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class CertificateTest extends TestCase
 {
     use RefreshDatabase;
+
+    #[DataProvider('supportedCertificateTypes')]
+    public function test_each_supported_certificate_type_can_be_issued(string $type): void
+    {
+        $resident = Resident::factory()->create();
+
+        $this->post(route('certificates.store'), [
+            'resident_id' => $resident->id,
+            'certificate_type' => $type,
+            'purpose' => 'Employment',
+            'date_issued' => '2026-09-18',
+        ])->assertSessionHasNoErrors()->assertRedirect();
+
+        $this->assertDatabaseHas('certificates', ['certificate_type' => $type, 'resident_id' => $resident->id]);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function supportedCertificateTypes(): array
+    {
+        return [
+            'clearance' => ['Barangay Clearance'],
+            'residency' => ['Certificate of Residency'],
+            'indigency' => ['Certificate of Indigency'],
+            'business' => ['Business Clearance'],
+        ];
+    }
+
+    public function test_unsupported_certificate_type_is_rejected_and_form_input_is_preserved(): void
+    {
+        $resident = Resident::factory()->create();
+        $data = [
+            'resident_id' => $resident->id,
+            'certificate_type' => 'Unsupported Certificate',
+            'purpose' => 'Employment',
+            'date_issued' => '2026-09-18',
+        ];
+
+        $this->from(route('certificates.create'))->post(route('certificates.store'), $data)
+            ->assertRedirect(route('certificates.create'))
+            ->assertSessionHasErrors('certificate_type')
+            ->assertSessionHasInput('purpose', 'Employment');
+
+        $this->assertDatabaseCount('certificates', 0);
+    }
+
+    public function test_invalid_certificate_details_are_rejected(): void
+    {
+        $this->post(route('certificates.store'), [
+            'resident_id' => 999999,
+            'certificate_type' => 'Barangay Clearance',
+            'purpose' => '',
+            'date_issued' => 'not-a-date',
+        ])->assertSessionHasErrors(['resident_id', 'purpose', 'date_issued']);
+
+        $this->assertDatabaseCount('certificates', 0);
+    }
 
     public function test_certificates_index_page_can_be_rendered(): void
     {

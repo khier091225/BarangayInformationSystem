@@ -9,6 +9,7 @@ class HouseholdController extends Controller
 {
     public function index(Request $request)
     {
+        /*
         // Kasama ang bilang ng mga residente (members) sa bawat bahay
         $query = Household::withCount('residents');
 
@@ -22,7 +23,9 @@ class HouseholdController extends Controller
             });
         }
 
-        $households = $query->latest()->paginate(10);
+        $households = $query->latest()->paginate(10)->withQueryString();
+        */
+        $households = Household::latest()->paginate(10);
 
         return view('households.index', compact('households'));
     }

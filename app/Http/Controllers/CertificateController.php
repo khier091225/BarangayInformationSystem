@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCertificateRequest;
 use App\Models\Certificate;
 use App\Models\Official;
 use App\Models\Resident;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class CertificateController extends Controller
@@ -14,6 +16,7 @@ class CertificateController extends Controller
      */
     public function index(Request $request)
     {
+        /*
         $query = Certificate::with('resident');
 
         // Search by resident name, certificate type, or purpose
@@ -35,7 +38,10 @@ class CertificateController extends Controller
             $query->where('certificate_type', $request->type);
         }
 
-        $certificates = $query->latest('date_issued')->paginate(10);
+        $certificates = $query->latest('date_issued')->paginate(10)->withQueryString();
+        */
+
+        $certificates = Certificate::latest('date_issued')->paginate(10);
 
         return view('certificates.index', compact('certificates'));
     }
@@ -56,14 +62,9 @@ class CertificateController extends Controller
     /**
      * Store a newly issued certificate in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCertificateRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'resident_id' => 'required|exists:residents,id',
-            'certificate_type' => 'required|string|max:255',
-            'purpose' => 'required|string|max:255',
-            'date_issued' => 'required|date',
-        ]);
+        $validated = $request->validated();
 
         $certificate = Certificate::create($validated);
 

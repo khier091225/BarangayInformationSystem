@@ -12,6 +12,7 @@ class OfficialController extends Controller
      */
     public function index(Request $request)
     {
+        /*
         $query = Official::query();
 
         // Search by name or position
@@ -30,7 +31,10 @@ class OfficialController extends Controller
         }
 
         // Display Captain first, then Kagawads, etc.
-        $officials = $query->orderBy('name')->paginate(10);
+        $officials = $query->orderBy('name')->paginate(10)->withQueryString();
+        */
+
+        $officials = Official::orderby('name')->paginate(10);
 
         return view('officials.index', compact('officials'));
     }

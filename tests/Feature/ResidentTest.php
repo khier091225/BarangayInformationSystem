@@ -5,11 +5,58 @@ namespace Tests\Feature;
 use App\Models\Household;
 use App\Models\Resident;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class ResidentTest extends TestCase
 {
     use RefreshDatabase;
+
+    /**
+     * @param  array<string, mixed>  $invalidValues
+     */
+    #[DataProvider('invalidResidentDetails')]
+    public function test_create_and_update_reject_invalid_resident_details(array $invalidValues): void
+    {
+        $resident = Resident::factory()->create(['first_name' => 'Original']);
+        $originalAttributes = $resident->fresh()->getAttributes();
+        $data = array_replace(Resident::factory()->make(['household_id' => null])->getAttributes(), $invalidValues);
+
+        $this->post(route('residents.store'), $data)->assertSessionHasErrors(array_keys($invalidValues));
+        $this->put(route('residents.update', $resident), $data)->assertSessionHasErrors(array_keys($invalidValues));
+
+        $this->assertDatabaseCount('residents', 1);
+        $this->assertSame($originalAttributes, $resident->fresh()->getAttributes());
+    }
+
+    /**
+     * @return array<string, array{array<string, mixed>}>
+     */
+    public static function invalidResidentDetails(): array
+    {
+        return [
+            'required fields' => [['first_name' => '', 'last_name' => '', 'address' => '']],
+            'invalid choices' => [['gender' => 'Invalid', 'civil_status' => 'Invalid']],
+            'invalid date' => [['birthdate' => 'not-a-date']],
+            'future birthdate' => [['birthdate' => '2999-01-01']],
+            'unknown household' => [['household_id' => 999999]],
+            'invalid voter flag' => [['is_voter' => 'invalid']],
+        ];
+    }
+
+    public function test_updating_a_resident_with_an_unchecked_voter_box_clears_the_flag(): void
+    {
+        $resident = Resident::factory()->create(['is_voter' => true]);
+        $data = Resident::factory()->make(['household_id' => null])->getAttributes();
+        unset($data['is_voter']);
+
+        $this->put(route('residents.update', $resident), $data)
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('residents.index'));
+
+        $this->assertFalse($resident->fresh()->is_voter);
+        $this->assertNull($resident->fresh()->household_id);
+    }
 
     public function test_residents_index_page_can_be_rendered(): void
     {

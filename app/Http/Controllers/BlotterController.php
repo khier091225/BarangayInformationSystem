@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveBlotterRequest;
 use App\Models\Blotter;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class BlotterController extends Controller
 {
     public function index(Request $request)
     {
+        /*
         $query = Blotter::query();
 
         // Search by complainant, respondent, or incident details
@@ -26,7 +29,10 @@ class BlotterController extends Controller
             $query->where('status', $request->status);
         }
 
-        $blotters = $query->latest('incident_date')->paginate(10);
+        $blotters = $query->latest('incident_date')->paginate(10)->withQueryString();
+        */
+
+        $blotters = Blotter::latest('incident_date')->paginate(10);
 
         return view('blotters.index', compact('blotters'));
     }
@@ -36,15 +42,9 @@ class BlotterController extends Controller
         return view('blotters.create');
     }
 
-    public function store(Request $request)
+    public function store(SaveBlotterRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'complainant' => 'required|string|max:255',
-            'respondent' => 'required|string|max:255',
-            'incident' => 'required|string',
-            'incident_date' => 'required|date',
-            'status' => 'required|in:Pending,Settled,Dismissed',
-        ]);
+        $validated = $request->validated();
 
         Blotter::create($validated);
 
@@ -62,15 +62,9 @@ class BlotterController extends Controller
         return view('blotters.edit', compact('blotter'));
     }
 
-    public function update(Request $request, Blotter $blotter)
+    public function update(SaveBlotterRequest $request, Blotter $blotter): RedirectResponse
     {
-        $validated = $request->validate([
-            'complainant' => 'required|string|max:255',
-            'respondent' => 'required|string|max:255',
-            'incident' => 'required|string',
-            'incident_date' => 'required|date',
-            'status' => 'required|in:Pending,Settled,Dismissed',
-        ]);
+        $validated = $request->validated();
 
         $blotter->update($validated);
 
