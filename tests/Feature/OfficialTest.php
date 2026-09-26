@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Official;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -10,11 +11,18 @@ class OfficialTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(User::factory()->create());
+    }
+
     public function test_officials_index_page_can_be_rendered(): void
     {
         Official::factory()->count(3)->create();
 
-        $response = $this->get(route('officials.index', ['role' => 'admin']));
+        $response = $this->get(route('officials.index'));
 
         $response->assertOk();
         $response->assertSee('Barangay Officials');
@@ -22,7 +30,7 @@ class OfficialTest extends TestCase
 
     public function test_official_create_form_can_be_rendered(): void
     {
-        $response = $this->get(route('officials.create', ['role' => 'admin']));
+        $response = $this->get(route('officials.create'));
 
         $response->assertOk();
         $response->assertSee('Add New Official');
@@ -38,9 +46,9 @@ class OfficialTest extends TestCase
             'term_end' => '2026-06-30',
         ];
 
-        $response = $this->post(route('officials.store', ['role' => 'admin']), $data);
+        $response = $this->post(route('officials.store'), $data);
 
-        $response->assertRedirect(route('officials.index', ['role' => 'admin']));
+        $response->assertRedirect(route('officials.index'));
         $this->assertDatabaseHas('officials', [
             'name' => 'Hon. Jose Rizal',
             'position' => 'Barangay Captain',
@@ -51,7 +59,7 @@ class OfficialTest extends TestCase
     {
         $official = Official::factory()->create();
 
-        $response = $this->get(route('officials.edit', [$official, 'role' => 'admin']));
+        $response = $this->get(route('officials.edit', [$official]));
 
         $response->assertOk();
         $response->assertSee('Edit Official');
@@ -64,7 +72,7 @@ class OfficialTest extends TestCase
             'position' => 'Barangay Kagawad',
         ]);
 
-        $response = $this->put(route('officials.update', [$official, 'role' => 'admin']), [
+        $response = $this->put(route('officials.update', [$official]), [
             'name' => 'Juan Luna Updated',
             'position' => 'Barangay Captain',
             'contact_number' => '09998887777',
@@ -72,7 +80,7 @@ class OfficialTest extends TestCase
             'term_end' => '2026-06-30',
         ]);
 
-        $response->assertRedirect(route('officials.index', ['role' => 'admin']));
+        $response->assertRedirect(route('officials.index'));
         $this->assertDatabaseHas('officials', [
             'id' => $official->id,
             'name' => 'Juan Luna Updated',
@@ -84,9 +92,9 @@ class OfficialTest extends TestCase
     {
         $official = Official::factory()->create();
 
-        $response = $this->delete(route('officials.destroy', [$official, 'role' => 'admin']));
+        $response = $this->delete(route('officials.destroy', [$official]));
 
-        $response->assertRedirect(route('officials.index', ['role' => 'admin']));
+        $response->assertRedirect(route('officials.index'));
         $this->assertDatabaseMissing('officials', [
             'id' => $official->id,
         ]);

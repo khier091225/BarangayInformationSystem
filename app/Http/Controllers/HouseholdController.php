@@ -25,7 +25,7 @@ class HouseholdController extends Controller
 
         $households = $query->latest()->paginate(10)->withQueryString();
         */
-        $households = Household::latest()->paginate(10)->appends(['role' => 'admin']);
+        $households = Household::latest()->paginate(10);
 
         return view('households.index', compact('households'));
     }
@@ -45,7 +45,7 @@ class HouseholdController extends Controller
 
         Household::create($validated);
 
-        return redirect()->route('households.index', ['role' => 'admin'])
+        return redirect()->route('households.index')
             ->with('success', 'Household added successfully!');
     }
 
@@ -71,7 +71,7 @@ class HouseholdController extends Controller
 
         $household->update($validated);
 
-        return redirect()->route('households.index', ['role' => 'admin'])
+        return redirect()->route('households.index')
             ->with('success', 'Household updated successfully!');
     }
 
@@ -79,7 +79,7 @@ class HouseholdController extends Controller
     {
         $household->delete();
 
-        return redirect()->route('households.index', ['role' => 'admin'])
+        return redirect()->route('households.index')
             ->with('success', 'Household deleted successfully!');
     }
 }

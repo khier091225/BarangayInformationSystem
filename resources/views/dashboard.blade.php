@@ -22,13 +22,13 @@
             <p style="color: #69786b; font-size: 13px;">Real-time overview of community demographics, civil documents, and blotter records.</p>
         </div>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <a href="{{ route('residents.create', ['role' => 'admin']) }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            <a href="{{ route('residents.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
                 <i data-lucide="user-plus"></i> Register Resident
             </a>
-            <a href="{{ route('certificates.create', ['role' => 'admin']) }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            <a href="{{ route('certificates.create') }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
                 <i data-lucide="file-plus"></i> Issue Certificate
             </a>
-            <a href="{{ route('blotters.create', ['role' => 'admin']) }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            <a href="{{ route('blotters.create') }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
                 <i data-lucide="plus"></i> File Complaint
             </a>
         </div>
@@ -37,7 +37,6 @@
     <!-- Dashboard Quick Search Bar -->
     <div class="search-filter-card" style="margin-bottom: 24px;">
         <form method="GET" action="{{ route('residents.index') }}" class="search-filter-form">
-            <input type="hidden" name="role" value="admin">
             <div class="search-input-group">
                 <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
                 <input type="search" name="search" placeholder="Quick search resident records by name, household, or address..." aria-label="Quick search residents">
@@ -59,7 +58,7 @@
             <div style="flex: 1; min-width: 0;">
                 <div style="font-size: 12px; font-weight: 600; color: #69786b; text-transform: uppercase; letter-spacing: 0.04em;">Total Residents</div>
                 <div style="font-size: 26px; font-weight: 700; color: #1e3a29; margin-top: 2px;">{{ number_format($residentCount) }}</div>
-                <a href="{{ route('residents.index', ['role' => 'admin']) }}" style="font-size: 12px; color: #276747; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
+                <a href="{{ route('residents.index') }}" style="font-size: 12px; color: #276747; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
                     View directory <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
                 </a>
             </div>
@@ -73,7 +72,7 @@
             <div style="flex: 1; min-width: 0;">
                 <div style="font-size: 12px; font-weight: 600; color: #69786b; text-transform: uppercase; letter-spacing: 0.04em;">Households</div>
                 <div style="font-size: 26px; font-weight: 700; color: #1e3a29; margin-top: 2px;">{{ number_format($householdCount) }}</div>
-                <a href="{{ route('households.index', ['role' => 'admin']) }}" style="font-size: 12px; color: #285881; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
+                <a href="{{ route('households.index') }}" style="font-size: 12px; color: #285881; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
                     View households <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
                 </a>
             </div>
@@ -87,7 +86,7 @@
             <div style="flex: 1; min-width: 0;">
                 <div style="font-size: 12px; font-weight: 600; color: #69786b; text-transform: uppercase; letter-spacing: 0.04em;">Certificates</div>
                 <div style="font-size: 26px; font-weight: 700; color: #1e3a29; margin-top: 2px;">{{ number_format($certificateCount) }}</div>
-                <a href="{{ route('certificates.index', ['role' => 'admin']) }}" style="font-size: 12px; color: #5f377e; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
+                <a href="{{ route('certificates.index') }}" style="font-size: 12px; color: #5f377e; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
                     View requests <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
                 </a>
             </div>
@@ -101,7 +100,7 @@
             <div style="flex: 1; min-width: 0;">
                 <div style="font-size: 12px; font-weight: 600; color: #69786b; text-transform: uppercase; letter-spacing: 0.04em;">Pending Blotters</div>
                 <div style="font-size: 26px; font-weight: 700; color: #1e3a29; margin-top: 2px;">{{ number_format($pendingBlotterCount) }}</div>
-                <a href="{{ route('blotters.index', ['role' => 'admin']) }}" style="font-size: 12px; color: #74500b; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
+                <a href="{{ route('blotters.index') }}" style="font-size: 12px; color: #74500b; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
                     Total cases: {{ $totalBlotterCount }} <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
                 </a>
             </div>
@@ -110,31 +109,31 @@
 
     <!-- Shortcuts Row -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 28px;">
-        <a href="{{ route('residents.index', ['role' => 'admin']) }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
+        <a href="{{ route('residents.index') }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
             <span style="display: flex; align-items: center; gap: 10px;">
                 <i data-lucide="users-round" style="width: 16px; height: 16px; color: #276747;"></i> Resident Registry
             </span>
             <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #999;"></i>
         </a>
-        <a href="{{ route('households.index', ['role' => 'admin']) }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
+        <a href="{{ route('households.index') }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
             <span style="display: flex; align-items: center; gap: 10px;">
                 <i data-lucide="house" style="width: 16px; height: 16px; color: #285881;"></i> Households
             </span>
             <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #999;"></i>
         </a>
-        <a href="{{ route('certificates.index', ['role' => 'admin']) }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
+        <a href="{{ route('certificates.index') }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
             <span style="display: flex; align-items: center; gap: 10px;">
                 <i data-lucide="files" style="width: 16px; height: 16px; color: #5f377e;"></i> Certificates
             </span>
             <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #999;"></i>
         </a>
-        <a href="{{ route('blotters.index', ['role' => 'admin']) }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
+        <a href="{{ route('blotters.index') }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
             <span style="display: flex; align-items: center; gap: 10px;">
                 <i data-lucide="notebook-pen" style="width: 16px; height: 16px; color: #8b3f20;"></i> Blotter Records
             </span>
             <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #999;"></i>
         </a>
-        <a href="{{ route('officials.index', ['role' => 'admin']) }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
+        <a href="{{ route('officials.index') }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
             <span style="display: flex; align-items: center; gap: 10px;">
                 <i data-lucide="badge-check" style="width: 16px; height: 16px; color: #2e7d32;"></i> Officials
             </span>
@@ -151,7 +150,7 @@
                     <h2 style="font-size: 16px; font-weight: 600; color: #1e3a29; margin: 0;">Recent Certificate Requests</h2>
                     <p style="font-size: 12px; color: #69786b; margin: 2px 0 0;">Latest applications submitted</p>
                 </div>
-                <a href="{{ route('certificates.index', ['role' => 'admin']) }}" style="font-size: 12px; font-weight: 600; color: #276747; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                <a href="{{ route('certificates.index') }}" style="font-size: 12px; font-weight: 600; color: #276747; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
                     View all <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
                 </a>
             </div>
@@ -179,7 +178,7 @@
                                 {{ $certificate->date_issued ? $certificate->date_issued->format('M d, Y') : 'N/A' }}
                             </td>
                             <td style="padding: 12px 20px; text-align: right;">
-                                <a href="{{ route('certificates.show', [$certificate, 'role' => 'admin']) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 3px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
+                                <a href="{{ route('certificates.show', [$certificate]) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 3px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
                                     View
                                 </a>
                             </td>
@@ -202,7 +201,7 @@
                     <h2 style="font-size: 16px; font-weight: 600; color: #1e3a29; margin: 0;">Recent Blotter Cases</h2>
                     <p style="font-size: 12px; color: #69786b; margin: 2px 0 0;">Peace and order incidents</p>
                 </div>
-                <a href="{{ route('blotters.index', ['role' => 'admin']) }}" style="font-size: 12px; font-weight: 600; color: #276747; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                <a href="{{ route('blotters.index') }}" style="font-size: 12px; font-weight: 600; color: #276747; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
                     View all <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
                 </a>
             </div>
@@ -238,7 +237,7 @@
                                 @endif
                             </td>
                             <td style="padding: 12px 20px; text-align: right;">
-                                <a href="{{ route('blotters.show', [$blotter, 'role' => 'admin']) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 3px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
+                                <a href="{{ route('blotters.show', [$blotter]) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 3px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
                                     View
                                 </a>
                             </td>
@@ -262,7 +261,7 @@
                 <h2 style="font-size: 16px; font-weight: 600; color: #1e3a29; margin: 0;">Newly Registered Residents</h2>
                 <p style="font-size: 12px; color: #69786b; margin: 2px 0 0;">Recent additions to the community registry</p>
             </div>
-            <a href="{{ route('residents.index', ['role' => 'admin']) }}" style="font-size: 12px; font-weight: 600; color: #276747; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+            <a href="{{ route('residents.index') }}" style="font-size: 12px; font-weight: 600; color: #276747; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
                 View all residents <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
             </a>
         </div>
@@ -281,7 +280,7 @@
                 @forelse ($recentResidents as $resident)
                     <tr style="border-bottom: 1px solid #edf1eb;">
                         <td style="padding: 12px 20px; font-weight: 600; color: #1e3a29;">
-                            <a href="{{ route('residents.show', [$resident, 'role' => 'admin']) }}" style="color: inherit; text-decoration: underline;">
+                            <a href="{{ route('residents.show', [$resident]) }}" style="color: inherit; text-decoration: underline;">
                                 {{ $resident->full_name }}
                             </a>
                             @if ($resident->contact_number)
@@ -292,7 +291,7 @@
                         </td>
                         <td style="padding: 12px 16px;">
                             @if ($resident->household)
-                                <a href="{{ route('households.show', [$resident->household, 'role' => 'admin']) }}" style="color: #276747; text-decoration: none; font-weight: 600;">
+                                <a href="{{ route('households.show', [$resident->household]) }}" style="color: #276747; text-decoration: none; font-weight: 600;">
                                     {{ $resident->household->household_number }}
                                 </a>
                             @else
@@ -313,7 +312,7 @@
                             @endif
                         </td>
                         <td style="padding: 12px 20px; text-align: right;">
-                            <a href="{{ route('residents.show', [$resident, 'role' => 'admin']) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 3px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
+                            <a href="{{ route('residents.show', [$resident]) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 3px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
                                 View
                             </a>
                         </td>

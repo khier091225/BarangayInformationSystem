@@ -32,7 +32,7 @@ class BlotterController extends Controller
         $blotters = $query->latest('incident_date')->paginate(10)->withQueryString();
         */
 
-        $blotters = Blotter::latest('incident_date')->paginate(10)->appends(['role' => 'admin']);
+        $blotters = Blotter::latest('incident_date')->paginate(10);
 
         return view('blotters.index', compact('blotters'));
     }
@@ -48,7 +48,7 @@ class BlotterController extends Controller
 
         Blotter::create($validated);
 
-        return redirect()->route('blotters.index', ['role' => 'admin'])
+        return redirect()->route('blotters.index')
             ->with('success', 'Blotter report recorded successfully!');
     }
 
@@ -68,7 +68,7 @@ class BlotterController extends Controller
 
         $blotter->update($validated);
 
-        return redirect()->route('blotters.index', ['role' => 'admin'])
+        return redirect()->route('blotters.index')
             ->with('success', 'Blotter record updated successfully!');
     }
 
@@ -76,7 +76,7 @@ class BlotterController extends Controller
     {
         $blotter->delete();
 
-        return redirect()->route('blotters.index', ['role' => 'admin'])
+        return redirect()->route('blotters.index')
             ->with('success', 'Blotter record deleted successfully!');
     }
 }

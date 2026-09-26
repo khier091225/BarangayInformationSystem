@@ -17,15 +17,14 @@
             <h1 style="font-size: 26px; color: #1e3a29; margin-top: 4px;">Household Registry</h1>
             <p style="color: #69786b; font-size: 13px;">Manage registered households, household heads, and family addresses.</p>
         </div>
-        <a href="{{ route('households.create', ['role' => 'admin']) }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="{{ route('households.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
             <i data-lucide="plus"></i> Add Household
         </a>
     </div>
 
     <!-- Search & Filters -->
     <div class="search-filter-card">
-        <form method="GET" action="{{ route('households.index', ['role' => 'admin']) }}" class="search-filter-form">
-            <input type="hidden" name="role" value="admin">
+        <form method="GET" action="{{ route('households.index') }}" class="search-filter-form">
             <div class="search-input-group">
                 <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
                 <input type="search" name="search" value="{{ request('search') }}" placeholder="Search household number, head, or address..." aria-label="Search households">
@@ -35,7 +34,7 @@
                 <span>Search</span>
             </button>
             @if(request('search'))
-                <a href="{{ route('households.index', ['role' => 'admin']) }}" class="search-button-reset">
+                <a href="{{ route('households.index') }}" class="search-button-reset">
                     <i data-lucide="rotate-ccw" aria-hidden="true"></i>
                     <span>Reset</span>
                 </a>
@@ -59,7 +58,7 @@
                 @forelse ($households as $household)
                     <tr style="border-bottom: 1px solid #edf1eb;">
                         <td style="padding: 14px 16px; font-weight: 700; color: #1e3a29;">
-                            <a href="{{ route('households.show', [$household, 'role' => 'admin']) }}" style="color: inherit; text-decoration: underline;">
+                            <a href="{{ route('households.show', [$household]) }}" style="color: inherit; text-decoration: underline;">
                                 {{ $household->household_number }}
                             </a>
                         </td>
@@ -72,13 +71,13 @@
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('households.show', [$household, 'role' => 'admin']) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
+                                <a href="{{ route('households.show', [$household]) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
                                     View Members
                                 </a>
-                                <a href="{{ route('households.edit', [$household, 'role' => 'admin']) }}" style="color: #556658; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #ccd5c8; border-radius: 4px;">
+                                <a href="{{ route('households.edit', [$household]) }}" style="color: #556658; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #ccd5c8; border-radius: 4px;">
                                     Edit
                                 </a>
-                                <form method="POST" action="{{ route('households.destroy', [$household, 'role' => 'admin']) }}" onsubmit="return confirm('Are you sure you want to delete this household?');" style="display: inline;">
+                                <form method="POST" action="{{ route('households.destroy', [$household]) }}" onsubmit="return confirm('Are you sure you want to delete this household?');" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" style="background: none; border: 1px solid #eed0ce; color: #a43229; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 4px; cursor: pointer;">

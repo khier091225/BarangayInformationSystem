@@ -22,17 +22,9 @@
 .sidebar-user-name { display: block; font-size: .875rem; font-weight: 650; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.25; }
 .sidebar-user-role { display: inline-flex; align-items: center; gap: .25rem; font-size: .75rem; font-weight: 500; color: var(--muted); margin-top: .125rem; }
 .sidebar-user-role svg { width: .8125rem; height: .8125rem; color: #245838; }
-.sidebar-logout-btn { display: flex; align-items: center; gap: .625rem; width: 100%; padding: .5rem .75rem; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; transition: background .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03); }
-.sidebar-logout-btn:hover { background: #fef2f2; border-color: #fecaca; color: #b91c1c; box-shadow: 0 2px 4px rgba(185, 28, 28, 0.08); }
-.sidebar-logout-btn:hover svg { color: #b91c1c; transform: translateX(2px); }
-.sidebar-logout-btn svg { width: 1.125rem; height: 1.125rem; color: var(--muted); transition: transform .15s ease, color .15s ease; }
-.sidebar-logout-btn .logout-label-group { display: flex; flex-direction: column; text-align: left; line-height: 1.2; }
-.sidebar-logout-btn .logout-main-label { font-weight: 600; font-size: .8125rem; }
-.sidebar-logout-btn .logout-sub-label { font-size: .6875rem; font-weight: 450; color: var(--muted); }
-.sidebar-logout-btn:hover .logout-sub-label { color: #dc2626; opacity: .85; }
 .topbar-actions { display: flex; align-items: center; gap: .75rem; flex-shrink: 0; }
 .topbar-session-badge { display: inline-flex; align-items: center; gap: .4375rem; padding: .25rem .625rem; border-radius: 9999px; background: #eaf5eb; color: #245838; border: 1px solid #c2e2c7; font-size: .75rem; font-weight: 600; line-height: 1.2; }
-.topbar-logout-btn { display: inline-flex; align-items: center; gap: .4375rem; padding: .375rem .75rem; min-height: 2.25rem; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: .8125rem; font-weight: 600; text-decoration: none; transition: all .15s ease-in-out; }
+.topbar-logout-btn { display: inline-flex; align-items: center; gap: .4375rem; padding: .375rem .75rem; min-height: 2.25rem; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: .8125rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all .15s ease-in-out; }
 .topbar-logout-btn:hover { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
 .topbar-logout-btn svg { width: .9375rem; height: .9375rem; color: var(--muted); transition: color .15s ease, transform .15s ease; }
 .topbar-logout-btn:hover svg { color: #b91c1c; transform: translateX(1px); }
@@ -46,7 +38,7 @@
 .logout-dialog-actions { display: flex; justify-content: flex-end; gap: .625rem; border-top: 1px solid var(--line); padding-top: 1.125rem; }
 .logout-dialog-cancel-btn { padding: .5rem 1rem; font-size: .875rem; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer; transition: background .15s ease; }
 .logout-dialog-cancel-btn:hover { background: var(--canvas); }
-.logout-dialog-confirm-btn { display: inline-flex; align-items: center; gap: .5rem; padding: .5rem 1rem; font-size: .875rem; font-weight: 600; color: #fff; background: #b91c1c; border: 1px solid transparent; border-radius: var(--radius); text-decoration: none; transition: background .15s ease; }
+.logout-dialog-confirm-btn { display: inline-flex; align-items: center; gap: .5rem; padding: .5rem 1rem; font-size: .875rem; font-weight: 600; color: #fff; background: #b91c1c; border: 1px solid transparent; border-radius: var(--radius); text-decoration: none; cursor: pointer; transition: background .15s ease; }
 .logout-dialog-confirm-btn:hover { background: #991b1b; }
 .logout-dialog-confirm-btn svg { width: 1rem; height: 1rem; }
 .search-filter-card { background: #ffffff; border: 1px solid #e1e7de; border-radius: 8px; padding: 14px 18px; margin-bottom: 22px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02); }

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Household;
 use App\Models\Resident;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -11,6 +12,13 @@ use Tests\TestCase;
 class ResidentTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(User::factory()->create());
+    }
 
     /**
      * @param  array<string, mixed>  $invalidValues
@@ -22,8 +30,8 @@ class ResidentTest extends TestCase
         $originalAttributes = $resident->fresh()->getAttributes();
         $data = array_replace(Resident::factory()->make(['household_id' => null])->getAttributes(), $invalidValues);
 
-        $this->post(route('residents.store', ['role' => 'admin']), $data)->assertSessionHasErrors(array_keys($invalidValues));
-        $this->put(route('residents.update', [$resident, 'role' => 'admin']), $data)->assertSessionHasErrors(array_keys($invalidValues));
+        $this->post(route('residents.store'), $data)->assertSessionHasErrors(array_keys($invalidValues));
+        $this->put(route('residents.update', [$resident]), $data)->assertSessionHasErrors(array_keys($invalidValues));
 
         $this->assertDatabaseCount('residents', 1);
         $this->assertSame($originalAttributes, $resident->fresh()->getAttributes());
@@ -50,9 +58,9 @@ class ResidentTest extends TestCase
         $data = Resident::factory()->make(['household_id' => null])->getAttributes();
         unset($data['is_voter']);
 
-        $this->put(route('residents.update', [$resident, 'role' => 'admin']), $data)
+        $this->put(route('residents.update', [$resident]), $data)
             ->assertSessionHasNoErrors()
-            ->assertRedirect(route('residents.index', ['role' => 'admin']));
+            ->assertRedirect(route('residents.index'));
 
         $this->assertFalse($resident->fresh()->is_voter);
         $this->assertNull($resident->fresh()->household_id);
@@ -62,7 +70,7 @@ class ResidentTest extends TestCase
     {
         Resident::factory()->count(3)->create();
 
-        $response = $this->get(route('residents.index', ['role' => 'admin']));
+        $response = $this->get(route('residents.index'));
 
         $response->assertOk();
         $response->assertSee('Resident Registry');
@@ -70,7 +78,7 @@ class ResidentTest extends TestCase
 
     public function test_resident_create_form_can_be_rendered(): void
     {
-        $response = $this->get(route('residents.create', ['role' => 'admin']));
+        $response = $this->get(route('residents.create'));
 
         $response->assertOk();
         $response->assertSee('Register New Resident');
@@ -93,9 +101,9 @@ class ResidentTest extends TestCase
             'is_voter' => '1',
         ];
 
-        $response = $this->post(route('residents.store', ['role' => 'admin']), $data);
+        $response = $this->post(route('residents.store'), $data);
 
-        $response->assertRedirect(route('residents.index', ['role' => 'admin']));
+        $response->assertRedirect(route('residents.index'));
         $this->assertDatabaseHas('residents', [
             'first_name' => 'Maria',
             'last_name' => 'Clara',
@@ -110,7 +118,7 @@ class ResidentTest extends TestCase
             'last_name' => 'Ibarra',
         ]);
 
-        $response = $this->get(route('residents.show', [$resident, 'role' => 'admin']));
+        $response = $this->get(route('residents.show', [$resident]));
 
         $response->assertOk();
         $response->assertSee('Crisostomo');
@@ -124,7 +132,7 @@ class ResidentTest extends TestCase
             'last_name' => 'Luna',
         ]);
 
-        $response = $this->put(route('residents.update', [$resident, 'role' => 'admin']), [
+        $response = $this->put(route('residents.update', [$resident]), [
             'first_name' => 'Juan',
             'middle_name' => 'Novicio',
             'last_name' => 'Luna',
@@ -136,7 +144,7 @@ class ResidentTest extends TestCase
             'is_voter' => '1',
         ]);
 
-        $response->assertRedirect(route('residents.index', ['role' => 'admin']));
+        $response->assertRedirect(route('residents.index'));
         $this->assertDatabaseHas('residents', [
             'id' => $resident->id,
             'middle_name' => 'Novicio',
@@ -148,9 +156,9 @@ class ResidentTest extends TestCase
     {
         $resident = Resident::factory()->create();
 
-        $response = $this->delete(route('residents.destroy', [$resident, 'role' => 'admin']));
+        $response = $this->delete(route('residents.destroy', [$resident]));
 
-        $response->assertRedirect(route('residents.index', ['role' => 'admin']));
+        $response->assertRedirect(route('residents.index'));
         $this->assertDatabaseMissing('residents', [
             'id' => $resident->id,
         ]);

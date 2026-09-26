@@ -17,15 +17,14 @@
             <h1 style="font-size: 26px; color: #1e3a29; margin-top: 4px;">Resident Registry</h1>
             <p style="color: #69786b; font-size: 13px;">Manage community residents, demographics, and voter registration records.</p>
         </div>
-        <a href="{{ route('residents.create', ['role' => 'admin']) }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="{{ route('residents.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
             <i data-lucide="user-plus"></i> Register Resident
         </a>
     </div>
 
     <!-- Search & Filters -->
     <div class="search-filter-card">
-        <form method="GET" action="{{ route('residents.index', ['role' => 'admin']) }}" class="search-filter-form">
-            <input type="hidden" name="role" value="admin">
+        <form method="GET" action="{{ route('residents.index') }}" class="search-filter-form">
             <div class="search-input-group">
                 <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
                 <input type="search" name="search" value="{{ request('search') }}" placeholder="Search by name, address, or contact..." aria-label="Search residents">
@@ -48,7 +47,7 @@
                 <span>Filter</span>
             </button>
             @if(request('search') || request('gender') || request('is_voter') !== null)
-                <a href="{{ route('residents.index', ['role' => 'admin']) }}" class="search-button-reset">
+                <a href="{{ route('residents.index') }}" class="search-button-reset">
                     <i data-lucide="rotate-ccw" aria-hidden="true"></i>
                     <span>Reset</span>
                 </a>
@@ -74,7 +73,7 @@
                 @forelse ($residents as $resident)
                     <tr style="border-bottom: 1px solid #edf1eb;">
                         <td style="padding: 14px 16px; font-weight: 600; color: #1e3a29;">
-                            <a href="{{ route('residents.show', [$resident, 'role' => 'admin']) }}" style="color: inherit; text-decoration: underline;">
+                            <a href="{{ route('residents.show', [$resident]) }}" style="color: inherit; text-decoration: underline;">
                                 {{ $resident->full_name }}
                             </a>
                             @if($resident->contact_number)
@@ -85,7 +84,7 @@
                         </td>
                         <td style="padding: 14px 16px;">
                             @if($resident->household)
-                                <a href="{{ route('households.show', [$resident->household, 'role' => 'admin']) }}" style="color: #276747; text-decoration: none; font-weight: 600;">
+                                <a href="{{ route('households.show', [$resident->household]) }}" style="color: #276747; text-decoration: none; font-weight: 600;">
                                     {{ $resident->household->household_number }}
                                 </a>
                                 <div style="font-size: 11px; color: #788577;">Head: {{ $resident->household->household_head }}</div>
@@ -114,13 +113,13 @@
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('residents.show', [$resident, 'role' => 'admin']) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
+                                <a href="{{ route('residents.show', [$resident]) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
                                     View
                                 </a>
-                                <a href="{{ route('residents.edit', [$resident, 'role' => 'admin']) }}" style="color: #556658; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #ccd5c8; border-radius: 4px;">
+                                <a href="{{ route('residents.edit', [$resident]) }}" style="color: #556658; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #ccd5c8; border-radius: 4px;">
                                     Edit
                                 </a>
-                                <form method="POST" action="{{ route('residents.destroy', [$resident, 'role' => 'admin']) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');" style="display: inline;">
+                                <form method="POST" action="{{ route('residents.destroy', [$resident]) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" style="background: none; border: 1px solid #eed0ce; color: #a43229; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 4px; cursor: pointer;">

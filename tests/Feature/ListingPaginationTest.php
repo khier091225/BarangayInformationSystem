@@ -7,6 +7,7 @@ use App\Models\Certificate;
 use App\Models\Household;
 use App\Models\Official;
 use App\Models\Resident;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -16,32 +17,37 @@ class ListingPaginationTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(User::factory()->create());
+    }
+
     /**
      * @param  class-string<Model>  $model
      * @param  array<string, mixed>  $attributes
      * @param  array<string, string>  $filters
      */
     #[DataProvider('filteredListings')]
-    public function test_pagination_links_keep_search_and_filters(string $resource, string $model, array $attributes, array $filters): void
+    public function test_pagination_works_without_role_query_while_filters_are_disabled(string $resource, string $model, array $attributes, array $filters): void
     {
         $model::factory()->count(11)->create($attributes);
         $model::factory()->create($this->nonMatchingAttributes($resource));
 
-        $response = $this->get(route($resource.'.index', [...$filters, 'role' => 'admin']))->assertOk();
+        $response = $this->get(route($resource.'.index', $filters))->assertOk();
         $paginator = $response->viewData($resource);
-        $this->assertSame(11, $paginator->total());
+        $this->assertSame(12, $paginator->total());
         $nextPageUrl = $paginator->nextPageUrl();
         $this->assertNotNull($nextPageUrl);
         $response->assertSee($nextPageUrl);
         parse_str(parse_url($nextPageUrl, PHP_URL_QUERY), $query);
         $this->assertSame('2', $query['page']);
-        foreach ($filters as $key => $value) {
-            $this->assertSame($value, $query[$key]);
-        }
+        $this->assertArrayNotHasKey('role', $query);
 
         $nextPage = $this->get($nextPageUrl)->assertOk()->viewData($resource);
-        $this->assertSame(11, $nextPage->total());
-        $this->assertCount(1, $nextPage->items());
+        $this->assertSame(12, $nextPage->total());
+        $this->assertCount(2, $nextPage->items());
     }
 
     /**

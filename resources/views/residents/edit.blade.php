@@ -7,14 +7,14 @@
 @section('main-style', 'max-width: 840px;')
 
 @section('breadcrumb')
-    <a href="{{ route('residents.index', ['role' => 'admin']) }}" style="color: inherit; text-decoration: none;">Residents</a>
+    <a href="{{ route('residents.index') }}" style="color: inherit; text-decoration: none;">Residents</a>
     <i data-lucide="chevron-right"></i>
     <strong>Edit {{ $resident->full_name }}</strong>
 @endsection
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('residents.index', ['role' => 'admin']) }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; margin-bottom: 12px;">
+        <a href="{{ route('residents.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; margin-bottom: 12px;">
             <i data-lucide="arrow-left"></i> Back to Residents
         </a>
         <h1 style="font-size: 24px; color: #1e3a29;">Edit Resident: {{ $resident->full_name }}</h1>
@@ -22,7 +22,7 @@
     </div>
 
     <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-        <form method="POST" action="{{ route('residents.update', [$resident, 'role' => 'admin']) }}">
+        <form method="POST" action="{{ route('residents.update', [$resident]) }}">
             @csrf
             @method('PUT')
 
@@ -118,7 +118,7 @@
             </div>
 
             <!-- Submit Buttons -->
-            <x-form.actions :cancel-url="route('residents.index', ['role' => 'admin'])">
+            <x-form.actions :cancel-url="route('residents.index')">
                 <x-slot:submit>Update Resident</x-slot:submit>
             </x-form.actions>
         </form>

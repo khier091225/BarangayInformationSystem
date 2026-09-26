@@ -5,14 +5,14 @@
 @endsection
 
 @section('breadcrumb')
-    <a href="{{ route('residents.index', ['role' => 'admin']) }}" style="color: inherit; text-decoration: none;">Residents</a>
+    <a href="{{ route('residents.index') }}" style="color: inherit; text-decoration: none;">Residents</a>
     <i data-lucide="chevron-right"></i>
     <strong>{{ $resident->full_name }}</strong>
 @endsection
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('residents.index', ['role' => 'admin']) }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; margin-bottom: 12px;">
+        <a href="{{ route('residents.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; margin-bottom: 12px;">
             <i data-lucide="arrow-left"></i> Back to Residents
         </a>
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -22,10 +22,10 @@
                 <p style="color: #69786b; font-size: 13px;">Member of Barangay Information System community registry.</p>
             </div>
             <div style="display: flex; gap: 10px;">
-                <a href="{{ route('residents.edit', [$resident, 'role' => 'admin']) }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                <a href="{{ route('residents.edit', [$resident]) }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                     <i data-lucide="pencil"></i> Edit Profile
                 </a>
-                <form method="POST" action="{{ route('residents.destroy', [$resident, 'role' => 'admin']) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');" style="display: inline;">
+                <form method="POST" action="{{ route('residents.destroy', [$resident]) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');" style="display: inline;">
                     @csrf
                     @method('DELETE')
                     <button type="submit" style="background: none; border: 1px solid #eed0ce; color: #a43229; font-size: 13px; font-weight: 600; padding: 9px 14px; border-radius: 6px; cursor: pointer;">
@@ -77,7 +77,7 @@
             @if($resident->household)
                 <div style="margin-top: 10px;">
                     <div style="font-size: 18px; font-weight: 700; color: #276747;">
-                        <a href="{{ route('households.show', [$resident->household, 'role' => 'admin']) }}" style="color: inherit; text-decoration: underline;">
+                        <a href="{{ route('households.show', [$resident->household]) }}" style="color: inherit; text-decoration: underline;">
                             {{ $resident->household->household_number }}
                         </a>
                     </div>

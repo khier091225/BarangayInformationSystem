@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -11,7 +12,7 @@ class DashboardTest extends TestCase
 
     public function test_dashboard_loads_directly_on_root(): void
     {
-        $response = $this->get('/?role=admin')
+        $response = $this->actingAs(User::factory()->create())->get('/')
             ->assertOk()
             ->assertSee('Overview')
             ->assertSee('Management Dashboard')
@@ -35,19 +36,19 @@ class DashboardTest extends TestCase
 
     public function test_dashboard_path_redirects_to_root(): void
     {
-        $this->get('/dashboard?role=admin')->assertRedirect('/?role=admin');
+        $this->actingAs(User::factory()->create())->get('/dashboard')->assertRedirect('/');
     }
 
-    public function test_login_is_public_and_no_logout_session_is_required(): void
+    public function test_login_is_public_and_logout_requires_authentication(): void
     {
         $this->get('/login')->assertOk()->assertSee('Staff sign in');
         $this->post('/login')->assertSessionHasErrors(['email', 'password']);
-        $this->post('/logout')->assertNotFound();
+        $this->post('/logout')->assertRedirect(route('login'));
     }
 
     public function test_dashboard_does_not_contain_public_website_or_signout(): void
     {
-        $this->get('/?role=admin')
+        $this->actingAs(User::factory()->create())->get('/')
             ->assertDontSee('Public website')
             ->assertDontSee('title="Sign out"', false)
             ->assertDontSee('data-demo-entry', false);

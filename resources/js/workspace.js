@@ -86,7 +86,7 @@ export default function initializeWorkspace() {
                 if (typeof logoutDialog.showModal === 'function') {
                     logoutDialog.showModal();
                 } else {
-                    window.location.href = trigger.getAttribute('href');
+                    trigger.form.requestSubmit();
                 }
             });
         });

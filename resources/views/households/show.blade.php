@@ -5,14 +5,14 @@
 @endsection
 
 @section('breadcrumb')
-    <a href="{{ route('households.index', ['role' => 'admin']) }}" style="color: inherit; text-decoration: none;">Households</a>
+    <a href="{{ route('households.index') }}" style="color: inherit; text-decoration: none;">Households</a>
     <i data-lucide="chevron-right"></i>
     <strong>{{ $household->household_number }}</strong>
 @endsection
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('households.index', ['role' => 'admin']) }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; margin-bottom: 12px;">
+        <a href="{{ route('households.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; margin-bottom: 12px;">
             <i data-lucide="arrow-left"></i> Back to Households
         </a>
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -20,7 +20,7 @@
                 <h1 style="font-size: 24px; color: #1e3a29;">Household: {{ $household->household_number }}</h1>
                 <p style="color: #69786b; font-size: 13px;">Household details and registered family members.</p>
             </div>
-            <a href="{{ route('households.edit', [$household, 'role' => 'admin']) }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+            <a href="{{ route('households.edit', [$household]) }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                 <i data-lucide="pencil"></i> Edit Household
             </a>
         </div>

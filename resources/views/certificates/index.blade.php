@@ -17,15 +17,14 @@
             <h1 style="font-size: 26px; color: #1e3a29; margin-top: 4px;">Certificates & Clearances</h1>
             <p style="color: #69786b; font-size: 13px;">Manage and print official barangay clearances, residency, and indigency certificates.</p>
         </div>
-        <a href="{{ route('certificates.create', ['role' => 'admin']) }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="{{ route('certificates.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
             <i data-lucide="file-plus"></i> Issue Certificate
         </a>
     </div>
 
     <!-- Search & Filters -->
     <div class="search-filter-card">
-        <form method="GET" action="{{ route('certificates.index', ['role' => 'admin']) }}" class="search-filter-form">
-            <input type="hidden" name="role" value="admin">
+        <form method="GET" action="{{ route('certificates.index') }}" class="search-filter-form">
             <div class="search-input-group">
                 <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
                 <input type="search" name="search" value="{{ request('search') }}" placeholder="Search by resident name, certificate type, or purpose..." aria-label="Search certificates">
@@ -44,7 +43,7 @@
                 <span>Filter</span>
             </button>
             @if(request('search') || request('type'))
-                <a href="{{ route('certificates.index', ['role' => 'admin']) }}" class="search-button-reset">
+                <a href="{{ route('certificates.index') }}" class="search-button-reset">
                     <i data-lucide="rotate-ccw" aria-hidden="true"></i>
                     <span>Reset</span>
                 </a>
@@ -73,7 +72,7 @@
                         </td>
                         <td style="padding: 14px 16px; font-weight: 600;">
                             @if($cert->resident)
-                                <a href="{{ route('residents.show', [$cert->resident, 'role' => 'admin']) }}" style="color: inherit; text-decoration: underline;">
+                                <a href="{{ route('residents.show', [$cert->resident]) }}" style="color: inherit; text-decoration: underline;">
                                     {{ $cert->resident->full_name }}
                                 </a>
                             @else
@@ -97,10 +96,10 @@
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('certificates.show', [$cert, 'role' => 'admin']) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 10px; border: 1px solid #c8d8c9; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
+                                <a href="{{ route('certificates.show', [$cert]) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 10px; border: 1px solid #c8d8c9; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
                                     <i data-lucide="printer" style="width: 12px; height: 12px;"></i> View & Print
                                 </a>
-                                <form method="POST" action="{{ route('certificates.destroy', [$cert, 'role' => 'admin']) }}" onsubmit="return confirm('Are you sure you want to delete this certificate record?');" style="display: inline;">
+                                <form method="POST" action="{{ route('certificates.destroy', [$cert]) }}" onsubmit="return confirm('Are you sure you want to delete this certificate record?');" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" style="background: none; border: 1px solid #eed0ce; color: #a43229; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 4px; cursor: pointer;">

@@ -34,7 +34,7 @@ class OfficialController extends Controller
         $officials = $query->orderBy('name')->paginate(10)->withQueryString();
         */
 
-        $officials = Official::orderby('name')->paginate(10)->appends(['role' => 'admin']);
+        $officials = Official::orderby('name')->paginate(10);
 
         return view('officials.index', compact('officials'));
     }
@@ -62,7 +62,7 @@ class OfficialController extends Controller
 
         Official::create($validated);
 
-        return redirect()->route('officials.index', ['role' => 'admin'])
+        return redirect()->route('officials.index')
             ->with('success', 'Barangay official added successfully!');
     }
 
@@ -89,7 +89,7 @@ class OfficialController extends Controller
 
         $official->update($validated);
 
-        return redirect()->route('officials.index', ['role' => 'admin'])
+        return redirect()->route('officials.index')
             ->with('success', 'Barangay official updated successfully!');
     }
 
@@ -100,7 +100,7 @@ class OfficialController extends Controller
     {
         $official->delete();
 
-        return redirect()->route('officials.index', ['role' => 'admin'])
+        return redirect()->route('officials.index')
             ->with('success', 'Barangay official removed successfully!');
     }
 }
