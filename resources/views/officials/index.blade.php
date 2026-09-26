@@ -23,24 +23,35 @@
     </div>
 
     <!-- Search & Filters -->
-    <form method="GET" action="{{ route('officials.index', ['role' => 'admin']) }}" style="display: flex; gap: 12px; margin-bottom: 20px;">
-        <input type="hidden" name="role" value="admin">
-        <input type="search" name="search" value="{{ request('search') }}" placeholder="Search by name, position, or contact..." style="flex: 1; padding: 10px 14px; border: 1px solid #d4dcd2; border-radius: 6px; font-size: 13px;">
-        
-        <select name="position" style="padding: 10px 14px; border: 1px solid #d4dcd2; border-radius: 6px; font-size: 13px; background: white;">
-            <option value="">All Positions</option>
-            <option value="Barangay Captain" {{ request('position') == 'Barangay Captain' ? 'selected' : '' }}>Barangay Captain</option>
-            <option value="Barangay Kagawad" {{ request('position') == 'Barangay Kagawad' ? 'selected' : '' }}>Barangay Kagawad</option>
-            <option value="SK Chairman" {{ request('position') == 'SK Chairman' ? 'selected' : '' }}>SK Chairman</option>
-            <option value="Barangay Secretary" {{ request('position') == 'Barangay Secretary' ? 'selected' : '' }}>Barangay Secretary</option>
-            <option value="Barangay Treasurer" {{ request('position') == 'Barangay Treasurer' ? 'selected' : '' }}>Barangay Treasurer</option>
-        </select>
+    <div class="search-filter-card">
+        <form method="GET" action="{{ route('officials.index', ['role' => 'admin']) }}" class="search-filter-form">
+            <input type="hidden" name="role" value="admin">
+            <div class="search-input-group">
+                <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
+                <input type="search" name="search" value="{{ request('search') }}" placeholder="Search by name, position, or contact..." aria-label="Search officials">
+            </div>
+            
+            <select name="position" class="search-select" aria-label="Filter by official position">
+                <option value="">All Positions</option>
+                <option value="Barangay Captain" {{ request('position') == 'Barangay Captain' ? 'selected' : '' }}>Barangay Captain</option>
+                <option value="Barangay Kagawad" {{ request('position') == 'Barangay Kagawad' ? 'selected' : '' }}>Barangay Kagawad</option>
+                <option value="SK Chairman" {{ request('position') == 'SK Chairman' ? 'selected' : '' }}>SK Chairman</option>
+                <option value="Barangay Secretary" {{ request('position') == 'Barangay Secretary' ? 'selected' : '' }}>Barangay Secretary</option>
+                <option value="Barangay Treasurer" {{ request('position') == 'Barangay Treasurer' ? 'selected' : '' }}>Barangay Treasurer</option>
+            </select>
 
-        <button type="submit" class="button button-outline" style="cursor: pointer;">Filter</button>
-        @if(request('search') || request('position'))
-            <a href="{{ route('officials.index', ['role' => 'admin']) }}" class="button" style="text-decoration: none; padding: 10px 14px; color: #666;">Reset</a>
-        @endif
-    </form>
+            <button type="submit" class="search-button-primary">
+                <i data-lucide="search" aria-hidden="true"></i>
+                <span>Filter</span>
+            </button>
+            @if(request('search') || request('position'))
+                <a href="{{ route('officials.index', ['role' => 'admin']) }}" class="search-button-reset">
+                    <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+                    <span>Reset</span>
+                </a>
+            @endif
+        </form>
+    </div>
 
     <!-- Data Table -->
     <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">

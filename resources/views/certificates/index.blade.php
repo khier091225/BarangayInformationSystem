@@ -23,23 +23,34 @@
     </div>
 
     <!-- Search & Filters -->
-    <form method="GET" action="{{ route('certificates.index', ['role' => 'admin']) }}" style="display: flex; gap: 12px; margin-bottom: 20px;">
-        <input type="hidden" name="role" value="admin">
-        <input type="search" name="search" value="{{ request('search') }}" placeholder="Search by resident name, certificate type, or purpose..." style="flex: 1; padding: 10px 14px; border: 1px solid #d4dcd2; border-radius: 6px; font-size: 13px;">
-        
-        <select name="type" style="padding: 10px 14px; border: 1px solid #d4dcd2; border-radius: 6px; font-size: 13px; background: white;">
-            <option value="">All Document Types</option>
-            <option value="Barangay Clearance" {{ request('type') == 'Barangay Clearance' ? 'selected' : '' }}>Barangay Clearance</option>
-            <option value="Certificate of Residency" {{ request('type') == 'Certificate of Residency' ? 'selected' : '' }}>Certificate of Residency</option>
-            <option value="Certificate of Indigency" {{ request('type') == 'Certificate of Indigency' ? 'selected' : '' }}>Certificate of Indigency</option>
-            <option value="Business Clearance" {{ request('type') == 'Business Clearance' ? 'selected' : '' }}>Business Clearance</option>
-        </select>
+    <div class="search-filter-card">
+        <form method="GET" action="{{ route('certificates.index', ['role' => 'admin']) }}" class="search-filter-form">
+            <input type="hidden" name="role" value="admin">
+            <div class="search-input-group">
+                <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
+                <input type="search" name="search" value="{{ request('search') }}" placeholder="Search by resident name, certificate type, or purpose..." aria-label="Search certificates">
+            </div>
+            
+            <select name="type" class="search-select" aria-label="Filter by certificate type">
+                <option value="">All Document Types</option>
+                <option value="Barangay Clearance" {{ request('type') == 'Barangay Clearance' ? 'selected' : '' }}>Barangay Clearance</option>
+                <option value="Certificate of Residency" {{ request('type') == 'Certificate of Residency' ? 'selected' : '' }}>Certificate of Residency</option>
+                <option value="Certificate of Indigency" {{ request('type') == 'Certificate of Indigency' ? 'selected' : '' }}>Certificate of Indigency</option>
+                <option value="Business Clearance" {{ request('type') == 'Business Clearance' ? 'selected' : '' }}>Business Clearance</option>
+            </select>
 
-        <button type="submit" class="button button-outline" style="cursor: pointer;">Filter</button>
-        @if(request('search') || request('type'))
-            <a href="{{ route('certificates.index', ['role' => 'admin']) }}" class="button" style="text-decoration: none; padding: 10px 14px; color: #666;">Reset</a>
-        @endif
-    </form>
+            <button type="submit" class="search-button-primary">
+                <i data-lucide="search" aria-hidden="true"></i>
+                <span>Filter</span>
+            </button>
+            @if(request('search') || request('type'))
+                <a href="{{ route('certificates.index', ['role' => 'admin']) }}" class="search-button-reset">
+                    <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+                    <span>Reset</span>
+                </a>
+            @endif
+        </form>
+    </div>
 
     <!-- Data Table -->
     <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">

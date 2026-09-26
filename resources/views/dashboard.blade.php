@@ -34,6 +34,21 @@
         </div>
     </div>
 
+    <!-- Dashboard Quick Search Bar -->
+    <div class="search-filter-card" style="margin-bottom: 24px;">
+        <form method="GET" action="{{ route('residents.index') }}" class="search-filter-form">
+            <input type="hidden" name="role" value="admin">
+            <div class="search-input-group">
+                <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
+                <input type="search" name="search" placeholder="Quick search resident records by name, household, or address..." aria-label="Quick search residents">
+            </div>
+            <button type="submit" class="search-button-primary">
+                <i data-lucide="search" aria-hidden="true"></i>
+                <span>Search Directory</span>
+            </button>
+        </form>
+    </div>
+
     <!-- Metrics Grid -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px;">
         <!-- Total Residents -->

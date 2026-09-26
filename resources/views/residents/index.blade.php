@@ -23,27 +23,38 @@
     </div>
 
     <!-- Search & Filters -->
-    <form method="GET" action="{{ route('residents.index', ['role' => 'admin']) }}" style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
-        <input type="hidden" name="role" value="admin">
-        <input type="search" name="search" value="{{ request('search') }}" placeholder="Search by name, address, or contact..." style="flex: 1; min-width: 240px; padding: 10px 14px; border: 1px solid #d4dcd2; border-radius: 6px; font-size: 13px;">
-        
-        <select name="gender" style="padding: 10px 14px; border: 1px solid #d4dcd2; border-radius: 6px; font-size: 13px; background: white;">
-            <option value="">All Genders</option>
-            <option value="Male" {{ request('gender') == 'Male' ? 'selected' : '' }}>Male</option>
-            <option value="Female" {{ request('gender') == 'Female' ? 'selected' : '' }}>Female</option>
-        </select>
+    <div class="search-filter-card">
+        <form method="GET" action="{{ route('residents.index', ['role' => 'admin']) }}" class="search-filter-form">
+            <input type="hidden" name="role" value="admin">
+            <div class="search-input-group">
+                <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
+                <input type="search" name="search" value="{{ request('search') }}" placeholder="Search by name, address, or contact..." aria-label="Search residents">
+            </div>
+            
+            <select name="gender" class="search-select" aria-label="Filter by gender">
+                <option value="">All Genders</option>
+                <option value="Male" {{ request('gender') == 'Male' ? 'selected' : '' }}>Male</option>
+                <option value="Female" {{ request('gender') == 'Female' ? 'selected' : '' }}>Female</option>
+            </select>
 
-        <select name="is_voter" style="padding: 10px 14px; border: 1px solid #d4dcd2; border-radius: 6px; font-size: 13px; background: white;">
-            <option value="">All Voters</option>
-            <option value="1" {{ request('is_voter') === '1' ? 'selected' : '' }}>Registered Voters</option>
-            <option value="0" {{ request('is_voter') === '0' ? 'selected' : '' }}>Non-Voters</option>
-        </select>
+            <select name="is_voter" class="search-select" aria-label="Filter by voter status">
+                <option value="">All Voters</option>
+                <option value="1" {{ request('is_voter') === '1' ? 'selected' : '' }}>Registered Voters</option>
+                <option value="0" {{ request('is_voter') === '0' ? 'selected' : '' }}>Non-Voters</option>
+            </select>
 
-        <button type="submit" class="button button-outline" style="cursor: pointer;">Filter</button>
-        @if(request('search') || request('gender') || request('is_voter') !== null)
-            <a href="{{ route('residents.index', ['role' => 'admin']) }}" class="button" style="text-decoration: none; padding: 10px 14px; color: #666;">Reset</a>
-        @endif
-    </form>
+            <button type="submit" class="search-button-primary">
+                <i data-lucide="search" aria-hidden="true"></i>
+                <span>Filter</span>
+            </button>
+            @if(request('search') || request('gender') || request('is_voter') !== null)
+                <a href="{{ route('residents.index', ['role' => 'admin']) }}" class="search-button-reset">
+                    <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+                    <span>Reset</span>
+                </a>
+            @endif
+        </form>
+    </div>
 
     <!-- Data Table -->
     <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
