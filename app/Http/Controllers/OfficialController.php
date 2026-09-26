@@ -3,38 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Models\Official;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class OfficialController extends Controller
 {
     /**
      * Display a listing of barangay officials.
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        /*
+        $filters = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
+        ]);
+
         $query = Official::query();
 
-        // Search by name or position
         if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
+            $search = $filters['search'];
+            $query->where(function (Builder $officialQuery) use ($search): void {
+                $officialQuery->where('name', 'like', "%{$search}%")
                     ->orWhere('position', 'like', "%{$search}%")
                     ->orWhere('contact_number', 'like', "%{$search}%");
             });
         }
 
-        // Filter by position
-        if ($request->filled('position')) {
-            $query->where('position', $request->position);
+        if (! empty($filters['position'])) {
+            $query->where('position', $filters['position']);
         }
 
-        // Display Captain first, then Kagawads, etc.
         $officials = $query->orderBy('name')->paginate(10)->withQueryString();
-        */
-
-        $officials = Official::orderby('name')->paginate(10);
 
         return view('officials.index', compact('officials'));
     }

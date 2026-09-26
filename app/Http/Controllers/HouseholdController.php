@@ -3,29 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Household;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class HouseholdController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        /*
-        // Kasama ang bilang ng mga residente (members) sa bawat bahay
+        $filters = $request->validate([
+            'search' => 'nullable|string|max:255',
+        ]);
+
         $query = Household::withCount('residents');
 
-        // Search para sa household number, head, o address
         if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('household_number', 'like', "%{$search}%")
+            $search = $filters['search'];
+            $query->where(function (Builder $householdQuery) use ($search): void {
+                $householdQuery->where('household_number', 'like', "%{$search}%")
                     ->orWhere('household_head', 'like', "%{$search}%")
                     ->orWhere('address', 'like', "%{$search}%");
             });
         }
 
         $households = $query->latest()->paginate(10)->withQueryString();
-        */
-        $households = Household::latest()->paginate(10);
 
         return view('households.index', compact('households'));
     }

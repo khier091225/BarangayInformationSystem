@@ -6,42 +6,46 @@ use App\Http\Requests\StoreCertificateRequest;
 use App\Models\Certificate;
 use App\Models\Official;
 use App\Models\Resident;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CertificateController extends Controller
 {
     /**
      * Display a listing of issued certificates.
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        /*
+        $filters = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'type' => 'nullable|string|max:255',
+        ]);
+
         $query = Certificate::with('resident');
 
-        // Search by resident name, certificate type, or purpose
         if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('certificate_type', 'like', "%{$search}%")
-                    ->orWhere('purpose', 'like', "%{$search}%")
-                    ->orWhereHas('resident', function ($rq) use ($search) {
-                        $rq->where('first_name', 'like', "%{$search}%")
-                            ->orWhere('middle_name', 'like', "%{$search}%")
-                            ->orWhere('last_name', 'like', "%{$search}%");
-                    });
-            });
+            $terms = preg_split('/\s+/', trim($filters['search']));
+
+            foreach ($terms as $term) {
+                $query->where(function (Builder $certificateQuery) use ($term): void {
+                    $certificateQuery->where('certificate_type', 'like', "%{$term}%")
+                        ->orWhere('purpose', 'like', "%{$term}%")
+                        ->orWhereHas('resident', function (Builder $residentQuery) use ($term): void {
+                            $residentQuery->where('first_name', 'like', "%{$term}%")
+                                ->orWhere('middle_name', 'like', "%{$term}%")
+                                ->orWhere('last_name', 'like', "%{$term}%");
+                        });
+                });
+            }
         }
 
-        // Filter by certificate type
-        if ($request->filled('type')) {
-            $query->where('certificate_type', $request->type);
+        if (! empty($filters['type'])) {
+            $query->where('certificate_type', $filters['type']);
         }
 
         $certificates = $query->latest('date_issued')->paginate(10)->withQueryString();
-        */
-
-        $certificates = Certificate::latest('date_issued')->paginate(10);
 
         return view('certificates.index', compact('certificates'));
     }

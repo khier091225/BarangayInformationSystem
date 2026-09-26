@@ -4,35 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SaveBlotterRequest;
 use App\Models\Blotter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class BlotterController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        /*
+        $filters = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'status' => 'nullable|in:Pending,Settled,Dismissed',
+        ]);
+
         $query = Blotter::query();
 
-        // Search by complainant, respondent, or incident details
         if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('complainant', 'like', "%{$search}%")
+            $search = $filters['search'];
+            $query->where(function (Builder $blotterQuery) use ($search): void {
+                $blotterQuery->where('complainant', 'like', "%{$search}%")
                     ->orWhere('respondent', 'like', "%{$search}%")
                     ->orWhere('incident', 'like', "%{$search}%");
             });
         }
 
-        // Filter by status (Pending, Settled, Dismissed)
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
+        if (! empty($filters['status'])) {
+            $query->where('status', $filters['status']);
         }
 
         $blotters = $query->latest('incident_date')->paginate(10)->withQueryString();
-        */
-
-        $blotters = Blotter::latest('incident_date')->paginate(10);
 
         return view('blotters.index', compact('blotters'));
     }

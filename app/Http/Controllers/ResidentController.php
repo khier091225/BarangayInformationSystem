@@ -5,46 +5,49 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SaveResidentRequest;
 use App\Models\Household;
 use App\Models\Resident;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ResidentController extends Controller
 {
     /**
      * Display a listing of residents.
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
+        $filters = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'gender' => 'nullable|in:Male,Female',
+            'is_voter' => 'nullable|in:0,1',
+        ]);
 
-        /*
         $query = Resident::with('household');
 
-        // Search by name, address, or contact number
         if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('first_name', 'like', "%{$search}%")
-                    ->orWhere('middle_name', 'like', "%{$search}%")
-                    ->orWhere('last_name', 'like', "%{$search}%")
-                    ->orWhere('address', 'like', "%{$search}%")
-                    ->orWhere('contact_number', 'like', "%{$search}%");
-            });
+            $terms = preg_split('/\s+/', trim($filters['search']));
+
+            foreach ($terms as $term) {
+                $query->where(function (Builder $residentQuery) use ($term): void {
+                    $residentQuery->where('first_name', 'like', "%{$term}%")
+                        ->orWhere('middle_name', 'like', "%{$term}%")
+                        ->orWhere('last_name', 'like', "%{$term}%")
+                        ->orWhere('address', 'like', "%{$term}%")
+                        ->orWhere('contact_number', 'like', "%{$term}%");
+                });
+            }
         }
 
-        // Filter by gender
-        if ($request->filled('gender')) {
-            $query->where('gender', $request->gender);
+        if (! empty($filters['gender'])) {
+            $query->where('gender', $filters['gender']);
         }
 
-        // Filter by voter status
-        if ($request->filled('is_voter')) {
-            $query->where('is_voter', $request->is_voter === '1');
+        if (isset($filters['is_voter'])) {
+            $query->where('is_voter', $filters['is_voter'] === '1');
         }
 
         $residents = $query->latest()->paginate(10)->withQueryString();
-        */
-
-        $residents = Resident::latest()->paginate(10);
 
         return view('residents.index', compact('residents'));
     }
