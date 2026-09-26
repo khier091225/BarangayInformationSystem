@@ -18,19 +18,26 @@ class AccountController extends Controller
     {
         $user = $request->user();
         $recentRequests = collect();
-        $requestCounts = ['total' => 0, 'pending' => 0, 'completed' => 0];
+        $latestReviewedRequest = null;
+        $requestCounts = ['total' => 0, 'pending' => 0, 'completed' => 0, 'declined' => 0];
 
         if ($user->role === 'resident' && $user->resident_id !== null) {
             $query = ServiceRequest::query()->where('resident_id', $user->resident_id);
-            $recentRequests = (clone $query)->latest()->limit(5)->get();
+            $recentRequests = (clone $query)->latest('updated_at')->latest('id')->limit(5)->get();
+            $latestReviewedRequest = (clone $query)
+                ->whereIn('status', [ServiceRequest::STATUS_COMPLETED, ServiceRequest::STATUS_DECLINED])
+                ->whereNotNull('reviewed_at')->latest('reviewed_at')->latest('id')->first();
+            $statusTotals = (clone $query)->select('status')->selectRaw('COUNT(*) as total')
+                ->groupBy('status')->pluck('total', 'status');
             $requestCounts = [
-                'total' => (clone $query)->count(),
-                'pending' => (clone $query)->where('status', ServiceRequest::STATUS_PENDING)->count(),
-                'completed' => (clone $query)->where('status', ServiceRequest::STATUS_COMPLETED)->count(),
+                'total' => (int) $statusTotals->sum(),
+                'pending' => (int) ($statusTotals[ServiceRequest::STATUS_PENDING] ?? 0),
+                'completed' => (int) ($statusTotals[ServiceRequest::STATUS_COMPLETED] ?? 0),
+                'declined' => (int) ($statusTotals[ServiceRequest::STATUS_DECLINED] ?? 0),
             ];
         }
 
-        return view('account', compact('user', 'recentRequests', 'requestCounts'));
+        return view('account', compact('user', 'recentRequests', 'requestCounts', 'latestReviewedRequest'));
     }
 
     public function verify(VerifyResidentRequest $request): RedirectResponse

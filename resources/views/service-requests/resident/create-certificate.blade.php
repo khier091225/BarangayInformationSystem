@@ -17,22 +17,23 @@
             <div class="resident-form-intro"><span class="resident-section-icon"><i data-lucide="user-round" aria-hidden="true"></i></span><span>Requesting for <strong>{{ auth()->user()->name }}</strong></span></div>
             <form method="POST" action="{{ route('account.requests.certificate.store') }}" class="resident-form">
                 @csrf
+                <p class="resident-form-note">Fields marked with an asterisk (*) are required.</p>
                 <div class="resident-field">
                     <x-form.label for="certificate_type" required>Document type</x-form.label>
-                    <x-form.select name="certificate_type" required>
+                    <x-form.select name="certificate_type" required :aria-invalid="$errors->has('certificate_type') ? 'true' : 'false'" :aria-describedby="$errors->has('certificate_type') ? 'certificate-type-error' : null">
                         <option value="">Select a document</option>
                         @foreach (['Barangay Clearance', 'Certificate of Residency', 'Certificate of Indigency', 'Business Clearance'] as $type)
                             <option value="{{ $type }}" @selected(old('certificate_type') === $type)>{{ $type }}</option>
                         @endforeach
                     </x-form.select>
-                    <x-form.error :message="$errors->first('certificate_type')" />
+                    <x-form.error id="certificate-type-error" :message="$errors->first('certificate_type')" />
                 </div>
                 <div class="resident-field">
                     <x-form.label for="purpose" required>Purpose</x-form.label>
-                    <x-form.input name="purpose" :value="old('purpose')" required maxlength="255" placeholder="e.g. Employment or scholarship" />
-                    <x-form.error :message="$errors->first('purpose')" />
+                    <x-form.input name="purpose" :value="old('purpose')" required maxlength="255" placeholder="e.g. Employment or scholarship" :aria-invalid="$errors->has('purpose') ? 'true' : 'false'" :aria-describedby="$errors->has('purpose') ? 'purpose-error' : null" />
+                    <x-form.error id="purpose-error" :message="$errors->first('purpose')" />
                 </div>
-                <button type="submit" class="resident-button resident-button-primary">Submit document request <i data-lucide="arrow-right" aria-hidden="true"></i></button>
+                <div class="resident-form-actions"><button type="submit" class="resident-button resident-button-primary">Submit document request <i data-lucide="arrow-right" aria-hidden="true"></i></button><a href="{{ route('account') }}" class="resident-button resident-button-outline">Cancel</a></div>
             </form>
         </section>
         <aside class="resident-card resident-form-help" aria-labelledby="request-help-title">
@@ -42,7 +43,7 @@
             <ul>
                 <li>Barangay staff will check the request details.</li>
                 <li>You can check its status from your dashboard.</li>
-                <li>Staff will provide collection instructions when the document is issued.</li>
+                <li>Once issued, contact barangay staff about document collection.</li>
             </ul>
         </aside>
     </div>

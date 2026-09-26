@@ -13,12 +13,17 @@ class ResidentServiceRequestController extends Controller
 {
     public function index(Request $request): View
     {
-        $requests = ServiceRequest::query()
-            ->where('resident_id', $request->user()->resident_id)
-            ->latest()
-            ->paginate(10);
+        $filters = $request->validate(['status' => 'nullable|in:Pending,Completed,Declined']);
+        $status = $filters['status'] ?? null;
+        $query = ServiceRequest::query()->where('resident_id', $request->user()->resident_id);
 
-        return view('service-requests.resident.index', compact('requests'));
+        if ($status !== null) {
+            $query->where('status', $status);
+        }
+
+        $requests = $query->latest('updated_at')->latest('id')->paginate(10)->withQueryString();
+
+        return view('service-requests.resident.index', compact('requests', 'status'));
     }
 
     public function createCertificate(): View

@@ -3,25 +3,10 @@
 @section('title', 'My Dashboard | Barangay Information System')
 
 @section('content')
-    <section class="resident-hero" aria-labelledby="dashboard-title">
-        <div class="resident-hero-copy">
-            <div class="resident-kicker"><span></span> RESIDENT PORTAL</div>
-            <h1 id="dashboard-title">Welcome, {{ $user->name }}</h1>
-            <p>Your barangay services and request updates, all in one place.</p>
-            @if ($user->role === 'resident' && $user->resident_id !== null)
-                <div class="resident-hero-actions">
-                    <a href="{{ route('account.requests.certificate.create') }}" class="resident-button resident-button-light"><i data-lucide="plus" aria-hidden="true"></i> Request a document</a>
-                    <a href="{{ route('account.requests.index') }}" class="resident-button resident-button-ghost">Track my requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
-                </div>
-            @endif
-        </div>
-        <div class="resident-hero-aside" aria-label="Account status">
-            <span class="resident-hero-aside-icon"><i data-lucide="{{ $user->role === 'staff' ? 'user-round' : ($user->resident_id === null ? 'info' : 'badge-check') }}" aria-hidden="true"></i></span>
-            <span class="resident-hero-aside-label">ACCOUNT STATUS</span>
-            <strong>{{ $user->role === 'staff' ? 'Staff access' : ($user->resident_id === null ? 'Verification needed' : 'Verified resident') }}</strong>
-            <span>{{ $user->role === 'staff' ? 'Staff workspace available' : ($user->resident_id === null ? 'Enter your staff-issued code below' : 'Ready to request barangay services') }}</span>
-        </div>
-    </section>
+    <header class="resident-welcome">
+        <div><span class="resident-kicker resident-kicker-dark">YOUR BARANGAY, CONNECTED</span><h1>Hello, {{ $user->name }}</h1><p>Request a service, follow its progress, and hear back from barangay staff.</p></div>
+        <span class="resident-account-state"><i data-lucide="{{ $user->role === 'staff' ? 'user-round' : ($user->resident_id === null ? 'info' : 'badge-check') }}" aria-hidden="true"></i>{{ $user->role === 'staff' ? 'Staff account' : ($user->resident_id === null ? 'Verification needed' : 'Verified resident') }}</span>
+    </header>
 
     @if ($user->role === 'staff')
         <section class="resident-card resident-single-panel" aria-labelledby="staff-panel-title">
@@ -40,8 +25,8 @@
                     @csrf
                     <div class="resident-field">
                         <x-form.label for="registration_code" required>Registration code</x-form.label>
-                        <x-form.input name="registration_code" required autocomplete="off" placeholder="XXXX-XXXX-XXXX-XXXX" />
-                        <x-form.error :message="$errors->first('registration_code')" />
+                        <x-form.input name="registration_code" :value="old('registration_code')" required autocomplete="off" placeholder="XXXX-XXXX-XXXX-XXXX" :aria-invalid="$errors->has('registration_code') ? 'true' : 'false'" :aria-describedby="$errors->has('registration_code') ? 'registration-code-error' : null" />
+                        <x-form.error id="registration-code-error" :message="$errors->first('registration_code')" />
                     </div>
                     <button type="submit" class="resident-button resident-button-primary">Verify resident record <i data-lucide="arrow-right" aria-hidden="true"></i></button>
                 </form>
@@ -49,123 +34,92 @@
             <aside class="resident-card resident-help-card" aria-labelledby="verification-help-title">
                 <span class="resident-section-icon resident-section-icon-warm"><i data-lucide="info" aria-hidden="true"></i></span>
                 <h2 id="verification-help-title">How verification works</h2>
-                <ol class="resident-steps">
-                    <li>Ask barangay staff to check your resident record.</li>
-                    <li>Get the registration code issued for your record.</li>
-                    <li>Enter the code here to unlock online requests.</li>
-                </ol>
+                <ol class="resident-steps"><li>Ask barangay staff to check your resident record.</li><li>Get the registration code issued for your record.</li><li>Enter the code here to unlock online requests.</li></ol>
             </aside>
         </div>
     @else
-        <section class="resident-overview" aria-labelledby="overview-title">
-            <div class="resident-section-heading">
-                <div>
-                    <span class="resident-kicker resident-kicker-dark">YOUR ACTIVITY</span>
-                    <h2 id="overview-title">At a glance</h2>
-                </div>
-                <p>Keep track of your submissions.</p>
-            </div>
-            <div class="resident-stats">
-                <div class="resident-stat resident-stat-total">
-                    <span class="resident-stat-icon"><i data-lucide="files" aria-hidden="true"></i></span>
-                    <span class="resident-stat-label">Total requests</span>
-                    <strong>{{ $requestCounts['total'] }}</strong>
-                    <span class="resident-stat-note">Documents and reports submitted</span>
-                </div>
-                <div class="resident-stat resident-stat-pending">
-                    <span class="resident-stat-icon"><i data-lucide="calendar-clock" aria-hidden="true"></i></span>
-                    <span class="resident-stat-label">Under review</span>
-                    <strong>{{ $requestCounts['pending'] }}</strong>
-                    <span class="resident-stat-note">Awaiting staff action</span>
-                </div>
-                <div class="resident-stat resident-stat-completed">
-                    <span class="resident-stat-icon"><i data-lucide="file-check-2" aria-hidden="true"></i></span>
-                    <span class="resident-stat-label">Completed</span>
-                    <strong>{{ $requestCounts['completed'] }}</strong>
-                    <span class="resident-stat-note">Reviewed and processed</span>
-                </div>
+        <section class="resident-services" id="resident-services" aria-labelledby="services-title">
+            <div class="resident-section-heading"><h2 id="services-title">What do you need today?</h2><span>Barangay services</span></div>
+            <div class="resident-service-grid">
+                <a href="{{ route('account.requests.certificate.create') }}" class="resident-service-card resident-service-documents">
+                    <span class="resident-service-top"><span class="resident-service-icon"><i data-lucide="files" aria-hidden="true"></i></span><span>DOCUMENT SERVICES</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+                    <strong>Request a document</strong>
+                    <span class="resident-service-description">Barangay Clearance, Certificate of Residency, Certificate of Indigency, or Business Clearance.</span>
+                    <span class="resident-service-action">Start a document request <i data-lucide="arrow-right" aria-hidden="true"></i></span>
+                </a>
+                <a href="{{ route('account.requests.blotter.create') }}" class="resident-service-card resident-service-report">
+                    <span class="resident-service-top"><span class="resident-service-icon"><i data-lucide="notebook-pen" aria-hidden="true"></i></span><span>INCIDENT REPORT</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+                    <strong>File a blotter report</strong>
+                    <span class="resident-service-description">Share incident details for barangay staff to review and record.</span>
+                    <span class="resident-service-action">Start an incident report <i data-lucide="arrow-right" aria-hidden="true"></i></span>
+                </a>
             </div>
         </section>
 
-        <section class="resident-services" aria-labelledby="services-title">
-            <div class="resident-section-heading">
-                <div>
-                    <span class="resident-kicker resident-kicker-dark">BARANGAY SERVICES</span>
-                    <h2 id="services-title">How can we help?</h2>
-                </div>
-                <p>Choose a service to get started.</p>
-            </div>
-            <div class="resident-service-grid">
-                <a href="{{ route('account.requests.certificate.create') }}" class="resident-service-card">
-                    <span class="resident-service-icon"><i data-lucide="files" aria-hidden="true"></i></span>
-                    <span class="resident-service-copy"><strong>Request a document</strong><span>Barangay Clearance, Certificate of Residency, Certificate of Indigency, or Business Clearance.</span></span>
-                    <span class="resident-service-arrow"><i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+        <section class="resident-overview" aria-labelledby="overview-title">
+            <div class="resident-section-heading"><h2 id="overview-title">Your requests at a glance</h2><a href="{{ route('account.requests.index') }}" class="resident-inline-link">View all requests <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
+            <div class="resident-stats">
+                <a href="{{ route('account.requests.index') }}" class="resident-stat">
+                    <span class="resident-stat-icon"><i data-lucide="files" aria-hidden="true"></i></span><span class="resident-stat-label">Total requests</span><strong>{{ number_format($requestCounts['total']) }}</strong><span class="resident-stat-note">All your submissions <i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
                 </a>
-                <a href="{{ route('account.requests.blotter.create') }}" class="resident-service-card resident-service-card-alt">
-                    <span class="resident-service-icon"><i data-lucide="notebook-pen" aria-hidden="true"></i></span>
-                    <span class="resident-service-copy"><strong>File a blotter report</strong><span>Submit incident details for barangay staff to review and record.</span></span>
-                    <span class="resident-service-arrow"><i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+                <a href="{{ route('account.requests.index', ['status' => 'Pending']) }}" class="resident-stat resident-stat-pending">
+                    <span class="resident-stat-icon"><i data-lucide="calendar-clock" aria-hidden="true"></i></span><span class="resident-stat-label">Under review</span><strong>{{ number_format($requestCounts['pending']) }}</strong><span class="resident-stat-note">Awaiting staff action <i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+                </a>
+                <a href="{{ route('account.requests.index', ['status' => 'Completed']) }}" class="resident-stat resident-stat-completed">
+                    <span class="resident-stat-icon"><i data-lucide="file-check-2" aria-hidden="true"></i></span><span class="resident-stat-label">Completed</span><strong>{{ number_format($requestCounts['completed']) }}</strong><span class="resident-stat-note">Processed by staff <i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+                </a>
+                <a href="{{ route('account.requests.index', ['status' => 'Declined']) }}" class="resident-stat resident-stat-declined">
+                    <span class="resident-stat-icon"><i data-lucide="info" aria-hidden="true"></i></span><span class="resident-stat-label">Declined</span><strong>{{ number_format($requestCounts['declined']) }}</strong><span class="resident-stat-note">Check staff feedback <i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
                 </a>
             </div>
         </section>
 
         <div class="resident-content-grid">
-            <section class="resident-card resident-activity-card" aria-labelledby="recent-requests-title">
-                <div class="resident-card-heading">
-                    <div>
-                        <span class="resident-kicker resident-kicker-dark">RECENT ACTIVITY</span>
-                        <h2 id="recent-requests-title">Recent requests</h2>
-                    </div>
-                    <a href="{{ route('account.requests.index') }}" class="resident-inline-link">View all <i data-lucide="arrow-right" aria-hidden="true"></i></a>
-                </div>
-                @if ($recentRequests->isEmpty())
-                    <div class="resident-empty-state">
-                        <span class="resident-empty-icon"><i data-lucide="inbox" aria-hidden="true"></i></span>
-                        <h3>No requests yet</h3>
-                        <p>When you submit a document request or blotter report, its progress will appear here.</p>
-                        <a href="{{ route('account.requests.certificate.create') }}" class="resident-inline-link">Make your first request <i data-lucide="arrow-right" aria-hidden="true"></i></a>
-                    </div>
-                @else
-                    <div class="resident-list-wrap">
-                        <table class="resident-list">
-                            <thead><tr><th scope="col">Request</th><th scope="col">Submitted</th><th scope="col">Status</th><th scope="col" aria-label="Details"></th></tr></thead>
-                            <tbody>
-                                @foreach ($recentRequests as $serviceRequest)
-                                    <tr>
-                                        <td><strong>{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</strong><span class="resident-table-reference">#{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}</span></td>
-                                        <td>{{ $serviceRequest->created_at->format('M d, Y') }}</td>
-                                        <td><span class="resident-badge @if ($serviceRequest->status === 'Completed') resident-badge-completed @elseif ($serviceRequest->status === 'Declined') resident-badge-declined @endif">{{ $serviceRequest->status }}</span></td>
-                                        <td><a href="{{ route('account.requests.show', $serviceRequest) }}" class="resident-table-link" aria-label="View request #{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}">View <i data-lucide="arrow-right" aria-hidden="true"></i></a></td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="resident-activity-column">
+                @if ($latestReviewedRequest)
+                    <section class="resident-update @if ($latestReviewedRequest->status === 'Declined') resident-update-declined @endif" aria-labelledby="latest-update-title">
+                        <div class="resident-update-heading"><span class="resident-section-icon"><i data-lucide="messages-square" aria-hidden="true"></i></span><div><h2 id="latest-update-title">Latest staff update</h2><time datetime="{{ $latestReviewedRequest->reviewed_at->toIso8601String() }}">{{ $latestReviewedRequest->reviewed_at->format('M j, Y · g:i A') }}</time></div><x-request-status :status="$latestReviewedRequest->status" /></div>
+                        <h3>{{ $latestReviewedRequest->type === 'certificate' ? $latestReviewedRequest->certificate_type : 'Blotter report' }} <span>#{{ str_pad($latestReviewedRequest->id, 5, '0', STR_PAD_LEFT) }}</span></h3>
+                        @if ($latestReviewedRequest->response_note)
+                            <p class="resident-update-message">{{ \Illuminate\Support\Str::limit($latestReviewedRequest->response_note, 220) }}</p>
+                        @elseif ($latestReviewedRequest->status === 'Completed')
+                            <p>{{ $latestReviewedRequest->type === 'certificate' ? 'Your document has been issued. Contact barangay staff about collection.' : 'Your report has been added to the barangay blotter records.' }}</p>
+                        @else
+                            <p>Your request was declined. Contact barangay staff if you need clarification.</p>
+                        @endif
+                        <a href="{{ route('account.requests.show', $latestReviewedRequest) }}" class="resident-inline-link">Read request details <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+                    </section>
                 @endif
-            </section>
 
-            <aside class="resident-card resident-account-card" aria-labelledby="account-title">
-                <div class="resident-card-heading">
-                    <div>
-                        <span class="resident-kicker resident-kicker-dark">YOUR PROFILE</span>
-                        <h2 id="account-title">My account</h2>
-                    </div>
-                    <span class="resident-account-icon"><i data-lucide="user-round" aria-hidden="true"></i></span>
-                </div>
-                <dl class="resident-account-details">
-                    <div><dt>Full name</dt><dd>{{ $user->name }}</dd></div>
-                    <div><dt>Email address</dt><dd>{{ $user->email }}</dd></div>
-                    <div><dt>Resident status</dt><dd><span class="resident-account-verified"><i data-lucide="badge-check" aria-hidden="true"></i> Verified</span></dd></div>
-                </dl>
-                <p class="resident-account-note">Your account is linked to a resident record verified by barangay staff.</p>
+                <section class="resident-card resident-activity-card" aria-labelledby="recent-requests-title">
+                    <div class="resident-card-heading"><div><span class="resident-kicker resident-kicker-dark">YOUR ACTIVITY</span><h2 id="recent-requests-title">Recent requests</h2><p>Most recently updated first</p></div><a href="{{ route('account.requests.index') }}" class="resident-inline-link">View all <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
+                    @if ($recentRequests->isEmpty())
+                        <div class="resident-empty-state"><span class="resident-empty-icon"><i data-lucide="inbox" aria-hidden="true"></i></span><h3>Your first request starts here</h3><p>Choose a service above. Your submission and staff updates will appear in this space.</p><a href="#resident-services" class="resident-inline-link">Explore services <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
+                    @else
+                        <ul class="resident-request-list">
+                            @foreach ($recentRequests as $serviceRequest)
+                                <li><x-resident-request-item :service-request="$serviceRequest" /></li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </section>
+            </div>
+
+            <aside class="resident-sidebar" aria-label="Account and request guidance">
+                <section class="resident-card resident-account-card" aria-labelledby="account-title">
+                    <div class="resident-card-heading"><div><span class="resident-kicker resident-kicker-dark">YOUR PROFILE</span><h2 id="account-title">My account</h2></div><span class="resident-section-icon"><i data-lucide="user-round" aria-hidden="true"></i></span></div>
+                    <dl class="resident-account-details"><div><dt>Full name</dt><dd>{{ $user->name }}</dd></div><div><dt>Email address</dt><dd>{{ $user->email }}</dd></div></dl>
+                    <div class="resident-profile-verification"><i data-lucide="badge-check" aria-hidden="true"></i><span><strong>Verified resident</strong><span>Linked to your barangay resident record.</span></span></div>
+                </section>
+                <section class="resident-card resident-guide" aria-labelledby="guide-title">
+                    <h2 id="guide-title">From request to result</h2>
+                    <ol class="resident-guide-steps"><li><span>1</span><div><strong>Choose a service</strong><p>Complete the form and submit your details.</p></div></li><li><span>2</span><div><strong>Staff reviews it</strong><p>Your request stays Pending until staff makes a decision.</p></div></li><li><span>3</span><div><strong>Check for an update</strong><p>Open the request for the result, staff notes, and next steps.</p></div></li></ol>
+                </section>
             </aside>
         </div>
     @endif
 
     @if ($user->role === 'staff' || $user->resident_id === null)
-        <section class="resident-card resident-account-compact" aria-labelledby="account-title">
-            <span class="resident-section-icon"><i data-lucide="user-round" aria-hidden="true"></i></span>
-            <div><h2 id="account-title">My account</h2><p>{{ $user->name }} <span aria-hidden="true">·</span> {{ $user->email }}</p></div>
-        </section>
+        <section class="resident-card resident-account-compact" aria-labelledby="account-title"><span class="resident-section-icon"><i data-lucide="user-round" aria-hidden="true"></i></span><div><h2 id="account-title">My account</h2><p>{{ $user->name }} <span aria-hidden="true">·</span> {{ $user->email }}</p></div></section>
     @endif
 @endsection

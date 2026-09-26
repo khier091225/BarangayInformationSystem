@@ -8,6 +8,7 @@ use App\Models\Resident;
 use App\Models\ServiceRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Tests\TestCase;
 
 class ResidentServiceRequestTest extends TestCase
@@ -22,7 +23,9 @@ class ResidentServiceRequestTest extends TestCase
 
         $this->get(route('account'))->assertOk()
             ->assertSee('Request a document')
-            ->assertSee('File a blotter report');
+            ->assertSee('File a blotter report')
+            ->assertViewHas('latestReviewedRequest', null)
+            ->assertViewHas('requestCounts', ['total' => 0, 'pending' => 0, 'completed' => 0, 'declined' => 0]);
         $this->get(route('account.requests.certificate.create'))->assertOk()
             ->assertSee('Business Clearance');
 
@@ -99,5 +102,75 @@ class ResidentServiceRequestTest extends TestCase
         ])->assertSessionHasErrors(['certificate_type', 'purpose']);
 
         $this->assertSame(0, ServiceRequest::query()->count());
+    }
+
+    public function test_dashboard_prioritizes_updates_and_shows_only_the_residents_counts_and_staff_response(): void
+    {
+        $this->freezeTime();
+        $resident = Resident::factory()->create();
+        $this->actingAs(User::factory()->resident()->create(['resident_id' => $resident->id]));
+        ServiceRequest::factory()->for($resident)->count(2)->create([
+            'created_at' => now()->subHours(2), 'updated_at' => now()->subHours(2),
+        ]);
+        $completed = ServiceRequest::factory()->for($resident)->create([
+            'status' => ServiceRequest::STATUS_COMPLETED,
+            'created_at' => now()->subMonth(),
+            'updated_at' => now()->subMinute(),
+            'reviewed_at' => now()->subMinute(),
+            'response_note' => 'Please visit the barangay hall for collection.',
+        ]);
+        ServiceRequest::factory()->for($resident)->create([
+            'status' => ServiceRequest::STATUS_DECLINED,
+            'created_at' => now()->subDays(4), 'updated_at' => now()->subDays(2),
+            'reviewed_at' => now()->subDays(2),
+        ]);
+        $otherRequest = ServiceRequest::factory()->create([
+            'status' => ServiceRequest::STATUS_COMPLETED, 'reviewed_at' => now(),
+            'response_note' => 'Private update belonging to another resident.',
+        ]);
+
+        $response = $this->get(route('account'))->assertOk()
+            ->assertSee('Latest staff update')
+            ->assertSee($completed->response_note)
+            ->assertDontSee($otherRequest->response_note)
+            ->assertSee(route('account.requests.index', ['status' => 'Declined']), false);
+
+        $this->assertSame(['total' => 4, 'pending' => 2, 'completed' => 1, 'declined' => 1], $response->viewData('requestCounts'));
+        $this->assertTrue($response->viewData('latestReviewedRequest')->is($completed));
+        $this->assertTrue($response->viewData('recentRequests')->first()->is($completed));
+        $this->assertCount(4, $response->viewData('recentRequests'));
+    }
+
+    public function test_request_history_filters_only_owned_records_and_preserves_status_across_pages(): void
+    {
+        $resident = Resident::factory()->create();
+        $this->actingAs(User::factory()->resident()->create(['resident_id' => $resident->id]));
+        ServiceRequest::factory()->for($resident)->count(11)->create(['status' => ServiceRequest::STATUS_COMPLETED]);
+        $pending = ServiceRequest::factory()->for($resident)->create();
+        $otherRequest = ServiceRequest::factory()->create(['status' => ServiceRequest::STATUS_COMPLETED]);
+
+        $response = $this->get(route('account.requests.index', ['status' => 'Completed']))->assertOk()
+            ->assertViewHas('status', 'Completed')
+            ->assertDontSee(route('account.requests.show', $otherRequest), false)
+            ->assertDontSee(route('account.requests.show', $pending), false);
+        $requests = $response->viewData('requests');
+
+        $this->assertSame(11, $requests->total());
+        $this->assertCount(10, $requests->items());
+        $this->assertStringContainsString('status=Completed', $requests->nextPageUrl());
+        $this->get($requests->nextPageUrl())->assertOk()
+            ->assertViewHas('requests', fn (LengthAwarePaginator $page): bool => $page->total() === 11 && $page->count() === 1);
+        $this->get(route('account.requests.index', ['status' => 'Declined']))->assertOk()
+            ->assertSee('No declined requests')
+            ->assertViewHas('requests', fn (LengthAwarePaginator $page): bool => $page->total() === 0);
+    }
+
+    public function test_request_history_rejects_an_unknown_status(): void
+    {
+        $resident = Resident::factory()->create();
+        $this->actingAs(User::factory()->resident()->create(['resident_id' => $resident->id]));
+
+        $this->getJson(route('account.requests.index', ['status' => 'Unknown']))
+            ->assertUnprocessable()->assertJsonValidationErrors('status');
     }
 }

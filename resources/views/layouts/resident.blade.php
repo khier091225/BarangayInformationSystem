@@ -15,20 +15,18 @@
             <div class="resident-header-inner">
                 <a class="resident-brand" href="{{ route('account') }}" aria-label="Barangay Information System, dashboard">
                     <span class="resident-brand-mark"><i data-lucide="landmark" aria-hidden="true"></i></span>
-                    <span>Barangay <strong>Information System</strong></span>
+                    <span><strong>Barangay</strong><small>RESIDENT PORTAL</small></span>
                 </a>
 
                 <nav class="resident-nav" aria-label="Resident navigation">
                     <a href="{{ route('account') }}" @if (request()->routeIs('account')) aria-current="page" @endif><i data-lucide="layout-dashboard" aria-hidden="true"></i> Dashboard</a>
                     @if (auth()->user()->role === 'resident' && auth()->user()->resident_id !== null)
                         <a href="{{ route('account.requests.index') }}" @if (request()->routeIs('account.requests.index', 'account.requests.show')) aria-current="page" @endif><i data-lucide="files" aria-hidden="true"></i> My requests</a>
+                        <a href="{{ route('account') }}#resident-services" @if (request()->routeIs('account.requests.certificate.create', 'account.requests.blotter.create')) aria-current="page" @endif><i data-lucide="plus" aria-hidden="true"></i> Services</a>
                     @endif
                 </nav>
 
                 <div class="resident-header-actions">
-                    @if (auth()->user()->role === 'resident' && auth()->user()->resident_id !== null)
-                        <a href="{{ route('account.requests.certificate.create') }}" class="resident-header-cta"><i data-lucide="plus" aria-hidden="true"></i> New request</a>
-                    @endif
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="resident-logout" aria-label="Log out"><i data-lucide="log-out" aria-hidden="true"></i> Log out</button>
@@ -45,6 +43,7 @@
                 <div role="status" class="resident-alert resident-alert-success"><i data-lucide="badge-check" aria-hidden="true"></i><span>{{ session('success') }}</span></div>
             @endif
             @yield('content')
+            <footer class="resident-footer"><span>Barangay Information System</span><span>Services for your community</span></footer>
         </main>
     </body>
 </html>
