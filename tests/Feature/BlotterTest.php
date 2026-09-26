@@ -18,8 +18,8 @@ class BlotterTest extends TestCase
             'status' => 'Pending',
         ]);
 
-        $this->get(route('dashboard'))->assertOk()->assertSee(route('blotters.show', $blotter));
-        $this->get(route('blotters.show', $blotter))
+        $this->get(route('dashboard', ['role' => 'admin']))->assertOk()->assertSee(route('blotters.show', [$blotter, 'role' => 'admin']));
+        $this->get(route('blotters.show', [$blotter, 'role' => 'admin']))
             ->assertOk()
             ->assertSee($blotter->complainant)
             ->assertSee($blotter->respondent)
@@ -27,20 +27,20 @@ class BlotterTest extends TestCase
             ->assertSee('Pending')
             ->assertSee($blotter->incident)
             ->assertDontSee("<script>alert('unsafe')</script>", false)
-            ->assertSee(route('blotters.edit', $blotter));
+            ->assertSee(route('blotters.edit', [$blotter, 'role' => 'admin']));
     }
 
     public function test_blotter_forms_render_and_valid_records_can_be_saved(): void
     {
         $data = Blotter::factory()->make()->getAttributes();
-        $this->get(route('blotters.create'))->assertOk();
-        $this->post(route('blotters.store'), $data)->assertRedirect(route('blotters.index'));
+        $this->get(route('blotters.create', ['role' => 'admin']))->assertOk();
+        $this->post(route('blotters.store', ['role' => 'admin']), $data)->assertRedirect(route('blotters.index', ['role' => 'admin']));
         $this->assertDatabaseHas('blotters', $data);
 
         $blotter = Blotter::sole();
-        $this->get(route('blotters.edit', $blotter))->assertOk();
+        $this->get(route('blotters.edit', [$blotter, 'role' => 'admin']))->assertOk();
         $data['status'] = 'Settled';
-        $this->put(route('blotters.update', $blotter), $data)->assertRedirect(route('blotters.index'));
+        $this->put(route('blotters.update', [$blotter, 'role' => 'admin']), $data)->assertRedirect(route('blotters.index', ['role' => 'admin']));
         $this->assertSame('Settled', $blotter->fresh()->status);
     }
 
@@ -55,14 +55,14 @@ class BlotterTest extends TestCase
             'status' => 'Unsupported',
         ];
 
-        $this->post(route('blotters.store'), $data)->assertSessionHasErrors(array_keys($data));
-        $this->put(route('blotters.update', $blotter), $data)->assertSessionHasErrors(array_keys($data));
+        $this->post(route('blotters.store', ['role' => 'admin']), $data)->assertSessionHasErrors(array_keys($data));
+        $this->put(route('blotters.update', [$blotter, 'role' => 'admin']), $data)->assertSessionHasErrors(array_keys($data));
         $this->assertDatabaseCount('blotters', 1);
         $this->assertSame('Pending', $blotter->fresh()->status);
     }
 
     public function test_missing_blotter_returns_not_found(): void
     {
-        $this->get(route('blotters.show', 999))->assertNotFound();
+        $this->get(route('blotters.show', [999, 'role' => 'admin']))->assertNotFound();
     }
 }

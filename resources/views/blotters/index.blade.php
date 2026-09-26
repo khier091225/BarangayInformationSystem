@@ -17,13 +17,14 @@
             <h1 style="font-size: 26px; color: #1e3a29; margin-top: 4px;">Blotter Case Register</h1>
             <p style="color: #69786b; font-size: 13px;">Manage community disputes, complaints, and hearing records.</p>
         </div>
-        <a href="{{ route('blotters.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="{{ route('blotters.create', ['role' => 'admin']) }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
             <i data-lucide="plus"></i> File New Complaint
         </a>
     </div>
 
     <!-- Search & Filters -->
-    <form method="GET" action="{{ route('blotters.index') }}" style="display: flex; gap: 12px; margin-bottom: 20px;">
+    <form method="GET" action="{{ route('blotters.index', ['role' => 'admin']) }}" style="display: flex; gap: 12px; margin-bottom: 20px;">
+        <input type="hidden" name="role" value="admin">
         <input type="search" name="search" value="{{ request('search') }}" placeholder="Search complainant, respondent, or incident..." style="flex: 1; padding: 10px 14px; border: 1px solid #d4dcd2; border-radius: 6px; font-size: 13px;">
         
         <select name="status" style="padding: 10px 14px; border: 1px solid #d4dcd2; border-radius: 6px; font-size: 13px; background: white;">
@@ -35,7 +36,7 @@
 
         <button type="submit" class="button button-outline" style="cursor: pointer;">Filter</button>
         @if(request('search') || request('status'))
-            <a href="{{ route('blotters.index') }}" class="button" style="text-decoration: none; padding: 10px 14px; color: #666;">Reset</a>
+            <a href="{{ route('blotters.index', ['role' => 'admin']) }}" class="button" style="text-decoration: none; padding: 10px 14px; color: #666;">Reset</a>
         @endif
     </form>
 
@@ -75,10 +76,10 @@
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('blotters.edit', $blotter) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
+                                <a href="{{ route('blotters.edit', [$blotter, 'role' => 'admin']) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
                                     Edit
                                 </a>
-                                <form method="POST" action="{{ route('blotters.destroy', $blotter) }}" onsubmit="return confirm('Are you sure you want to delete this blotter record?');" style="display: inline;">
+                                <form method="POST" action="{{ route('blotters.destroy', [$blotter, 'role' => 'admin']) }}" onsubmit="return confirm('Are you sure you want to delete this blotter record?');" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" style="background: none; border: 1px solid #eed0ce; color: #a43229; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 4px; cursor: pointer;">

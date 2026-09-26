@@ -12,25 +12,26 @@
     <body class="workspace-page">
         <!-- Sidebar Navigation -->
         <aside class="workspace-sidebar" id="workspace-navigation" aria-label="Workspace navigation">
-            <a href="{{ route('dashboard') }}" class="brand workspace-brand">
+            <a href="{{ route('dashboard', ['role' => 'admin']) }}" class="brand workspace-brand">
                 <span class="brand-mark"><i data-lucide="landmark"></i></span>
                 <span class="brand-name">Barangay<span>INFORMATION SYSTEM</span></span>
             </a>
             <div class="workspace-label">STAFF WORKSPACE</div>
             <nav class="workspace-nav" aria-label="Main workspace">
-                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" icon="layout-dashboard">Overview</x-nav-link>
+                <x-nav-link :href="route('dashboard', ['role' => 'admin'])" :active="request()->routeIs('dashboard')" icon="layout-dashboard">Overview</x-nav-link>
                 <span class="nav-group-label">BARANGAY MANAGEMENT</span>
-                <x-nav-link :href="route('residents.index')" :active="request()->routeIs('residents.*')" icon="users-round">Residents</x-nav-link>
-                <x-nav-link :href="route('households.index')" :active="request()->routeIs('households.*')" icon="house">Households</x-nav-link>
-                <x-nav-link :href="route('certificates.index')" :active="request()->routeIs('certificates.*')" icon="files">Certificates</x-nav-link>
-                <x-nav-link :href="route('blotters.index')" :active="request()->routeIs('blotters.*')" icon="notebook-pen">Blotter records</x-nav-link>
-                <x-nav-link :href="route('officials.index')" :active="request()->routeIs('officials.*')" icon="badge-check">Officials</x-nav-link>
+                <x-nav-link :href="route('residents.index', ['role' => 'admin'])" :active="request()->routeIs('residents.*')" icon="users-round">Residents</x-nav-link>
+                <x-nav-link :href="route('households.index', ['role' => 'admin'])" :active="request()->routeIs('households.*')" icon="house">Households</x-nav-link>
+                <x-nav-link :href="route('certificates.index', ['role' => 'admin'])" :active="request()->routeIs('certificates.*')" icon="files">Certificates</x-nav-link>
+                <x-nav-link :href="route('blotters.index', ['role' => 'admin'])" :active="request()->routeIs('blotters.*')" icon="notebook-pen">Blotter records</x-nav-link>
+                <x-nav-link :href="route('officials.index', ['role' => 'admin'])" :active="request()->routeIs('officials.*')" icon="badge-check">Officials</x-nav-link>
             </nav>
             <div class="sidebar-bottom">
                 <div class="sidebar-profile">
                     <span class="staff-avatar" aria-hidden="true">BS</span>
                     <span><strong>Barangay Staff</strong><small>Authorized Portal</small></span>
                 </div>
+                <a href="{{ route('login') }}" class="text-link">Back to sign in</a>
             </div>
         </aside>
 

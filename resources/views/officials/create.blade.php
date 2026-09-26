@@ -7,14 +7,14 @@
 @section('main-style', 'max-width: 750px;')
 
 @section('breadcrumb')
-    <a href="{{ route('officials.index') }}" style="color: inherit; text-decoration: none;">Barangay Officials</a>
+    <a href="{{ route('officials.index', ['role' => 'admin']) }}" style="color: inherit; text-decoration: none;">Barangay Officials</a>
     <i data-lucide="chevron-right"></i>
     <strong>Add Official</strong>
 @endsection
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('officials.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; margin-bottom: 12px;">
+        <a href="{{ route('officials.index', ['role' => 'admin']) }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; margin-bottom: 12px;">
             <i data-lucide="arrow-left"></i> Back to Officials
         </a>
         <h1 style="font-size: 24px; color: #1e3a29;">Add New Official</h1>
@@ -22,7 +22,7 @@
     </div>
 
     <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-        <form method="POST" action="{{ route('officials.store') }}">
+        <form method="POST" action="{{ route('officials.store', ['role' => 'admin']) }}">
             @csrf
 
             <!-- Full Name -->
@@ -70,7 +70,7 @@
             </div>
 
             <!-- Submit Buttons -->
-            <x-form.actions :cancel-url="route('officials.index')">
+            <x-form.actions :cancel-url="route('officials.index', ['role' => 'admin'])">
                 <x-slot:submit>Save Official</x-slot:submit>
             </x-form.actions>
         </form>

@@ -14,7 +14,7 @@ class HouseholdTest extends TestCase
     {
         Household::factory()->count(3)->create();
 
-        $response = $this->get(route('households.index'));
+        $response = $this->get(route('households.index', ['role' => 'admin']));
 
         $response->assertOk();
         $response->assertSee('Household Registry');
@@ -22,7 +22,7 @@ class HouseholdTest extends TestCase
 
     public function test_household_create_form_can_be_rendered(): void
     {
-        $response = $this->get(route('households.create'));
+        $response = $this->get(route('households.create', ['role' => 'admin']));
 
         $response->assertOk();
         $response->assertSee('Add New Household');
@@ -36,9 +36,9 @@ class HouseholdTest extends TestCase
             'address' => 'Kawit, Cavite St.',
         ];
 
-        $response = $this->post(route('households.store'), $data);
+        $response = $this->post(route('households.store', ['role' => 'admin']), $data);
 
-        $response->assertRedirect(route('households.index'));
+        $response->assertRedirect(route('households.index', ['role' => 'admin']));
         $this->assertDatabaseHas('households', [
             'household_number' => 'HH-2026-999',
             'household_head' => 'Emilio Aguinaldo',
@@ -52,7 +52,7 @@ class HouseholdTest extends TestCase
             'household_head' => 'Andres Bonifacio',
         ]);
 
-        $response = $this->get(route('households.show', $household));
+        $response = $this->get(route('households.show', [$household, 'role' => 'admin']));
 
         $response->assertOk();
         $response->assertSee('HH-2026-042');
@@ -66,13 +66,13 @@ class HouseholdTest extends TestCase
             'household_head' => 'Apolinario Mabini',
         ]);
 
-        $response = $this->put(route('households.update', $household), [
+        $response = $this->put(route('households.update', [$household, 'role' => 'admin']), [
             'household_number' => 'HH-2026-010-EDITED',
             'household_head' => 'Apolinario Mabini Sr.',
             'address' => 'Purok 5, Mabini St.',
         ]);
 
-        $response->assertRedirect(route('households.index'));
+        $response->assertRedirect(route('households.index', ['role' => 'admin']));
         $this->assertDatabaseHas('households', [
             'id' => $household->id,
             'household_number' => 'HH-2026-010-EDITED',
@@ -84,9 +84,9 @@ class HouseholdTest extends TestCase
     {
         $household = Household::factory()->create();
 
-        $response = $this->delete(route('households.destroy', $household));
+        $response = $this->delete(route('households.destroy', [$household, 'role' => 'admin']));
 
-        $response->assertRedirect(route('households.index'));
+        $response->assertRedirect(route('households.index', ['role' => 'admin']));
         $this->assertDatabaseMissing('households', [
             'id' => $household->id,
         ]);

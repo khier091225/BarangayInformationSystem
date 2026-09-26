@@ -27,7 +27,7 @@ class ListingPaginationTest extends TestCase
         $model::factory()->count(11)->create($attributes);
         $model::factory()->create($this->nonMatchingAttributes($resource));
 
-        $response = $this->get(route($resource.'.index', $filters))->assertOk();
+        $response = $this->get(route($resource.'.index', [...$filters, 'role' => 'admin']))->assertOk();
         $paginator = $response->viewData($resource);
         $this->assertSame(11, $paginator->total());
         $nextPageUrl = $paginator->nextPageUrl();

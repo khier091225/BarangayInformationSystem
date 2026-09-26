@@ -17,13 +17,14 @@
             <h1 style="font-size: 26px; color: #1e3a29; margin-top: 4px;">Barangay Officials</h1>
             <p style="color: #69786b; font-size: 13px;">Manage elective and appointed community leaders, roles, and service terms.</p>
         </div>
-        <a href="{{ route('officials.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="{{ route('officials.create', ['role' => 'admin']) }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
             <i data-lucide="user-plus"></i> Add Official
         </a>
     </div>
 
     <!-- Search & Filters -->
-    <form method="GET" action="{{ route('officials.index') }}" style="display: flex; gap: 12px; margin-bottom: 20px;">
+    <form method="GET" action="{{ route('officials.index', ['role' => 'admin']) }}" style="display: flex; gap: 12px; margin-bottom: 20px;">
+        <input type="hidden" name="role" value="admin">
         <input type="search" name="search" value="{{ request('search') }}" placeholder="Search by name, position, or contact..." style="flex: 1; padding: 10px 14px; border: 1px solid #d4dcd2; border-radius: 6px; font-size: 13px;">
         
         <select name="position" style="padding: 10px 14px; border: 1px solid #d4dcd2; border-radius: 6px; font-size: 13px; background: white;">
@@ -37,7 +38,7 @@
 
         <button type="submit" class="button button-outline" style="cursor: pointer;">Filter</button>
         @if(request('search') || request('position'))
-            <a href="{{ route('officials.index') }}" class="button" style="text-decoration: none; padding: 10px 14px; color: #666;">Reset</a>
+            <a href="{{ route('officials.index', ['role' => 'admin']) }}" class="button" style="text-decoration: none; padding: 10px 14px; color: #666;">Reset</a>
         @endif
     </form>
 
@@ -82,10 +83,10 @@
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('officials.edit', $official) }}" style="color: #556658; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #ccd5c8; border-radius: 4px;">
+                                <a href="{{ route('officials.edit', [$official, 'role' => 'admin']) }}" style="color: #556658; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #ccd5c8; border-radius: 4px;">
                                     Edit
                                 </a>
-                                <form method="POST" action="{{ route('officials.destroy', $official) }}" onsubmit="return confirm('Are you sure you want to remove this official?');" style="display: inline;">
+                                <form method="POST" action="{{ route('officials.destroy', [$official, 'role' => 'admin']) }}" onsubmit="return confirm('Are you sure you want to remove this official?');" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" style="background: none; border: 1px solid #eed0ce; color: #a43229; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 4px; cursor: pointer;">

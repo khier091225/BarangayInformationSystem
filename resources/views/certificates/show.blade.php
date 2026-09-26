@@ -121,7 +121,7 @@
 @section('topbar')
     <!-- Top Actions Toolbar (Hidden during print) -->
     <div class="action-bar no-print" style="padding: 18px 34px; background: white; border-bottom: 1px solid #e1e7de; display: flex; justify-content: space-between; align-items: center;">
-        <a href="{{ route('certificates.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; font-weight: 500;">
+        <a href="{{ route('certificates.index', ['role' => 'admin']) }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; font-weight: 500;">
             <i data-lucide="arrow-left"></i> Back to Certificates
         </a>
 

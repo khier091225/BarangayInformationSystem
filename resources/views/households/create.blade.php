@@ -7,14 +7,14 @@
 @section('main-style', 'max-width: 700px;')
 
 @section('breadcrumb')
-    <a href="{{ route('households.index') }}" style="color: inherit; text-decoration: none;">Households</a>
+    <a href="{{ route('households.index', ['role' => 'admin']) }}" style="color: inherit; text-decoration: none;">Households</a>
     <i data-lucide="chevron-right"></i>
     <strong>Add New Household</strong>
 @endsection
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('households.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; margin-bottom: 12px;">
+        <a href="{{ route('households.index', ['role' => 'admin']) }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; margin-bottom: 12px;">
             <i data-lucide="arrow-left"></i> Back to Households
         </a>
         <h1 style="font-size: 24px; color: #1e3a29;">Add New Household</h1>
@@ -22,7 +22,7 @@
     </div>
 
     <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-        <form method="POST" action="{{ route('households.store') }}">
+        <form method="POST" action="{{ route('households.store', ['role' => 'admin']) }}">
             @csrf
 
             <!-- Household Number -->
@@ -47,7 +47,7 @@
             </div>
 
             <!-- Submit Buttons -->
-            <x-form.actions :cancel-url="route('households.index')">
+            <x-form.actions :cancel-url="route('households.index', ['role' => 'admin'])">
                 <x-slot:submit>Save Household</x-slot:submit>
             </x-form.actions>
         </form>

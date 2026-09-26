@@ -44,7 +44,7 @@ class ResidentController extends Controller
         $residents = $query->latest()->paginate(10)->withQueryString();
         */
 
-        $residents = Resident::latest()->paginate(10);
+        $residents = Resident::latest()->paginate(10)->appends(['role' => 'admin']);
 
         return view('residents.index', compact('residents'));
     }
@@ -70,7 +70,7 @@ class ResidentController extends Controller
 
         Resident::create($validated);
 
-        return redirect()->route('residents.index')
+        return redirect()->route('residents.index', ['role' => 'admin'])
             ->with('success', 'Resident registered successfully!');
     }
 
@@ -105,7 +105,7 @@ class ResidentController extends Controller
 
         $resident->update($validated);
 
-        return redirect()->route('residents.index')
+        return redirect()->route('residents.index', ['role' => 'admin'])
             ->with('success', 'Resident details updated successfully!');
     }
 
@@ -116,7 +116,7 @@ class ResidentController extends Controller
     {
         $resident->delete();
 
-        return redirect()->route('residents.index')
+        return redirect()->route('residents.index', ['role' => 'admin'])
             ->with('success', 'Resident record deleted successfully!');
     }
 }

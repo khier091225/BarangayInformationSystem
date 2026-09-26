@@ -17,7 +17,7 @@ class CertificateTest extends TestCase
     {
         $resident = Resident::factory()->create();
 
-        $this->post(route('certificates.store'), [
+        $this->post(route('certificates.store', ['role' => 'admin']), [
             'resident_id' => $resident->id,
             'certificate_type' => $type,
             'purpose' => 'Employment',
@@ -50,8 +50,8 @@ class CertificateTest extends TestCase
             'date_issued' => '2026-09-18',
         ];
 
-        $this->from(route('certificates.create'))->post(route('certificates.store'), $data)
-            ->assertRedirect(route('certificates.create'))
+        $this->from(route('certificates.create', ['role' => 'admin']))->post(route('certificates.store', ['role' => 'admin']), $data)
+            ->assertRedirect(route('certificates.create', ['role' => 'admin']))
             ->assertSessionHasErrors('certificate_type')
             ->assertSessionHasInput('purpose', 'Employment');
 
@@ -60,7 +60,7 @@ class CertificateTest extends TestCase
 
     public function test_invalid_certificate_details_are_rejected(): void
     {
-        $this->post(route('certificates.store'), [
+        $this->post(route('certificates.store', ['role' => 'admin']), [
             'resident_id' => 999999,
             'certificate_type' => 'Barangay Clearance',
             'purpose' => '',
@@ -77,7 +77,7 @@ class CertificateTest extends TestCase
             'resident_id' => $resident->id,
         ]);
 
-        $response = $this->get(route('certificates.index'));
+        $response = $this->get(route('certificates.index', ['role' => 'admin']));
 
         $response->assertOk();
         $response->assertSee('Certificates & Clearances', false);
@@ -85,7 +85,7 @@ class CertificateTest extends TestCase
 
     public function test_certificate_create_form_can_be_rendered(): void
     {
-        $response = $this->get(route('certificates.create'));
+        $response = $this->get(route('certificates.create', ['role' => 'admin']));
 
         $response->assertOk();
         $response->assertSee('Issue New Certificate / Clearance');
@@ -102,7 +102,7 @@ class CertificateTest extends TestCase
             'date_issued' => '2026-09-18',
         ];
 
-        $response = $this->post(route('certificates.store'), $data);
+        $response = $this->post(route('certificates.store', ['role' => 'admin']), $data);
 
         $this->assertDatabaseHas('certificates', [
             'resident_id' => $resident->id,
@@ -111,7 +111,7 @@ class CertificateTest extends TestCase
         ]);
 
         $certificate = Certificate::latest('id')->first();
-        $response->assertRedirect(route('certificates.show', $certificate));
+        $response->assertRedirect(route('certificates.show', [$certificate, 'role' => 'admin']));
     }
 
     public function test_certificate_printable_view_can_be_rendered(): void
@@ -127,7 +127,7 @@ class CertificateTest extends TestCase
             'purpose' => 'Bank Account Requirement',
         ]);
 
-        $response = $this->get(route('certificates.show', $certificate));
+        $response = $this->get(route('certificates.show', [$certificate, 'role' => 'admin']));
 
         $response->assertOk();
         $response->assertSee('GRACIANO');
@@ -145,9 +145,9 @@ class CertificateTest extends TestCase
             'resident_id' => $resident->id,
         ]);
 
-        $response = $this->delete(route('certificates.destroy', $certificate));
+        $response = $this->delete(route('certificates.destroy', [$certificate, 'role' => 'admin']));
 
-        $response->assertRedirect(route('certificates.index'));
+        $response->assertRedirect(route('certificates.index', ['role' => 'admin']));
         $this->assertDatabaseMissing('certificates', [
             'id' => $certificate->id,
         ]);

@@ -41,7 +41,7 @@ class CertificateController extends Controller
         $certificates = $query->latest('date_issued')->paginate(10)->withQueryString();
         */
 
-        $certificates = Certificate::latest('date_issued')->paginate(10);
+        $certificates = Certificate::latest('date_issued')->paginate(10)->appends(['role' => 'admin']);
 
         return view('certificates.index', compact('certificates'));
     }
@@ -68,7 +68,7 @@ class CertificateController extends Controller
 
         $certificate = Certificate::create($validated);
 
-        return redirect()->route('certificates.show', $certificate)
+        return redirect()->route('certificates.show', [$certificate, 'role' => 'admin'])
             ->with('success', 'Certificate issued successfully! You may now print it.');
     }
 
@@ -94,7 +94,7 @@ class CertificateController extends Controller
     {
         $certificate->delete();
 
-        return redirect()->route('certificates.index')
+        return redirect()->route('certificates.index', ['role' => 'admin'])
             ->with('success', 'Certificate record deleted successfully!');
     }
 }
