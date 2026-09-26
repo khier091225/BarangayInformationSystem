@@ -1,6 +1,7 @@
 @extends('layouts.resident')
 
 @section('title', 'Request a Document | Barangay Information System')
+@section('main-class', 'resident-main-form')
 
 @section('content')
     <a href="{{ route('account') }}" class="resident-page-back"><i data-lucide="arrow-left" aria-hidden="true"></i> Back to dashboard</a>
@@ -12,12 +13,15 @@
         </div>
     </div>
 
-    <div class="resident-form-layout">
-        <section class="resident-card resident-form-card" aria-label="Document request form">
-            <div class="resident-form-intro"><span class="resident-section-icon"><i data-lucide="user-round" aria-hidden="true"></i></span><span>Requesting for <strong>{{ auth()->user()->name }}</strong></span></div>
-            <form method="POST" action="{{ route('account.requests.certificate.store') }}" class="resident-form">
-                @csrf
-                <p class="resident-form-note">Fields marked with an asterisk (*) are required.</p>
+    <section class="resident-card resident-form-card resident-service-form" aria-label="Document request form">
+        <div class="resident-form-intro">
+            <span class="resident-section-icon"><i data-lucide="user-round" aria-hidden="true"></i></span>
+            <div><span>Requesting for</span><strong>{{ auth()->user()->name }}</strong></div>
+            <p>Fields marked * are required.</p>
+        </div>
+        <form method="POST" action="{{ route('account.requests.certificate.store') }}" class="resident-form">
+            @csrf
+            <div class="resident-form-fields">
                 <div class="resident-field">
                     <x-form.label for="certificate_type" required>Document type</x-form.label>
                     <x-form.select name="certificate_type" required :aria-invalid="$errors->has('certificate_type') ? 'true' : 'false'" :aria-describedby="$errors->has('certificate_type') ? 'certificate-type-error' : null">
@@ -33,18 +37,12 @@
                     <x-form.input name="purpose" :value="old('purpose')" required maxlength="255" placeholder="e.g. Employment or scholarship" :aria-invalid="$errors->has('purpose') ? 'true' : 'false'" :aria-describedby="$errors->has('purpose') ? 'purpose-error' : null" />
                     <x-form.error id="purpose-error" :message="$errors->first('purpose')" />
                 </div>
-                <div class="resident-form-actions"><button type="submit" class="resident-button resident-button-primary">Submit document request <i data-lucide="arrow-right" aria-hidden="true"></i></button><a href="{{ route('account') }}" class="resident-button resident-button-outline">Cancel</a></div>
-            </form>
-        </section>
-        <aside class="resident-card resident-form-help" aria-labelledby="request-help-title">
-            <span class="resident-section-icon"><i data-lucide="info" aria-hidden="true"></i></span>
-            <h2 id="request-help-title">What happens next?</h2>
-            <p>After you submit, your request will appear in My requests with a Pending status.</p>
-            <ul>
-                <li>Barangay staff will check the request details.</li>
-                <li>You can check its status from your dashboard.</li>
-                <li>Once issued, contact barangay staff about document collection.</li>
-            </ul>
-        </aside>
-    </div>
+            </div>
+            <aside class="resident-form-guidance" aria-labelledby="request-help-title">
+                <i data-lucide="info" aria-hidden="true"></i>
+                <div><h2 id="request-help-title">What happens next?</h2><p>Staff will review your request. Track its status in <a href="{{ route('account.requests.index') }}">My requests</a> after submitting. Once issued, contact barangay staff about document collection.</p></div>
+            </aside>
+            <div class="resident-form-actions"><button type="submit" class="resident-button resident-button-primary">Submit document request <i data-lucide="arrow-right" aria-hidden="true"></i></button><a href="{{ route('account') }}" class="resident-button resident-button-outline">Cancel</a></div>
+        </form>
+    </section>
 @endsection

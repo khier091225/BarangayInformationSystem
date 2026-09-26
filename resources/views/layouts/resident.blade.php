@@ -35,7 +35,7 @@
             </div>
         </header>
 
-        <main id="resident-main" class="resident-main" tabindex="-1">
+        <main id="resident-main" class="resident-main @yield('main-class')" tabindex="-1">
             @if (session('warning'))
                 <div role="alert" class="resident-alert resident-alert-warning"><i data-lucide="info" aria-hidden="true"></i><span>{{ session('warning') }}</span></div>
             @endif
