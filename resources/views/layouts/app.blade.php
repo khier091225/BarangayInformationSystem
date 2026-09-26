@@ -27,19 +27,48 @@
                 <x-nav-link :href="route('officials.index', ['role' => 'admin'])" :active="request()->routeIs('officials.*')" icon="badge-check">Officials</x-nav-link>
             </nav>
             <div class="sidebar-bottom">
-                <div class="sidebar-profile">
-                    <span class="staff-avatar" aria-hidden="true">BS</span>
-                    <span><strong>Barangay Staff</strong><small>Authorized Portal</small></span>
+                <div class="sidebar-user-card">
+                    <div class="sidebar-profile">
+                        <div class="staff-avatar-wrapper">
+                            <span class="staff-avatar" aria-hidden="true">BS</span>
+                            <span class="status-indicator-dot" aria-label="Session active"></span>
+                        </div>
+                        <div class="sidebar-user-meta">
+                            <strong class="sidebar-user-name">Barangay Staff</strong>
+                            <span class="sidebar-user-role">
+                                <i data-lucide="badge-check" aria-hidden="true"></i> Authorized Admin
+                            </span>
+                        </div>
+                    </div>
+                    <div class="sidebar-account-actions">
+                        <a href="{{ route('login') }}" class="sidebar-logout-btn" data-logout-trigger aria-label="Log out to sign in screen">
+                            <i data-lucide="log-out" aria-hidden="true"></i>
+                            <span class="logout-label-group">
+                                <span class="logout-main-label">Log out</span>
+                                <span class="logout-sub-label">Back to sign in</span>
+                            </span>
+                        </a>
+                    </div>
                 </div>
-                <a href="{{ route('login') }}" class="text-link">Back to sign in</a>
             </div>
         </aside>
+        <div class="sidebar-backdrop" hidden></div>
 
         <div class="workspace-shell">
             @section('topbar')
             <header class="workspace-topbar">
                 <div class="workspace-breadcrumb">
                     @yield('breadcrumb')
+                </div>
+                <div class="topbar-actions">
+                    <div class="topbar-session-badge" aria-label="Admin session active">
+                        <span class="status-indicator-dot" aria-hidden="true"></span>
+                        <span>Admin Active</span>
+                    </div>
+                    <a href="{{ route('login') }}" class="topbar-logout-btn" data-logout-trigger aria-label="Log out of session">
+                        <i data-lucide="log-out" aria-hidden="true"></i>
+                        <span>Log out</span>
+                    </a>
                 </div>
             </header>
             @show
@@ -54,6 +83,27 @@
                 @yield('content')
             </main>
         </div>
+
+        <!-- Logout Confirmation Modal -->
+        <dialog class="logout-confirm-dialog" id="logout-confirm-dialog" aria-labelledby="logout-dialog-title" aria-describedby="logout-dialog-desc">
+            <div class="logout-dialog-header">
+                <div class="logout-dialog-icon">
+                    <i data-lucide="log-out" aria-hidden="true"></i>
+                </div>
+                <div>
+                    <h2 id="logout-dialog-title">Log out of Dashboard?</h2>
+                    <p id="logout-dialog-desc">You are about to exit the administrative portal. Any unsaved edits will be discarded.</p>
+                </div>
+            </div>
+            <div class="logout-dialog-actions">
+                <button type="button" class="logout-dialog-cancel-btn" id="cancel-logout-btn">Stay in Dashboard</button>
+                <a href="{{ route('login') }}" class="logout-dialog-confirm-btn" id="confirm-logout-link">
+                    <i data-lucide="log-out" aria-hidden="true"></i>
+                    <span>Log out</span>
+                </a>
+            </div>
+        </dialog>
+
         @stack('scripts')
     </body>
 </html>
