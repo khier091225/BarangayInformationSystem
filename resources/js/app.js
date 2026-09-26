@@ -1,9 +1,22 @@
-import { createIcons, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, ClipboardList, Download, ExternalLink, FileCheck2, Files, Flag, Globe, HandHeart, HeartHandshake, HeartPulse, House, Info, Landmark, LayoutDashboard, LogOut, MapPin, Megaphone, Menu, MessagesSquare, NotebookPen, PanelLeft, Plus, Search, SearchX, Sprout, TrendingUp, UserRound, UserRoundPlus, UsersRound, X } from 'lucide';
+import { createIcons, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, ClipboardList, Download, ExternalLink, FileCheck2, Files, Flag, Globe, HandHeart, HeartHandshake, HeartPulse, House, Inbox, Info, Landmark, LayoutDashboard, LogOut, MapPin, Megaphone, Menu, MessagesSquare, NotebookPen, PanelLeft, Plus, Search, SearchX, Sprout, TrendingUp, UserRound, UserRoundPlus, UsersRound, X } from 'lucide';
 import initializeWorkspace from './workspace';
 
-createIcons({ icons: { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, ClipboardList, Download, ExternalLink, FileCheck2, Files, Flag, Globe, HandHeart, HeartHandshake, HeartPulse, House, Info, Landmark, LayoutDashboard, LogOut, MapPin, Megaphone, Menu, MessagesSquare, NotebookPen, PanelLeft, Plus, Search, SearchX, Sprout, TrendingUp, UserRound, UserRoundPlus, UsersRound, X } });
+createIcons({ icons: { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, ClipboardList, Download, ExternalLink, FileCheck2, Files, Flag, Globe, HandHeart, HeartHandshake, HeartPulse, House, Inbox, Info, Landmark, LayoutDashboard, LogOut, MapPin, Megaphone, Menu, MessagesSquare, NotebookPen, PanelLeft, Plus, Search, SearchX, Sprout, TrendingUp, UserRound, UserRoundPlus, UsersRound, X } });
 
 initializeWorkspace();
+
+document.querySelectorAll('[data-password-toggle]').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+        const input = document.getElementById(toggle.dataset.passwordToggle);
+        if (!input) return;
+
+        const isVisible = input.type === 'text';
+        input.type = isVisible ? 'password' : 'text';
+        toggle.textContent = isVisible ? 'Show' : 'Hide';
+        toggle.setAttribute('aria-label', `${isVisible ? 'Show' : 'Hide'} ${toggle.dataset.passwordLabel}`);
+        toggle.setAttribute('aria-pressed', String(!isVisible));
+    });
+});
 
 const menuToggle = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('#primary-navigation');
