@@ -2,6 +2,7 @@
 @import './workspace.css';
 @import './auth.css';
 @import './resident.css';
+@import './staff-dashboard.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';

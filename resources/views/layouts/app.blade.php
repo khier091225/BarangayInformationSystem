@@ -10,6 +10,7 @@
         @stack('styles')
     </head>
     <body class="workspace-page">
+        <a class="skip-link" href="#workspace-main">Skip to content</a>
         <!-- Sidebar Navigation -->
         <aside class="workspace-sidebar" id="workspace-navigation" aria-label="Workspace navigation">
             <a href="{{ route('dashboard') }}" class="brand workspace-brand">
@@ -31,7 +32,7 @@
                 <div class="sidebar-user-card">
                     <div class="sidebar-profile">
                         <div class="staff-avatar-wrapper">
-                            <span class="staff-avatar" aria-hidden="true">BS</span>
+                            <span class="staff-avatar" aria-hidden="true"><i data-lucide="user-round"></i></span>
                             <span class="status-indicator-dot" aria-label="Session active"></span>
                         </div>
                         <div class="sidebar-user-meta">
@@ -68,7 +69,7 @@
             </header>
             @show
 
-            <main class="workspace-main" id="workspace-main" tabindex="-1" style="padding: 24px 34px; @yield('main-style')">
+            <main class="workspace-main" id="workspace-main" tabindex="-1" style="@yield('main-style')">
                 @if (session('success'))
                     <div class="no-print" role="status" style="background: #eaf5eb; color: #245838; border: 1px solid #c2e2c7; padding: 12px 18px; border-radius: 6px; margin-bottom: 20px; font-weight: 500;">
                         {{ session('success') }}

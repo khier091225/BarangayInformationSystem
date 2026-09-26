@@ -20,11 +20,27 @@ class DashboardController extends Controller
         $pendingBlotterCount = Blotter::where('status', 'Pending')->count();
         $totalBlotterCount = Blotter::count();
         $officialCount = Official::count();
-        $pendingServiceRequestCount = ServiceRequest::where('status', ServiceRequest::STATUS_PENDING)->count();
+        $requestTotals = ServiceRequest::query()
+            ->select('status')
+            ->selectRaw('COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+        $requestCounts = [
+            'Pending' => (int) ($requestTotals[ServiceRequest::STATUS_PENDING] ?? 0),
+            'Completed' => (int) ($requestTotals[ServiceRequest::STATUS_COMPLETED] ?? 0),
+            'Declined' => (int) ($requestTotals[ServiceRequest::STATUS_DECLINED] ?? 0),
+        ];
+        $totalServiceRequestCount = array_sum($requestCounts);
+        $pendingServiceRequestCount = $requestCounts[ServiceRequest::STATUS_PENDING];
+        $pendingRequests = ServiceRequest::query()->with('resident')
+            ->where('status', ServiceRequest::STATUS_PENDING)
+            ->oldest()->orderBy('id')->limit(4)->get();
+        $certificateActivity = $this->certificateActivity();
 
-        $recentCertificates = Certificate::with('resident')->latest()->take(5)->get();
-        $recentBlotters = Blotter::latest()->take(5)->get();
-        $recentResidents = Resident::with('household')->latest()->take(5)->get();
+        $recentCertificates = Certificate::with('resident')->whereDate('date_issued', '<=', today())
+            ->latest('date_issued')->latest('id')->limit(3)->get();
+        $recentBlotters = Blotter::latest()->limit(3)->get();
+        $recentResidents = Resident::with('household')->latest()->limit(3)->get();
 
         return view('dashboard', compact(
             'residentCount',
@@ -34,9 +50,49 @@ class DashboardController extends Controller
             'totalBlotterCount',
             'officialCount',
             'pendingServiceRequestCount',
+            'totalServiceRequestCount',
+            'requestCounts',
+            'pendingRequests',
+            'certificateActivity',
             'recentCertificates',
             'recentBlotters',
             'recentResidents'
         ));
+    }
+
+    /**
+     * @return array{months: array<int, array{label: string, fullLabel: string, count: int}>, maximum: int, total: int, currentMonth: int}
+     */
+    private function certificateActivity(): array
+    {
+        $firstMonth = today()->toImmutable()->startOfMonth()->subMonths(5);
+        $query = Certificate::query()
+            ->where('date_issued', '>=', $firstMonth->toDateString())
+            ->where('date_issued', '<', today()->addDay()->toDateString());
+        $months = [];
+
+        for ($index = 0; $index < 6; $index++) {
+            $month = $firstMonth->addMonths($index);
+            $query->selectRaw(
+                "SUM(CASE WHEN date_issued >= ? AND date_issued < ? THEN 1 ELSE 0 END) AS month_{$index}",
+                [$month->toDateString(), $month->addMonth()->toDateString()],
+            );
+            $months[] = ['label' => $month->format('M'), 'fullLabel' => $month->format('F Y'), 'count' => 0];
+        }
+
+        $totals = $query->toBase()->first();
+
+        foreach ($months as $index => $month) {
+            $months[$index]['count'] = (int) ($totals->{"month_{$index}"} ?? 0);
+        }
+
+        $counts = array_column($months, 'count');
+
+        return [
+            'months' => $months,
+            'maximum' => max(4, (int) (ceil(max($counts) / 4) * 4)),
+            'total' => array_sum($counts),
+            'currentMonth' => $counts[5],
+        ];
     }
 }

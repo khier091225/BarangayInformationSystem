@@ -1,349 +1,159 @@
 @extends('layouts.app')
 
-@section('title')
-    Dashboard | Barangay Information System
-@endsection
+@section('title', 'Dashboard | Barangay Information System')
 
 @section('breadcrumb')
     <button type="button" class="icon-button sidebar-toggle" aria-label="Open sidebar" aria-controls="workspace-navigation" aria-expanded="false">
         <i data-lucide="panel-left" aria-hidden="true"></i>
     </button>
-    <span>Workspace</span>
-    <i data-lucide="chevron-right"></i>
+    <span>Staff workspace</span>
+    <i data-lucide="chevron-right" aria-hidden="true"></i>
     <strong>Overview</strong>
 @endsection
 
 @section('content')
-    <!-- Header -->
-    <div class="workspace-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
-        <div>
-            <div class="eyebrow">BARANGAY ADMINISTRATION</div>
-            <h1 style="font-size: 26px; color: #1e3a29; margin-top: 4px;">Management Dashboard</h1>
-            <p style="color: #69786b; font-size: 13px;">Real-time overview of community demographics, civil documents, and blotter records.</p>
-        </div>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <a href="{{ route('residents.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-                <i data-lucide="user-plus"></i> Register Resident
-            </a>
-            <a href="{{ route('certificates.create') }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-                <i data-lucide="file-plus"></i> Issue Certificate
-            </a>
-            <a href="{{ route('blotters.create') }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-                <i data-lucide="plus"></i> File Complaint
-            </a>
-        </div>
-    </div>
-
-    <!-- Dashboard Quick Search Bar -->
-    <div class="search-filter-card" style="margin-bottom: 24px;">
-        <form method="GET" action="{{ route('residents.index') }}" class="search-filter-form">
-            <div class="search-input-group">
-                <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
-                <input type="search" name="search" placeholder="Quick search resident records by name, household, or address..." aria-label="Quick search residents">
-            </div>
-            <button type="submit" class="search-button-primary">
-                <i data-lucide="search" aria-hidden="true"></i>
-                <span>Search Directory</span>
-            </button>
-        </form>
-    </div>
-
-    <!-- Metrics Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px;">
-        <!-- Total Residents -->
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; align-items: center; gap: 16px;">
-            <div style="width: 48px; height: 48px; border-radius: 8px; background: #eaf5eb; color: #245838; display: grid; place-items: center; flex-shrink: 0;">
-                <i data-lucide="users-round" style="width: 24px; height: 24px;"></i>
-            </div>
-            <div style="flex: 1; min-width: 0;">
-                <div style="font-size: 12px; font-weight: 600; color: #69786b; text-transform: uppercase; letter-spacing: 0.04em;">Total Residents</div>
-                <div style="font-size: 26px; font-weight: 700; color: #1e3a29; margin-top: 2px;">{{ number_format($residentCount) }}</div>
-                <a href="{{ route('residents.index') }}" style="font-size: 12px; color: #276747; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
-                    View directory <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- Households -->
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; align-items: center; gap: 16px;">
-            <div style="width: 48px; height: 48px; border-radius: 8px; background: #e8f0fa; color: #285881; display: grid; place-items: center; flex-shrink: 0;">
-                <i data-lucide="house" style="width: 24px; height: 24px;"></i>
-            </div>
-            <div style="flex: 1; min-width: 0;">
-                <div style="font-size: 12px; font-weight: 600; color: #69786b; text-transform: uppercase; letter-spacing: 0.04em;">Households</div>
-                <div style="font-size: 26px; font-weight: 700; color: #1e3a29; margin-top: 2px;">{{ number_format($householdCount) }}</div>
-                <a href="{{ route('households.index') }}" style="font-size: 12px; color: #285881; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
-                    View households <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- Certificates Issued -->
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; align-items: center; gap: 16px;">
-            <div style="width: 48px; height: 48px; border-radius: 8px; background: #f3eef8; color: #5f377e; display: grid; place-items: center; flex-shrink: 0;">
-                <i data-lucide="files" style="width: 24px; height: 24px;"></i>
-            </div>
-            <div style="flex: 1; min-width: 0;">
-                <div style="font-size: 12px; font-weight: 600; color: #69786b; text-transform: uppercase; letter-spacing: 0.04em;">Certificates</div>
-                <div style="font-size: 26px; font-weight: 700; color: #1e3a29; margin-top: 2px;">{{ number_format($certificateCount) }}</div>
-                <a href="{{ route('certificates.index') }}" style="font-size: 12px; color: #5f377e; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
-                    View certificates <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- Blotter Records -->
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; align-items: center; gap: 16px;">
-            <div style="width: 48px; height: 48px; border-radius: 8px; background: #fff2d5; color: #74500b; display: grid; place-items: center; flex-shrink: 0;">
-                <i data-lucide="notebook-pen" style="width: 24px; height: 24px;"></i>
-            </div>
-            <div style="flex: 1; min-width: 0;">
-                <div style="font-size: 12px; font-weight: 600; color: #69786b; text-transform: uppercase; letter-spacing: 0.04em;">Pending Blotters</div>
-                <div style="font-size: 26px; font-weight: 700; color: #1e3a29; margin-top: 2px;">{{ number_format($pendingBlotterCount) }}</div>
-                <a href="{{ route('blotters.index') }}" style="font-size: 12px; color: #74500b; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
-                    Total cases: {{ $totalBlotterCount }} <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
-                </a>
-            </div>
-        </div>
-
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; align-items: center; gap: 16px;">
-            <div style="width: 48px; height: 48px; border-radius: 8px; background: #e7f4ed; color: #206345; display: grid; place-items: center; flex-shrink: 0;">
-                <i data-lucide="inbox" style="width: 24px; height: 24px;"></i>
-            </div>
-            <div style="flex: 1; min-width: 0;">
-                <div style="font-size: 12px; font-weight: 600; color: #69786b; text-transform: uppercase; letter-spacing: 0.04em;">Resident Requests</div>
-                <div style="font-size: 26px; font-weight: 700; color: #1e3a29; margin-top: 2px;">{{ number_format($pendingServiceRequestCount) }}</div>
-                <a href="{{ route('service-requests.index') }}" style="font-size: 12px; color: #276747; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
-                    Review pending <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Shortcuts Row -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 28px;">
-        <a href="{{ route('residents.index') }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
-            <span style="display: flex; align-items: center; gap: 10px;">
-                <i data-lucide="users-round" style="width: 16px; height: 16px; color: #276747;"></i> Resident Registry
-            </span>
-            <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #999;"></i>
-        </a>
-        <a href="{{ route('households.index') }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
-            <span style="display: flex; align-items: center; gap: 10px;">
-                <i data-lucide="house" style="width: 16px; height: 16px; color: #285881;"></i> Households
-            </span>
-            <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #999;"></i>
-        </a>
-        <a href="{{ route('certificates.index') }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
-            <span style="display: flex; align-items: center; gap: 10px;">
-                <i data-lucide="files" style="width: 16px; height: 16px; color: #5f377e;"></i> Certificates
-            </span>
-            <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #999;"></i>
-        </a>
-        <a href="{{ route('blotters.index') }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
-            <span style="display: flex; align-items: center; gap: 10px;">
-                <i data-lucide="notebook-pen" style="width: 16px; height: 16px; color: #8b3f20;"></i> Blotter Records
-            </span>
-            <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #999;"></i>
-        </a>
-        <a href="{{ route('officials.index') }}" style="background: white; border: 1px solid #e1e7de; border-radius: 6px; padding: 14px 18px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; color: #1e3a29; font-weight: 600; font-size: 13px; transition: border-color 0.2s;">
-            <span style="display: flex; align-items: center; gap: 10px;">
-                <i data-lucide="badge-check" style="width: 16px; height: 16px; color: #2e7d32;"></i> Officials
-            </span>
-            <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #999;"></i>
-        </a>
-    </div>
-
-    <!-- Recent Tables Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 24px; margin-bottom: 30px;">
-        <!-- Recent Certificates -->
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-            <div style="padding: 16px 20px; border-bottom: 1px solid #e3e8e1; display: flex; justify-content: space-between; align-items: center; background: #f8faf7;">
-                <div>
-                    <h2 style="font-size: 16px; font-weight: 600; color: #1e3a29; margin: 0;">Recently Issued Certificates</h2>
-                    <p style="font-size: 12px; color: #69786b; margin: 2px 0 0;">Latest applications submitted</p>
-                </div>
-                <a href="{{ route('certificates.index') }}" style="font-size: 12px; font-weight: 600; color: #276747; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                    View all <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
-                </a>
-            </div>
-            <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                <thead>
-                    <tr style="border-bottom: 1px solid #edf1eb; text-align: left; color: #5a6b5c; font-size: 12px;">
-                        <th style="padding: 12px 20px;">Resident</th>
-                        <th style="padding: 12px 16px;">Certificate Type</th>
-                        <th style="padding: 12px 16px;">Date Issued</th>
-                        <th style="padding: 12px 20px; text-align: right;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($recentCertificates as $certificate)
-                        <tr style="border-bottom: 1px solid #edf1eb;">
-                            <td style="padding: 12px 20px; font-weight: 600; color: #1e3a29;">
-                                {{ $certificate->resident?->full_name ?? 'Unknown Resident' }}
-                            </td>
-                            <td style="padding: 12px 16px; color: #4b584e;">
-                                <span style="background: #f0f4f1; color: #2d5037; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;">
-                                    {{ $certificate->certificate_type }}
-                                </span>
-                            </td>
-                            <td style="padding: 12px 16px; color: #69786b; font-size: 12px;">
-                                {{ $certificate->date_issued ? $certificate->date_issued->format('M d, Y') : 'N/A' }}
-                            </td>
-                            <td style="padding: 12px 20px; text-align: right;">
-                                <a href="{{ route('certificates.show', [$certificate]) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 3px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
-                                    View
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" style="text-align: center; padding: 28px; color: #829283;">
-                                No certificates issued recently.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Recent Blotter Records -->
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-            <div style="padding: 16px 20px; border-bottom: 1px solid #e3e8e1; display: flex; justify-content: space-between; align-items: center; background: #f8faf7;">
-                <div>
-                    <h2 style="font-size: 16px; font-weight: 600; color: #1e3a29; margin: 0;">Recent Blotter Cases</h2>
-                    <p style="font-size: 12px; color: #69786b; margin: 2px 0 0;">Peace and order incidents</p>
-                </div>
-                <a href="{{ route('blotters.index') }}" style="font-size: 12px; font-weight: 600; color: #276747; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                    View all <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
-                </a>
-            </div>
-            <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                <thead>
-                    <tr style="border-bottom: 1px solid #edf1eb; text-align: left; color: #5a6b5c; font-size: 12px;">
-                        <th style="padding: 12px 20px;">Complainant / Respondent</th>
-                        <th style="padding: 12px 16px;">Incident</th>
-                        <th style="padding: 12px 16px;">Status</th>
-                        <th style="padding: 12px 20px; text-align: right;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($recentBlotters as $blotter)
-                        <tr style="border-bottom: 1px solid #edf1eb;">
-                            <td style="padding: 12px 20px; font-weight: 600; color: #1e3a29;">
-                                <div>{{ $blotter->complainant }}</div>
-                                <div style="font-size: 11px; color: #69786b; font-weight: 400;">vs. {{ $blotter->respondent }}</div>
-                            </td>
-                            <td style="padding: 12px 16px; color: #4b584e;">
-                                <div style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $blotter->incident }}">
-                                    {{ $blotter->incident }}
-                                </div>
-                                <div style="font-size: 11px; color: #829283;">{{ $blotter->incident_date ? $blotter->incident_date->format('M d, Y') : '' }}</div>
-                            </td>
-                            <td style="padding: 12px 16px;">
-                                @if ($blotter->status === 'Pending')
-                                    <span style="background: #fff2d5; color: #74500b; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">Pending</span>
-                                @elseif ($blotter->status === 'Settled')
-                                    <span style="background: #eaf5eb; color: #236539; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">Settled</span>
-                                @else
-                                    <span style="background: #fbece5; color: #8b3f20; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">{{ $blotter->status }}</span>
-                                @endif
-                            </td>
-                            <td style="padding: 12px 20px; text-align: right;">
-                                <a href="{{ route('blotters.show', [$blotter]) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 3px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
-                                    View
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" style="text-align: center; padding: 28px; color: #829283;">
-                                No blotter records found.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Newly Registered Residents Table -->
-    <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 30px;">
-        <div style="padding: 16px 20px; border-bottom: 1px solid #e3e8e1; display: flex; justify-content: space-between; align-items: center; background: #f8faf7;">
+    <div class="staff-overview">
+        <header class="overview-heading">
             <div>
-                <h2 style="font-size: 16px; font-weight: 600; color: #1e3a29; margin: 0;">Newly Registered Residents</h2>
-                <p style="font-size: 12px; color: #69786b; margin: 2px 0 0;">Recent additions to the community registry</p>
+                <span class="overview-eyebrow">BARANGAY ADMINISTRATION</span>
+                <h1>Barangay overview</h1>
+                <p>A clear view of your community, services, and work awaiting review.</p>
             </div>
-            <a href="{{ route('residents.index') }}" style="font-size: 12px; font-weight: 600; color: #276747; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                View all residents <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
-            </a>
-        </div>
-        <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-            <thead>
-                <tr style="border-bottom: 1px solid #edf1eb; text-align: left; color: #5a6b5c; font-size: 12px;">
-                    <th style="padding: 12px 20px;">Full Name</th>
-                    <th style="padding: 12px 16px;">Household</th>
-                    <th style="padding: 12px 16px;">Gender & Age</th>
-                    <th style="padding: 12px 16px;">Address</th>
-                    <th style="padding: 12px 16px;">Voter Status</th>
-                    <th style="padding: 12px 20px; text-align: right;">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($recentResidents as $resident)
-                    <tr style="border-bottom: 1px solid #edf1eb;">
-                        <td style="padding: 12px 20px; font-weight: 600; color: #1e3a29;">
-                            <a href="{{ route('residents.show', [$resident]) }}" style="color: inherit; text-decoration: underline;">
-                                {{ $resident->full_name }}
-                            </a>
-                            @if ($resident->contact_number)
-                                <div style="font-size: 11px; color: #788577; font-weight: 400; margin-top: 2px;">
-                                    <i data-lucide="phone" style="width: 11px; height: 11px; display: inline;"></i> {{ $resident->contact_number }}
-                                </div>
-                            @endif
-                        </td>
-                        <td style="padding: 12px 16px;">
-                            @if ($resident->household)
-                                <a href="{{ route('households.show', [$resident->household]) }}" style="color: #276747; text-decoration: none; font-weight: 600;">
-                                    {{ $resident->household->household_number }}
-                                </a>
-                            @else
-                                <span style="color: #999; font-style: italic;">No Household</span>
-                            @endif
-                        </td>
-                        <td style="padding: 12px 16px; color: #4b584e;">
-                            {{ $resident->gender }}, {{ $resident->birthdate ? $resident->birthdate->age . ' yrs' : 'N/A' }}
-                        </td>
-                        <td style="padding: 12px 16px; color: #556658; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $resident->address }}">
-                            {{ $resident->address }}
-                        </td>
-                        <td style="padding: 12px 16px;">
-                            @if ($resident->is_voter)
-                                <span style="background: #eaf5eb; color: #236539; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">Voter</span>
-                            @else
-                                <span style="background: #f4f4f4; color: #888; padding: 2px 8px; border-radius: 4px; font-size: 11px;">Non-Voter</span>
-                            @endif
-                        </td>
-                        <td style="padding: 12px 20px; text-align: right;">
-                            <a href="{{ route('residents.show', [$resident]) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 3px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
-                                View
-                            </a>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 28px; color: #829283;">
-                            No resident records found.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+            <div class="overview-heading-actions">
+                <span class="overview-date"><i data-lucide="calendar-days" aria-hidden="true"></i> {{ today()->format('D, M j, Y') }}</span>
+                <a href="{{ route('residents.create') }}" class="overview-button overview-button-primary"><i data-lucide="user-round-plus" aria-hidden="true"></i> Add resident</a>
+            </div>
+        </header>
 
-    <!-- Footer -->
-    <footer class="workspace-footer" style="padding-block: 20px; color: #829283; font-size: 12px; display: flex; justify-content: space-between; border-top: 1px solid #e1e7de;">
-        <span>&copy; {{ date('Y') }} Barangay Information System</span>
-        <span>Administrative Management Portal</span>
-    </footer>
+        <div class="overview-toolbar">
+            <form method="GET" action="{{ route('residents.index') }}" class="overview-search" role="search">
+                <i data-lucide="search" aria-hidden="true"></i>
+                <input type="search" name="search" placeholder="Find a resident by name, household, or address" aria-label="Search resident records" maxlength="255">
+                <button type="submit">Search <i data-lucide="arrow-right" aria-hidden="true"></i></button>
+            </form>
+            <div class="overview-shortcuts">
+                <a href="{{ route('certificates.create') }}"><i data-lucide="file-check-2" aria-hidden="true"></i> Issue certificate</a>
+                <a href="{{ route('blotters.create') }}"><i data-lucide="notebook-pen" aria-hidden="true"></i> Record blotter</a>
+            </div>
+        </div>
+
+        <section class="overview-attention" aria-labelledby="attention-title">
+            <div class="overview-attention-intro">
+                <span class="overview-attention-icon"><i data-lucide="inbox" aria-hidden="true"></i></span>
+                <div><h2 id="attention-title">{{ $pendingServiceRequestCount + $pendingBlotterCount > 0 ? 'Needs your attention' : 'You’re all caught up' }}</h2><p>{{ $pendingServiceRequestCount + $pendingBlotterCount > 0 ? 'Start with the requests and cases waiting for staff action.' : 'There are no pending resident requests or blotter cases.' }}</p></div>
+            </div>
+            <div class="overview-attention-links">
+                <a href="{{ route('service-requests.index', ['status' => 'Pending']) }}"><strong>{{ number_format($pendingServiceRequestCount) }}</strong><span>Pending requests</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+                <a href="{{ route('blotters.index', ['status' => 'Pending']) }}"><strong>{{ number_format($pendingBlotterCount) }}</strong><span>Pending blotters</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+        </section>
+
+        <section class="overview-stats" aria-label="Barangay record totals">
+            <x-dashboard-stat label="Total residents" :value="$residentCount" icon="users-round" :href="route('residents.index')" hint="Resident directory" />
+            <x-dashboard-stat label="Households" :value="$householdCount" icon="house" :href="route('households.index')" hint="Household registry" tone="blue" />
+            <x-dashboard-stat label="Certificates" :value="$certificateCount" icon="files" :href="route('certificates.index')" hint="All certificate records" tone="violet" />
+            <x-dashboard-stat label="Barangay officials" :value="$officialCount" icon="badge-check" :href="route('officials.index')" hint="View official roster" tone="amber" />
+        </section>
+
+        <div class="overview-main-grid">
+            <section class="overview-panel overview-chart-panel" aria-labelledby="certificate-activity-title">
+                <div class="overview-panel-heading">
+                    <div><span class="overview-eyebrow">SERVICE ACTIVITY</span><h2 id="certificate-activity-title">Certificates issued</h2><p>Monthly volume for the last six months</p></div>
+                    <span class="overview-panel-icon"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i></span>
+                </div>
+                <div class="overview-chart-summary">
+                    <div><strong>{{ number_format($certificateActivity['total']) }}</strong><span>issued in this period</span></div>
+                    <span class="overview-chart-current"><span></span> {{ number_format($certificateActivity['currentMonth']) }} this month</span>
+                </div>
+                <figure class="overview-chart" aria-labelledby="certificate-activity-title certificate-chart-caption">
+                    <div class="overview-chart-axis" aria-hidden="true"><span>{{ number_format($certificateActivity['maximum']) }}</span><span>{{ number_format($certificateActivity['maximum'] / 2) }}</span><span>0</span></div>
+                    <ol class="overview-chart-plot">
+                        @foreach ($certificateActivity['months'] as $month)
+                            <li class="overview-chart-column @if ($loop->last) overview-chart-column-current @endif" aria-label="{{ $month['fullLabel'] }}: {{ $month['count'] }} certificates issued">
+                                <div class="overview-chart-bar-space" aria-hidden="true"><div class="overview-chart-bar" style="height: {{ $month['count'] / $certificateActivity['maximum'] * 100 }}%;"><span>{{ number_format($month['count']) }}</span></div></div>
+                                <span class="overview-chart-month" aria-hidden="true">{{ $month['label'] }}</span>
+                            </li>
+                        @endforeach
+                    </ol>
+                    <figcaption id="certificate-chart-caption">{{ $certificateActivity['months'][0]['fullLabel'] }} – {{ $certificateActivity['months'][5]['fullLabel'] }}. {{ $certificateActivity['total'] === 0 ? 'No certificates issued in this period.' : 'Based on issuance dates, through today.' }}</figcaption>
+                </figure>
+                <a href="{{ route('certificates.index') }}" class="overview-panel-footer">Open certificate records <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+            </section>
+
+            <section class="overview-panel overview-queue" id="review-queue" aria-labelledby="review-queue-title">
+                <div class="overview-panel-heading">
+                    <div><span class="overview-eyebrow">RESIDENT SERVICES</span><h2 id="review-queue-title">Awaiting review <span class="overview-count">{{ number_format($pendingServiceRequestCount) }}</span></h2><p>Oldest requests appear first</p></div>
+                </div>
+                <div class="overview-queue-list">
+                    @forelse ($pendingRequests as $serviceRequest)
+                        <a class="overview-queue-item" href="{{ route('service-requests.show', $serviceRequest) }}">
+                            <span class="overview-list-icon @if ($serviceRequest->type === 'blotter') overview-list-icon-amber @endif"><i data-lucide="{{ $serviceRequest->type === 'certificate' ? 'files' : 'notebook-pen' }}" aria-hidden="true"></i></span>
+                            <span class="overview-queue-copy"><strong>{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</strong><span>{{ $serviceRequest->resident?->full_name ?? 'Resident record unavailable' }}</span><small>#{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }} · {{ $serviceRequest->created_at->format('M j, Y') }}</small></span>
+                            <i data-lucide="chevron-right" aria-hidden="true"></i>
+                        </a>
+                    @empty
+                        <div class="overview-empty"><span><i data-lucide="badge-check" aria-hidden="true"></i></span><h3>No requests waiting</h3><p>New resident submissions will appear here when they need your review.</p></div>
+                    @endforelse
+                </div>
+                <a href="{{ route('service-requests.index', ['status' => 'Pending']) }}" class="overview-panel-footer">View pending requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+            </section>
+        </div>
+
+        <div class="overview-secondary-grid">
+            <section class="overview-panel" aria-labelledby="request-status-title">
+                <div class="overview-panel-heading"><div><span class="overview-eyebrow">REQUEST SUMMARY</span><h2 id="request-status-title">Resident requests</h2><p>All submissions, by current status</p></div></div>
+                <div class="overview-request-total"><strong>{{ number_format($totalServiceRequestCount) }}</strong><span>total requests</span></div>
+                <div class="overview-status-meter" aria-hidden="true">
+                    @foreach ($requestCounts as $status => $count)
+                        <span class="overview-status-{{ strtolower($status) }}" style="width: {{ $totalServiceRequestCount > 0 ? $count / $totalServiceRequestCount * 100 : 0 }}%;"></span>
+                    @endforeach
+                </div>
+                <ul class="overview-status-list">
+                    @foreach ($requestCounts as $status => $count)
+                        <li><a href="{{ route('service-requests.index', ['status' => $status]) }}"><span class="overview-status-dot overview-status-{{ strtolower($status) }}" aria-hidden="true"></span><span>{{ $status }}</span><strong>{{ number_format($count) }}</strong><i data-lucide="chevron-right" aria-hidden="true"></i></a></li>
+                    @endforeach
+                </ul>
+            </section>
+
+            <section class="overview-panel overview-recent" aria-labelledby="recent-certificates-title">
+                <div class="overview-panel-heading"><div><span class="overview-eyebrow">LATEST DOCUMENTS</span><h2 id="recent-certificates-title">Recently issued certificates</h2></div></div>
+                <div class="overview-record-list">
+                    @forelse ($recentCertificates as $certificate)
+                        <a href="{{ route('certificates.show', $certificate) }}" class="overview-record-item">
+                            <span><strong>{{ $certificate->resident?->full_name ?? 'Resident record unavailable' }}</strong><span>{{ $certificate->certificate_type }}</span><small>Issued {{ $certificate->date_issued->format('M j, Y') }}</small></span><i data-lucide="arrow-up-right" aria-hidden="true"></i>
+                        </a>
+                    @empty
+                        <div class="overview-empty overview-empty-small"><span><i data-lucide="files" aria-hidden="true"></i></span><p>No certificates issued yet.</p><a href="{{ route('certificates.create') }}">Issue a certificate <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
+                    @endforelse
+                </div>
+                <a href="{{ route('certificates.index') }}" class="overview-panel-footer">View certificates <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+            </section>
+
+            <section class="overview-panel overview-recent" aria-labelledby="recent-blotters-title">
+                <div class="overview-panel-heading"><div><span class="overview-eyebrow">PEACE &amp; ORDER</span><h2 id="recent-blotters-title">Recent blotter cases</h2></div></div>
+                <div class="overview-record-list">
+                    @forelse ($recentBlotters as $blotter)
+                        <a href="{{ route('blotters.show', $blotter) }}" class="overview-record-item">
+                            <span><strong>{{ $blotter->complainant }}</strong><span>Respondent: {{ $blotter->respondent }}</span><small>{{ $blotter->incident_date->format('M j, Y') }} <span class="overview-case-status overview-case-{{ strtolower($blotter->status) }}">{{ $blotter->status }}</span></small></span><i data-lucide="arrow-up-right" aria-hidden="true"></i>
+                        </a>
+                    @empty
+                        <div class="overview-empty overview-empty-small"><span><i data-lucide="notebook-pen" aria-hidden="true"></i></span><p>No blotter records yet.</p><a href="{{ route('blotters.create') }}">Record a blotter <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
+                    @endforelse
+                </div>
+                <a href="{{ route('blotters.index') }}" class="overview-panel-footer">View all {{ number_format($totalBlotterCount) }} cases <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+            </section>
+        </div>
+
+        <section class="overview-panel overview-residents" aria-labelledby="recent-residents-title">
+            <div class="overview-panel-heading"><div><span class="overview-eyebrow">COMMUNITY RECORDS</span><h2 id="recent-residents-title">Newly registered residents</h2></div><a href="{{ route('residents.index') }}" class="overview-text-link">View directory <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
+            <div class="overview-resident-list">
+                @forelse ($recentResidents as $resident)
+                    <a href="{{ route('residents.show', $resident) }}" class="overview-resident-item"><span class="overview-list-icon"><i data-lucide="user-round" aria-hidden="true"></i></span><span><strong>{{ $resident->full_name }}</strong><small>{{ $resident->household?->household_number ?? 'No household assigned' }}</small></span><i data-lucide="chevron-right" aria-hidden="true"></i></a>
+                @empty
+                    <p class="overview-empty-inline">No resident records yet. Add a resident to start building the directory.</p>
+                @endforelse
+            </div>
+        </section>
+        <footer class="overview-footer"><span>Barangay Information System</span><span>Records and totals as of {{ now()->format('M j, Y · g:i A') }}</span></footer>
+    </div>
 @endsection
