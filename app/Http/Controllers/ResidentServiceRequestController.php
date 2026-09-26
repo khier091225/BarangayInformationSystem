@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\StoreResidentBlotterRequest;
+use App\Http\Requests\StoreResidentCertificateRequest;
+use App\Models\ServiceRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class ResidentServiceRequestController extends Controller
+{
+    public function index(Request $request): View
+    {
+        $requests = ServiceRequest::query()
+            ->where('resident_id', $request->user()->resident_id)
+            ->latest()
+            ->paginate(10);
+
+        return view('service-requests.resident.index', compact('requests'));
+    }
+
+    public function createCertificate(): View
+    {
+        return view('service-requests.resident.create-certificate');
+    }
+
+    public function storeCertificate(StoreResidentCertificateRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        $serviceRequest = ServiceRequest::create([
+            'resident_id' => $request->user()->resident_id,
+            'type' => ServiceRequest::TYPE_CERTIFICATE,
+            'certificate_type' => $validated['certificate_type'],
+            'purpose' => $validated['purpose'],
+            'status' => ServiceRequest::STATUS_PENDING,
+        ]);
+
+        return redirect()->route('account.requests.show', $serviceRequest)
+            ->with('success', 'Your document request has been submitted for staff review.');
+    }
+
+    public function createBlotter(): View
+    {
+        return view('service-requests.resident.create-blotter');
+    }
+
+    public function storeBlotter(StoreResidentBlotterRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        $serviceRequest = ServiceRequest::create([
+            'resident_id' => $request->user()->resident_id,
+            'type' => ServiceRequest::TYPE_BLOTTER,
+            'respondent' => $validated['respondent'],
+            'incident' => $validated['incident'],
+            'incident_date' => $validated['incident_date'],
+            'status' => ServiceRequest::STATUS_PENDING,
+        ]);
+
+        return redirect()->route('account.requests.show', $serviceRequest)
+            ->with('success', 'Your blotter report has been submitted for staff review.');
+    }
+
+    public function show(Request $request, ServiceRequest $serviceRequest): View
+    {
+        abort_unless($serviceRequest->resident_id === $request->user()->resident_id, 404);
+
+        return view('service-requests.resident.show', compact('serviceRequest'));
+    }
+}

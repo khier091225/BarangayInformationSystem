@@ -21,7 +21,7 @@ class DashboardTest extends TestCase
             ->assertSee('Households')
             ->assertSee('Certificates')
             ->assertSee('Pending Blotters')
-            ->assertSee('Recent Certificate Requests')
+            ->assertSee('Recently Issued Certificates')
             ->assertSee('Recent Blotter Cases')
             ->assertSee('Newly Registered Residents')
             ->assertDontSee('Sample data')

@@ -117,9 +117,9 @@ class ResidentController extends Controller
      */
     public function destroy(Resident $resident): RedirectResponse
     {
-        if ($resident->user()->exists()) {
+        if ($resident->user()->exists() || $resident->serviceRequests()->exists()) {
             return redirect()->route('residents.show', $resident)
-                ->with('warning', 'This resident has a linked account and cannot be deleted.');
+                ->with('warning', 'This resident has a linked account or request and cannot be deleted.');
         }
 
         $resident->delete();

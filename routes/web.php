@@ -10,6 +10,8 @@ use App\Http\Controllers\OfficialController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\ResidentRegistrationCodeController;
+use App\Http\Controllers\ResidentServiceRequestController;
+use App\Http\Controllers\StaffServiceRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function (): void {
@@ -28,12 +30,26 @@ Route::middleware('auth')->group(function (): void {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 });
 
+Route::middleware(['auth', 'resident.verified'])->group(function (): void {
+    Route::get('/account/requests', [ResidentServiceRequestController::class, 'index'])->name('account.requests.index');
+    Route::get('/account/requests/certificate', [ResidentServiceRequestController::class, 'createCertificate'])->name('account.requests.certificate.create');
+    Route::post('/account/requests/certificate', [ResidentServiceRequestController::class, 'storeCertificate'])
+        ->middleware('throttle:5,1')->name('account.requests.certificate.store');
+    Route::get('/account/requests/blotter', [ResidentServiceRequestController::class, 'createBlotter'])->name('account.requests.blotter.create');
+    Route::post('/account/requests/blotter', [ResidentServiceRequestController::class, 'storeBlotter'])
+        ->middleware('throttle:5,1')->name('account.requests.blotter.store');
+    Route::get('/account/requests/{serviceRequest}', [ResidentServiceRequestController::class, 'show'])->name('account.requests.show');
+});
+
 Route::middleware('staff.session')->group(function (): void {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::redirect('/dashboard', '/');
     Route::resource('residents', ResidentController::class);
     Route::post('/residents/{resident}/registration-code', [ResidentRegistrationCodeController::class, 'store'])
         ->name('residents.registration-code.store');
+    Route::get('/service-requests', [StaffServiceRequestController::class, 'index'])->name('service-requests.index');
+    Route::get('/service-requests/{serviceRequest}', [StaffServiceRequestController::class, 'show'])->name('service-requests.show');
+    Route::post('/service-requests/{serviceRequest}/review', [StaffServiceRequestController::class, 'review'])->name('service-requests.review');
     Route::resource('households', HouseholdController::class);
     Route::resource('blotters', BlotterController::class);
     Route::resource('officials', OfficialController::class)->except(['show']);

@@ -1,0 +1,51 @@
+<div>
+    <!-- Let all your things have their places; let each part of your business have its time. - Benjamin Franklin -->
+</div>
+@extends('layouts.app')
+
+@section('title', 'Resident Requests | Barangay Information System')
+
+@section('breadcrumb')
+    <span>Workspace</span><i data-lucide="chevron-right"></i><strong>Resident requests</strong>
+@endsection
+
+@section('content')
+    <div style="margin-bottom: 24px;">
+        <div class="eyebrow">STAFF REVIEW</div>
+        <h1 style="font-size: 26px; color: #1e3a29; margin: 4px 0 8px;">Resident requests</h1>
+        <p style="color: #69786b; font-size: 13px;">Review certificate requests and blotter reports before creating official records.</p>
+    </div>
+
+    <form method="GET" action="{{ route('service-requests.index') }}" class="search-filter-card" style="margin-bottom: 20px;">
+        <label for="status" style="font-size: 13px; font-weight: 600; margin-right: 8px;">Status</label>
+        <select id="status" name="status" class="search-select" onchange="this.form.submit()">
+            @foreach (['Pending', 'Completed', 'Declined'] as $option)
+                <option value="{{ $option }}" @selected($status === $option)>{{ $option }}</option>
+            @endforeach
+        </select>
+        <button type="submit" class="search-button-primary">Filter</button>
+    </form>
+
+    <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow-x: auto;">
+        <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+            <thead><tr style="background: #f8faf7; text-align: left;">
+                <th style="padding: 14px;">Reference</th><th style="padding: 14px;">Resident</th><th style="padding: 14px;">Request</th><th style="padding: 14px;">Submitted</th><th style="padding: 14px;">Status</th><th style="padding: 14px;"></th>
+            </tr></thead>
+            <tbody>
+                @forelse ($requests as $serviceRequest)
+                    <tr style="border-top: 1px solid #edf1eb;">
+                        <td style="padding: 14px;">#{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}</td>
+                        <td style="padding: 14px; font-weight: 600;">{{ $serviceRequest->resident->full_name }}</td>
+                        <td style="padding: 14px;">{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</td>
+                        <td style="padding: 14px;">{{ $serviceRequest->created_at->format('M d, Y') }}</td>
+                        <td style="padding: 14px;">{{ $serviceRequest->status }}</td>
+                        <td style="padding: 14px;"><a href="{{ route('service-requests.show', $serviceRequest) }}">Review</a></td>
+                    </tr>
+                @empty
+                    <tr><td colspan="6" style="padding: 30px; text-align: center; color: #788577;">No {{ strtolower($status) }} requests.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    <div style="margin-top: 20px;">{{ $requests->links() }}</div>
+@endsection

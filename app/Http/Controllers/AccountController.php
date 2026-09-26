@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\VerifyResidentRequest;
 use App\Models\Resident;
+use App\Models\ServiceRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,7 +16,21 @@ class AccountController extends Controller
 {
     public function index(Request $request): View
     {
-        return view('account', ['user' => $request->user()]);
+        $user = $request->user();
+        $recentRequests = collect();
+        $requestCounts = ['total' => 0, 'pending' => 0, 'completed' => 0];
+
+        if ($user->role === 'resident' && $user->resident_id !== null) {
+            $query = ServiceRequest::query()->where('resident_id', $user->resident_id);
+            $recentRequests = (clone $query)->latest()->limit(5)->get();
+            $requestCounts = [
+                'total' => (clone $query)->count(),
+                'pending' => (clone $query)->where('status', ServiceRequest::STATUS_PENDING)->count(),
+                'completed' => (clone $query)->where('status', ServiceRequest::STATUS_COMPLETED)->count(),
+            ];
+        }
+
+        return view('account', compact('user', 'recentRequests', 'requestCounts'));
     }
 
     public function verify(VerifyResidentRequest $request): RedirectResponse

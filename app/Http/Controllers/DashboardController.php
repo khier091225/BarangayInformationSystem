@@ -7,6 +7,7 @@ use App\Models\Certificate;
 use App\Models\Household;
 use App\Models\Official;
 use App\Models\Resident;
+use App\Models\ServiceRequest;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -19,6 +20,7 @@ class DashboardController extends Controller
         $pendingBlotterCount = Blotter::where('status', 'Pending')->count();
         $totalBlotterCount = Blotter::count();
         $officialCount = Official::count();
+        $pendingServiceRequestCount = ServiceRequest::where('status', ServiceRequest::STATUS_PENDING)->count();
 
         $recentCertificates = Certificate::with('resident')->latest()->take(5)->get();
         $recentBlotters = Blotter::latest()->take(5)->get();
@@ -31,6 +33,7 @@ class DashboardController extends Controller
             'pendingBlotterCount',
             'totalBlotterCount',
             'officialCount',
+            'pendingServiceRequestCount',
             'recentCertificates',
             'recentBlotters',
             'recentResidents'

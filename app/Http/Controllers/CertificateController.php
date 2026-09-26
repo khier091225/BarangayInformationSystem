@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCertificateRequest;
 use App\Models\Certificate;
 use App\Models\Official;
 use App\Models\Resident;
+use App\Models\ServiceRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -94,8 +95,13 @@ class CertificateController extends Controller
     /**
      * Remove or void the certificate record.
      */
-    public function destroy(Certificate $certificate)
+    public function destroy(Certificate $certificate): RedirectResponse
     {
+        if (ServiceRequest::query()->where('certificate_id', $certificate->id)->exists()) {
+            return redirect()->route('certificates.index')
+                ->with('warning', 'This certificate is linked to a completed resident request and cannot be deleted here.');
+        }
+
         $certificate->delete();
 
         return redirect()->route('certificates.index')

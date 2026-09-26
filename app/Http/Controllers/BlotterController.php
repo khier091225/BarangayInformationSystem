@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SaveBlotterRequest;
 use App\Models\Blotter;
+use App\Models\ServiceRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -73,8 +74,13 @@ class BlotterController extends Controller
             ->with('success', 'Blotter record updated successfully!');
     }
 
-    public function destroy(Blotter $blotter)
+    public function destroy(Blotter $blotter): RedirectResponse
     {
+        if (ServiceRequest::query()->where('blotter_id', $blotter->id)->exists()) {
+            return redirect()->route('blotters.index')
+                ->with('warning', 'This blotter is linked to a completed resident request and cannot be deleted here.');
+        }
+
         $blotter->delete();
 
         return redirect()->route('blotters.index')

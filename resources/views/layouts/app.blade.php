@@ -21,6 +21,7 @@
                 <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" icon="layout-dashboard">Overview</x-nav-link>
                 <span class="nav-group-label">BARANGAY MANAGEMENT</span>
                 <x-nav-link :href="route('residents.index')" :active="request()->routeIs('residents.*')" icon="users-round">Residents</x-nav-link>
+                <x-nav-link :href="route('service-requests.index')" :active="request()->routeIs('service-requests.*')" icon="inbox">Resident requests</x-nav-link>
                 <x-nav-link :href="route('households.index')" :active="request()->routeIs('households.*')" icon="house">Households</x-nav-link>
                 <x-nav-link :href="route('certificates.index')" :active="request()->routeIs('certificates.*')" icon="files">Certificates</x-nav-link>
                 <x-nav-link :href="route('blotters.index')" :active="request()->routeIs('blotters.*')" icon="notebook-pen">Blotter records</x-nav-link>

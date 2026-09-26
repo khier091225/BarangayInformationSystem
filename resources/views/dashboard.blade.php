@@ -87,7 +87,7 @@
                 <div style="font-size: 12px; font-weight: 600; color: #69786b; text-transform: uppercase; letter-spacing: 0.04em;">Certificates</div>
                 <div style="font-size: 26px; font-weight: 700; color: #1e3a29; margin-top: 2px;">{{ number_format($certificateCount) }}</div>
                 <a href="{{ route('certificates.index') }}" style="font-size: 12px; color: #5f377e; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
-                    View requests <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
+                    View certificates <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
                 </a>
             </div>
         </div>
@@ -102,6 +102,19 @@
                 <div style="font-size: 26px; font-weight: 700; color: #1e3a29; margin-top: 2px;">{{ number_format($pendingBlotterCount) }}</div>
                 <a href="{{ route('blotters.index') }}" style="font-size: 12px; color: #74500b; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
                     Total cases: {{ $totalBlotterCount }} <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
+                </a>
+            </div>
+        </div>
+
+        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; align-items: center; gap: 16px;">
+            <div style="width: 48px; height: 48px; border-radius: 8px; background: #e7f4ed; color: #206345; display: grid; place-items: center; flex-shrink: 0;">
+                <i data-lucide="inbox" style="width: 24px; height: 24px;"></i>
+            </div>
+            <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 12px; font-weight: 600; color: #69786b; text-transform: uppercase; letter-spacing: 0.04em;">Resident Requests</div>
+                <div style="font-size: 26px; font-weight: 700; color: #1e3a29; margin-top: 2px;">{{ number_format($pendingServiceRequestCount) }}</div>
+                <a href="{{ route('service-requests.index') }}" style="font-size: 12px; color: #276747; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
+                    Review pending <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
                 </a>
             </div>
         </div>
@@ -143,11 +156,11 @@
 
     <!-- Recent Tables Grid -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 24px; margin-bottom: 30px;">
-        <!-- Recent Certificate Requests -->
+        <!-- Recent Certificates -->
         <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
             <div style="padding: 16px 20px; border-bottom: 1px solid #e3e8e1; display: flex; justify-content: space-between; align-items: center; background: #f8faf7;">
                 <div>
-                    <h2 style="font-size: 16px; font-weight: 600; color: #1e3a29; margin: 0;">Recent Certificate Requests</h2>
+                    <h2 style="font-size: 16px; font-weight: 600; color: #1e3a29; margin: 0;">Recently Issued Certificates</h2>
                     <p style="font-size: 12px; color: #69786b; margin: 2px 0 0;">Latest applications submitted</p>
                 </div>
                 <a href="{{ route('certificates.index') }}" style="font-size: 12px; font-weight: 600; color: #276747; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
@@ -186,7 +199,7 @@
                     @empty
                         <tr>
                             <td colspan="4" style="text-align: center; padding: 28px; color: #829283;">
-                                No recent certificate requests.
+                                No certificates issued recently.
                             </td>
                         </tr>
                     @endforelse

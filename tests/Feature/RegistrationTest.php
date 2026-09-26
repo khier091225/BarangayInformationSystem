@@ -45,6 +45,7 @@ class RegistrationTest extends TestCase
         $this->assertSame(1, Resident::query()->count());
         $this->assertNull($resident->fresh()->registration_code_hash);
         $this->get(route('account'))->assertOk()->assertSee('Juan Dela Cruz');
+        $this->get(route('account.requests.certificate.create'))->assertOk();
     }
 
     public function test_staff_must_confirm_identity_before_issuing_a_code(): void
