@@ -36,6 +36,40 @@
         </div>
     </div>
 
+    <section style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 22px; margin-bottom: 24px;">
+        <h2 style="font-size: 17px; color: #1e3a29; margin: 0 0 8px;">Resident account registration</h2>
+        @if ($resident->user)
+            <p style="font-size: 13px; color: #556658; margin: 0;">An account is linked to this resident: <strong>{{ $resident->user->email }}</strong></p>
+        @else
+            <p style="font-size: 13px; color: #556658; margin: 0 0 14px;">Verify the resident's identity before issuing a code. The code expires after 24 hours and works once.</p>
+
+            @if (session('registration_code') && session('registration_resident_id') === $resident->id)
+                <div role="status" style="background: #eaf5eb; border: 1px solid #c2e2c7; border-radius: 6px; padding: 14px; margin-bottom: 16px;">
+                    <strong>Give this code to the resident now:</strong>
+                    <div style="font-family: monospace; font-size: 20px; letter-spacing: 2px; margin: 8px 0; user-select: all;">{{ session('registration_code') }}</div>
+                    <span style="font-size: 12px;">It will not be shown again. You can issue a new code if needed.</span>
+                </div>
+            @elseif ($resident->registration_code_expires_at?->isFuture())
+                <p style="font-size: 13px; color: #704800; margin: 0 0 14px;">An active code was issued. It expires {{ $resident->registration_code_expires_at->format('M d, Y h:i A') }}. Issuing a new one cancels the old code.</p>
+            @endif
+
+            @error('registration_code')
+                <p role="alert" style="font-size: 13px; color: #a43229; margin-bottom: 12px;">{{ $message }}</p>
+            @enderror
+            <form method="POST" action="{{ route('residents.registration-code.store', $resident) }}">
+                @csrf
+                <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: #334a38; margin-bottom: 12px;">
+                    <input type="checkbox" name="identity_confirmed" value="1" required style="margin-top: 2px;">
+                    <span>I have verified this resident's identity.</span>
+                </label>
+                @error('identity_confirmed')
+                    <p role="alert" style="font-size: 13px; color: #a43229; margin-bottom: 12px;">{{ $message }}</p>
+                @enderror
+                <button type="submit" class="button button-primary">{{ $resident->registration_code_expires_at?->isFuture() ? 'Issue a new code' : 'Issue registration code' }}</button>
+            </form>
+        @endif
+    </section>
+
     <!-- Info Grid -->
     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
         <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 18px;">

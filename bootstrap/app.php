@@ -22,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             : route('account'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        $exceptions->dontFlash(['registration_code']);
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );

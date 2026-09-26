@@ -82,7 +82,7 @@ class ResidentController extends Controller
      */
     public function show(Resident $resident)
     {
-        $resident->load(['household', 'certificates']);
+        $resident->load(['household', 'certificates', 'user']);
 
         return view('residents.show', compact('resident'));
     }
@@ -115,8 +115,13 @@ class ResidentController extends Controller
     /**
      * Remove the specified resident from storage.
      */
-    public function destroy(Resident $resident)
+    public function destroy(Resident $resident): RedirectResponse
     {
+        if ($resident->user()->exists()) {
+            return redirect()->route('residents.show', $resident)
+                ->with('warning', 'This resident has a linked account and cannot be deleted.');
+        }
+
         $resident->delete();
 
         return redirect()->route('residents.index')

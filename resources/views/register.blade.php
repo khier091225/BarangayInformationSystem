@@ -12,14 +12,14 @@
             <section aria-labelledby="register-title" style="width: 100%; max-width: 440px; padding: 28px; background: white; border: 1px solid #d8e1e3; border-radius: 8px;">
                 <p class="form-note">Barangay Information System</p>
                 <h1 id="register-title" style="font-size: 26px; margin: 8px 0;">Create an account</h1>
-                <p class="form-note" style="margin-bottom: 24px;">Sign up to access your community account. Barangay records remain available to staff only.</p>
+                <p class="form-note" style="margin-bottom: 24px;">Ask barangay staff to verify your resident record and issue a registration code before signing up.</p>
 
                 <form method="POST" action="{{ route('register.store') }}">
                     @csrf
                     <div style="margin-bottom: 18px;">
-                        <x-form.label for="name" required>Full name</x-form.label>
-                        <x-form.input name="name" :value="old('name')" required autofocus autocomplete="name" />
-                        <x-form.error :message="$errors->first('name')" />
+                        <x-form.label for="registration_code" required>Registration code</x-form.label>
+                        <x-form.input name="registration_code" required autofocus autocomplete="off" placeholder="XXXX-XXXX-XXXX-XXXX" />
+                        <x-form.error :message="$errors->first('registration_code')" />
                     </div>
                     <div style="margin-bottom: 18px;">
                         <x-form.label for="email" required>Email address</x-form.label>

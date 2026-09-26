@@ -73,6 +73,11 @@
                         {{ session('success') }}
                     </div>
                 @endif
+                @if (session('warning'))
+                    <div class="no-print" role="alert" style="background: #fff5df; color: #704800; border: 1px solid #f0d596; padding: 12px 18px; border-radius: 6px; margin-bottom: 20px; font-weight: 500;">
+                        {{ session('warning') }}
+                    </div>
+                @endif
 
                 @yield('content')
             </main>
