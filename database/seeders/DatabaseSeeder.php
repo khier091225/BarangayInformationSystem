@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Barangay Admin',
             'email' => 'jannyca@khier.com',
+            'role' => 'staff',
         ]);
 
         Household::factory(10)->create()->each(function (Household $household): void {

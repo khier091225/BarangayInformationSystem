@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'staff.session' => EnsureStaffSession::class,
         ]);
+
+        $middleware->redirectUsersTo(fn (Request $request): string => $request->user()->role === 'staff'
+            ? route('dashboard')
+            : route('account'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

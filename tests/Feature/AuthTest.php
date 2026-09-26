@@ -144,11 +144,13 @@ class AuthTest extends TestCase
     public function test_all_management_routes_use_the_session_middleware(): void
     {
         foreach (Route::getRoutes() as $route) {
-            if ($route->uri() === '/' || $route->uri() === 'dashboard' || $route->uri() === 'logout'
+            if ($route->uri() === '/' || $route->uri() === 'dashboard'
                 || preg_match('/^(residents|households|blotters|officials|certificates)(\/|$)/', $route->uri())) {
                 $this->assertContains('staff.session', $route->gatherMiddleware(), $route->uri());
             }
         }
+
+        $this->assertContains('auth', Route::getRoutes()->getByName('logout')->gatherMiddleware());
     }
 
     public function test_navigation_and_pagination_do_not_require_role_parameters(): void

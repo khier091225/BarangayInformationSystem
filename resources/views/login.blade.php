@@ -11,8 +11,8 @@
         <main style="min-height: 100svh; display: grid; place-items: center; padding: 24px;">
             <section aria-labelledby="login-title" style="width: 100%; max-width: 440px; padding: 28px; background: white; border: 1px solid #d8e1e3; border-radius: 8px;">
                 <p class="form-note">Barangay Information System</p>
-                <h1 id="login-title" style="font-size: 26px; margin: 8px 0;">Staff sign in</h1>
-                <p class="form-note" style="margin-bottom: 24px;">Enter your account details to access barangay records.</p>
+                <h1 id="login-title" style="font-size: 26px; margin: 8px 0;">Sign in</h1>
+                <p class="form-note" style="margin-bottom: 24px;">Enter your account details to continue.</p>
 
                 @if (session('warning'))
                     <div role="alert" style="padding: 12px; margin-bottom: 20px; background: #fff5df; color: #704800; border-radius: 6px;">{{ session('warning') }}</div>
@@ -36,6 +36,8 @@
                     </div>
                     <button type="submit" class="button button-primary" style="width: 100%;">Sign in</button>
                 </form>
+
+                <p class="form-note" style="margin-top: 22px; text-align: center;">Need an account? <a href="{{ route('register') }}">Create one</a></p>
             </section>
         </main>
     </body>

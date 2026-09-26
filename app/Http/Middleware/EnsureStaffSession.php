@@ -24,6 +24,15 @@ class EnsureStaffSession
                 ->with('warning', 'Please sign in to access barangay records.');
         }
 
+        if ($request->user()->role !== 'staff') {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Forbidden.'], 403);
+            }
+
+            return redirect()->route('account')
+                ->with('warning', 'This page is only available to barangay staff.');
+        }
+
         return $next($request);
     }
 }

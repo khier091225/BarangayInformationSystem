@@ -41,7 +41,7 @@ class DashboardTest extends TestCase
 
     public function test_login_is_public_and_logout_requires_authentication(): void
     {
-        $this->get('/login')->assertOk()->assertSee('Staff sign in');
+        $this->get('/login')->assertOk()->assertSee('Sign in');
         $this->post('/login')->assertSessionHasErrors(['email', 'password']);
         $this->post('/logout')->assertRedirect(route('login'));
     }
