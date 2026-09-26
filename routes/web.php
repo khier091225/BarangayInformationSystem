@@ -11,6 +11,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\ResidentRegistrationCodeController;
 use App\Http\Controllers\ResidentServiceRequestController;
+use App\Http\Controllers\StaffProfileController;
 use App\Http\Controllers\StaffServiceRequestController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,10 @@ Route::middleware(['auth', 'resident.verified'])->group(function (): void {
 Route::middleware('staff.session')->group(function (): void {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::redirect('/dashboard', '/');
+    Route::get('/profile', [StaffProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [StaffProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/password', [StaffProfileController::class, 'updatePassword'])
+        ->middleware('throttle:5,1')->name('profile.password.update');
     Route::resource('residents', ResidentController::class);
     Route::post('/residents/{resident}/registration-code', [ResidentRegistrationCodeController::class, 'store'])
         ->name('residents.registration-code.store');

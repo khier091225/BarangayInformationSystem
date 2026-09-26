@@ -27,10 +27,12 @@
                 <x-nav-link :href="route('certificates.index')" :active="request()->routeIs('certificates.*')" icon="files">Certificates</x-nav-link>
                 <x-nav-link :href="route('blotters.index')" :active="request()->routeIs('blotters.*')" icon="notebook-pen">Blotter records</x-nav-link>
                 <x-nav-link :href="route('officials.index')" :active="request()->routeIs('officials.*')" icon="badge-check">Officials</x-nav-link>
+                <span class="nav-group-label">ACCOUNT</span>
+                <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.*')" icon="user-round">My profile</x-nav-link>
             </nav>
             <div class="sidebar-bottom">
                 <div class="sidebar-user-card">
-                    <div class="sidebar-profile">
+                    <a href="{{ route('profile.edit') }}" class="sidebar-profile" aria-label="Manage your profile">
                         <div class="staff-avatar-wrapper">
                             <span class="staff-avatar" aria-hidden="true"><i data-lucide="user-round"></i></span>
                             <span class="status-indicator-dot" aria-label="Session active"></span>
@@ -41,7 +43,7 @@
                                 <i data-lucide="badge-check" aria-hidden="true"></i> Signed-in staff
                             </span>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </aside>
