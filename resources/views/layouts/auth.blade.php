@@ -15,9 +15,9 @@
         <a class="skip-link" href="#auth-main">Skip to form</a>
         <div class="auth-shell">
             <aside class="auth-story" aria-label="About the Barangay Information System">
-                <a href="{{ route('login') }}" class="auth-brand" aria-label="Barangay Information System home">
+                <a href="{{ route('home') }}" class="auth-brand" aria-label="Barangay Information System home">
                     <span class="auth-brand-mark"><i data-lucide="landmark" aria-hidden="true"></i></span>
-                    <span>Barangay <strong>Information System</strong></span>
+                    <span>Barangay <strong>Kay-Anlog</strong></span>
                 </a>
 
                 <div class="auth-story-content">
@@ -27,13 +27,18 @@
                     <div class="auth-story-detail">@yield('story-detail')</div>
                 </div>
 
-                <p class="auth-story-footer">For barangay staff and verified residents</p>
+                <p class="auth-story-footer">
+                    <a href="{{ route('home') }}" style="color: rgba(255,255,255,0.85); display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8125rem;">
+                        <i data-lucide="arrow-left" style="width: 0.875rem; height: 0.875rem;"></i>
+                        <span>Return to Public Homepage</span>
+                    </a>
+                </p>
             </aside>
 
             <main id="auth-main" class="auth-main" tabindex="-1">
-                <a href="{{ route('login') }}" class="auth-mobile-brand" aria-label="Barangay Information System home">
+                <a href="{{ route('home') }}" class="auth-mobile-brand" aria-label="Barangay Information System home">
                     <span class="auth-brand-mark"><i data-lucide="landmark" aria-hidden="true"></i></span>
-                    <span>Barangay <strong>Information System</strong></span>
+                    <span>Barangay <strong>Kay-Anlog</strong></span>
                 </a>
 
                 <div class="auth-panel">
