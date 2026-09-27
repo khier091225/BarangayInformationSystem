@@ -9,6 +9,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OfficialController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ResidentController;
+use App\Http\Controllers\ResidentProfileController;
 use App\Http\Controllers\ResidentRegistrationCodeController;
 use App\Http\Controllers\ResidentServiceRequestController;
 use App\Http\Controllers\StaffProfileController;
@@ -32,6 +33,9 @@ Route::middleware('auth')->group(function (): void {
 });
 
 Route::middleware(['auth', 'resident.verified'])->group(function (): void {
+    Route::get('/account/profile', [ResidentProfileController::class, 'edit'])->name('account.profile.edit');
+    Route::patch('/account/profile/password', [ResidentProfileController::class, 'updatePassword'])
+        ->middleware('throttle:5,1')->name('account.profile.password.update');
     Route::get('/account/requests', [ResidentServiceRequestController::class, 'index'])->name('account.requests.index');
     Route::get('/account/requests/certificate', [ResidentServiceRequestController::class, 'createCertificate'])->name('account.requests.certificate.create');
     Route::post('/account/requests/certificate', [ResidentServiceRequestController::class, 'storeCertificate'])

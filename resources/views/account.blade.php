@@ -110,6 +110,7 @@
                     <div class="resident-card-heading"><div><span class="resident-kicker resident-kicker-dark">YOUR PROFILE</span><h2 id="account-title">My account</h2></div><span class="resident-section-icon"><i data-lucide="user-round" aria-hidden="true"></i></span></div>
                     <dl class="resident-account-details"><div><dt>Full name</dt><dd>{{ $user->name }}</dd></div><div><dt>Email address</dt><dd>{{ $user->email }}</dd></div></dl>
                     <div class="resident-profile-verification"><i data-lucide="badge-check" aria-hidden="true"></i><span><strong>Verified resident</strong><span>Linked to your barangay resident record.</span></span></div>
+                    <a href="{{ route('account.profile.edit') }}" class="resident-inline-link">Manage profile and password <i data-lucide="arrow-right" aria-hidden="true"></i></a>
                 </section>
                 <section class="resident-card resident-guide" aria-labelledby="guide-title">
                     <h2 id="guide-title">From request to result</h2>
