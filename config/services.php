@@ -22,6 +22,12 @@ return [
         'key' => env('RESEND_API_KEY'),
     ],
 
+    'philsms' => [
+        'url' => env('PHILSMS_API_URL', 'https://dashboard.philsms.com/api/v3'),
+        'token' => env('PHILSMS_API_TOKEN'),
+        'sender_id' => env('PHILSMS_SENDER_ID'),
+    ],
+
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),

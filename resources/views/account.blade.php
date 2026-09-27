@@ -34,7 +34,7 @@
             <aside class="resident-card resident-help-card" aria-labelledby="verification-help-title">
                 <span class="resident-section-icon resident-section-icon-warm"><i data-lucide="info" aria-hidden="true"></i></span>
                 <h2 id="verification-help-title">How verification works</h2>
-                <ol class="resident-steps"><li>Ask barangay staff to check your resident record.</li><li>Get the registration code issued for your record.</li><li>Enter the code here to unlock online requests.</li></ol>
+                <ol class="resident-steps"><li>Ask barangay staff to check your resident record and mobile number.</li><li>Check your registered mobile number for the SMS registration code.</li><li>Enter the code here to unlock online requests.</li></ol>
             </aside>
         </div>
     @else

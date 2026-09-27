@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\RegistrationCodeSms;
 use App\Http\Requests\SaveResidentRequest;
 use App\Models\Household;
 use App\Models\Resident;
@@ -80,11 +81,15 @@ class ResidentController extends Controller
     /**
      * Display the specified resident profile.
      */
-    public function show(Resident $resident)
+    public function show(Resident $resident, RegistrationCodeSms $sms): View
     {
         $resident->load(['household', 'certificates', 'user']);
 
-        return view('residents.show', compact('resident'));
+        return view('residents.show', [
+            'resident' => $resident,
+            'registrationPhoneNumber' => $sms->normalizePhoneNumber($resident->contact_number),
+            'registrationSmsConfigured' => $sms->isConfigured(),
+        ]);
     }
 
     /**

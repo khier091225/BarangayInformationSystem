@@ -30,6 +30,7 @@ class Resident extends Model
             'birthdate' => 'date',
             'is_voter' => 'boolean',
             'registration_code_expires_at' => 'datetime',
+            'registration_code_issued_at' => 'datetime',
         ];
     }
 
@@ -63,6 +64,8 @@ class Resident extends Model
         $this->forceFill([
             'registration_code_hash' => null,
             'registration_code_expires_at' => null,
+            'registration_code_issued_at' => null,
+            'registration_code_sms_status' => null,
         ])->save();
     }
 

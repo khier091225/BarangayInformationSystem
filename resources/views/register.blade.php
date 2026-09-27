@@ -11,7 +11,7 @@
     </div>
     <div class="auth-feature">
         <span class="auth-feature-icon"><i data-lucide="file-check-2" aria-hidden="true"></i></span>
-        <div><strong>2. Use your one-time code</strong><span>Enter the code issued for your resident record.</span></div>
+        <div><strong>2. Check your phone</strong><span>Staff will send a one-time code to the mobile number on your resident record.</span></div>
     </div>
     <div class="auth-feature">
         <span class="auth-feature-icon"><i data-lucide="notebook-pen" aria-hidden="true"></i></span>
@@ -22,14 +22,14 @@
 @section('content')
     <div class="auth-panel-kicker">VERIFIED RESIDENTS</div>
     <h1 id="register-title">Create an account</h1>
-    <p class="auth-panel-intro">Already verified by barangay staff? Use the code they gave you to get started.</p>
+    <p class="auth-panel-intro">Already verified by barangay staff? Enter the registration code sent to your registered mobile number.</p>
 
     <form class="auth-form" method="POST" action="{{ route('register.store') }}" aria-labelledby="register-title">
         @csrf
         <div class="auth-field">
             <label class="auth-label" for="registration_code">Registration code <span class="auth-required" aria-hidden="true">*</span></label>
             <input class="auth-input" id="registration_code" name="registration_code" type="text" required autofocus autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="19" placeholder="XXXX-XXXX-XXXX-XXXX" aria-describedby="registration-code-help @if ($errors->has('registration_code')) registration-code-error @endif" @if ($errors->has('registration_code')) aria-invalid="true" @endif>
-            <p class="auth-input-help" id="registration-code-help">Ask barangay staff for your one-time code. It is valid for 24 hours.</p>
+            <p class="auth-input-help" id="registration-code-help">Your code is valid for 24 hours. If the SMS has not arrived, ask barangay staff to check your mobile number.</p>
             @error('registration_code')<p class="auth-error" id="registration-code-error" role="alert">{{ $message }}</p>@enderror
         </div>
         <div class="auth-field">

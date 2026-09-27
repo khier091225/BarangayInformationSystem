@@ -5,6 +5,32 @@ createIcons({ icons: { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck,
 
 initializeWorkspace();
 
+document.querySelectorAll('[data-registration-code-form]').forEach(form => {
+    const submit = form.querySelector('[type="submit"]');
+    const initialText = submit.textContent;
+    const initiallyDisabled = submit.disabled;
+    let sending = false;
+
+    form.addEventListener('submit', event => {
+        if (sending || initiallyDisabled) {
+            event.preventDefault();
+            return;
+        }
+        if (event.defaultPrevented) return;
+        sending = true;
+        submit.disabled = true;
+        submit.textContent = 'Sending code…';
+        form.setAttribute('aria-busy', 'true');
+    });
+
+    window.addEventListener('pageshow', () => {
+        sending = false;
+        submit.disabled = initiallyDisabled;
+        submit.textContent = initialText;
+        form.removeAttribute('aria-busy');
+    });
+});
+
 document.querySelectorAll('[data-password-toggle]').forEach(toggle => {
     toggle.addEventListener('click', () => {
         const input = document.getElementById(toggle.dataset.passwordToggle);

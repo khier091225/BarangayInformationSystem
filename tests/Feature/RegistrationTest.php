@@ -6,11 +6,25 @@ use App\Models\Resident;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config([
+            'services.philsms.url' => 'https://dashboard.philsms.com/api/v3',
+            'services.philsms.token' => 'test-token',
+            'services.philsms.sender_id' => 'Barangay',
+        ]);
+        Http::preventStrayRequests();
+        Http::fake(['https://dashboard.philsms.com/api/v3/sms/send' => Http::response(['status' => 'success'])]);
+    }
 
     public function test_registration_requires_a_code_from_staff_and_links_the_resident_record(): void
     {
@@ -65,12 +79,13 @@ class RegistrationTest extends TestCase
 
         $this->assertNull($resident->fresh()->registration_code_hash);
 
+        Http::assertNothingSent();
         $this->post(route('residents.registration-code.store', $resident), ['identity_confirmed' => '1'])
             ->assertRedirect(route('residents.show', $resident))
             ->assertSessionHas('registration_code');
 
         $this->get(route('residents.show', $resident))->assertOk()
-            ->assertSee('Give this code to the resident now')
+            ->assertSee('SMS submitted')
             ->assertSee(session('registration_code'));
     }
 
@@ -131,6 +146,7 @@ class RegistrationTest extends TestCase
     {
         $resident = Resident::factory()->create();
         $firstCode = $this->issueCodeFor($resident);
+        $this->travel(61)->seconds();
         $secondCode = $this->issueCodeFor($resident);
         $details = [
             'email' => 'juan@example.test',
