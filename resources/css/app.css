@@ -13,16 +13,16 @@
 }
 
 :root {
-    --ink: #172d33;
-    --muted: #53666d;
-    --line: #d8e1e3;
+    --ink: #064e3b;
+    --muted: #475569;
+    --line: #cbd5e1;
     --surface: #fff;
-    --canvas: #f3f6f7;
-    --accent: #11665e;
-    --accent-hover: #0b4f49;
-    --accent-soft: #e4f1ee;
-    --focus: #9c480d;
-    --radius: .5rem;
+    --canvas: #f8fafc;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --accent-soft: #ecfdf5;
+    --focus: #34d399;
+    --radius: .75rem;
     --green: var(--accent);
     font-family: var(--font-sans);
     color: var(--ink);

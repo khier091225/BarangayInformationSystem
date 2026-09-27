@@ -1,9 +1,9 @@
 .auth-page {
-    --auth-forest: #104f48;
-    --auth-deep: #0c3836;
-    --auth-mint: #c8e9d5;
+    --auth-forest: #10b981;
+    --auth-deep: #0f172a;
+    --auth-mint: #ecfdf5;
     min-height: 100svh;
-    background: #f4f6f2;
+    background: #f8fafc;
 }
 
 .auth-shell {
@@ -23,9 +23,9 @@
     min-height: 100svh;
     padding: clamp(2rem, 4vw, 4rem);
     color: #fff;
-    background: radial-gradient(circle at 92% 10%, #317a69 0, transparent 32%),
-        radial-gradient(circle at 0 95%, #1c6965 0, transparent 35%),
-        linear-gradient(148deg, #165b4c 0%, var(--auth-deep) 75%);
+    background: radial-gradient(circle at 92% 10%, rgba(16, 185, 129, 0.2) 0, transparent 32%),
+        radial-gradient(circle at 0 95%, rgba(16, 185, 129, 0.15) 0, transparent 35%),
+        linear-gradient(148deg, #0f172a 0%, #020617 75%);
 }
 
 .auth-story::before {
@@ -174,7 +174,7 @@
 }
 .auth-input::placeholder { color: #87998e; }
 .auth-input:hover { border-color: #7aa58f; }
-.auth-input:focus { outline: none; border-color: #1c7b64; background: #fff; box-shadow: 0 0 0 3px #1c7b6426; }
+.auth-input:focus { outline: none; border-color: #34d399; background: #fff; box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.25); }
 .auth-input[aria-invalid="true"] { border-color: #bd5541; }
 .auth-input[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px #bd554126; }
 .auth-input-help { margin-top: .4rem; color: #667b6e; font-size: .75rem; line-height: 1.45; }
@@ -213,8 +213,9 @@
     font-size: .92rem;
     font-weight: 700;
     transition: background .2s, transform .2s;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
 }
-.auth-submit:hover { background: #0b3f3a; transform: translateY(-1px); }
+.auth-submit:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4); }
 .auth-submit svg { width: 1.15rem; height: 1.15rem; }
 .auth-switch { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid #e5ece7; color: #63756b; font-size: .84rem; text-align: center; }
 .auth-switch a { color: #12624e; font-weight: 750; }
