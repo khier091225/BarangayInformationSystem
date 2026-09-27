@@ -11,7 +11,7 @@
     </div>
     <div class="auth-feature">
         <span class="auth-feature-icon"><i data-lucide="badge-check" aria-hidden="true"></i></span>
-        <div><strong>Receive secure instructions</strong><span>The completed recovery flow will send a time-limited reset link.</span></div>
+        <div><strong>Receive secure instructions</strong><span>We will send a time-limited reset link to your inbox.</span></div>
     </div>
     <div class="auth-feature">
         <span class="auth-feature-icon"><i data-lucide="arrow-right" aria-hidden="true"></i></span>
@@ -26,27 +26,27 @@
         <span class="auth-recovery-icon"><i data-lucide="badge-check" aria-hidden="true"></i></span>
         <div><div class="auth-panel-kicker">ACCOUNT RECOVERY</div><h1 id="forgot-password-title">Forgot your password?</h1></div>
     </div>
-    <p class="auth-panel-intro">Enter your account email. When recovery is connected, you will receive instructions for choosing a new password.</p>
+    <p class="auth-panel-intro">Enter your account email and we will send instructions for choosing a new password.</p>
 
-    <form class="auth-form" method="POST" action="{{ route('password.request') }}" data-password-recovery-preview aria-labelledby="forgot-password-title" aria-describedby="recovery-availability-note">
+    @if (session('status'))
+        <div class="auth-alert auth-alert--success" role="status">{{ session('status') }}</div>
+    @endif
+
+    <form class="auth-form" method="POST" action="{{ route('password.email') }}" aria-labelledby="forgot-password-title" aria-describedby="recovery-availability-note">
         @csrf
         <div class="auth-field">
             <label class="auth-label" for="recovery_email">Email address <span class="auth-required" aria-hidden="true">*</span></label>
-            <input class="auth-input" id="recovery_email" name="email" type="email" required autofocus autocomplete="email" inputmode="email" placeholder="you@example.com" aria-describedby="recovery-email-help recovery-availability-note">
+            <input class="auth-input" id="recovery_email" name="email" type="email" value="{{ old('email') }}" required autofocus autocomplete="email" inputmode="email" placeholder="you@example.com" @if ($errors->has('email')) aria-invalid="true" aria-describedby="recovery-email-error recovery-email-help recovery-availability-note" @else aria-describedby="recovery-email-help recovery-availability-note" @endif>
+            @error('email')<p class="auth-error" id="recovery-email-error" role="alert">{{ $message }}</p>@enderror
             <p class="auth-input-help" id="recovery-email-help">Use the email address linked to your staff or resident account.</p>
         </div>
 
-        <button class="auth-submit" type="submit"><span>Continue</span><i data-lucide="arrow-right" aria-hidden="true"></i></button>
+        <button class="auth-submit" type="submit"><span>Send reset link</span><i data-lucide="arrow-right" aria-hidden="true"></i></button>
     </form>
-
-    <div class="auth-recovery-preview" data-password-recovery-status role="status" tabindex="-1" hidden>
-        <span class="auth-recovery-preview-icon"><i data-lucide="info" aria-hidden="true"></i></span>
-        <div><strong>Recovery screen ready</strong><p>Email delivery is not connected yet, so no message was sent and your account was not changed.</p></div>
-    </div>
 
     <div class="auth-recovery-note" id="recovery-availability-note">
         <i data-lucide="info" aria-hidden="true"></i>
-        <p><strong>Design-only screen</strong><span>Password recovery email and reset links will be connected in the next step.</span></p>
+        <p><strong>Protecting your account</strong><span>For privacy, the confirmation message is the same whether or not an account matches the email address.</span></p>
     </div>
 
     <p class="auth-switch">Remembered your password? <a href="{{ route('login') }}">Return to sign in</a></p>

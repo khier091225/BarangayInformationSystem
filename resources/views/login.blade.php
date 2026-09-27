@@ -28,6 +28,10 @@
         <div class="auth-alert" role="alert">{{ session('warning') }}</div>
     @endif
 
+    @if (session('status'))
+        <div class="auth-alert auth-alert--success" role="status">{{ session('status') }}</div>
+    @endif
+
     <form class="auth-form" method="POST" action="{{ route('login.store') }}" aria-labelledby="login-title">
         @csrf
         <div class="auth-field">

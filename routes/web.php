@@ -6,7 +6,9 @@ use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HouseholdController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\NewPasswordController;
 use App\Http\Controllers\OfficialController;
+use App\Http\Controllers\PasswordResetLinkController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\ResidentProfileController;
@@ -20,7 +22,12 @@ Route::middleware('guest')->group(function (): void {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
     Route::post('/login', [LoginController::class, 'store'])
         ->middleware('throttle:5,1')->name('login.store');
-    Route::view('/forgot-password', 'forgot-password')->name('password.request');
+    Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+        ->middleware('throttle:3,1')->name('password.email');
+    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+    Route::post('/reset-password', [NewPasswordController::class, 'store'])
+        ->middleware('throttle:5,1')->name('password.update');
     Route::get('/register', [RegisterController::class, 'create'])->name('register');
     Route::post('/register', [RegisterController::class, 'store'])
         ->middleware('throttle:5,1')->name('register.store');
