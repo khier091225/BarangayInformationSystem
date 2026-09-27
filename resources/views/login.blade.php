@@ -36,7 +36,10 @@
             @error('email')<p class="auth-error" id="email-error" role="alert">{{ $message }}</p>@enderror
         </div>
         <div class="auth-field">
-            <label class="auth-label" for="password">Password <span class="auth-required" aria-hidden="true">*</span></label>
+            <div class="auth-label-row">
+                <label class="auth-label" for="password">Password <span class="auth-required" aria-hidden="true">*</span></label>
+                <a href="{{ route('password.request') }}" class="auth-forgot-link">Forgot password?</a>
+            </div>
             <div class="auth-password-wrap">
                 <input class="auth-input" id="password" name="password" type="password" required autocomplete="current-password" placeholder="Enter your password" @if ($errors->has('password')) aria-invalid="true" aria-describedby="password-error" @endif>
                 <button class="auth-password-toggle" type="button" data-password-toggle="password" data-password-label="password" aria-label="Show password" aria-pressed="false">Show</button>

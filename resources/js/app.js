@@ -44,6 +44,28 @@ document.querySelectorAll('[data-password-toggle]').forEach(toggle => {
     });
 });
 
+document.querySelectorAll('[data-password-recovery-preview]').forEach(form => {
+    const status = document.querySelector('[data-password-recovery-status]');
+    const submit = form.querySelector('[type="submit"]');
+    const email = form.querySelector('[type="email"]');
+
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+        if (!form.reportValidity() || !status) return;
+
+        status.hidden = false;
+        submit.querySelector('span').textContent = 'Screen previewed';
+        status.focus({ preventScroll: true });
+        status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    email?.addEventListener('input', () => {
+        if (!status || status.hidden) return;
+        status.hidden = true;
+        submit.querySelector('span').textContent = 'Continue';
+    });
+});
+
 const menuToggle = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('#primary-navigation');
 const desktopNavigation = window.matchMedia('(min-width: 960px)');
