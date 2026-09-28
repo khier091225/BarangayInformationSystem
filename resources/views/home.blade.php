@@ -87,9 +87,9 @@
     <section class="relative min-h-[85vh] flex items-center pt-10 pb-24 lg:pt-0 overflow-hidden bg-slate-900">
         <!-- Background Image with beautiful overlay -->
         <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-900/50 z-10"></div>
-            <!-- Unsplash Premium Architecture/Community vibe -->
-            <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=2000&q=80" alt="Barangay Kay-Anlog Background" class="w-full h-full object-cover object-center opacity-70 mix-blend-luminosity">
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/85 to-slate-900/48 z-10"></div>
+            <!-- Background Image -->
+            <img src="{{ asset('images/maxresdefault.jpg') }}" alt="Barangay Kay-Anlog Background" class="w-full h-full object-cover object-center opacity-55 mix-blend-overlay">
         </div>
         
         <div class="container mx-auto px-4 lg:px-8 relative z-20 flex flex-col lg:flex-row items-center gap-16">
@@ -103,7 +103,7 @@
                     Your Community.<br>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-200 to-teal-100">Just A Click Away.</span>
                 </h2>
-                <p class="text-lg text-slate-300 mb-10 max-w-xl leading-relaxed">
+                <p class="text-lg text-white/90 mb-10 max-w-xl leading-relaxed font-normal drop-shadow-sm">
                     Welcome to the official digital portal of Barangay Kay-Anlog, Calamba City. Request certificates, file incident reports, inspect official records, and stay connected online.
                 </p>
                 <div class="flex flex-wrap gap-4">
@@ -118,7 +118,7 @@
                                 <i data-lucide="file-check-2" class="w-5 h-5"></i>
                                 Request Document Online
                             </a>
-                            <a href="{{ route('account') }}" class="inline-flex items-center gap-2 px-7 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 font-semibold rounded-xl transition-all">
+                            <a href="{{ route('account') }}" class="inline-flex items-center gap-2 px-7 py-4 bg-white/15 hover:bg-white/25 backdrop-blur-md text-white border border-white/30 font-semibold rounded-xl transition-all shadow-lg shadow-black/20">
                                 <i data-lucide="user-round" class="w-5 h-5"></i>
                                 Go to My Account
                             </a>
@@ -128,7 +128,7 @@
                             <i data-lucide="file-check-2" class="w-5 h-5"></i>
                             Request Certificate
                         </a>
-                        <a href="{{ route('register') }}" class="inline-flex items-center gap-2 px-7 py-4 bg-white/5 hover:bg-white/10 backdrop-blur-md text-white border border-white/10 font-semibold rounded-xl transition-all hover:-translate-y-0.5">
+                        <a href="{{ route('register') }}" class="inline-flex items-center gap-2 px-7 py-4 bg-white/15 hover:bg-white/25 backdrop-blur-md text-white border border-white/30 font-semibold rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-black/20">
                             <i data-lucide="user-round-plus" class="w-5 h-5"></i>
                             Resident Registration
                         </a>
