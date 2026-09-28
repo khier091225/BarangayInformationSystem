@@ -9,7 +9,7 @@
 @push('styles')
 <style>
     @media print {
-        .no-print, .workspace-sidebar, .workspace-topbar, .action-bar {
+        .skip-link, .no-print, .workspace-sidebar, .workspace-topbar, .action-bar {
             display: none !important;
         }
         body, .workspace-page, .workspace-shell, .workspace-main {
@@ -21,6 +21,7 @@
             border: none !important;
             box-shadow: none !important;
             padding: 0 !important;
+            min-height: 0 !important;
             width: 100% !important;
             max-width: 100% !important;
         }
