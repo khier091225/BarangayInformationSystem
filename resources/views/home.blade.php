@@ -53,9 +53,7 @@
         <div class="container mx-auto px-4 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
             <!-- Brand -->
             <a href="{{ route('home') }}" class="flex items-center gap-2.5 sm:gap-3.5 group min-w-0">
-                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-emerald-50 flex items-center justify-center border border-emerald-100 group-hover:bg-emerald-100 transition-colors shadow-sm flex-shrink-0">
-                    <i data-lucide="landmark" class="w-5 h-5 sm:w-6 sm:h-6 text-emerald-700"></i>
-                </div>
+                <img src="{{ asset('images/Logo_kay-anlog.jpg') }}" alt="" aria-hidden="true" width="44" height="44" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-cover bg-white border border-slate-200 shadow-sm flex-shrink-0">
                 <div class="min-w-0">
                     <h1 class="text-sm sm:text-lg lg:text-xl font-extrabold text-slate-900 tracking-tight leading-none group-hover:text-emerald-800 transition-colors whitespace-nowrap">Barangay Kay-Anlog</h1>
                     <span class="hidden sm:block text-xs font-bold text-emerald-600 tracking-wider sm:tracking-[0.16em] uppercase truncate mt-0.5">Information &amp; E-Services</span>
@@ -561,9 +559,7 @@
                 <!-- Col 1: Brand Info -->
                 <div class="md:col-span-2">
                     <a href="{{ route('home') }}" class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center border border-emerald-100 shadow-sm">
-                            <i data-lucide="landmark" class="w-5 h-5 text-emerald-700"></i>
-                        </div>
+                        <img src="{{ asset('images/Logo_kay-anlog.jpg') }}" alt="" aria-hidden="true" width="40" height="40" loading="lazy" class="w-10 h-10 rounded-full object-cover bg-white border border-slate-200 shadow-sm flex-shrink-0">
                         <div>
                             <span class="font-extrabold text-slate-900 block leading-tight">Barangay Kay-Anlog</span>
                             <span class="text-xs text-emerald-600 font-semibold tracking-wider uppercase">Calamba City, Laguna</span>
