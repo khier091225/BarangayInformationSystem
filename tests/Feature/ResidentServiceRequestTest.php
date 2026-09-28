@@ -51,7 +51,7 @@ class ResidentServiceRequestTest extends TestCase
         $this->actingAs(User::factory()->resident()->create(['resident_id' => $resident->id]));
 
         $this->post(route('account.requests.blotter.store'), [
-            'respondent' => '',
+            'respondent' => str_repeat('a', 256),
             'incident' => 'Short',
             'incident_date' => today()->addDay()->toDateString(),
         ])->assertSessionHasErrors(['respondent', 'incident', 'incident_date']);
@@ -68,6 +68,23 @@ class ResidentServiceRequestTest extends TestCase
         $this->assertSame(ServiceRequest::STATUS_PENDING, $serviceRequest->status);
         $this->assertSame(0, Blotter::query()->count());
         $this->get(route('account.requests.index'))->assertOk()->assertSee('Blotter report');
+    }
+
+    public function test_resident_can_file_a_blotter_with_only_the_incident_description(): void
+    {
+        $resident = Resident::factory()->create();
+        $this->actingAs(User::factory()->resident()->create(['resident_id' => $resident->id]));
+
+        $this->get(route('account.requests.blotter.create'))
+            ->assertOk()
+            ->assertSee('Add person involved or incident date');
+        $this->post(route('account.requests.blotter.store'), [
+            'incident' => 'A dispute happened near the barangay hall today.',
+        ])->assertRedirect();
+
+        $request = ServiceRequest::query()->sole();
+        $this->assertSame('Unknown', $request->respondent);
+        $this->assertSame(today('Asia/Manila')->toDateString(), $request->incident_date->toDateString());
     }
 
     public function test_only_verified_residents_can_submit_and_only_owners_can_view_requests(): void

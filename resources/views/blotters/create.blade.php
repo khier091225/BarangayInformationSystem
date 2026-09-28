@@ -15,55 +15,38 @@
 @section('content')
     <div style="margin-bottom: 24px;">
         <h1 style="font-size: 24px; color: var(--ink);">Record blotter</h1>
+        <p style="color: var(--muted); font-size: 13px;">Record the complainant and what happened. New cases start as Pending.</p>
     </div>
 
-    <!-- Form Card -->
-    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-        <form method="POST" action="{{ route('blotters.store') }}">
+    <div class="staff-request-detail-card">
+        <form method="POST" action="{{ route('blotters.store') }}" class="complaint-staff-form">
             @csrf
-
-            <!-- Complainant & Respondent -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
-                <div>
-                    <x-form.label for="complainant" required>Complainant Name</x-form.label>
-                    <x-form.input type="text" name="complainant" value="{{ old('complainant') }}" required placeholder="Full name of complainant" />
-                    <x-form.error :message="$errors->first('complainant')" />
-                </div>
-
-                <div>
-                    <x-form.label for="respondent" required>Respondent Name</x-form.label>
-                    <x-form.input type="text" name="respondent" value="{{ old('respondent') }}" required placeholder="Full name of respondent" />
-                    <x-form.error :message="$errors->first('respondent')" />
-                </div>
+            <div class="resident-field">
+                <x-form.label for="complainant" required>Complainant name</x-form.label>
+                <x-form.input name="complainant" :value="old('complainant')" required maxlength="255" placeholder="Full name of complainant" :aria-invalid="$errors->has('complainant') ? 'true' : 'false'" />
+                <x-form.error :message="$errors->first('complainant')" />
             </div>
-
-            <!-- Date & Status -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
-                <div>
-                    <x-form.label for="incident_date" required>Incident Date</x-form.label>
-                    <x-form.input type="date" name="incident_date" value="{{ old('incident_date', date('Y-m-d')) }}" required />
-                    <x-form.error :message="$errors->first('incident_date')" />
-                </div>
-
-                <div>
-                    <x-form.label for="status" required>Status</x-form.label>
-                    <x-form.select name="status" required>
-                        <option value="Pending" {{ old('status') == 'Pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="Settled" {{ old('status') == 'Settled' ? 'selected' : '' }}>Settled</option>
-                        <option value="Dismissed" {{ old('status') == 'Dismissed' ? 'selected' : '' }}>Dismissed</option>
-                    </x-form.select>
-                    <x-form.error :message="$errors->first('status')" />
-                </div>
-            </div>
-
-            <!-- Incident Narrative -->
-            <div style="margin-bottom: 24px;">
-                <x-form.label for="incident" required>Incident Details</x-form.label>
-                <x-form.textarea name="incident" rows="5" required placeholder="Describe the incident narrative in detail...">{{ old('incident') }}</x-form.textarea>
+            <div class="resident-field">
+                <x-form.label for="incident" required>What happened?</x-form.label>
+                <x-form.textarea name="incident" rows="5" required placeholder="Describe the incident and where it happened." :aria-invalid="$errors->has('incident') ? 'true' : 'false'">{{ old('incident') }}</x-form.textarea>
                 <x-form.error :message="$errors->first('incident')" />
             </div>
-
-            <!-- Submit Buttons -->
+            <details class="complaint-optional-fields" @if ($errors->has('respondent') || $errors->has('incident_date')) open @endif>
+                <summary>Add respondent or incident date <span>(optional)</span></summary>
+                <div class="complaint-optional-body">
+                    <div class="resident-field">
+                        <x-form.label for="respondent">Respondent name</x-form.label>
+                        <x-form.input name="respondent" :value="old('respondent')" maxlength="255" placeholder="Leave blank if unknown" :aria-invalid="$errors->has('respondent') ? 'true' : 'false'" />
+                        <x-form.error :message="$errors->first('respondent')" />
+                    </div>
+                    <div class="resident-field">
+                        <x-form.label for="incident_date">Date of incident</x-form.label>
+                        <x-form.input name="incident_date" type="date" :value="old('incident_date')" :aria-invalid="$errors->has('incident_date') ? 'true' : 'false'" />
+                        <p class="incident-field-help">Leave blank if it happened today.</p>
+                        <x-form.error :message="$errors->first('incident_date')" />
+                    </div>
+                </div>
+            </details>
             <x-form.actions :cancel-url="route('blotters.index')">
                 <x-slot:submit>Save blotter record</x-slot:submit>
             </x-form.actions>

@@ -22,9 +22,9 @@ class StoreResidentBlotterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'respondent' => 'required|string|max:255',
+            'respondent' => 'nullable|string|max:255',
             'incident' => 'required|string|min:10|max:5000',
-            'incident_date' => 'required|date|before_or_equal:today',
+            'incident_date' => 'nullable|date|before_or_equal:today',
         ];
     }
 }

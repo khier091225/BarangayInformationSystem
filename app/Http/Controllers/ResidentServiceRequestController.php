@@ -59,9 +59,9 @@ class ResidentServiceRequestController extends Controller
         $serviceRequest = ServiceRequest::create([
             'resident_id' => $request->user()->resident_id,
             'type' => ServiceRequest::TYPE_BLOTTER,
-            'respondent' => $validated['respondent'],
+            'respondent' => trim($validated['respondent'] ?? '') ?: 'Unknown',
             'incident' => $validated['incident'],
-            'incident_date' => $validated['incident_date'],
+            'incident_date' => $validated['incident_date'] ?? today('Asia/Manila')->toDateString(),
             'status' => ServiceRequest::STATUS_PENDING,
         ]);
 

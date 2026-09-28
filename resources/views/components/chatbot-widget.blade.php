@@ -21,7 +21,7 @@
 
         <div class="project-chat__conversation" data-chat-scroll>
             <div class="project-chat__messages" data-chat-messages role="log" aria-label="Chat messages" aria-live="polite" aria-relevant="additions text">
-                <p class="project-chat__message project-chat__message--assistant">Hi! Kumusta? 👋 Ask me about registration, document requests, blotter requests, or using the Barangay Information System.</p>
+                <p class="project-chat__message project-chat__message--assistant">Hi! Kumusta? 👋 Ask me about registration, document requests, incident reports, blotter requests, or using the Barangay Information System.</p>
             </div>
 
             <div class="project-chat__prompts" data-chat-prompts aria-label="Suggested questions">

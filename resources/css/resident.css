@@ -51,7 +51,7 @@
 .resident-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
 .resident-section-heading h2 { font-size: 1.2rem; font-weight: 730; letter-spacing: -.025em; line-height: 1.3; }
 .resident-services { scroll-margin-top: 1.5rem; }
-.resident-service-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 1rem; }
+.resident-service-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
 .resident-service-card { display: flex; flex-direction: column; min-width: 0; padding: 1.5rem; border: 1px solid transparent; border-radius: 1rem; transition: box-shadow .18s, border-color .18s; }
 .resident-service-documents { color: var(--surface); background: linear-gradient(120deg, var(--accent-hover), var(--accent)); }
 .resident-service-documents:hover { box-shadow: 0 8px 24px #1a49382b; border-color: var(--success-line); }

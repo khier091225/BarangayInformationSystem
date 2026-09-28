@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\VerifyResidentRequest;
+use App\Models\IncidentReport;
 use App\Models\Resident;
 use App\Models\ServiceRequest;
 use App\Models\User;
@@ -20,8 +21,11 @@ class AccountController extends Controller
         $recentRequests = collect();
         $latestReviewedRequest = null;
         $requestCounts = ['total' => 0, 'pending' => 0, 'completed' => 0, 'declined' => 0];
+        $latestIncidentReport = null;
 
         if ($user->role === 'resident' && $user->resident_id !== null) {
+            $latestIncidentReport = IncidentReport::query()->where('resident_id', $user->resident_id)
+                ->latest('updated_at')->first();
             $query = ServiceRequest::query()->where('resident_id', $user->resident_id);
             $recentRequests = (clone $query)->latest('updated_at')->latest('id')->limit(5)->get();
             $latestReviewedRequest = (clone $query)
@@ -37,7 +41,7 @@ class AccountController extends Controller
             ];
         }
 
-        return view('account', compact('user', 'recentRequests', 'requestCounts', 'latestReviewedRequest'));
+        return view('account', compact('user', 'recentRequests', 'requestCounts', 'latestReviewedRequest', 'latestIncidentReport'));
     }
 
     public function verify(VerifyResidentRequest $request): RedirectResponse

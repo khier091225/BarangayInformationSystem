@@ -23,6 +23,7 @@
                     <a href="{{ route('account') }}" @if (request()->routeIs('account')) aria-current="page" @endif><i data-lucide="layout-dashboard" aria-hidden="true"></i> Dashboard</a>
                     @if (auth()->user()->role === 'resident' && auth()->user()->resident_id !== null)
                         <a href="{{ route('account.requests.index') }}" @if (request()->routeIs('account.requests.index', 'account.requests.show')) aria-current="page" @endif><i data-lucide="files" aria-hidden="true"></i> My requests</a>
+                        <a href="{{ route('account.incidents.index') }}" @if (request()->routeIs('account.incidents.*')) aria-current="page" @endif><i data-lucide="message-square-warning" aria-hidden="true"></i> My reports</a>
                         <a href="{{ route('account.profile.edit') }}" @if (request()->routeIs('account.profile.*')) aria-current="page" @endif><i data-lucide="user-round" aria-hidden="true"></i> My profile</a>
                     @endif
                 </nav>

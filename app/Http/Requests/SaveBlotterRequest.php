@@ -16,12 +16,14 @@ class SaveBlotterRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isCreating = $this->isMethod('post');
+
         return [
             'complainant' => 'required|string|max:255',
-            'respondent' => 'required|string|max:255',
+            'respondent' => $isCreating ? 'nullable|string|max:255' : 'required|string|max:255',
             'incident' => 'required|string',
-            'incident_date' => 'required|date',
-            'status' => 'required|in:Pending,Settled,Dismissed',
+            'incident_date' => $isCreating ? 'nullable|date' : 'required|date',
+            'status' => $isCreating ? 'sometimes|in:Pending,Settled,Dismissed' : 'required|in:Pending,Settled,Dismissed',
         ];
     }
 }

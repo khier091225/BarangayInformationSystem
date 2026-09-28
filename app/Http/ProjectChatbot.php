@@ -16,8 +16,8 @@ class ProjectChatbot
     private const TOPICS = [
         'overview' => [
             'label' => 'What the Barangay Information System is',
-            'en' => 'The Barangay Information System helps Barangay Kay-Anlog staff manage resident, household, official, blotter, certificate, and service request records. Residents can use their account to submit and track requests.',
-            'tl' => 'Ang Barangay Information System ay gamit ng staff ng Barangay Kay-Anlog para pamahalaan ang resident, household, official, blotter, certificate, at service request records. Puwede ring magsumite at sumubaybay ng request ang residents sa kanilang account.',
+            'en' => 'The Barangay Information System helps Barangay Kay-Anlog staff manage resident, household, official, blotter, certificate, service request, and incident report records. Residents can use their account to submit and track requests and incident reports.',
+            'tl' => 'Ang Barangay Information System ay gamit ng staff ng Barangay Kay-Anlog para pamahalaan ang resident, household, official, blotter, certificate, service request, at incident report records. Puwede ring magsumite at sumubaybay ng requests at incident reports ang residents sa kanilang account.',
         ],
         'registration' => [
             'label' => 'Who can register and how resident registration works',
@@ -36,8 +36,8 @@ class ProjectChatbot
         ],
         'resident_portal' => [
             'label' => 'What residents can do in their account dashboard',
-            'en' => 'The resident dashboard provides shortcuts to request documents, file a blotter request, see recent requests, and open your profile. My Requests shows submitted requests and their status.',
-            'tl' => 'Sa resident dashboard, puwede kang humiling ng dokumento, magsumite ng blotter request, tingnan ang recent requests, at buksan ang profile. Makikita sa My Requests ang mga naisumite at ang status ng mga ito.',
+            'en' => 'The resident dashboard provides shortcuts to request documents, file a formal blotter request, report an incident through Online Sumbong, see recent requests, and open your profile. My Requests shows service requests; My Reports shows incident reports and their progress.',
+            'tl' => 'Sa resident dashboard, puwede kang humiling ng dokumento, magsumite ng formal blotter request, mag-report ng insidente sa Online Sumbong, tingnan ang recent requests, at buksan ang profile. Nasa My Requests ang service requests; nasa My Reports ang incident reports at progress ng mga ito.',
         ],
         'document_request' => [
             'label' => 'How residents request a document',
@@ -53,6 +53,11 @@ class ProjectChatbot
             'label' => 'How residents file a blotter request',
             'en' => 'Sign in and open File a Blotter Request. Fill in the incident details and submit. Barangay staff reviews the request before it becomes an official blotter record. For an immediate emergency, contact local emergency services directly.',
             'tl' => 'Mag-login at buksan ang File a Blotter Request. Ilagay ang detalye ng insidente at i-submit. Susuriin muna ito ng barangay staff bago maging opisyal na blotter record. Para sa agarang emergency, direktang tumawag sa local emergency services.',
+        ],
+        'incident_report' => [
+            'label' => 'Online Sumbong incident reports, categories, confidentiality, and tracking',
+            'en' => 'Verified residents can open Report an Incident from their dashboard, choose a category, enter what happened, the location, and date and time, and optionally attach a photo or video. The system gives an INC reference number. My Reports shows Submitted, Assigned, Responding, Resolved, and Closed updates. A confidential report hides the resident name from staff lists and from staff who have not accepted the report, but it is not anonymous. An online incident report is separate from a formal blotter request. For immediate danger, contact emergency services or the barangay office directly.',
+            'tl' => 'Puwedeng buksan ng verified resident ang Report an Incident sa dashboard, pumili ng category, at ilagay ang nangyari, lugar, at petsa/oras. Optional ang photo o video. Magbibigay ang system ng INC reference number. Sa My Reports makikita ang Submitted, Assigned, Responding, Resolved, at Closed na updates. Itinatago ng confidential report ang pangalan sa staff lists at sa staff na hindi pa tumatanggap ng report, pero hindi ito anonymous. Hiwalay ang online incident report sa formal blotter request. Para sa agarang panganib, direktang tumawag sa emergency services o barangay office.',
         ],
         'request_tracking' => [
             'label' => 'My Requests and request statuses',

@@ -36,10 +36,11 @@
         <section class="overview-attention" aria-labelledby="attention-title">
             <div class="overview-attention-intro">
                 <span class="overview-attention-icon"><i data-lucide="inbox" aria-hidden="true"></i></span>
-                <div><h2 id="attention-title">{{ $pendingServiceRequestCount + $pendingBlotterCount > 0 ? 'Needs your attention' : 'You’re all caught up' }}</h2><p>{{ $pendingServiceRequestCount + $pendingBlotterCount > 0 ? 'Start with the requests and cases waiting for staff action.' : 'There are no pending resident requests or blotter cases.' }}</p></div>
+                <div><h2 id="attention-title">{{ $pendingServiceRequestCount + $pendingBlotterCount + $pendingIncidentReportCount > 0 ? 'Needs your attention' : 'You’re all caught up' }}</h2><p>{{ $pendingServiceRequestCount + $pendingBlotterCount + $pendingIncidentReportCount > 0 ? 'Start with the requests and cases waiting for staff action.' : 'There are no pending resident requests, incident reports, or blotter cases.' }}</p></div>
             </div>
             <div class="overview-attention-links">
                 <a href="{{ route('service-requests.index', ['status' => 'Pending']) }}"><strong>{{ number_format($pendingServiceRequestCount) }}</strong><span>Pending requests</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+                <a href="{{ route('incident-reports.index', ['status' => 'Submitted']) }}"><strong>{{ number_format($pendingIncidentReportCount) }}</strong><span>New incident reports</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
                 <a href="{{ route('blotters.index', ['status' => 'Pending']) }}"><strong>{{ number_format($pendingBlotterCount) }}</strong><span>Pending blotters</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
             </div>
         </section>

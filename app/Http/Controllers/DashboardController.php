@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Blotter;
 use App\Models\Certificate;
 use App\Models\Household;
+use App\Models\IncidentReport;
 use App\Models\Official;
 use App\Models\Resident;
 use App\Models\ServiceRequest;
@@ -18,6 +19,7 @@ class DashboardController extends Controller
         $householdCount = Household::count();
         $certificateCount = Certificate::count();
         $pendingBlotterCount = Blotter::where('status', 'Pending')->count();
+        $pendingIncidentReportCount = IncidentReport::where('status', IncidentReport::STATUS_SUBMITTED)->count();
         $totalBlotterCount = Blotter::count();
         $officialCount = Official::count();
         $requestTotals = ServiceRequest::query()
@@ -47,6 +49,7 @@ class DashboardController extends Controller
             'householdCount',
             'certificateCount',
             'pendingBlotterCount',
+            'pendingIncidentReportCount',
             'totalBlotterCount',
             'officialCount',
             'pendingServiceRequestCount',

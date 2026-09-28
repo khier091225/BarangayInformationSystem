@@ -53,8 +53,23 @@
                     <span class="resident-service-description">Share incident details for barangay staff to review and record.</span>
                     <span class="resident-service-action">File report <i data-lucide="arrow-right" aria-hidden="true"></i></span>
                 </a>
+                <a href="{{ route('account.incidents.create') }}" class="resident-service-card resident-service-incident">
+                    <span class="resident-service-top"><span class="resident-service-icon"><i data-lucide="message-square-warning" aria-hidden="true"></i></span><span>ONLINE SUMBONG</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+                    <strong>Report an incident</strong>
+                    <span class="resident-service-description">Report community concerns such as noise, sanitation, parking, or infrastructure and track staff updates.</span>
+                    <span class="resident-service-action">Start report <i data-lucide="arrow-right" aria-hidden="true"></i></span>
+                </a>
             </div>
         </section>
+
+        @if ($latestIncidentReport)
+            <section class="resident-card incident-dashboard-update" aria-labelledby="latest-incident-title">
+                <span class="resident-section-icon"><i data-lucide="message-square-warning" aria-hidden="true"></i></span>
+                <div><span class="resident-kicker resident-kicker-dark">LATEST INCIDENT REPORT</span><h2 id="latest-incident-title">{{ $latestIncidentReport->categoryLabel() }}</h2><p>{{ $latestIncidentReport->reference_number }} · {{ $latestIncidentReport->location }}</p></div>
+                <x-incident-status :status="$latestIncidentReport->status" />
+                <a href="{{ route('account.incidents.show', $latestIncidentReport) }}" class="resident-inline-link">View progress <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+            </section>
+        @endif
 
         <section class="resident-overview" aria-labelledby="overview-title">
             <div class="resident-section-heading"><h2 id="overview-title">Your requests at a glance</h2></div>

@@ -41,6 +41,7 @@ class BlotterTest extends TestCase
     public function test_blotter_forms_render_and_valid_records_can_be_saved(): void
     {
         $data = Blotter::factory()->make()->getAttributes();
+        $data['status'] = 'Pending';
         $this->get(route('blotters.create'))->assertOk();
         $this->post(route('blotters.store'), $data)->assertRedirect(route('blotters.index'));
         $this->assertDatabaseHas('blotters', $data);
@@ -52,12 +53,28 @@ class BlotterTest extends TestCase
         $this->assertSame('Settled', $blotter->fresh()->status);
     }
 
+    public function test_staff_can_record_a_blotter_with_only_the_essential_fields(): void
+    {
+        $this->get(route('blotters.create'))->assertOk()->assertSee('Add respondent or incident date');
+
+        $this->post(route('blotters.store'), [
+            'complainant' => 'Ana Cruz',
+            'incident' => 'A dispute happened near the barangay hall.',
+            'status' => 'Settled',
+        ])->assertRedirect(route('blotters.index'));
+
+        $blotter = Blotter::query()->sole();
+        $this->assertSame('Unknown', $blotter->respondent);
+        $this->assertSame('Pending', $blotter->status);
+        $this->assertSame(today('Asia/Manila')->toDateString(), $blotter->incident_date->toDateString());
+    }
+
     public function test_create_and_update_reject_invalid_blotter_details(): void
     {
         $blotter = Blotter::factory()->create(['status' => 'Pending']);
         $data = [
             'complainant' => '',
-            'respondent' => '',
+            'respondent' => str_repeat('a', 256),
             'incident' => '',
             'incident_date' => 'invalid-date',
             'status' => 'Unsupported',

@@ -48,7 +48,13 @@ class BlotterController extends Controller
     {
         $validated = $request->validated();
 
-        Blotter::create($validated);
+        Blotter::create([
+            'complainant' => $validated['complainant'],
+            'respondent' => trim($validated['respondent'] ?? '') ?: 'Unknown',
+            'incident' => $validated['incident'],
+            'incident_date' => $validated['incident_date'] ?? today('Asia/Manila')->toDateString(),
+            'status' => 'Pending',
+        ]);
 
         return redirect()->route('blotters.index')
             ->with('success', 'Blotter report recorded successfully!');
