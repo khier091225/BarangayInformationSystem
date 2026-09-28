@@ -14,8 +14,8 @@
         <!-- Sidebar Navigation -->
         <aside class="workspace-sidebar" id="workspace-navigation" aria-label="Workspace navigation">
             <a href="{{ route('dashboard') }}" class="brand workspace-brand">
-                <span class="brand-mark"><i data-lucide="landmark"></i></span>
-                <span class="brand-name">Barangay Kay-Anlog<span>INFORMATION SYSTEM</span></span>
+                <x-brand-seal />
+                <span class="brand-name">Barangay<br> Kay-Anlog<span>INFORMATION SYSTEM</span></span>
             </a>
             <div class="workspace-label">STAFF WORKSPACE</div>
             <nav class="workspace-nav" aria-label="Main workspace">

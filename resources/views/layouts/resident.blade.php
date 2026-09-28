@@ -14,7 +14,7 @@
         <header class="resident-header">
             <div class="resident-header-inner">
                 <a class="resident-brand" href="{{ route('account') }}" aria-label="Barangay Kay-Anlog, dashboard">
-                    <span class="resident-brand-mark"><i data-lucide="landmark" aria-hidden="true"></i></span>
+                    <x-brand-seal />
                     <span><strong>Barangay Kay-Anlog</strong><small>RESIDENT PORTAL</small></span>
                 </a>
 

@@ -13,7 +13,7 @@
         <div class="auth-shell">
             <aside class="auth-story" aria-label="About the Barangay Information System">
                 <a href="{{ route('home') }}" class="auth-brand" aria-label="Barangay Information System home">
-                    <span class="auth-brand-mark"><i data-lucide="landmark" aria-hidden="true"></i></span>
+                    <x-brand-seal />
                     <span>Barangay <strong>Kay-Anlog</strong></span>
                 </a>
 
@@ -34,7 +34,7 @@
 
             <main id="auth-main" class="auth-main" tabindex="-1">
                 <a href="{{ route('home') }}" class="auth-mobile-brand" aria-label="Barangay Information System home">
-                    <span class="auth-brand-mark"><i data-lucide="landmark" aria-hidden="true"></i></span>
+                    <x-brand-seal />
                     <span>Barangay <strong>Kay-Anlog</strong></span>
                 </a>
 

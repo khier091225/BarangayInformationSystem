@@ -1,7 +1,6 @@
 .auth-page {
     --auth-forest: var(--accent);
     --auth-deep: var(--sidebar);
-    --auth-mint: var(--accent-soft);
     min-height: 100svh;
     background: var(--canvas);
 }
@@ -55,17 +54,7 @@
 
 .auth-brand strong, .auth-mobile-brand strong { display: block; font-weight: 750; }
 .auth-brand:hover, .auth-mobile-brand:hover { text-decoration: none; }
-.auth-brand-mark {
-    display: grid;
-    place-items: center;
-    width: 3rem;
-    height: 3rem;
-    flex: none;
-    color: var(--auth-deep);
-    background: var(--auth-mint);
-    border-radius: .85rem;
-}
-.auth-brand-mark svg { width: 1.55rem; height: 1.55rem; }
+.auth-brand .brand-seal, .auth-mobile-brand .brand-seal { width: 3rem; height: 3rem; }
 .auth-story-content { max-width: 32rem; }
 .auth-story-kicker {
     display: flex;
