@@ -517,16 +517,16 @@
                 </div>
                 
                 <!-- Bureau of Fire -->
-                <div class="bg-red-500/10 border border-red-500/25 rounded-2xl p-6 backdrop-blur-md hover:bg-red-500/20 transition-all duration-300 flex flex-col justify-between">
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md hover:bg-white/10 transition-all duration-300 flex flex-col justify-between">
                     <div>
                         <div class="w-12 h-12 rounded-2xl bg-red-500/20 flex items-center justify-center mb-5 text-red-400">
                             <i data-lucide="bell" class="w-6 h-6"></i>
                         </div>
-                        <h3 class="text-lg font-bold mb-1 text-red-100">Bureau of Fire (BFP)</h3>
-                        <p class="text-sm text-red-200/70 leading-relaxed mb-4">Calamba Fire Station responders.</p>
+                        <h3 class="text-lg font-bold mb-1">Bureau of Fire (BFP)</h3>
+                        <p class="text-sm text-emerald-100/60 leading-relaxed mb-4">Calamba Fire Station responders.</p>
                     </div>
                     <div>
-                        <p class="text-2xl font-black text-red-400 tracking-tight mb-3">160</p>
+                        <p class="text-2xl font-black text-white tracking-tight mb-3">160</p>
                         <a href="tel:160" class="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-red-500/20 hover:bg-red-500 hover:text-white text-xs font-bold rounded-xl transition-all">
                             <i data-lucide="phone" class="w-3.5 h-3.5"></i> Call BFP Fire Desk
                         </a>
