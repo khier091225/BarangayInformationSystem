@@ -12,8 +12,8 @@
 @section('content')
     <div style="margin-bottom: 24px;">
         <div class="eyebrow">STAFF REVIEW</div>
-        <h1 style="font-size: 26px; color: #1e3a29; margin: 4px 0 8px;">Resident requests</h1>
-        <p style="color: #69786b; font-size: 13px;">Review certificate requests and blotter reports before creating official records.</p>
+        <h1 style="font-size: 26px; color: var(--ink); margin: 4px 0 8px;">Resident requests</h1>
+        <p style="color: var(--muted-soft); font-size: 13px;">Review certificate requests and blotter reports before creating official records.</p>
     </div>
 
     <form method="GET" action="{{ route('service-requests.index') }}" class="search-filter-card" style="margin-bottom: 20px;">
@@ -26,23 +26,23 @@
         <button type="submit" class="search-button-primary">Filter</button>
     </form>
 
-    <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow-x: auto;">
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow-x: auto;">
         <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-            <thead><tr style="background: #f8faf7; text-align: left;">
+            <thead><tr style="background: var(--canvas); text-align: left;">
                 <th style="padding: 14px;">Reference</th><th style="padding: 14px;">Resident</th><th style="padding: 14px;">Request</th><th style="padding: 14px;">Submitted</th><th style="padding: 14px;">Status</th><th style="padding: 14px;"></th>
             </tr></thead>
             <tbody>
                 @forelse ($requests as $serviceRequest)
-                    <tr style="border-top: 1px solid #edf1eb;">
+                    <tr style="border-top: 1px solid var(--line);">
                         <td style="padding: 14px;">#{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}</td>
                         <td style="padding: 14px; font-weight: 600;">{{ $serviceRequest->resident->full_name }}</td>
                         <td style="padding: 14px;">{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</td>
                         <td style="padding: 14px;">{{ $serviceRequest->created_at->format('M d, Y') }}</td>
-                        <td style="padding: 14px;">{{ $serviceRequest->status }}</td>
-                        <td style="padding: 14px;"><a href="{{ route('service-requests.show', $serviceRequest) }}">Review</a></td>
+                        <td style="padding: 14px;"><x-request-status :status="$serviceRequest->status" /></td>
+                        <td style="padding: 14px;"><a href="{{ route('service-requests.show', $serviceRequest) }}" class="table-action-link">Review</a></td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" style="padding: 30px; text-align: center; color: #788577;">No {{ strtolower($status) }} requests.</td></tr>
+                    <tr><td colspan="6" style="padding: 30px; text-align: center; color: var(--muted-soft);">No {{ strtolower($status) }} requests.</td></tr>
                 @endforelse
             </tbody>
         </table>

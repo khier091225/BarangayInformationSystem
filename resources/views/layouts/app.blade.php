@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#11665e">
+        <meta name="theme-color" content="#276747">
         <title>@yield('title', 'Barangay Information System')</title>
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -78,12 +78,12 @@
 
             <main class="workspace-main" id="workspace-main" tabindex="-1" style="@yield('main-style')">
                 @if (session('success'))
-                    <div class="no-print" role="status" style="background: #eaf5eb; color: #245838; border: 1px solid #c2e2c7; padding: 12px 18px; border-radius: 6px; margin-bottom: 20px; font-weight: 500;">
+                    <div class="no-print" role="status" style="background: var(--success-soft); color: var(--accent-hover); border: 1px solid var(--success-line); padding: 12px 18px; border-radius: 6px; margin-bottom: 20px; font-weight: 500;">
                         {{ session('success') }}
                     </div>
                 @endif
                 @if (session('warning'))
-                    <div class="no-print" role="alert" style="background: #fff5df; color: #704800; border: 1px solid #f0d596; padding: 12px 18px; border-radius: 6px; margin-bottom: 20px; font-weight: 500;">
+                    <div class="no-print" role="alert" style="background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning-line); padding: 12px 18px; border-radius: 6px; margin-bottom: 20px; font-weight: 500;">
                         {{ session('warning') }}
                     </div>
                 @endif

@@ -14,15 +14,15 @@
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('blotters.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; margin-bottom: 12px;">
+        <a href="{{ route('blotters.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 12px;">
             <i data-lucide="arrow-left"></i> Back to Blotters
         </a>
-        <h1 style="font-size: 24px; color: #1e3a29;">Edit Blotter Report #{{ $blotter->id }}</h1>
-        <p style="color: #69786b; font-size: 13px;">Update hearing status or incident details below.</p>
+        <h1 style="font-size: 24px; color: var(--ink);">Edit Blotter Report #{{ $blotter->id }}</h1>
+        <p style="color: var(--muted-soft); font-size: 13px;">Update hearing status or incident details below.</p>
     </div>
 
     <!-- Form Card -->
-    <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
         <form method="POST" action="{{ route('blotters.update', [$blotter]) }}">
             @csrf
             @method('PUT')

@@ -31,7 +31,7 @@
         min-height: 297mm;
         margin: 0 auto;
         padding: 40px 50px;
-        border: 1px solid #dcdfdc;
+        border: 1px solid var(--line);
         box-shadow: 0 4px 20px rgba(0,0,0,0.06);
         box-sizing: border-box;
         font-family: 'Times New Roman', Times, serif;
@@ -40,7 +40,7 @@
     }
     .cert-header {
         text-align: center;
-        border-bottom: 2px solid #224d35;
+        border-bottom: 2px solid var(--accent-hover);
         padding-bottom: 15px;
         margin-bottom: 30px;
     }
@@ -55,7 +55,7 @@
     .cert-header h2 {
         font-size: 18px;
         margin: 4px 0;
-        color: #1e3a29;
+        color: var(--ink);
         font-weight: bold;
     }
     .cert-header h1 {
@@ -63,7 +63,7 @@
         letter-spacing: 2px;
         text-transform: uppercase;
         margin: 4px 0 0 0;
-        color: #276747;
+        color: var(--accent);
     }
     .cert-title-container {
         text-align: center;
@@ -75,7 +75,7 @@
         text-transform: uppercase;
         letter-spacing: 2px;
         text-decoration: underline;
-        color: #153823;
+        color: var(--ink);
     }
     .cert-body {
         font-size: 15px;
@@ -120,8 +120,8 @@
 
 @section('topbar')
     <!-- Top Actions Toolbar (Hidden during print) -->
-    <div class="action-bar no-print" style="padding: 18px 34px; background: white; border-bottom: 1px solid #e1e7de; display: flex; justify-content: space-between; align-items: center;">
-        <a href="{{ route('certificates.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; font-weight: 500;">
+    <div class="action-bar no-print" style="padding: 18px 34px; background: var(--surface); border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center;">
+        <a href="{{ route('certificates.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--accent); text-decoration: none; font-weight: 500;">
             <i data-lucide="arrow-left"></i> Back to Certificates
         </a>
 

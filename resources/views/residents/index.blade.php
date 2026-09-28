@@ -14,8 +14,8 @@
     <div class="workspace-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div>
             <div class="eyebrow">BARANGAY DIRECTORY</div>
-            <h1 style="font-size: 26px; color: #1e3a29; margin-top: 4px;">Resident Registry</h1>
-            <p style="color: #69786b; font-size: 13px;">Manage community residents, demographics, and voter registration records.</p>
+            <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Resident Registry</h1>
+            <p style="color: var(--muted-soft); font-size: 13px;">Manage community residents, demographics, and voter registration records.</p>
         </div>
         <a href="{{ route('residents.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
             <i data-lucide="user-plus"></i> Register Resident
@@ -56,10 +56,10 @@
     </div>
 
     <!-- Data Table -->
-    <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
         <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
             <thead>
-                <tr style="background: #f8faf7; border-bottom: 1px solid #e3e8e1; text-align: left; color: #5a6b5c;">
+                <tr style="background: var(--canvas); border-bottom: 1px solid var(--line); text-align: left; color: var(--muted);">
                     <th style="padding: 14px 16px;">Full Name</th>
                     <th style="padding: 14px 16px;">Household</th>
                     <th style="padding: 14px 16px;">Gender & Age</th>
@@ -71,58 +71,58 @@
             </thead>
             <tbody>
                 @forelse ($residents as $resident)
-                    <tr style="border-bottom: 1px solid #edf1eb;">
-                        <td style="padding: 14px 16px; font-weight: 600; color: #1e3a29;">
+                    <tr style="border-bottom: 1px solid var(--line);">
+                        <td style="padding: 14px 16px; font-weight: 600; color: var(--ink);">
                             <a href="{{ route('residents.show', [$resident]) }}" style="color: inherit; text-decoration: underline;">
                                 {{ $resident->full_name }}
                             </a>
                             @if($resident->contact_number)
-                                <div style="font-size: 11px; color: #788577; font-weight: 400; margin-top: 2px;">
+                                <div style="font-size: 11px; color: var(--muted-soft); font-weight: 400; margin-top: 2px;">
                                     <i data-lucide="phone" style="width: 11px; height: 11px; display: inline;"></i> {{ $resident->contact_number }}
                                 </div>
                             @endif
                         </td>
                         <td style="padding: 14px 16px;">
                             @if($resident->household)
-                                <a href="{{ route('households.show', [$resident->household]) }}" style="color: #276747; text-decoration: none; font-weight: 600;">
+                                <a href="{{ route('households.show', [$resident->household]) }}" style="color: var(--accent); text-decoration: none; font-weight: 600;">
                                     {{ $resident->household->household_number }}
                                 </a>
-                                <div style="font-size: 11px; color: #788577;">Head: {{ $resident->household->household_head }}</div>
+                                <div style="font-size: 11px; color: var(--muted-soft);">Head: {{ $resident->household->household_head }}</div>
                             @else
-                                <span style="color: #999; font-style: italic;">No Household</span>
+                                <span style="color: var(--muted-soft); font-style: italic;">No Household</span>
                             @endif
                         </td>
                         <td style="padding: 14px 16px;">
                             <span>{{ $resident->gender }}</span>,
-                            <span style="color: #556658;">
+                            <span style="color: var(--muted);">
                                 {{ $resident->birthdate ? $resident->birthdate->age . ' yrs old' : 'N/A' }}
                             </span>
                         </td>
-                        <td style="padding: 14px 16px; color: #4b584e;">
+                        <td style="padding: 14px 16px; color: var(--muted);">
                             {{ $resident->civil_status }}
                         </td>
-                        <td style="padding: 14px 16px; color: #556658; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $resident->address }}">
+                        <td style="padding: 14px 16px; color: var(--muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $resident->address }}">
                             {{ $resident->address }}
                         </td>
                         <td style="padding: 14px 16px;">
                             @if ($resident->is_voter)
-                                <span style="background: #eaf5eb; color: #236539; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">Voter</span>
+                                <span style="background: var(--success-soft); color: var(--success); padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">Voter</span>
                             @else
-                                <span style="background: #f4f4f4; color: #888; padding: 3px 8px; border-radius: 4px; font-size: 11px;">Non-Voter</span>
+                                <span style="background: var(--surface-soft); color: var(--muted); padding: 3px 8px; border-radius: 4px; font-size: 11px;">Non-Voter</span>
                             @endif
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('residents.show', [$resident]) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
+                                <a href="{{ route('residents.show', [$resident]) }}" style="color: var(--accent); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 4px;">
                                     View
                                 </a>
-                                <a href="{{ route('residents.edit', [$resident]) }}" style="color: #556658; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #ccd5c8; border-radius: 4px;">
+                                <a href="{{ route('residents.edit', [$resident]) }}" style="color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--input-line); border-radius: 4px;">
                                     Edit
                                 </a>
                                 <form method="POST" action="{{ route('residents.destroy', [$resident]) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" style="background: none; border: 1px solid #eed0ce; color: #a43229; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
+                                    <button type="submit" class="record-delete">
                                         Delete
                                     </button>
                                 </form>
@@ -131,7 +131,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 40px; color: #829283;">
+                        <td colspan="7" style="text-align: center; padding: 40px; color: var(--muted-soft);">
                             No resident records found.
                         </td>
                     </tr>

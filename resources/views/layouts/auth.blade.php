@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#104f48">
+        <meta name="theme-color" content="#276747">
         <title>@yield('title') | Barangay Information System</title>
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])

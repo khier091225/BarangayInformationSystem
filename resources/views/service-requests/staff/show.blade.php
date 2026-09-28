@@ -10,15 +10,15 @@
 @endsection
 
 @section('content')
-    <a href="{{ route('service-requests.index') }}" style="color: #42634e; font-size: 13px;">← Back to requests</a>
+    <a href="{{ route('service-requests.index') }}" style="color: var(--accent); font-size: 13px;">← Back to requests</a>
     <div style="margin: 18px 0 24px;">
         <div class="eyebrow">REQUEST #{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}</div>
-        <h1 style="font-size: 26px; color: #1e3a29; margin: 4px 0 8px;">{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</h1>
-        <p style="color: #69786b; font-size: 13px;">Submitted {{ $serviceRequest->created_at->format('M d, Y h:i A') }} · Status: <strong>{{ $serviceRequest->status }}</strong></p>
+        <h1 style="font-size: 26px; color: var(--ink); margin: 4px 0 8px;">{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</h1>
+        <p style="color: var(--muted-soft); font-size: 13px;">Submitted {{ $serviceRequest->created_at->format('M d, Y h:i A') }} · Status: <x-request-status :status="$serviceRequest->status" /></p>
     </div>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: start;">
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 24px;">
+        <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 24px;">
             <h2 style="font-size: 18px; margin-top: 0;">Request details</h2>
             <p><strong>Resident:</strong> <a href="{{ route('residents.show', $serviceRequest->resident) }}">{{ $serviceRequest->resident->full_name }}</a></p>
             <p><strong>Address:</strong> {{ $serviceRequest->resident->address }}</p>
@@ -33,10 +33,10 @@
             @endif
         </div>
 
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 24px;">
+        <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 24px;">
             @if ($serviceRequest->status === 'Pending')
                 <h2 style="font-size: 18px; margin-top: 0;">Review request</h2>
-                <p style="font-size: 13px; color: #69786b;">Completing this request creates an official {{ $serviceRequest->type === 'certificate' ? 'certificate' : 'blotter' }} record. A response is required when declining.</p>
+                <p style="font-size: 13px; color: var(--muted-soft);">Completing this request creates an official {{ $serviceRequest->type === 'certificate' ? 'certificate' : 'blotter' }} record. A response is required when declining.</p>
                 <form method="POST" action="{{ route('service-requests.review', $serviceRequest) }}">
                     @csrf
                     <div style="margin: 18px 0;">
@@ -46,13 +46,13 @@
                     </div>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <button type="submit" name="decision" value="complete" class="button button-primary">Complete request</button>
-                        <button type="submit" name="decision" value="decline" class="button button-outline">Decline request</button>
+                        <button type="submit" name="decision" value="decline" class="button button-danger-outline">Decline request</button>
                     </div>
                     <x-form.error :message="$errors->first('decision')" />
                 </form>
             @else
                 <h2 style="font-size: 18px; margin-top: 0;">Review outcome</h2>
-                <p><strong>Status:</strong> {{ $serviceRequest->status }}</p>
+                <p><strong>Status:</strong> <x-request-status :status="$serviceRequest->status" /></p>
                 <p><strong>Reviewed by:</strong> {{ $serviceRequest->reviewer?->name ?? 'Staff account unavailable' }}</p>
                 <p style="white-space: pre-wrap;"><strong>Message to resident:</strong> {{ $serviceRequest->response_note ?: 'No message provided.' }}</p>
                 @if ($serviceRequest->certificate)

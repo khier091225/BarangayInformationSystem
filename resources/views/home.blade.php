@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#064e3b">
+    <meta name="theme-color" content="#276747">
     <title>Barangay Kay-Anlog | Official Information &amp; E-Services Portal</title>
     @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -12,21 +12,24 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            border-bottom: 1px solid rgb(225 231 222 / 80%);
         }
         dialog::backdrop {
-            background: rgba(15, 23, 42, 0.65);
+            background: rgb(12 48 42 / 65%);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
         }
         dialog {
             margin: auto;
         }
+        .home-hero :focus-visible, #emergency :focus-visible {
+            outline-color: var(--sidebar-active);
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-emerald-200 selection:text-emerald-900">
     <!-- Utility Bar -->
-    <div class="bg-[#064e3b] text-emerald-50 py-1.5 sm:py-2 border-b border-emerald-900/60 relative z-50">
+    <div class="bg-primary-active text-emerald-50 py-1.5 sm:py-2 border-b border-emerald-900/60 relative z-50">
         <div class="container mx-auto px-4 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-4 text-[0.7rem] sm:text-xs">
             <div class="flex items-center gap-1.5 sm:gap-2 text-center sm:text-left">
                 <i data-lucide="flag" class="w-3.5 h-3.5 text-amber-400 flex-shrink-0"></i>
@@ -126,7 +129,7 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="relative min-h-[85vh] flex items-center pt-10 pb-20 lg:pt-0 overflow-hidden bg-slate-900">
+    <section class="home-hero relative min-h-[85vh] flex items-center pt-10 pb-20 lg:pt-0 overflow-hidden bg-slate-900">
         <!-- Background Image with tuned dark overlay -->
         <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/75 to-slate-900/45 z-10"></div>
@@ -154,12 +157,12 @@
                 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-8">
                     @auth
                         @if (auth()->user()->role === 'staff')
-                            <a href="{{ route('dashboard') }}" class="inline-flex justify-center items-center gap-2 px-7 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-900/30 hover:-translate-y-0.5">
+                            <a href="{{ route('dashboard') }}" class="inline-flex justify-center items-center gap-2 px-7 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-900/30 hover:-translate-y-0.5">
                                 <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                                 Open Staff Dashboard
                             </a>
                         @else
-                            <a href="{{ route('account.requests.certificate.create') }}" class="inline-flex justify-center items-center gap-2 px-7 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-900/30 hover:-translate-y-0.5">
+                            <a href="{{ route('account.requests.certificate.create') }}" class="inline-flex justify-center items-center gap-2 px-7 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-900/30 hover:-translate-y-0.5">
                                 <i data-lucide="file-check-2" class="w-5 h-5"></i>
                                 Request Document Online
                             </a>
@@ -169,7 +172,7 @@
                             </a>
                         @endif
                     @else
-                        <a href="{{ route('login') }}" class="inline-flex justify-center items-center gap-2 px-7 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-900/30 hover:-translate-y-0.5">
+                        <a href="{{ route('login') }}" class="inline-flex justify-center items-center gap-2 px-7 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-900/30 hover:-translate-y-0.5">
                             <i data-lucide="file-check-2" class="w-5 h-5"></i>
                             Request Certificate
                         </a>
@@ -272,7 +275,7 @@
                             <span>Voters: <strong class="text-white">{{ number_format($stats['voters']) }}</strong></span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <i data-lucide="heart-pulse" class="w-4 h-4 text-pink-400 flex-shrink-0"></i>
+                            <i data-lucide="heart-pulse" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
                             <span>Senior Citizens: <strong class="text-white">{{ number_format($stats['seniors']) }}</strong></span>
                         </div>
                     </div>
@@ -364,7 +367,7 @@
                         <h3 class="text-xl font-bold text-slate-900 mb-2.5 tracking-tight">Certificate of Residency</h3>
                         <p class="text-slate-600 text-sm leading-relaxed mb-6">Validates bona fide residence for utility meter installation (Meralco/Water), bank account opening, and school enrollment.</p>
                     </div>
-                    <button class="inline-flex items-center justify-between text-sky-700 font-bold hover:text-sky-800 bg-sky-50 hover:bg-sky-100/80 px-4 py-3 rounded-xl w-full text-sm transition-colors" onclick="showServiceModal('Certificate of Residency', 'Certifies bona fide living residence within the territory of Barangay Kay-Anlog.', ['1 Valid Government ID', 'Household Registration / Purok Leader Certification', 'Recent utility bill or lease agreement'], '24 Hours', 'Standard administrative document fee')">
+                    <button class="inline-flex items-center justify-between text-emerald-700 font-bold hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100/80 px-4 py-3 rounded-xl w-full text-sm transition-colors" onclick="showServiceModal('Certificate of Residency', 'Certifies bona fide living residence within the territory of Barangay Kay-Anlog.', ['1 Valid Government ID', 'Household Registration / Purok Leader Certification', 'Recent utility bill or lease agreement'], '24 Hours', 'Standard administrative document fee')">
                         <span>View Requirements</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                     </button>
@@ -382,7 +385,7 @@
                         <h3 class="text-xl font-bold text-slate-900 mb-2.5 tracking-tight">Certificate of Indigency</h3>
                         <p class="text-slate-600 text-sm leading-relaxed mb-6">Supporting document for financial aid, educational scholarships, medical assistance (DSWD/Malasakit), and PAO legal aid.</p>
                     </div>
-                    <button class="inline-flex items-center justify-between text-amber-700 font-bold hover:text-amber-800 bg-amber-50 hover:bg-amber-100/80 px-4 py-3 rounded-xl w-full text-sm transition-colors" onclick="showServiceModal('Certificate of Indigency', 'Special certification for low-income residents applying for government aid or legal assistance.', ['Valid ID of applicant or parent/guardian', 'Purok Chairman Endorsement or Case Assessment', 'Hospital bill, prescription, or school assessment (if medical/educational)'], 'Same Day to 24 Hours', 'FREE / 100% Fee-Exempt under National Guidelines')">
+                    <button class="inline-flex items-center justify-between text-emerald-700 font-bold hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100/80 px-4 py-3 rounded-xl w-full text-sm transition-colors" onclick="showServiceModal('Certificate of Indigency', 'Special certification for low-income residents applying for government aid or legal assistance.', ['Valid ID of applicant or parent/guardian', 'Purok Chairman Endorsement or Case Assessment', 'Hospital bill, prescription, or school assessment (if medical/educational)'], 'Same Day to 24 Hours', 'FREE / 100% Fee-Exempt under National Guidelines')">
                         <span>View Requirements</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                     </button>
@@ -398,7 +401,7 @@
                         <p class="text-slate-300 text-sm sm:text-base leading-relaxed">Confidential documentation and mediation of neighborhood disputes, property matters, and peace and order concerns handled through community conciliation.</p>
                     </div>
                     <div class="relative z-10 flex-shrink-0">
-                        <button class="inline-flex justify-center items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3.5 rounded-xl transition-all shadow-md shadow-emerald-900/40 w-full sm:w-auto" onclick="showServiceModal('Blotter &amp; Incident Reporting', 'Formal documentation of incident reports and mediation under the Katarungang Pambarangay.', ['Personal appearance of Complainant/Incident Reporter', 'Valid Government ID', 'Narrative description of incident and involved parties'], 'Formal Hearing Schedule Assigned', 'Strictly confidential and handled by the Barangay Lupon')">
+                        <button class="inline-flex justify-center items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3.5 rounded-xl transition-all shadow-md shadow-emerald-900/40 w-full sm:w-auto" onclick="showServiceModal('Blotter &amp; Incident Reporting', 'Formal documentation of incident reports and mediation under the Katarungang Pambarangay.', ['Personal appearance of Complainant/Incident Reporter', 'Valid Government ID', 'Narrative description of incident and involved parties'], 'Formal Hearing Schedule Assigned', 'Strictly confidential and handled by the Barangay Lupon')">
                             <span>View Mediation Guidelines</span>
                             <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </button>
@@ -469,7 +472,7 @@
     </section>
 
     <!-- Emergency Hotlines Section -->
-    <section id="emergency" class="py-20 bg-[#063327] text-white relative overflow-hidden">
+    <section id="emergency" class="py-20 bg-primary-active text-white relative overflow-hidden">
         <!-- Abstract subtle red/amber glow for emergency feel -->
         <div class="absolute -top-40 -right-40 w-96 h-96 bg-red-500/10 rounded-full blur-[100px] pointer-events-none"></div>
         <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>

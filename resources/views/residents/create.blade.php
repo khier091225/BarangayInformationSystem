@@ -14,14 +14,14 @@
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('residents.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; margin-bottom: 12px;">
+        <a href="{{ route('residents.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 12px;">
             <i data-lucide="arrow-left"></i> Back to Residents
         </a>
-        <h1 style="font-size: 24px; color: #1e3a29;">Register New Resident</h1>
-        <p style="color: #69786b; font-size: 13px;">Add a community resident to the barangay registry.</p>
+        <h1 style="font-size: 24px; color: var(--ink);">Register New Resident</h1>
+        <p style="color: var(--muted-soft); font-size: 13px;">Add a community resident to the barangay registry.</p>
     </div>
 
-    <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
         <form method="POST" action="{{ route('residents.store') }}">
             @csrf
 
@@ -110,12 +110,12 @@
             </div>
 
             <!-- Voter Status Checkbox -->
-            <div style="margin-bottom: 26px; padding: 14px; background: #fbfdfa; border: 1px solid #edf1eb; border-radius: 6px;">
-                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; font-weight: 600; color: #2d3b30;">
-                    <input type="checkbox" name="is_voter" value="1" {{ old('is_voter') ? 'checked' : '' }} style="width: 16px; height: 16px; accent-color: #276747;">
+            <div style="margin-bottom: 26px; padding: 14px; background: var(--canvas); border: 1px solid var(--line); border-radius: 6px;">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink);">
+                    <input type="checkbox" name="is_voter" value="1" {{ old('is_voter') ? 'checked' : '' }} style="width: 16px; height: 16px; accent-color: var(--accent);">
                     <span>Registered Voter in this Barangay</span>
                 </label>
-                <p style="margin: 4px 0 0 26px; font-size: 12px; color: #788577;">Check this box if the resident is registered to vote in local elections.</p>
+                <p style="margin: 4px 0 0 26px; font-size: 12px; color: var(--muted-soft);">Check this box if the resident is registered to vote in local elections.</p>
             </div>
 
             <!-- Submit Buttons -->

@@ -12,14 +12,14 @@
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('residents.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #42634e; text-decoration: none; margin-bottom: 12px;">
+        <a href="{{ route('residents.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 12px;">
             <i data-lucide="arrow-left"></i> Back to Residents
         </a>
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <div class="eyebrow">RESIDENT PROFILE</div>
-                <h1 style="font-size: 26px; color: #1e3a29; margin-top: 4px;">{{ $resident->full_name }}</h1>
-                <p style="color: #69786b; font-size: 13px;">Member of Barangay Information System community registry.</p>
+                <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">{{ $resident->full_name }}</h1>
+                <p style="color: var(--muted-soft); font-size: 13px;">Member of Barangay Information System community registry.</p>
             </div>
             <div style="display: flex; gap: 10px;">
                 <a href="{{ route('residents.edit', [$resident]) }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
@@ -28,7 +28,7 @@
                 <form method="POST" action="{{ route('residents.destroy', [$resident]) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');" style="display: inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" style="background: none; border: 1px solid #eed0ce; color: #a43229; font-size: 13px; font-weight: 600; padding: 9px 14px; border-radius: 6px; cursor: pointer;">
+                    <button type="submit" class="record-delete record-delete-large">
                         Delete
                     </button>
                 </form>
@@ -39,7 +39,7 @@
     <section class="registration-card" aria-labelledby="registration-title">
         <h2 id="registration-title">Resident account registration</h2>
         @if ($resident->user)
-            <p style="font-size: 13px; color: #556658; margin: 0;">An account is linked to this resident: <strong>{{ $resident->user->email }}</strong></p>
+            <p style="font-size: 13px; color: var(--muted); margin: 0;">An account is linked to this resident: <strong>{{ $resident->user->email }}</strong></p>
         @else
             <p class="registration-intro">Verify the resident's identity and mobile number, then send their registration code by SMS. Each code works once and expires after 24 hours.</p>
 
@@ -92,33 +92,33 @@
 
     <!-- Info Grid -->
     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 18px;">
-            <span style="font-size: 11px; color: #788577; text-transform: uppercase; font-weight: 600;">Gender</span>
-            <div style="font-size: 17px; font-weight: 600; color: #1e3a29; margin-top: 4px;">{{ $resident->gender }}</div>
+        <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px;">
+            <span style="font-size: 11px; color: var(--muted-soft); text-transform: uppercase; font-weight: 600;">Gender</span>
+            <div style="font-size: 17px; font-weight: 600; color: var(--ink); margin-top: 4px;">{{ $resident->gender }}</div>
         </div>
 
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 18px;">
-            <span style="font-size: 11px; color: #788577; text-transform: uppercase; font-weight: 600;">Age & Birthdate</span>
-            <div style="font-size: 17px; font-weight: 600; color: #1e3a29; margin-top: 4px;">
+        <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px;">
+            <span style="font-size: 11px; color: var(--muted-soft); text-transform: uppercase; font-weight: 600;">Age & Birthdate</span>
+            <div style="font-size: 17px; font-weight: 600; color: var(--ink); margin-top: 4px;">
                 {{ $resident->birthdate ? $resident->birthdate->age . ' yrs old' : 'N/A' }}
             </div>
-            <div style="font-size: 11px; color: #788577; margin-top: 2px;">
+            <div style="font-size: 11px; color: var(--muted-soft); margin-top: 2px;">
                 {{ $resident->birthdate ? $resident->birthdate->format('F d, Y') : '-' }}
             </div>
         </div>
 
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 18px;">
-            <span style="font-size: 11px; color: #788577; text-transform: uppercase; font-weight: 600;">Civil Status</span>
-            <div style="font-size: 17px; font-weight: 600; color: #1e3a29; margin-top: 4px;">{{ $resident->civil_status }}</div>
+        <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px;">
+            <span style="font-size: 11px; color: var(--muted-soft); text-transform: uppercase; font-weight: 600;">Civil Status</span>
+            <div style="font-size: 17px; font-weight: 600; color: var(--ink); margin-top: 4px;">{{ $resident->civil_status }}</div>
         </div>
 
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 18px;">
-            <span style="font-size: 11px; color: #788577; text-transform: uppercase; font-weight: 600;">Voter Status</span>
+        <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px;">
+            <span style="font-size: 11px; color: var(--muted-soft); text-transform: uppercase; font-weight: 600;">Voter Status</span>
             <div style="margin-top: 6px;">
                 @if ($resident->is_voter)
-                    <span style="background: #eaf5eb; color: #236539; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">Registered Voter</span>
+                    <span style="background: var(--success-soft); color: var(--success); padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">Registered Voter</span>
                 @else
-                    <span style="background: #f4f4f4; color: #777; padding: 4px 10px; border-radius: 4px; font-size: 12px;">Non-Voter</span>
+                    <span style="background: var(--surface-soft); color: var(--muted-soft); padding: 4px 10px; border-radius: 4px; font-size: 12px;">Non-Voter</span>
                 @endif
             </div>
         </div>
@@ -126,36 +126,36 @@
 
     <!-- Household & Contact Cards -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 22px;">
-            <span style="font-size: 11px; color: #788577; text-transform: uppercase; font-weight: 600;">Household Information</span>
+        <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 22px;">
+            <span style="font-size: 11px; color: var(--muted-soft); text-transform: uppercase; font-weight: 600;">Household Information</span>
             @if($resident->household)
                 <div style="margin-top: 10px;">
-                    <div style="font-size: 18px; font-weight: 700; color: #276747;">
+                    <div style="font-size: 18px; font-weight: 700; color: var(--accent);">
                         <a href="{{ route('households.show', [$resident->household]) }}" style="color: inherit; text-decoration: underline;">
                             {{ $resident->household->household_number }}
                         </a>
                     </div>
-                    <div style="font-size: 13px; color: #556658; margin-top: 4px;">
+                    <div style="font-size: 13px; color: var(--muted); margin-top: 4px;">
                         <strong>Household Head:</strong> {{ $resident->household->household_head }}
                     </div>
-                    <div style="font-size: 13px; color: #556658; margin-top: 2px;">
+                    <div style="font-size: 13px; color: var(--muted); margin-top: 2px;">
                         <strong>Address:</strong> {{ $resident->household->address }}
                     </div>
                 </div>
             @else
-                <div style="margin-top: 10px; color: #888; font-style: italic; font-size: 13px;">
+                <div style="margin-top: 10px; color: var(--muted); font-style: italic; font-size: 13px;">
                     No household linked to this resident.
                 </div>
             @endif
         </div>
 
-        <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; padding: 22px;">
-            <span style="font-size: 11px; color: #788577; text-transform: uppercase; font-weight: 600;">Contact & Residential Address</span>
+        <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 22px;">
+            <span style="font-size: 11px; color: var(--muted-soft); text-transform: uppercase; font-weight: 600;">Contact & Residential Address</span>
             <div style="margin-top: 10px;">
-                <div style="font-size: 14px; color: #333; margin-bottom: 6px;">
+                <div style="font-size: 14px; color: var(--ink); margin-bottom: 6px;">
                     <strong>Residential Address:</strong> {{ $resident->address }}
                 </div>
-                <div style="font-size: 14px; color: #333;">
+                <div style="font-size: 14px; color: var(--ink);">
                     <strong>Contact Phone:</strong> {{ $resident->contact_number ?: 'None provided' }}
                 </div>
             </div>
@@ -163,14 +163,14 @@
     </div>
 
     <!-- Certificates History Table -->
-    <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-        <div style="padding: 16px 20px; border-bottom: 1px solid #edf1eb; background: #fbfdfa; display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="font-size: 15px; color: #1e3a29; margin: 0;">Issued Certificates & Clearances</h3>
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+        <div style="padding: 16px 20px; border-bottom: 1px solid var(--line); background: var(--canvas); display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="font-size: 15px; color: var(--ink); margin: 0;">Issued Certificates & Clearances</h3>
         </div>
 
         <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
             <thead>
-                <tr style="background: #f8faf7; border-bottom: 1px solid #e3e8e1; text-align: left; color: #5a6b5c;">
+                <tr style="background: var(--canvas); border-bottom: 1px solid var(--line); text-align: left; color: var(--muted);">
                     <th style="padding: 12px 16px;">Certificate Type</th>
                     <th style="padding: 12px 16px;">Purpose</th>
                     <th style="padding: 12px 16px;">Issued Date</th>
@@ -179,15 +179,15 @@
             </thead>
             <tbody>
                 @forelse ($resident->certificates as $certificate)
-                    <tr style="border-bottom: 1px solid #edf1eb;">
-                        <td style="padding: 12px 16px; font-weight: 600; color: #1e3a29;">{{ $certificate->certificate_type }}</td>
-                        <td style="padding: 12px 16px; color: #556658;">{{ $certificate->purpose }}</td>
-                        <td style="padding: 12px 16px; color: #556658;">{{ $certificate->issued_date ? $certificate->issued_date->format('M d, Y') : '-' }}</td>
+                    <tr style="border-bottom: 1px solid var(--line);">
+                        <td style="padding: 12px 16px; font-weight: 600; color: var(--ink);">{{ $certificate->certificate_type }}</td>
+                        <td style="padding: 12px 16px; color: var(--muted);">{{ $certificate->purpose }}</td>
+                        <td style="padding: 12px 16px; color: var(--muted);">{{ $certificate->issued_date ? $certificate->issued_date->format('M d, Y') : '-' }}</td>
                         <td style="padding: 12px 16px; font-weight: 600;">₱{{ number_format($certificate->fee, 2) }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" style="text-align: center; padding: 28px; color: #829283;">
+                        <td colspan="4" style="text-align: center; padding: 28px; color: var(--muted-soft);">
                             No certificates issued yet for this resident.
                         </td>
                     </tr>

@@ -14,8 +14,8 @@
     <div class="workspace-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div>
             <div class="eyebrow">DOCUMENT ISSUANCE</div>
-            <h1 style="font-size: 26px; color: #1e3a29; margin-top: 4px;">Certificates & Clearances</h1>
-            <p style="color: #69786b; font-size: 13px;">Manage and print official barangay clearances, residency, and indigency certificates.</p>
+            <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Certificates & Clearances</h1>
+            <p style="color: var(--muted-soft); font-size: 13px;">Manage and print official barangay clearances, residency, and indigency certificates.</p>
         </div>
         <a href="{{ route('certificates.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
             <i data-lucide="file-plus"></i> Issue Certificate
@@ -52,10 +52,10 @@
     </div>
 
     <!-- Data Table -->
-    <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
         <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
             <thead>
-                <tr style="background: #f8faf7; border-bottom: 1px solid #e3e8e1; text-align: left; color: #5a6b5c;">
+                <tr style="background: var(--canvas); border-bottom: 1px solid var(--line); text-align: left; color: var(--muted);">
                     <th style="padding: 14px 16px;">Control #</th>
                     <th style="padding: 14px 16px;">Resident Name</th>
                     <th style="padding: 14px 16px;">Document Type</th>
@@ -66,8 +66,8 @@
             </thead>
             <tbody>
                 @forelse ($certificates as $cert)
-                    <tr style="border-bottom: 1px solid #edf1eb;">
-                        <td style="padding: 14px 16px; font-weight: 700; color: #1e3a29;">
+                    <tr style="border-bottom: 1px solid var(--line);">
+                        <td style="padding: 14px 16px; font-weight: 700; color: var(--ink);">
                             #CERT-{{ str_pad($cert->id, 4, '0', STR_PAD_LEFT) }}
                         </td>
                         <td style="padding: 14px 16px; font-weight: 600;">
@@ -76,33 +76,33 @@
                                     {{ $cert->resident->full_name }}
                                 </a>
                             @else
-                                <span style="color: #999;">Resident record unavailable</span>
+                                <span style="color: var(--muted-soft);">Resident record unavailable</span>
                             @endif
                         </td>
                         <td style="padding: 14px 16px;">
                             <span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600;
-                                @if($cert->certificate_type == 'Barangay Clearance') background: #eaf5eb; color: #1e5e34;
-                                @elseif($cert->certificate_type == 'Certificate of Residency') background: #eef3fc; color: #1a4f9c;
-                                @elseif($cert->certificate_type == 'Certificate of Indigency') background: #fdf8e9; color: #876211;
-                                @else background: #f3f5f3; color: #465548; @endif">
+                                @if($cert->certificate_type == 'Barangay Clearance') background: var(--success-soft); color: var(--success);
+                                @elseif($cert->certificate_type == 'Certificate of Residency') background: var(--info-soft); color: var(--info);
+                                @elseif($cert->certificate_type == 'Certificate of Indigency') background: var(--warning-soft); color: var(--warning);
+                                @else background: var(--canvas); color: var(--muted); @endif">
                                 {{ $cert->certificate_type }}
                             </span>
                         </td>
-                        <td style="padding: 14px 16px; color: #556658;">
+                        <td style="padding: 14px 16px; color: var(--muted);">
                             {{ $cert->purpose }}
                         </td>
-                        <td style="padding: 14px 16px; color: #556658;">
+                        <td style="padding: 14px 16px; color: var(--muted);">
                             {{ $cert->date_issued ? $cert->date_issued->format('M d, Y') : '-' }}
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('certificates.show', [$cert]) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 10px; border: 1px solid #c8d8c9; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
+                                <a href="{{ route('certificates.show', [$cert]) }}" style="color: var(--accent); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 10px; border: 1px solid var(--line-strong); border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
                                     <i data-lucide="printer" style="width: 12px; height: 12px;"></i> View & Print
                                 </a>
                                 <form method="POST" action="{{ route('certificates.destroy', [$cert]) }}" onsubmit="return confirm('Are you sure you want to delete this certificate record?');" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" style="background: none; border: 1px solid #eed0ce; color: #a43229; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
+                                    <button type="submit" class="record-delete">
                                         Delete
                                     </button>
                                 </form>
@@ -111,7 +111,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 40px; color: #829283;">
+                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--muted-soft);">
                             No certificates or clearances issued yet.
                         </td>
                     </tr>

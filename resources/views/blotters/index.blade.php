@@ -14,8 +14,8 @@
     <div class="workspace-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div>
             <div class="eyebrow">PEACE & ORDER</div>
-            <h1 style="font-size: 26px; color: #1e3a29; margin-top: 4px;">Blotter Case Register</h1>
-            <p style="color: #69786b; font-size: 13px;">Manage community disputes, complaints, and hearing records.</p>
+            <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Blotter Case Register</h1>
+            <p style="color: var(--muted-soft); font-size: 13px;">Manage community disputes, complaints, and hearing records.</p>
         </div>
         <a href="{{ route('blotters.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
             <i data-lucide="plus"></i> File New Complaint
@@ -51,10 +51,10 @@
     </div>
 
     <!-- Data Table -->
-    <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
         <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
             <thead>
-                <tr style="background: #f8faf7; border-bottom: 1px solid #e3e8e1; text-align: left; color: #5a6b5c;">
+                <tr style="background: var(--canvas); border-bottom: 1px solid var(--line); text-align: left; color: var(--muted);">
                     <th style="padding: 14px 16px;">Case #</th>
                     <th style="padding: 14px 16px;">Complainant</th>
                     <th style="padding: 14px 16px;">Respondent</th>
@@ -66,33 +66,33 @@
             </thead>
             <tbody>
                 @forelse ($blotters as $blotter)
-                    <tr style="border-bottom: 1px solid #edf1eb;">
-                        <td style="padding: 14px 16px; font-weight: 600; color: #1e3a29;">#{{ $blotter->id }}</td>
+                    <tr style="border-bottom: 1px solid var(--line);">
+                        <td style="padding: 14px 16px; font-weight: 600; color: var(--ink);">#{{ $blotter->id }}</td>
                         <td style="padding: 14px 16px; font-weight: 600;">{{ $blotter->complainant }}</td>
-                        <td style="padding: 14px 16px; color: #6d4038;">{{ $blotter->respondent }}</td>
+                        <td style="padding: 14px 16px; color: var(--danger-hover);">{{ $blotter->respondent }}</td>
                         <td style="padding: 14px 16px; max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $blotter->incident }}">
                             {{ $blotter->incident }}
                         </td>
-                        <td style="padding: 14px 16px; color: #667568;">
+                        <td style="padding: 14px 16px; color: var(--muted);">
                             {{ $blotter->incident_date ? $blotter->incident_date->format('M d, Y') : '-' }}
                         </td>
                         <td style="padding: 14px 16px;">
                             <span style="display: inline-block; padding: 4px 9px; border-radius: 4px; font-size: 11px; font-weight: 600;
-                                @if($blotter->status == 'Pending') background: #fdf3d8; color: #875c10;
-                                @elseif($blotter->status == 'Settled') background: #eaf5eb; color: #236539;
-                                @else background: #f5eaea; color: #822727; @endif">
+                                @if($blotter->status == 'Pending') background: var(--warning-soft); color: var(--warning);
+                                @elseif($blotter->status == 'Settled') background: var(--success-soft); color: var(--success);
+                                @else background: var(--danger-soft); color: var(--danger-hover); @endif">
                                 {{ $blotter->status }}
                             </span>
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('blotters.edit', [$blotter]) }}" style="color: #276747; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #c8d8c9; border-radius: 4px;">
+                                <a href="{{ route('blotters.edit', [$blotter]) }}" style="color: var(--accent); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 4px;">
                                     Edit
                                 </a>
                                 <form method="POST" action="{{ route('blotters.destroy', [$blotter]) }}" onsubmit="return confirm('Are you sure you want to delete this blotter record?');" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" style="background: none; border: 1px solid #eed0ce; color: #a43229; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
+                                    <button type="submit" class="record-delete">
                                         Delete
                                     </button>
                                 </form>
@@ -101,7 +101,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 40px; color: #829283;">
+                        <td colspan="7" style="text-align: center; padding: 40px; color: var(--muted-soft);">
                             No blotter records found.
                         </td>
                     </tr>

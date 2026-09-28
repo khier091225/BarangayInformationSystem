@@ -14,8 +14,8 @@
     <div class="workspace-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div>
             <div class="eyebrow">BARANGAY LEADERSHIP</div>
-            <h1 style="font-size: 26px; color: #1e3a29; margin-top: 4px;">Barangay Officials</h1>
-            <p style="color: #69786b; font-size: 13px;">Manage elective and appointed community leaders, roles, and service terms.</p>
+            <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Barangay Officials</h1>
+            <p style="color: var(--muted-soft); font-size: 13px;">Manage elective and appointed community leaders, roles, and service terms.</p>
         </div>
         <a href="{{ route('officials.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
             <i data-lucide="user-plus"></i> Add Official
@@ -53,10 +53,10 @@
     </div>
 
     <!-- Data Table -->
-    <div style="background: white; border: 1px solid #e1e7de; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
         <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
             <thead>
-                <tr style="background: #f8faf7; border-bottom: 1px solid #e3e8e1; text-align: left; color: #5a6b5c;">
+                <tr style="background: var(--canvas); border-bottom: 1px solid var(--line); text-align: left; color: var(--muted);">
                     <th style="padding: 14px 16px;">Official Name</th>
                     <th style="padding: 14px 16px;">Position</th>
                     <th style="padding: 14px 16px;">Contact Number</th>
@@ -66,40 +66,40 @@
             </thead>
             <tbody>
                 @forelse ($officials as $official)
-                    <tr style="border-bottom: 1px solid #edf1eb;">
-                        <td style="padding: 14px 16px; font-weight: 600; color: #1e3a29;">
+                    <tr style="border-bottom: 1px solid var(--line);">
+                        <td style="padding: 14px 16px; font-weight: 600; color: var(--ink);">
                             {{ $official->name }}
                         </td>
                         <td style="padding: 14px 16px;">
                             <span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600;
-                                @if($official->position == 'Barangay Captain') background: #eaf5eb; color: #1e5e34;
-                                @elseif($official->position == 'SK Chairman') background: #eef3fc; color: #1a4f9c;
-                                @elseif($official->position == 'Barangay Kagawad') background: #fdf8e9; color: #876211;
-                                @else background: #f3f5f3; color: #465548; @endif">
+                                @if($official->position == 'Barangay Captain') background: var(--success-soft); color: var(--success);
+                                @elseif($official->position == 'SK Chairman') background: var(--info-soft); color: var(--info);
+                                @elseif($official->position == 'Barangay Kagawad') background: var(--warning-soft); color: var(--warning);
+                                @else background: var(--canvas); color: var(--muted); @endif">
                                 {{ $official->position }}
                             </span>
                         </td>
-                        <td style="padding: 14px 16px; color: #556658;">
+                        <td style="padding: 14px 16px; color: var(--muted);">
                             {{ $official->contact_number ?: 'Not provided' }}
                         </td>
-                        <td style="padding: 14px 16px; color: #556658;">
+                        <td style="padding: 14px 16px; color: var(--muted);">
                             @if($official->term_start && $official->term_end)
                                 {{ $official->term_start->format('M Y') }} – {{ $official->term_end->format('M Y') }}
                             @elseif($official->term_start)
                                 Since {{ $official->term_start->format('M Y') }}
                             @else
-                                <span style="color: #999;">Active</span>
+                                <span style="color: var(--muted-soft);">Active</span>
                             @endif
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('officials.edit', [$official]) }}" style="color: #556658; text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid #ccd5c8; border-radius: 4px;">
+                                <a href="{{ route('officials.edit', [$official]) }}" style="color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--input-line); border-radius: 4px;">
                                     Edit
                                 </a>
                                 <form method="POST" action="{{ route('officials.destroy', [$official]) }}" onsubmit="return confirm('Are you sure you want to remove this official?');" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" style="background: none; border: 1px solid #eed0ce; color: #a43229; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
+                                    <button type="submit" class="record-delete">
                                         Delete
                                     </button>
                                 </form>
@@ -108,7 +108,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" style="text-align: center; padding: 40px; color: #829283;">
+                        <td colspan="5" style="text-align: center; padding: 40px; color: var(--muted-soft);">
                             No barangay officials registered yet.
                         </td>
                     </tr>
