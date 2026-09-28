@@ -144,7 +144,7 @@ class AuthTest extends TestCase
     public function test_all_management_routes_use_the_session_middleware(): void
     {
         foreach (Route::getRoutes() as $route) {
-            if ($route->uri() === '/' || $route->uri() === 'dashboard'
+            if ($route->uri() === 'dashboard'
                 || preg_match('/^(residents|households|blotters|officials|certificates)(\/|$)/', $route->uri())) {
                 $this->assertContains('staff.session', $route->gatherMiddleware(), $route->uri());
             }

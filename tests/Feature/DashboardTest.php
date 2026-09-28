@@ -13,9 +13,9 @@ class DashboardTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_dashboard_loads_directly_on_root(): void
+    public function test_dashboard_loads_directly_on_dashboard(): void
     {
-        $response = $this->actingAs(User::factory()->create())->get('/')
+        $response = $this->actingAs(User::factory()->create())->get('/dashboard')
             ->assertOk()
             ->assertSee('Overview')
             ->assertSee('Barangay overview')
@@ -53,7 +53,7 @@ class DashboardTest extends TestCase
         Certificate::factory()->for($resident)->create(['date_issued' => '2026-07-31']);
         Certificate::factory()->for($resident)->create(['date_issued' => '2027-01-16']);
 
-        $response = $this->actingAs(User::factory()->create())->get('/')->assertOk();
+        $response = $this->actingAs(User::factory()->create())->get('/dashboard')->assertOk();
         $activity = $response->viewData('certificateActivity');
 
         $this->assertSame([2, 0, 0, 0, 1, 4], array_column($activity['months'], 'count'));
@@ -80,7 +80,7 @@ class DashboardTest extends TestCase
             'status' => ServiceRequest::STATUS_DECLINED, 'created_at' => now()->subMonth(),
         ]);
 
-        $response = $this->actingAs(User::factory()->create())->get('/')->assertOk()
+        $response = $this->actingAs(User::factory()->create())->get('/dashboard')->assertOk()
             ->assertSee(route('service-requests.show', $pending->first()))
             ->assertSee(route('service-requests.index', ['status' => 'Pending']), false)
             ->assertSee(route('blotters.index', ['status' => 'Pending']), false);
@@ -89,11 +89,6 @@ class DashboardTest extends TestCase
         $this->assertSame(['Pending' => 5, 'Completed' => 2, 'Declined' => 1], $response->viewData('requestCounts'));
         $this->assertSame(8, $response->viewData('totalServiceRequestCount'));
         $this->assertSame(5, $response->viewData('pendingServiceRequestCount'));
-    }
-
-    public function test_dashboard_path_redirects_to_root(): void
-    {
-        $this->actingAs(User::factory()->create())->get('/dashboard')->assertRedirect('/');
     }
 
     public function test_login_is_public_and_logout_requires_authentication(): void
@@ -105,7 +100,7 @@ class DashboardTest extends TestCase
 
     public function test_dashboard_does_not_contain_public_website_or_signout(): void
     {
-        $this->actingAs(User::factory()->create())->get('/')
+        $this->actingAs(User::factory()->create())->get('/dashboard')
             ->assertDontSee('Public website')
             ->assertDontSee('title="Sign out"', false)
             ->assertDontSee('data-demo-entry', false);

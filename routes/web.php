@@ -19,8 +19,9 @@ use App\Http\Controllers\StaffProfileController;
 use App\Http\Controllers\StaffServiceRequestController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::redirect('/portal', '/home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::redirect('/home', '/');
+Route::redirect('/portal', '/');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
@@ -59,8 +60,7 @@ Route::middleware(['auth', 'resident.verified'])->group(function (): void {
 });
 
 Route::middleware('staff.session')->group(function (): void {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::redirect('/dashboard', '/');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [StaffProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [StaffProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/password', [StaffProfileController::class, 'updatePassword'])
