@@ -138,36 +138,76 @@
 
             <!-- Right Glassmorphic Stats Panel -->
             <div class="w-full lg:w-1/2 relative lg:pl-12 mt-12 lg:mt-0" id="demographics">
-                <div class="bg-slate-900/60 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 lg:p-10 shadow-2xl relative overflow-hidden">
+                <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/15 rounded-3xl p-7 lg:p-9 shadow-2xl relative overflow-hidden">
                     <!-- Ambient Glow -->
                     <div class="absolute -top-32 -right-32 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
                     
-                    <div class="flex items-center gap-4 mb-8 border-b border-white/10 pb-6 relative z-10">
-                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white shadow-lg shadow-amber-500/20">
-                            <i data-lucide="trending-up" class="w-6 h-6"></i>
+                    <div class="flex items-center justify-between mb-8 border-b border-white/10 pb-5 relative z-10">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white shadow-lg shadow-emerald-900/40">
+                                <i data-lucide="trending-up" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-white tracking-tight">Community At A Glance</h3>
+                                <p class="text-xs text-slate-300 font-medium mt-0.5">Real-time local governance data</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-white tracking-tight">Community At A Glance</h3>
-                            <p class="text-sm text-slate-300 font-medium mt-0.5">Live database demographics</p>
+                        <div class="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-400/25 whitespace-nowrap flex-shrink-0">
+                            <span class="relative flex h-2 w-2 flex-shrink-0">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                            </span>
+                            <span class="text-[0.7rem] font-bold text-emerald-300 uppercase tracking-wider whitespace-nowrap">Live System</span>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4 lg:gap-6 relative z-10">
-                        <div class="bg-white/5 border border-white/5 rounded-2xl p-6 hover:bg-white/10 transition-colors group">
-                            <span class="block text-4xl font-extrabold text-white mb-1 group-hover:scale-105 transition-transform origin-left">{{ number_format($stats['residents']) }}</span>
-                            <span class="text-sm text-emerald-100 font-medium tracking-wide">Registered Residents</span>
+                    <div class="grid grid-cols-2 gap-4 lg:gap-5 relative z-10">
+                        <!-- Residents -->
+                        <div class="bg-white/[0.04] border border-white/10 rounded-2xl p-5 hover:bg-white/[0.08] hover:border-emerald-500/30 hover:-translate-y-1 transition-all duration-300 group">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Residents</span>
+                                <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i data-lucide="users-round" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <span class="block text-3xl lg:text-4xl font-black text-white tracking-tight">{{ number_format($stats['residents']) }}</span>
+                            <span class="text-xs text-emerald-200/90 font-medium mt-1 block">Registered &amp; Verified</span>
                         </div>
-                        <div class="bg-white/5 border border-white/5 rounded-2xl p-6 hover:bg-white/10 transition-colors group">
-                            <span class="block text-4xl font-extrabold text-white mb-1 group-hover:scale-105 transition-transform origin-left">{{ number_format($stats['households']) }}</span>
-                            <span class="text-sm text-emerald-100 font-medium tracking-wide">Mapped Households</span>
+
+                        <!-- Households -->
+                        <div class="bg-white/[0.04] border border-white/10 rounded-2xl p-5 hover:bg-white/[0.08] hover:border-sky-500/30 hover:-translate-y-1 transition-all duration-300 group">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Households</span>
+                                <div class="w-9 h-9 rounded-xl bg-sky-500/15 text-sky-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i data-lucide="house" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <span class="block text-3xl lg:text-4xl font-black text-white tracking-tight">{{ number_format($stats['households']) }}</span>
+                            <span class="text-xs text-sky-200/90 font-medium mt-1 block">Mapped Families</span>
                         </div>
-                        <div class="bg-white/5 border border-white/5 rounded-2xl p-6 hover:bg-white/10 transition-colors group">
-                            <span class="block text-4xl font-extrabold text-white mb-1 group-hover:scale-105 transition-transform origin-left">{{ number_format($stats['certificates']) }}</span>
-                            <span class="text-sm text-emerald-100 font-medium tracking-wide">Certificates Issued</span>
+
+                        <!-- Certificates -->
+                        <div class="bg-white/[0.04] border border-white/10 rounded-2xl p-5 hover:bg-white/[0.08] hover:border-amber-500/30 hover:-translate-y-1 transition-all duration-300 group">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Certificates</span>
+                                <div class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i data-lucide="file-check-2" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <span class="block text-3xl lg:text-4xl font-black text-white tracking-tight">{{ number_format($stats['certificates']) }}</span>
+                            <span class="text-xs text-amber-200/90 font-medium mt-1 block">Issued &amp; Certified</span>
                         </div>
-                        <div class="bg-white/5 border border-white/5 rounded-2xl p-6 hover:bg-white/10 transition-colors group">
-                            <span class="block text-4xl font-extrabold text-white mb-1 group-hover:scale-105 transition-transform origin-left">24h</span>
-                            <span class="text-sm text-emerald-100 font-medium tracking-wide">Standard Turnaround</span>
+
+                        <!-- Turnaround -->
+                        <div class="bg-white/[0.04] border border-white/10 rounded-2xl p-5 hover:bg-white/[0.08] hover:border-teal-500/30 hover:-translate-y-1 transition-all duration-300 group">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Processing</span>
+                                <div class="w-9 h-9 rounded-xl bg-teal-500/15 text-teal-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i data-lucide="zap" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <span class="block text-3xl lg:text-4xl font-black text-white tracking-tight">24h</span>
+                            <span class="text-xs text-teal-200/90 font-medium mt-1 block">Fast E-Service</span>
                         </div>
                     </div>
                 </div>
