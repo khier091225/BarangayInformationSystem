@@ -12,7 +12,14 @@ class IncidentReportAlert extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public string $referenceNumber, public string $categoryLabel) {}
+    public function __construct(
+        public string $referenceNumber,
+        public string $categoryLabel,
+        public string $location,
+        public string $occurredAt,
+        public string $description,
+        public bool $identityConfidential,
+    ) {}
 
     /**
      * Get the message envelope.

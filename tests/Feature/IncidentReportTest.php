@@ -179,7 +179,7 @@ class IncidentReportTest extends TestCase
             ->assertSee('On it');
     }
 
-    public function test_configured_team_alert_uses_existing_philsms_and_sends_no_private_details(): void
+    public function test_configured_team_alert_includes_report_details_without_the_residents_identity(): void
     {
         Queue::fake();
         Mail::fake();
@@ -189,13 +189,18 @@ class IncidentReportTest extends TestCase
         config()->set('services.philsms.sender_id', 'Barangay');
         config()->set('incident_reports.alerts.tanod.phone', '09912197679');
         config()->set('incident_reports.alerts.tanod.email', 'duty@example.com');
-        $resident = Resident::factory()->create();
+        $resident = Resident::factory()->create([
+            'first_name' => 'Jannyca',
+            'middle_name' => null,
+            'last_name' => 'Ilaida',
+            'contact_number' => '09171234567',
+        ]);
         $this->actingAs(User::factory()->resident()->create(['resident_id' => $resident->id]));
 
         $this->post(route('account.incidents.store'), [
             'category' => 'noise_complaint',
-            'description' => 'Private description with identifying details.',
-            'location' => 'Private location',
+            'description' => 'Loud music near the court. Jannyca Ilaida can be reached at 09171234567.',
+            'location' => 'Purok 3, near the court',
             'occurred_at' => now('Asia/Manila')->subHour()->format('Y-m-d\TH:i'),
             'keep_identity_confidential' => '1',
         ])->assertRedirect();
@@ -207,9 +212,18 @@ class IncidentReportTest extends TestCase
         $this->assertSame('submitted', $report->fresh()->alert_email_status);
         Http::assertSent(fn (Request $request): bool => $request['recipient'] === '639912197679'
             && str_contains($request['message'], $report->reference_number)
-            && ! str_contains($request['message'], 'Private description')
-            && ! str_contains($request['message'], 'Private location'));
-        Mail::assertSent(IncidentReportAlert::class, fn (IncidentReportAlert $mail): bool => $mail->referenceNumber === $report->reference_number);
+            && str_contains($request['message'], 'Purok 3, near the court')
+            && str_contains($request['message'], 'Loud music near the court.')
+            && str_contains($request['message'], $report->occurred_at->timezone('Asia/Manila')->format('M j, Y g:i A'))
+            && ! str_contains($request['message'], 'Jannyca Ilaida')
+            && ! str_contains($request['message'], '09171234567'));
+        Mail::assertSent(IncidentReportAlert::class, fn (IncidentReportAlert $mail): bool => $mail->referenceNumber === $report->reference_number
+            && $mail->location === 'Purok 3, near the court'
+            && str_contains($mail->description, 'Loud music near the court.')
+            && ! str_contains($mail->description, 'Jannyca Ilaida')
+            && ! str_contains($mail->description, '09171234567')
+            && $mail->identityConfidential
+            && str_contains($mail->render(), 'What happened:'));
 
         $this->actingAs(User::factory()->create())
             ->get(route('incident-reports.show', $report))
@@ -227,21 +241,25 @@ class IncidentReportTest extends TestCase
         config()->set('services.philsms.sender_id', 'Barangay');
         config()->set('incident_reports.alerts.tanod.phone', '09912197679');
         config()->set('incident_reports.alerts.tanod.email', 'duty@example.com');
-        $resident = Resident::factory()->create();
+        $resident = Resident::factory()->create(['contact_number' => '09171234567']);
         $this->actingAs(User::factory()->resident()->create(['resident_id' => $resident->id]));
 
         $this->post(route('account.incidents.store'), [
             'category' => 'noise_complaint',
-            'description' => 'There is loud music on our street.',
-            'location' => 'Purok 3',
+            'description' => "There is loud music on our street. {$resident->full_name} can be reached at {$resident->contact_number}.",
+            'location' => "Purok 3, near {$resident->full_name}'s house",
             'occurred_at' => now('Asia/Manila')->subHour()->format('Y-m-d\TH:i'),
         ])->assertRedirect();
 
         $report = IncidentReport::query()->firstOrFail();
         $this->assertSame('submitted', $report->fresh()->alert_sms_status);
         $this->assertSame('submitted', $report->fresh()->alert_email_status);
-        Http::assertSentCount(1);
-        Mail::assertSent(IncidentReportAlert::class);
+        Http::assertSent(fn (Request $request): bool => str_contains($request['message'], 'There is loud music on our street.')
+            && ! str_contains($request['message'], $resident->full_name)
+            && ! str_contains($request['message'], $resident->contact_number));
+        Mail::assertSent(IncidentReportAlert::class, fn (IncidentReportAlert $mail): bool => ! str_contains($mail->location, $resident->full_name)
+            && ! str_contains($mail->description, $resident->full_name)
+            && ! str_contains($mail->description, $resident->contact_number));
     }
 
     public function test_unverified_resident_and_staff_cannot_submit_incident_reports(): void

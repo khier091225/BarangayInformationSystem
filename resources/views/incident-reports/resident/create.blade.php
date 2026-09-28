@@ -39,7 +39,8 @@
                 </div>
                 <div class="resident-field resident-field-wide">
                     <x-form.label for="description" required>What happened?</x-form.label>
-                    <x-form.textarea name="description" rows="6" required minlength="10" maxlength="5000" placeholder="Describe what you observed and any details that may help staff respond." :aria-invalid="$errors->has('description') ? 'true' : 'false'" :aria-describedby="$errors->has('description') ? 'description-error' : null">{{ old('description') }}</x-form.textarea>
+                    <x-form.textarea name="description" rows="6" required minlength="10" maxlength="5000" placeholder="Describe what you observed and any details that may help staff respond." :aria-invalid="$errors->has('description') ? 'true' : 'false'" :aria-describedby="$errors->has('description') ? 'description-error incident-description-help' : 'incident-description-help'">{{ old('description') }}</x-form.textarea>
+                    <p id="incident-description-help" class="incident-field-help">The duty team may receive this location and description by SMS or email. Avoid adding your name or contact number here.</p>
                     <x-form.error id="description-error" :message="$errors->first('description')" />
                 </div>
             </div>
@@ -60,7 +61,7 @@
                     </div>
                     <label class="incident-confidential-choice">
                         <input type="checkbox" name="keep_identity_confidential" value="1" @checked(old('keep_identity_confidential'))>
-                        <span><strong>Keep my identity confidential</strong><small>Your name is hidden from staff who have not accepted this report. The staff member handling it can see your identity. This is not anonymous.</small></span>
+                        <span><strong>Keep my identity confidential</strong><small>Your name is hidden from staff who have not accepted this report. The staff member handling the report can see your identity. This is not anonymous.</small></span>
                     </label>
                 </div>
             </details>

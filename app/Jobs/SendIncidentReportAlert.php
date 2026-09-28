@@ -8,6 +8,7 @@ use App\Models\IncidentReport;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Throwable;
 
 class SendIncidentReportAlert implements ShouldQueue
@@ -26,10 +27,25 @@ class SendIncidentReportAlert implements ShouldQueue
             return;
         }
 
+        $report->loadMissing('resident');
         $recipients = config("incident_reports.alerts.{$report->suggested_team}", []);
         $phone = $sms->normalizePhoneNumber($recipients['phone'] ?? null);
         $email = $recipients['email'] ?? null;
-        $message = "NEW BARANGAY REPORT: {$report->categoryLabel()}. Ref: {$report->reference_number}. Login to BIS for details.";
+        $location = $report->location;
+        $description = $report->description;
+
+        foreach ([$report->resident?->full_name, $report->resident?->contact_number] as $identityDetail) {
+            if (filled($identityDetail)) {
+                $location = str_ireplace($identityDetail, '[resident]', $location);
+                $description = str_ireplace($identityDetail, '[resident]', $description);
+            }
+        }
+
+        $occurredAt = $report->occurred_at->timezone('Asia/Manila')->format('M j, Y g:i A');
+        $message = "NEW BARANGAY REPORT {$report->reference_number}\n"
+            .$report->categoryLabel()." | {$occurredAt}\n"
+            .'Where: '.Str::limit(Str::squish($location), 70)."\n"
+            .'Details: '.Str::limit(Str::squish($description), 120);
         $smsStatus = filled($recipients['phone'] ?? null) ? 'failed' : 'not_configured';
         $emailStatus = filled($email) ? 'failed' : 'not_configured';
 
@@ -39,7 +55,14 @@ class SendIncidentReportAlert implements ShouldQueue
 
         if (filled($email)) {
             try {
-                Mail::to($email)->send(new IncidentReportAlert($report->reference_number, $report->categoryLabel()));
+                Mail::to($email)->send(new IncidentReportAlert(
+                    $report->reference_number,
+                    $report->categoryLabel(),
+                    $location,
+                    $occurredAt,
+                    $description,
+                    $report->keep_identity_confidential,
+                ));
                 $emailStatus = 'submitted';
             } catch (Throwable) {
                 $emailStatus = 'failed';
