@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#276747">
+        <link rel="icon" type="image/jpeg" href="{{ asset('images/Logo_kay-anlog.jpg') }}">
         <title>@yield('title') | Barangay Information System</title>
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
