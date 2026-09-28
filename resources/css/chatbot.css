@@ -19,7 +19,7 @@
     border-radius: 999px;
     background: var(--accent);
     color: var(--surface);
-    box-shadow: 0 0 0 3px var(--surface), 0 12px 30px rgb(20 54 35 / 26%);
+    box-shadow: 0 0 0 2px var(--surface), 0 12px 30px rgb(20 54 35 / 26%);
     cursor: pointer;
     transition: border-color .2s, transform .2s, box-shadow .2s;
 }
@@ -27,7 +27,7 @@
 .project-chat__launcher:hover {
     border-color: var(--accent-active);
     background: var(--accent-hover);
-    box-shadow: 0 0 0 3px var(--surface), 0 16px 34px rgb(20 54 35 / 30%);
+    box-shadow: 0 0 0 2px var(--surface), 0 16px 34px rgb(20 54 35 / 30%);
     transform: translateY(-3px);
 }
 
@@ -254,7 +254,7 @@
         width: 3.75rem;
         min-height: 3.75rem;
         padding: 0;
-        border: 2px solid var(--surface);
+        border: 1.5px solid var(--surface);
         background: var(--accent);
         box-shadow: 0 0 0 2px var(--accent-active), 0 12px 28px rgb(20 54 35 / 30%);
     }
