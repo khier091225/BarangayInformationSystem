@@ -4,6 +4,7 @@
 @import './resident.css';
 @import './staff-dashboard.css';
 @import './staff-profile.css';
+@import './chatbot.css';
 
 @source "../**/*.blade.php";
 @source "../**/*.js";

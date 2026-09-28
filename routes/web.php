@@ -10,6 +10,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\NewPasswordController;
 use App\Http\Controllers\OfficialController;
 use App\Http\Controllers\PasswordResetLinkController;
+use App\Http\Controllers\ProjectChatbotController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\ResidentProfileController;
@@ -20,6 +21,8 @@ use App\Http\Controllers\StaffServiceRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::post('/chatbot/reply', ProjectChatbotController::class)
+    ->middleware('throttle:8,1')->name('chatbot.reply');
 Route::redirect('/home', '/');
 Route::redirect('/portal', '/');
 

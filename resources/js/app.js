@@ -1,9 +1,11 @@
 import { createIcons, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, ClipboardList, Clock, Download, ExternalLink, FileCheck2, Files, Flag, Globe, HandHeart, HeartHandshake, HeartPulse, House, Inbox, Info, Landmark, LayoutDashboard, LogIn, LogOut, MapPin, Megaphone, Menu, MessagesSquare, NotebookPen, PanelLeft, Phone, Plus, Search, SearchX, ShieldCheck, Sprout, TrendingUp, UserRound, UserRoundPlus, UsersRound, X, Zap } from 'lucide';
 import initializeWorkspace from './workspace';
+import initializeProjectChatbot from './chatbot';
 
 createIcons({ icons: { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, ClipboardList, Clock, Download, ExternalLink, FileCheck2, Files, Flag, Globe, HandHeart, HeartHandshake, HeartPulse, House, Inbox, Info, Landmark, LayoutDashboard, LogIn, LogOut, MapPin, Megaphone, Menu, MessagesSquare, NotebookPen, PanelLeft, Phone, Plus, Search, SearchX, ShieldCheck, Sprout, TrendingUp, UserRound, UserRoundPlus, UsersRound, X, Zap } });
 
 initializeWorkspace();
+initializeProjectChatbot();
 
 document.querySelectorAll('[data-registration-code-form]').forEach(form => {
     const submit = form.querySelector('[type="submit"]');

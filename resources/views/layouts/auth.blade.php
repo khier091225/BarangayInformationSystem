@@ -52,5 +52,6 @@
                 </div>
             </main>
         </div>
+        <x-chatbot-widget />
     </body>
 </html>

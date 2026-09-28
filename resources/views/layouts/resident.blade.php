@@ -45,5 +45,6 @@
             @yield('content')
             <footer class="resident-footer"><span>Barangay Kay-Anlog Information System</span><span>Services for your community</span></footer>
         </main>
+        <x-chatbot-widget />
     </body>
 </html>

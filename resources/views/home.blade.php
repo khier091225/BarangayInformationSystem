@@ -715,5 +715,6 @@
             document.getElementById('service-dialog').showModal();
         }
     </script>
+<x-chatbot-widget />
 </body>
 </html>

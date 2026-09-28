@@ -91,5 +91,6 @@
         </div>
 
         @stack('scripts')
+        <x-chatbot-widget />
     </body>
 </html>
