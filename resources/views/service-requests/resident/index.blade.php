@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="resident-page-heading">
-        <div><span class="resident-kicker resident-kicker-dark">REQUEST HISTORY</span><h1>My requests</h1><p>Follow your submissions and open a request to read updates from barangay staff.</p></div>
+        <div><h1>My requests</h1><p>Follow your submissions and read updates from barangay staff.</p></div>
         <a href="{{ route('account') }}#resident-services" class="resident-button resident-button-primary"><i data-lucide="plus" aria-hidden="true"></i> New request</a>
     </div>
 
@@ -15,14 +15,14 @@
                 <a href="{{ route('account.requests.index', ['status' => $requestStatus]) }}" @if ($status === $requestStatus) aria-current="page" @endif>{{ $requestStatus }}</a>
             @endforeach
         </nav>
-        <div class="resident-history-summary"><span>{{ number_format($requests->total()) }} {{ \Illuminate\Support\Str::plural('request', $requests->total()) }}{{ $status ? ' · '.$status : '' }}</span><span>Most recently updated first</span></div>
+        <div class="resident-history-summary"><span>{{ number_format($requests->total()) }} {{ \Illuminate\Support\Str::plural('request', $requests->total()) }}</span><span>Most recently updated first</span></div>
         @if ($requests->isEmpty())
             <div class="resident-empty-state resident-history-empty">
                 <span class="resident-empty-icon"><i data-lucide="inbox" aria-hidden="true"></i></span>
                 @if ($requests->total() > 0)
-                    <h2>No requests on this page</h2><p>Return to the first page to see your matching requests.</p><a href="{{ route('account.requests.index', ['status' => $status]) }}" class="resident-inline-link">Back to first page <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+                    <h2>No requests on this page</h2><a href="{{ route('account.requests.index', ['status' => $status]) }}" class="resident-inline-link">Back to first page <i data-lucide="arrow-right" aria-hidden="true"></i></a>
                 @elseif ($status)
-                    <h2>No {{ strtolower($status) }} requests</h2><p>Requests with this status will appear here.</p><a href="{{ route('account.requests.index') }}" class="resident-inline-link">View all requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+                    <h2>No {{ strtolower($status) }} requests</h2><a href="{{ route('account.requests.index') }}" class="resident-inline-link">View all requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
                 @else
                     <h2>No requests yet</h2><p>Start with a document request or blotter report. You can follow its progress here.</p><a href="{{ route('account') }}#resident-services" class="resident-inline-link">Explore services <i data-lucide="arrow-right" aria-hidden="true"></i></a>
                 @endif
@@ -30,7 +30,7 @@
         @else
             <ul class="resident-request-list">
                 @foreach ($requests as $serviceRequest)
-                    <li><x-resident-request-item :service-request="$serviceRequest" /></li>
+                        <li><x-resident-request-item :service-request="$serviceRequest" :show-status="$status === null" /></li>
                 @endforeach
             </ul>
         @endif

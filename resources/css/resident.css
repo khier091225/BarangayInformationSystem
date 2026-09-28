@@ -52,7 +52,6 @@
 .resident-inline-link svg { width: .95rem; height: .95rem; }
 .resident-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
 .resident-section-heading h2 { font-size: 1.2rem; font-weight: 730; letter-spacing: -.025em; line-height: 1.3; }
-.resident-section-heading > span { color: var(--resident-muted); font-size: .77rem; }
 .resident-services { scroll-margin-top: 1.5rem; }
 .resident-service-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 1rem; }
 .resident-service-card { display: flex; flex-direction: column; min-width: 0; padding: 1.5rem; border: 1px solid transparent; border-radius: 1rem; transition: box-shadow .18s, border-color .18s; }
@@ -84,8 +83,6 @@
 .resident-stat-icon svg { width: 1.1rem; height: 1.1rem; }
 .resident-stat-label { grid-column: 1; grid-row: 1; color: var(--muted); font-size: .78rem; font-weight: 630; }
 .resident-stat strong { grid-column: 1; grid-row: 2; margin-top: .45rem; font-size: 2rem; font-weight: 750; line-height: 1.1; letter-spacing: -.04em; }
-.resident-stat-note { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: .35rem; margin-top: 1rem; padding-top: .75rem; border-top: 1px solid var(--line); color: var(--resident-muted); font-size: .7rem; line-height: 1.4; }
-.resident-stat-note svg { width: .9rem; height: .9rem; }
 .resident-stat-pending .resident-stat-icon { color: var(--warning); background: var(--warning-soft); }
 .resident-stat-completed .resident-stat-icon { color: var(--success); background: var(--accent-soft); }
 .resident-stat-declined .resident-stat-icon { color: var(--danger-hover); background: var(--danger-soft); }
@@ -138,10 +135,6 @@
 .resident-account-details > div { padding: .8rem 0; border-bottom: 1px solid var(--line); }
 .resident-account-details dt { color: var(--resident-muted); font-size: .74rem; }
 .resident-account-details dd { margin: .3rem 0 0; overflow-wrap: anywhere; color: var(--accent-hover); font-size: .86rem; font-weight: 600; }
-.resident-profile-verification { display: flex; align-items: flex-start; gap: .55rem; margin-top: 1rem; padding: .85rem; border-radius: .7rem; background: var(--accent-soft); color: var(--success); }
-.resident-profile-verification > svg { width: 1.05rem; height: 1.05rem; margin-top: .1rem; }
-.resident-profile-verification strong { display: block; font-size: .79rem; font-weight: 650; }
-.resident-profile-verification > span > span { display: block; margin-top: .2rem; color: var(--resident-muted); font-size: .73rem; line-height: 1.6; }
 .resident-account-card > .resident-inline-link { margin-top: .7rem; }
 .resident-guide h2 { font-size: 1rem; font-weight: 700; }
 .resident-guide-steps { display: grid; gap: 1.15rem; list-style: none; margin: 1.3rem 0 0; padding: 0; }
@@ -153,9 +146,6 @@
 .resident-page-heading { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; margin-bottom: 1.5rem; }
 .resident-page-heading h1 { margin-top: .4rem; font-size: clamp(1.8rem, 3vw, 2.3rem); font-weight: 740; line-height: 1.2; letter-spacing: -.04em; }
 .resident-page-heading p { max-width: 62ch; margin-top: .6rem; color: var(--resident-muted); font-size: .88rem; line-height: 1.65; }
-.resident-page-back { display: inline-flex; align-items: center; gap: .45rem; min-height: 2.75rem; margin-bottom: .7rem; color: var(--muted); font-size: .81rem; font-weight: 660; }
-.resident-page-back svg { width: .95rem; height: .95rem; }
-.resident-page-back:hover { text-decoration: underline; }
 .resident-history-card { padding: 0 1.4rem 1rem; }
 .resident-status-filters { display: flex; flex-wrap: wrap; gap: .3rem 1.3rem; padding-top: .5rem; border-bottom: 1px solid var(--resident-line); }
 .resident-status-filters a { display: inline-flex; align-items: center; min-height: 3.3rem; padding: .65rem .1rem; border-bottom: 3px solid transparent; color: var(--muted); font-size: .83rem; font-weight: 630; }
@@ -272,15 +262,7 @@
 .resident-field > span { display: block; margin-top: .3rem; }
 
 .resident-profile-page { max-width: 70rem; }
-.resident-profile-page .resident-page-heading .resident-kicker { display: flex; width: max-content; }
 .resident-profile-grid { display: grid; grid-template-columns: minmax(17rem, .85fr) minmax(0, 1.3fr); gap: 1rem; align-items: start; }
-.resident-profile-summary { display: flex; align-items: center; gap: .85rem; padding: 1rem; margin-bottom: 1.25rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--surface-soft); }
-.resident-profile-summary > div { min-width: 0; }
-.resident-profile-summary strong, .resident-profile-summary span { display: block; overflow-wrap: anywhere; }
-.resident-profile-summary strong { color: var(--accent-active); font-size: .95rem; font-weight: 700; }
-.resident-profile-summary span { margin-top: .25rem; color: var(--resident-muted); font-size: .76rem; }
-.resident-profile-avatar { display: grid !important; place-items: center; width: 2.8rem; height: 2.8rem; flex: none; margin: 0 !important; border-radius: .8rem; background: var(--line); color: var(--accent); }
-.resident-profile-avatar svg { width: 1.35rem; height: 1.35rem; }
 .resident-profile-list { margin: 0; }
 .resident-profile-list > div { padding: .8rem 0; border-bottom: 1px solid var(--line); }
 .resident-profile-list dt { color: var(--resident-muted); font-size: .72rem; }
@@ -337,8 +319,6 @@
     .resident-service-top { margin-bottom: .9rem; }
     .resident-service-action { padding-top: 1rem; }
     .resident-section-heading { align-items: flex-start; flex-direction: column; gap: .3rem; }
-    .resident-section-heading > span { display: none; }
-    .resident-stat-note { font-size: .68rem; }
     .resident-stat strong { font-size: 1.9rem; }
     .resident-card { padding: 1.15rem; }
     .resident-update { padding: 1.1rem; }
@@ -375,7 +355,6 @@
     .resident-form-fields { grid-template-columns: 1fr; }
     .resident-form-intro > p { flex-basis: 100%; margin-left: 3.3rem; }
     .resident-form-guidance { padding: .85rem; }
-    .resident-profile-summary { padding: .9rem; }
     .resident-profile-password .resident-form-actions > .resident-button { width: 100%; }
     .resident-body .resident-field input, .resident-body .resident-field select, .resident-body .resident-field textarea { font-size: 1rem !important; }
 }

@@ -39,37 +39,37 @@
         </div>
     @else
         <section class="resident-services" id="resident-services" aria-labelledby="services-title">
-            <div class="resident-section-heading"><h2 id="services-title">What do you need today?</h2><span>Barangay services</span></div>
+            <div class="resident-section-heading"><h2 id="services-title">What do you need today?</h2></div>
             <div class="resident-service-grid">
                 <a href="{{ route('account.requests.certificate.create') }}" class="resident-service-card resident-service-documents">
                     <span class="resident-service-top"><span class="resident-service-icon"><i data-lucide="files" aria-hidden="true"></i></span><span>DOCUMENT SERVICES</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
                     <strong>Request a document</strong>
                     <span class="resident-service-description">Barangay Clearance, Certificate of Residency, Certificate of Indigency, or Business Clearance.</span>
-                    <span class="resident-service-action">Start a document request <i data-lucide="arrow-right" aria-hidden="true"></i></span>
+                    <span class="resident-service-action">Start request <i data-lucide="arrow-right" aria-hidden="true"></i></span>
                 </a>
                 <a href="{{ route('account.requests.blotter.create') }}" class="resident-service-card resident-service-report">
                     <span class="resident-service-top"><span class="resident-service-icon"><i data-lucide="notebook-pen" aria-hidden="true"></i></span><span>INCIDENT REPORT</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
                     <strong>File a blotter report</strong>
                     <span class="resident-service-description">Share incident details for barangay staff to review and record.</span>
-                    <span class="resident-service-action">Start an incident report <i data-lucide="arrow-right" aria-hidden="true"></i></span>
+                    <span class="resident-service-action">File report <i data-lucide="arrow-right" aria-hidden="true"></i></span>
                 </a>
             </div>
         </section>
 
         <section class="resident-overview" aria-labelledby="overview-title">
-            <div class="resident-section-heading"><h2 id="overview-title">Your requests at a glance</h2><a href="{{ route('account.requests.index') }}" class="resident-inline-link">View all requests <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
+            <div class="resident-section-heading"><h2 id="overview-title">Your requests at a glance</h2></div>
             <div class="resident-stats">
                 <a href="{{ route('account.requests.index') }}" class="resident-stat">
-                    <span class="resident-stat-icon"><i data-lucide="files" aria-hidden="true"></i></span><span class="resident-stat-label">Total requests</span><strong>{{ number_format($requestCounts['total']) }}</strong><span class="resident-stat-note">All your submissions <i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+                    <span class="resident-stat-icon"><i data-lucide="files" aria-hidden="true"></i></span><span class="resident-stat-label">Total requests</span><strong>{{ number_format($requestCounts['total']) }}</strong>
                 </a>
                 <a href="{{ route('account.requests.index', ['status' => 'Pending']) }}" class="resident-stat resident-stat-pending">
-                    <span class="resident-stat-icon"><i data-lucide="calendar-clock" aria-hidden="true"></i></span><span class="resident-stat-label">Under review</span><strong>{{ number_format($requestCounts['pending']) }}</strong><span class="resident-stat-note">Awaiting staff action <i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+                    <span class="resident-stat-icon"><i data-lucide="calendar-clock" aria-hidden="true"></i></span><span class="resident-stat-label">Pending</span><strong>{{ number_format($requestCounts['pending']) }}</strong>
                 </a>
                 <a href="{{ route('account.requests.index', ['status' => 'Completed']) }}" class="resident-stat resident-stat-completed">
-                    <span class="resident-stat-icon"><i data-lucide="file-check-2" aria-hidden="true"></i></span><span class="resident-stat-label">Completed</span><strong>{{ number_format($requestCounts['completed']) }}</strong><span class="resident-stat-note">Processed by staff <i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+                    <span class="resident-stat-icon"><i data-lucide="file-check-2" aria-hidden="true"></i></span><span class="resident-stat-label">Completed</span><strong>{{ number_format($requestCounts['completed']) }}</strong>
                 </a>
                 <a href="{{ route('account.requests.index', ['status' => 'Declined']) }}" class="resident-stat resident-stat-declined">
-                    <span class="resident-stat-icon"><i data-lucide="info" aria-hidden="true"></i></span><span class="resident-stat-label">Declined</span><strong>{{ number_format($requestCounts['declined']) }}</strong><span class="resident-stat-note">Check staff feedback <i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+                    <span class="resident-stat-icon"><i data-lucide="info" aria-hidden="true"></i></span><span class="resident-stat-label">Declined</span><strong>{{ number_format($requestCounts['declined']) }}</strong>
                 </a>
             </div>
         </section>
@@ -92,7 +92,7 @@
                 @endif
 
                 <section class="resident-card resident-activity-card" aria-labelledby="recent-requests-title">
-                    <div class="resident-card-heading"><div><span class="resident-kicker resident-kicker-dark">YOUR ACTIVITY</span><h2 id="recent-requests-title">Recent requests</h2><p>Most recently updated first</p></div><a href="{{ route('account.requests.index') }}" class="resident-inline-link">View all <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
+                    <div class="resident-card-heading"><div><h2 id="recent-requests-title">Recent requests</h2></div><a href="{{ route('account.requests.index') }}" class="resident-inline-link">View all requests <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
                     @if ($recentRequests->isEmpty())
                         <div class="resident-empty-state"><span class="resident-empty-icon"><i data-lucide="inbox" aria-hidden="true"></i></span><h3>Your first request starts here</h3><p>Choose a service above. Your submission and staff updates will appear in this space.</p><a href="#resident-services" class="resident-inline-link">Explore services <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
                     @else
@@ -107,10 +107,9 @@
 
             <aside class="resident-sidebar" aria-label="Account and request guidance">
                 <section class="resident-card resident-account-card" aria-labelledby="account-title">
-                    <div class="resident-card-heading"><div><span class="resident-kicker resident-kicker-dark">YOUR PROFILE</span><h2 id="account-title">My account</h2></div><span class="resident-section-icon"><i data-lucide="user-round" aria-hidden="true"></i></span></div>
-                    <dl class="resident-account-details"><div><dt>Full name</dt><dd>{{ $user->name }}</dd></div><div><dt>Email address</dt><dd>{{ $user->email }}</dd></div></dl>
-                    <div class="resident-profile-verification"><i data-lucide="badge-check" aria-hidden="true"></i><span><strong>Verified resident</strong><span>Linked to your barangay resident record.</span></span></div>
-                    <a href="{{ route('account.profile.edit') }}" class="resident-inline-link">Manage profile and password <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+                    <div class="resident-card-heading"><div><h2 id="account-title">My account</h2></div><span class="resident-section-icon"><i data-lucide="user-round" aria-hidden="true"></i></span></div>
+                    <dl class="resident-account-details"><div><dt>Email address</dt><dd>{{ $user->email }}</dd></div></dl>
+                    <a href="{{ route('account.profile.edit') }}" class="resident-inline-link">Manage profile <i data-lucide="arrow-right" aria-hidden="true"></i></a>
                 </section>
                 <section class="resident-card resident-guide" aria-labelledby="guide-title">
                     <h2 id="guide-title">From request to result</h2>

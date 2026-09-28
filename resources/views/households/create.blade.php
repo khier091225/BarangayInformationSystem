@@ -14,9 +14,6 @@
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('households.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 12px;">
-            <i data-lucide="arrow-left"></i> Back to Households
-        </a>
         <h1 style="font-size: 24px; color: var(--ink);">Add New Household</h1>
         <p style="color: var(--muted-soft); font-size: 13px;">Register a new household in the barangay database.</p>
     </div>
@@ -41,7 +38,7 @@
 
             <!-- Address -->
             <div style="margin-bottom: 24px;">
-                <x-form.label for="address" required>Address / Purok</x-form.label>
+                <x-form.label for="address" required>Address</x-form.label>
                 <x-form.input type="text" name="address" value="{{ old('address') }}" required placeholder="e.g. 124 Rizal St., Purok 3" />
                 <x-form.error :message="$errors->first('address')" />
             </div>

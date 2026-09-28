@@ -75,39 +75,4 @@ export default function initializeWorkspace() {
         });
     }
 
-    const logoutDialog = select('#logout-confirm-dialog');
-    const logoutTriggers = document.querySelectorAll('[data-logout-trigger]');
-    const cancelLogoutBtn = select('#cancel-logout-btn');
-
-    if (logoutDialog && logoutTriggers.length) {
-        logoutTriggers.forEach(trigger => {
-            trigger.addEventListener('click', event => {
-                event.preventDefault();
-                if (typeof logoutDialog.showModal === 'function') {
-                    logoutDialog.showModal();
-                } else {
-                    trigger.form.requestSubmit();
-                }
-            });
-        });
-
-        if (cancelLogoutBtn) {
-            cancelLogoutBtn.addEventListener('click', () => {
-                logoutDialog.close();
-            });
-        }
-
-        logoutDialog.addEventListener('click', event => {
-            const rect = logoutDialog.getBoundingClientRect();
-            const isInDialog = (
-                rect.top <= event.clientY &&
-                event.clientY <= rect.top + rect.height &&
-                rect.left <= event.clientX &&
-                event.clientX <= rect.left + rect.width
-            );
-            if (!isInDialog) {
-                logoutDialog.close();
-            }
-        });
-    }
 }

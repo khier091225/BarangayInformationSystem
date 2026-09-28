@@ -3,24 +3,17 @@
 @section('title', 'My Profile | Barangay Information System')
 
 @section('breadcrumb')
-    <button type="button" class="icon-button sidebar-toggle" aria-label="Open sidebar" aria-controls="workspace-navigation" aria-expanded="false"><i data-lucide="panel-left" aria-hidden="true"></i></button>
     <span>Staff workspace</span><i data-lucide="chevron-right" aria-hidden="true"></i><strong>My profile</strong>
 @endsection
 
 @section('content')
     <div class="staff-profile">
         <header class="overview-heading">
-            <div><span class="overview-eyebrow">ACCOUNT SETTINGS</span><h1>My profile</h1><p>Keep your account details up to date and manage your password.</p></div>
+            <div><h1>My profile</h1></div>
         </header>
 
-        <div class="profile-summary">
-            <span class="profile-avatar"><i data-lucide="user-round" aria-hidden="true"></i></span>
-            <div><strong>{{ $user->name }}</strong><span>{{ $user->email }}</span></div>
-            <span class="profile-role"><i data-lucide="badge-check" aria-hidden="true"></i> Barangay staff</span>
-        </div>
-
         <section class="profile-panel" aria-labelledby="profile-details-title">
-            <div class="profile-panel-heading"><span class="profile-section-icon"><i data-lucide="user-round" aria-hidden="true"></i></span><div><h2 id="profile-details-title">Personal information</h2><p>Update your name and the email you use to sign in.</p></div></div>
+            <div class="profile-panel-heading"><span class="profile-section-icon"><i data-lucide="user-round" aria-hidden="true"></i></span><div><h2 id="profile-details-title">Personal information</h2></div></div>
             <form method="POST" action="{{ route('profile.update') }}">
                 @csrf
                 @method('PATCH')
@@ -42,7 +35,7 @@
         </section>
 
         <section class="profile-panel" aria-labelledby="profile-password-title">
-            <div class="profile-panel-heading"><span class="profile-section-icon"><i data-lucide="badge-check" aria-hidden="true"></i></span><div><h2 id="profile-password-title">Change password</h2><p>Confirm your current password before choosing a new one.</p></div></div>
+            <div class="profile-panel-heading"><span class="profile-section-icon"><i data-lucide="badge-check" aria-hidden="true"></i></span><div><h2 id="profile-password-title">Change password</h2></div></div>
             <form method="POST" action="{{ route('profile.password.update') }}">
                 @csrf
                 @method('PATCH')

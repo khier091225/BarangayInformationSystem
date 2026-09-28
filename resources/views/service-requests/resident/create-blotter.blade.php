@@ -4,12 +4,9 @@
 @section('main-class', 'resident-main-form')
 
 @section('content')
-    <a href="{{ route('account') }}" class="resident-page-back"><i data-lucide="arrow-left" aria-hidden="true"></i> Back to dashboard</a>
     <div class="resident-page-heading">
         <div>
-            <span class="resident-kicker resident-kicker-dark">INCIDENT REPORT</span>
             <h1>File a blotter report</h1>
-            <p>Share the incident details below. Barangay staff will review your report before recording it in the official blotter.</p>
         </div>
     </div>
 
@@ -40,7 +37,7 @@
             </div>
             <aside class="resident-form-guidance" aria-labelledby="blotter-help-title">
                 <i data-lucide="info" aria-hidden="true"></i>
-                <div><h2 id="blotter-help-title">Before you submit</h2><p>Include where the incident happened and who was involved. Staff will review your report before adding it to the official blotter. You can follow updates in <a href="{{ route('account.requests.index') }}">My requests</a>.</p></div>
+                <div><h2 id="blotter-help-title">Before you submit</h2><p>Include where the incident happened and who was involved. Follow updates in <a href="{{ route('account.requests.index') }}">My requests</a>.</p></div>
             </aside>
             <div class="resident-form-actions"><button type="submit" class="resident-button resident-button-primary">Submit blotter report <i data-lucide="arrow-right" aria-hidden="true"></i></button><a href="{{ route('account') }}" class="resident-button resident-button-outline">Cancel</a></div>
         </form>

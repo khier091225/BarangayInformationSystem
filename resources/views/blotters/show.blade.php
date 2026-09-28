@@ -9,18 +9,15 @@
 @section('breadcrumb')
     <a href="{{ route('blotters.index') }}" style="color: inherit; text-decoration: none;">Blotter Records</a>
     <i data-lucide="chevron-right"></i>
-    <strong>Case #{{ $blotter->id }}</strong>
+    <strong>Blotter #{{ $blotter->id }}</strong>
 @endsection
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('blotters.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 12px;">
-            <i data-lucide="arrow-left"></i> Back to Blotters
-        </a>
         <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;">
-            <h1 style="font-size: 24px; color: var(--ink);">Blotter Report #{{ $blotter->id }}</h1>
+            <h1 style="font-size: 24px; color: var(--ink);">Blotter #{{ $blotter->id }}</h1>
             <a href="{{ route('blotters.edit', [$blotter]) }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                <i data-lucide="pencil"></i> Edit Blotter
+                <i data-lucide="pencil"></i> Edit blotter
             </a>
         </div>
     </div>

@@ -12,18 +12,13 @@
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('residents.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 12px;">
-            <i data-lucide="arrow-left"></i> Back to Residents
-        </a>
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <div class="eyebrow">RESIDENT PROFILE</div>
                 <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">{{ $resident->full_name }}</h1>
-                <p style="color: var(--muted-soft); font-size: 13px;">Member of Barangay Information System community registry.</p>
             </div>
             <div style="display: flex; gap: 10px;">
                 <a href="{{ route('residents.edit', [$resident]) }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                    <i data-lucide="pencil"></i> Edit Profile
+                    <i data-lucide="pencil"></i> Edit resident
                 </a>
                 <form method="POST" action="{{ route('residents.destroy', [$resident]) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');" style="display: inline;">
                     @csrf
@@ -91,7 +86,7 @@
     </section>
 
     <!-- Info Grid -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 16px; margin-bottom: 24px;">
         <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px;">
             <span style="font-size: 11px; color: var(--muted-soft); text-transform: uppercase; font-weight: 600;">Gender</span>
             <div style="font-size: 17px; font-weight: 600; color: var(--ink); margin-top: 4px;">{{ $resident->gender }}</div>
@@ -116,16 +111,16 @@
             <span style="font-size: 11px; color: var(--muted-soft); text-transform: uppercase; font-weight: 600;">Voter Status</span>
             <div style="margin-top: 6px;">
                 @if ($resident->is_voter)
-                    <span style="background: var(--success-soft); color: var(--success); padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">Registered Voter</span>
+                    <span style="background: var(--success-soft); color: var(--success); padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">Registered</span>
                 @else
-                    <span style="background: var(--surface-soft); color: var(--muted-soft); padding: 4px 10px; border-radius: 4px; font-size: 12px;">Non-Voter</span>
+                    <span style="background: var(--surface-soft); color: var(--muted-soft); padding: 4px 10px; border-radius: 4px; font-size: 12px;">Not registered</span>
                 @endif
             </div>
         </div>
     </div>
 
     <!-- Household & Contact Cards -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 20px; margin-bottom: 24px;">
         <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 22px;">
             <span style="font-size: 11px; color: var(--muted-soft); text-transform: uppercase; font-weight: 600;">Household Information</span>
             @if($resident->household)
@@ -163,9 +158,9 @@
     </div>
 
     <!-- Certificates History Table -->
-    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow-x: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
         <div style="padding: 16px 20px; border-bottom: 1px solid var(--line); background: var(--canvas); display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="font-size: 15px; color: var(--ink); margin: 0;">Issued Certificates & Clearances</h3>
+            <h3 style="font-size: 15px; color: var(--ink); margin: 0;">Issued certificates</h3>
         </div>
 
         <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">

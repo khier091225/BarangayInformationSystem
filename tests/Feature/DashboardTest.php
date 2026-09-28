@@ -19,7 +19,6 @@ class DashboardTest extends TestCase
             ->assertOk()
             ->assertSee('Overview')
             ->assertSee('Barangay overview')
-            ->assertSee('BARANGAY ADMINISTRATION')
             ->assertSee('Total residents')
             ->assertSee('Households')
             ->assertSee('Certificates')

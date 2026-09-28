@@ -6,10 +6,6 @@
 
 @section('story-detail')
     <div class="auth-feature">
-        <span class="auth-feature-icon"><i data-lucide="user-round" aria-hidden="true"></i></span>
-        <div><strong>Enter your account email</strong><span>Use the same address you normally use to sign in.</span></div>
-    </div>
-    <div class="auth-feature">
         <span class="auth-feature-icon"><i data-lucide="badge-check" aria-hidden="true"></i></span>
         <div><strong>Receive secure instructions</strong><span>We will send a time-limited reset link to your inbox.</span></div>
     </div>
@@ -36,9 +32,8 @@
         @csrf
         <div class="auth-field">
             <label class="auth-label" for="recovery_email">Email address <span class="auth-required" aria-hidden="true">*</span></label>
-            <input class="auth-input" id="recovery_email" name="email" type="email" value="{{ old('email') }}" required autofocus autocomplete="email" inputmode="email" placeholder="you@example.com" @if ($errors->has('email')) aria-invalid="true" aria-describedby="recovery-email-error recovery-email-help recovery-availability-note" @else aria-describedby="recovery-email-help recovery-availability-note" @endif>
+            <input class="auth-input" id="recovery_email" name="email" type="email" value="{{ old('email') }}" required autofocus autocomplete="email" inputmode="email" placeholder="you@example.com" @if ($errors->has('email')) aria-invalid="true" aria-describedby="recovery-email-error recovery-availability-note" @else aria-describedby="recovery-availability-note" @endif>
             @error('email')<p class="auth-error" id="recovery-email-error" role="alert">{{ $message }}</p>@enderror
-            <p class="auth-input-help" id="recovery-email-help">Use the email address linked to your staff or resident account.</p>
         </div>
 
         <button class="auth-submit" type="submit"><span>Send reset link</span><i data-lucide="arrow-right" aria-hidden="true"></i></button>
@@ -49,5 +44,4 @@
         <p><strong>Protecting your account</strong><span>For privacy, the confirmation message is the same whether or not an account matches the email address.</span></p>
     </div>
 
-    <p class="auth-switch">Remembered your password? <a href="{{ route('login') }}">Return to sign in</a></p>
 @endsection

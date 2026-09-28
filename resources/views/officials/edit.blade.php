@@ -14,9 +14,6 @@
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('officials.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 12px;">
-            <i data-lucide="arrow-left"></i> Back to Officials
-        </a>
         <h1 style="font-size: 24px; color: var(--ink);">Edit Official: {{ $official->name }}</h1>
         <p style="color: var(--muted-soft); font-size: 13px;">Update official title, contact information, or term of service.</p>
     </div>
@@ -36,9 +33,9 @@
             <!-- Position & Contact -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
                 <div>
-                    <x-form.label for="position" required>Position / Title</x-form.label>
+                    <x-form.label for="position" required>Position</x-form.label>
                     <x-form.select name="position" required>
-                        <option value="">-- Select Position --</option>
+                        <option value="">Select a position</option>
                         <option value="Barangay Captain" {{ old('position', $official->position) == 'Barangay Captain' ? 'selected' : '' }}>Barangay Captain (Punong Barangay)</option>
                         <option value="Barangay Kagawad" {{ old('position', $official->position) == 'Barangay Kagawad' ? 'selected' : '' }}>Barangay Kagawad (Councilor)</option>
                         <option value="SK Chairman" {{ old('position', $official->position) == 'SK Chairman' ? 'selected' : '' }}>SK Chairman</option>

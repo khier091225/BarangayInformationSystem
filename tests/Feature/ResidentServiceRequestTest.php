@@ -41,7 +41,7 @@ class ResidentServiceRequestTest extends TestCase
         $this->assertSame(ServiceRequest::TYPE_CERTIFICATE, $serviceRequest->type);
         $this->assertSame(ServiceRequest::STATUS_PENDING, $serviceRequest->status);
         $this->assertSame(0, Certificate::query()->count());
-        $this->get(route('account'))->assertOk()->assertSee('Certificate of Residency')->assertSee('Under review');
+        $this->get(route('account'))->assertOk()->assertSee('Certificate of Residency')->assertSee('Pending');
         $this->get(route('account.requests.show', $serviceRequest))->assertOk()->assertSee('Scholarship application');
     }
 

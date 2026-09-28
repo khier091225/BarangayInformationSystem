@@ -88,7 +88,7 @@ class CertificateTest extends TestCase
         $response = $this->get(route('certificates.index'));
 
         $response->assertOk();
-        $response->assertSee('Certificates & Clearances', false);
+        $response->assertSee('Certificates', false);
     }
 
     public function test_certificate_create_form_can_be_rendered(): void
@@ -96,7 +96,7 @@ class CertificateTest extends TestCase
         $response = $this->get(route('certificates.create'));
 
         $response->assertOk();
-        $response->assertSee('Issue New Certificate / Clearance');
+        $response->assertSee('Issue certificate');
     }
 
     public function test_new_certificate_can_be_issued(): void

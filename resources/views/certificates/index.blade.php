@@ -1,21 +1,20 @@
 @extends('layouts.app')
 
 @section('title')
-    Certificates & Clearances | Barangay Information System
+    Certificates | Barangay Information System
 @endsection
 
 @section('breadcrumb')
     <span>Workspace</span>
     <i data-lucide="chevron-right"></i>
-    <strong>Certificates & Clearances</strong>
+    <strong>Certificates</strong>
 @endsection
 
 @section('content')
     <div class="workspace-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div>
-            <div class="eyebrow">DOCUMENT ISSUANCE</div>
-            <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Certificates & Clearances</h1>
-            <p style="color: var(--muted-soft); font-size: 13px;">Manage and print official barangay clearances, residency, and indigency certificates.</p>
+            <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Certificates</h1>
+            <p style="color: var(--muted-soft); font-size: 13px;">Issue and print barangay documents.</p>
         </div>
         <a href="{{ route('certificates.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
             <i data-lucide="file-plus"></i> Issue Certificate
@@ -112,7 +111,7 @@
                 @empty
                     <tr>
                         <td colspan="6" style="text-align: center; padding: 40px; color: var(--muted-soft);">
-                            No certificates or clearances issued yet.
+                            No certificates issued yet.
                         </td>
                     </tr>
                 @endforelse

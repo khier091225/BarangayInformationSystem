@@ -14,9 +14,6 @@
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('residents.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 12px;">
-            <i data-lucide="arrow-left"></i> Back to Residents
-        </a>
         <h1 style="font-size: 24px; color: var(--ink);">Edit Resident: {{ $resident->full_name }}</h1>
         <p style="color: var(--muted-soft); font-size: 13px;">Update personal details, address, or voter status.</p>
     </div>
@@ -52,7 +49,7 @@
                 <div>
                     <x-form.label for="household_id">Household (Optional)</x-form.label>
                     <x-form.select name="household_id">
-                        <option value="">-- No Household / Independent --</option>
+                        <option value="">No household</option>
                         @foreach ($households as $household)
                             <option value="{{ $household->id }}" {{ old('household_id', $resident->household_id) == $household->id ? 'selected' : '' }}>
                                 {{ $household->household_number }} (Head: {{ $household->household_head }})
@@ -96,7 +93,7 @@
             <!-- Address & Contact Number -->
             <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;">
                 <div>
-                    <x-form.label for="address" required>Address / Purok</x-form.label>
+                    <x-form.label for="address" required>Address</x-form.label>
                     <x-form.input type="text" name="address" value="{{ old('address', $resident->address) }}" required />
                     <x-form.error :message="$errors->first('address')" />
                 </div>
@@ -112,9 +109,8 @@
             <div style="margin-bottom: 26px; padding: 14px; background: var(--canvas); border: 1px solid var(--line); border-radius: 6px;">
                 <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink);">
                     <input type="checkbox" name="is_voter" value="1" {{ old('is_voter', $resident->is_voter) ? 'checked' : '' }} style="width: 16px; height: 16px; accent-color: var(--accent);">
-                    <span>Registered Voter in this Barangay</span>
+                    <span>Registered voter</span>
                 </label>
-                <p style="margin: 4px 0 0 26px; font-size: 12px; color: var(--muted-soft);">Check this box if the resident is registered to vote in local elections.</p>
             </div>
 
             <!-- Submit Buttons -->

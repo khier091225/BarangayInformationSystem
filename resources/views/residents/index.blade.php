@@ -13,7 +13,6 @@
 @section('content')
     <div class="workspace-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div>
-            <div class="eyebrow">BARANGAY DIRECTORY</div>
             <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Resident Registry</h1>
             <p style="color: var(--muted-soft); font-size: 13px;">Manage community residents, demographics, and voter registration records.</p>
         </div>
@@ -113,9 +112,6 @@
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('residents.show', [$resident]) }}" style="color: var(--accent); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 4px;">
-                                    View
-                                </a>
                                 <a href="{{ route('residents.edit', [$resident]) }}" style="color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--input-line); border-radius: 4px;">
                                     Edit
                                 </a>

@@ -4,8 +4,6 @@
 
 @section('content')
     <div class="resident-detail-page">
-        <a href="{{ route('account.requests.index') }}" class="resident-page-back"><i data-lucide="arrow-left" aria-hidden="true"></i> Back to my requests</a>
-
         <header class="resident-request-heading">
             <span class="resident-request-type-icon"><i data-lucide="{{ $serviceRequest->type === 'certificate' ? 'files' : 'notebook-pen' }}" aria-hidden="true"></i></span>
             <div>
@@ -14,7 +12,7 @@
                     <x-request-status :status="$serviceRequest->status" />
                 </div>
                 <h1>{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</h1>
-                <p>{{ $serviceRequest->type === 'certificate' ? 'Document request' : 'Incident report' }} <span aria-hidden="true">&middot;</span> Submitted {{ $serviceRequest->created_at->format('M j, Y') }}</p>
+                <p>Submitted {{ $serviceRequest->created_at->format('M j, Y') }}</p>
             </div>
         </header>
 
@@ -42,11 +40,9 @@
                 <section class="resident-card resident-detail-card" aria-labelledby="request-details-title">
                     <div class="resident-detail-heading">
                         <span class="resident-section-icon"><i data-lucide="clipboard-list" aria-hidden="true"></i></span>
-                        <div><h2 id="request-details-title">Request details</h2><p>A copy of the information you submitted.</p></div>
+                        <div><h2 id="request-details-title">Request details</h2></div>
                     </div>
                     <dl class="resident-detail-grid">
-                        <div><dt>Request type</dt><dd>{{ $serviceRequest->type === 'certificate' ? 'Document request' : 'Blotter report' }}</dd></div>
-                        <div><dt>Submitted on</dt><dd><time datetime="{{ $serviceRequest->created_at->toIso8601String() }}">{{ $serviceRequest->created_at->format('M j, Y') }}<span class="resident-detail-time">{{ $serviceRequest->created_at->format('g:i A') }}</span></time></dd></div>
                         @if ($serviceRequest->type === 'certificate')
                             <div class="resident-detail-wide"><dt>Document requested</dt><dd>{{ $serviceRequest->certificate_type }}</dd></div>
                             <div class="resident-detail-description"><dt>Purpose of request</dt><dd>{{ $serviceRequest->purpose }}</dd></div>
@@ -58,6 +54,7 @@
                     </dl>
                 </section>
 
+                @if ($serviceRequest->status !== 'Pending' || $serviceRequest->response_note)
                 <section id="staff-message" class="resident-card resident-staff-message" aria-labelledby="staff-message-title" tabindex="-1">
                     <div class="resident-detail-heading">
                         <span class="resident-section-icon"><i data-lucide="messages-square" aria-hidden="true"></i></span>
@@ -65,8 +62,6 @@
                             <h2 id="staff-message-title">Message from barangay staff</h2>
                             @if ($serviceRequest->response_note && $serviceRequest->reviewed_at)
                                 <p><time datetime="{{ $serviceRequest->reviewed_at->toIso8601String() }}">{{ $serviceRequest->reviewed_at->format('M j, Y \a\t g:i A') }}</time></p>
-                            @else
-                                <p>Feedback and instructions for this request.</p>
                             @endif
                         </div>
                     </div>
@@ -79,15 +74,16 @@
                         </div>
                     @endif
                 </section>
+                @endif
             </div>
 
             <aside class="resident-request-sidebar" aria-label="Request progress and follow-up">
                 <section class="resident-card resident-progress-card" aria-labelledby="request-progress-title">
-                    <div class="resident-progress-heading"><span class="resident-kicker resident-kicker-dark">REQUEST TRACKER</span><h2 id="request-progress-title">From submission to result</h2></div>
+                    <div class="resident-progress-heading"><h2 id="request-progress-title">Request progress</h2></div>
                     <ol class="resident-progress" aria-label="Request progress">
                         <li class="resident-progress-done">
                             <span class="resident-progress-number"><i data-lucide="check" aria-hidden="true"></i></span>
-                            <div><strong>Request submitted</strong><p>We received your details.</p><time datetime="{{ $serviceRequest->created_at->toIso8601String() }}">{{ $serviceRequest->created_at->format('M j, Y \a\t g:i A') }}</time></div>
+                            <div><strong>Request submitted</strong><time datetime="{{ $serviceRequest->created_at->toIso8601String() }}">{{ $serviceRequest->created_at->format('M j, Y \a\t g:i A') }}</time></div>
                         </li>
                         <li class="{{ $serviceRequest->status === 'Pending' ? 'resident-progress-current' : 'resident-progress-done' }}" @if ($serviceRequest->status === 'Pending') aria-current="step" @endif>
                             <span class="resident-progress-number">
@@ -99,7 +95,6 @@
                             </span>
                             <div>
                                 <strong>Staff review</strong>
-                                <p>{{ $serviceRequest->status === 'Pending' ? 'Waiting for staff to check your request.' : 'Barangay staff reviewed your request.' }}</p>
                                 @if ($serviceRequest->status === 'Pending')
                                     <span class="resident-progress-label">Current step</span>
                                 @elseif ($serviceRequest->reviewed_at)
@@ -117,7 +112,6 @@
                             </span>
                             <div>
                                 <strong>{{ $serviceRequest->status === 'Pending' ? 'Request result' : ($serviceRequest->status === 'Completed' ? ($serviceRequest->type === 'certificate' ? 'Document issued' : 'Report recorded') : 'Request declined') }}</strong>
-                                <p>{{ $serviceRequest->status === 'Pending' ? 'The decision and any staff feedback will appear here.' : ($serviceRequest->status === 'Completed' ? ($serviceRequest->type === 'certificate' ? 'Contact staff about document collection.' : 'Added to the official blotter records.') : 'Contact staff if you need clarification.') }}</p>
                             </div>
                         </li>
                     </ol>
@@ -125,7 +119,7 @@
 
                 <section class="resident-follow-up" aria-labelledby="follow-up-title">
                     <i data-lucide="info" aria-hidden="true"></i>
-                    <div><h2 id="follow-up-title">Need to follow up?</h2><p>When contacting barangay staff, mention <strong>request #{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}</strong> so they can find your submission.</p><a href="{{ route('account.requests.index') }}" class="resident-inline-link">View all my requests <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
+                    <div><h2 id="follow-up-title">Need to follow up?</h2><p>When contacting barangay staff, mention <strong>request #{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}</strong> so they can find your submission.</p></div>
                 </section>
             </aside>
         </div>

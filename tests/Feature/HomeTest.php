@@ -65,7 +65,7 @@ class HomeTest extends TestCase
         $response = $this->actingAs($staff)->get(route('home'));
 
         $response->assertOk()
-            ->assertSee('Staff Dashboard')
+            ->assertSee('Open staff workspace')
             ->assertSee(route('dashboard'));
     }
 

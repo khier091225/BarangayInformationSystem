@@ -12,9 +12,6 @@
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('households.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 12px;">
-            <i data-lucide="arrow-left"></i> Back to Households
-        </a>
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <h1 style="font-size: 24px; color: var(--ink);">Household: {{ $household->household_number }}</h1>
@@ -27,27 +24,27 @@
     </div>
 
     <!-- Info Cards -->
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 20px; margin-bottom: 30px;">
         <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px;">
             <span style="font-size: 11px; color: var(--muted-soft); text-transform: uppercase; font-weight: 600;">Household Head</span>
             <h2 style="font-size: 18px; color: var(--ink); margin-top: 6px;">{{ $household->household_head }}</h2>
         </div>
 
         <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px;">
-            <span style="font-size: 11px; color: var(--muted-soft); text-transform: uppercase; font-weight: 600;">Address / Purok</span>
+            <span style="font-size: 11px; color: var(--muted-soft); text-transform: uppercase; font-weight: 600;">Address</span>
             <h2 style="font-size: 18px; color: var(--ink); margin-top: 6px;">{{ $household->address }}</h2>
         </div>
 
         <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px;">
             <span style="font-size: 11px; color: var(--muted-soft); text-transform: uppercase; font-weight: 600;">Total Members</span>
-            <h2 style="font-size: 18px; color: var(--accent); margin-top: 6px;">{{ $household->residents->count() }} Residents</h2>
+            <h2 style="font-size: 18px; color: var(--accent); margin-top: 6px;">{{ $household->residents->count() }}</h2>
         </div>
     </div>
 
     <!-- Family Members / Residents Table -->
-    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow-x: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
         <div style="padding: 18px 20px; border-bottom: 1px solid var(--line); background: var(--canvas);">
-            <h3 style="font-size: 15px; color: var(--ink); margin: 0;">Family Members (Residents)</h3>
+            <h3 style="font-size: 15px; color: var(--ink); margin: 0;">Residents</h3>
         </div>
 
         <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">

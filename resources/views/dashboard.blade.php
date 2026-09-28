@@ -3,9 +3,6 @@
 @section('title', 'Dashboard | Barangay Information System')
 
 @section('breadcrumb')
-    <button type="button" class="icon-button sidebar-toggle" aria-label="Open sidebar" aria-controls="workspace-navigation" aria-expanded="false">
-        <i data-lucide="panel-left" aria-hidden="true"></i>
-    </button>
     <span>Staff workspace</span>
     <i data-lucide="chevron-right" aria-hidden="true"></i>
     <strong>Overview</strong>
@@ -15,7 +12,6 @@
     <div class="staff-overview">
         <header class="overview-heading">
             <div>
-                <span class="overview-eyebrow">BARANGAY ADMINISTRATION</span>
                 <h1>Barangay overview</h1>
                 <p>A clear view of your community, services, and work awaiting review.</p>
             </div>
@@ -28,7 +24,7 @@
         <div class="overview-toolbar">
             <form method="GET" action="{{ route('residents.index') }}" class="overview-search" role="search">
                 <i data-lucide="search" aria-hidden="true"></i>
-                <input type="search" name="search" placeholder="Find a resident by name, household, or address" aria-label="Search resident records" maxlength="255">
+                <input type="search" name="search" placeholder="Find a resident by name, address, or contact" aria-label="Search resident records" maxlength="255">
                 <button type="submit">Search <i data-lucide="arrow-right" aria-hidden="true"></i></button>
             </form>
             <div class="overview-shortcuts">
@@ -49,16 +45,16 @@
         </section>
 
         <section class="overview-stats" aria-label="Barangay record totals">
-            <x-dashboard-stat label="Total residents" :value="$residentCount" icon="users-round" :href="route('residents.index')" hint="Resident directory" />
-            <x-dashboard-stat label="Households" :value="$householdCount" icon="house" :href="route('households.index')" hint="Household registry" tone="blue" />
-            <x-dashboard-stat label="Certificates" :value="$certificateCount" icon="files" :href="route('certificates.index')" hint="All certificate records" tone="violet" />
-            <x-dashboard-stat label="Barangay officials" :value="$officialCount" icon="badge-check" :href="route('officials.index')" hint="View official roster" tone="amber" />
+            <x-dashboard-stat label="Total residents" :value="$residentCount" icon="users-round" :href="route('residents.index')" />
+            <x-dashboard-stat label="Households" :value="$householdCount" icon="house" :href="route('households.index')" tone="blue" />
+            <x-dashboard-stat label="Certificates" :value="$certificateCount" icon="files" :href="route('certificates.index')" tone="violet" />
+            <x-dashboard-stat label="Barangay officials" :value="$officialCount" icon="badge-check" :href="route('officials.index')" tone="amber" />
         </section>
 
         <div class="overview-main-grid">
             <section class="overview-panel overview-chart-panel" aria-labelledby="certificate-activity-title">
                 <div class="overview-panel-heading">
-                    <div><span class="overview-eyebrow">SERVICE ACTIVITY</span><h2 id="certificate-activity-title">Certificates issued</h2><p>Monthly volume for the last six months</p></div>
+                    <div><h2 id="certificate-activity-title">Certificates issued</h2><p>Monthly volume for the last six months</p></div>
                     <span class="overview-panel-icon"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i></span>
                 </div>
                 <div class="overview-chart-summary">
@@ -82,7 +78,7 @@
 
             <section class="overview-panel overview-queue" id="review-queue" aria-labelledby="review-queue-title">
                 <div class="overview-panel-heading">
-                    <div><span class="overview-eyebrow">RESIDENT SERVICES</span><h2 id="review-queue-title">Awaiting review <span class="overview-count">{{ number_format($pendingServiceRequestCount) }}</span></h2><p>Oldest requests appear first</p></div>
+                    <div><h2 id="review-queue-title">Request review queue <span class="overview-count">{{ number_format($pendingServiceRequestCount) }}</span></h2><p>Oldest requests appear first</p></div>
                 </div>
                 <div class="overview-queue-list">
                     @forelse ($pendingRequests as $serviceRequest)
@@ -92,16 +88,18 @@
                             <i data-lucide="chevron-right" aria-hidden="true"></i>
                         </a>
                     @empty
-                        <div class="overview-empty"><span><i data-lucide="badge-check" aria-hidden="true"></i></span><h3>No requests waiting</h3><p>New resident submissions will appear here when they need your review.</p></div>
+                        <div class="overview-empty"><span><i data-lucide="badge-check" aria-hidden="true"></i></span><h3>No requests waiting</h3></div>
                     @endforelse
                 </div>
-                <a href="{{ route('service-requests.index', ['status' => 'Pending']) }}" class="overview-panel-footer">View pending requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+                @if ($pendingServiceRequestCount > 0)
+                    <a href="{{ route('service-requests.index', ['status' => 'Pending']) }}" class="overview-panel-footer">View pending requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+                @endif
             </section>
         </div>
 
         <div class="overview-secondary-grid">
             <section class="overview-panel" aria-labelledby="request-status-title">
-                <div class="overview-panel-heading"><div><span class="overview-eyebrow">REQUEST SUMMARY</span><h2 id="request-status-title">Resident requests</h2><p>All submissions, by current status</p></div></div>
+                <div class="overview-panel-heading"><div><h2 id="request-status-title">Resident requests</h2><p>All submissions, by current status</p></div></div>
                 <div class="overview-request-total"><strong>{{ number_format($totalServiceRequestCount) }}</strong><span>total requests</span></div>
                 <div class="overview-status-meter" aria-hidden="true">
                     @foreach ($requestCounts as $status => $count)
@@ -116,7 +114,7 @@
             </section>
 
             <section class="overview-panel overview-recent" aria-labelledby="recent-certificates-title">
-                <div class="overview-panel-heading"><div><span class="overview-eyebrow">LATEST DOCUMENTS</span><h2 id="recent-certificates-title">Recently issued certificates</h2></div></div>
+                <div class="overview-panel-heading"><div><h2 id="recent-certificates-title">Recently issued certificates</h2></div></div>
                 <div class="overview-record-list">
                     @forelse ($recentCertificates as $certificate)
                         <a href="{{ route('certificates.show', $certificate) }}" class="overview-record-item">
@@ -130,7 +128,7 @@
             </section>
 
             <section class="overview-panel overview-recent" aria-labelledby="recent-blotters-title">
-                <div class="overview-panel-heading"><div><span class="overview-eyebrow">PEACE &amp; ORDER</span><h2 id="recent-blotters-title">Recent blotter cases</h2></div></div>
+                <div class="overview-panel-heading"><div><h2 id="recent-blotters-title">Recent blotter cases</h2></div></div>
                 <div class="overview-record-list">
                     @forelse ($recentBlotters as $blotter)
                         <a href="{{ route('blotters.show', $blotter) }}" class="overview-record-item">
@@ -145,7 +143,7 @@
         </div>
 
         <section class="overview-panel overview-residents" aria-labelledby="recent-residents-title">
-            <div class="overview-panel-heading"><div><span class="overview-eyebrow">COMMUNITY RECORDS</span><h2 id="recent-residents-title">Newly registered residents</h2></div><a href="{{ route('residents.index') }}" class="overview-text-link">View directory <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
+            <div class="overview-panel-heading"><div><h2 id="recent-residents-title">Newly registered residents</h2></div><a href="{{ route('residents.index') }}" class="overview-text-link">View directory <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
             <div class="overview-resident-list">
                 @forelse ($recentResidents as $resident)
                     <a href="{{ route('residents.show', $resident) }}" class="overview-resident-item"><span class="overview-list-icon"><i data-lucide="user-round" aria-hidden="true"></i></span><span><strong>{{ $resident->full_name }}</strong><small>{{ $resident->household?->household_number ?? 'No household assigned' }}</small></span><i data-lucide="chevron-right" aria-hidden="true"></i></a>

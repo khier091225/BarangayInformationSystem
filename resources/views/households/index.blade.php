@@ -13,9 +13,7 @@
 @section('content')
     <div class="workspace-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div>
-            <div class="eyebrow">BARANGAY DIRECTORY</div>
             <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Household Registry</h1>
-            <p style="color: var(--muted-soft); font-size: 13px;">Manage registered households, household heads, and family addresses.</p>
         </div>
         <a href="{{ route('households.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
             <i data-lucide="plus"></i> Add Household
@@ -71,9 +69,6 @@
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('households.show', [$household]) }}" style="color: var(--accent); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 4px;">
-                                    View Members
-                                </a>
                                 <a href="{{ route('households.edit', [$household]) }}" style="color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--input-line); border-radius: 4px;">
                                     Edit
                                 </a>

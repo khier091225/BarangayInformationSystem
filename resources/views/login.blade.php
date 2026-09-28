@@ -20,9 +20,7 @@
 @endsection
 
 @section('content')
-    <div class="auth-panel-kicker">WELCOME BACK</div>
     <h1 id="login-title">Sign in</h1>
-    <p class="auth-panel-intro">Enter your account details to continue to your dashboard.</p>
 
     @if (session('warning'))
         <div class="auth-alert" role="alert">{{ session('warning') }}</div>

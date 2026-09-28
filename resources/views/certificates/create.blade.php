@@ -7,17 +7,14 @@
 @section('main-style', 'max-width: 750px;')
 
 @section('breadcrumb')
-    <a href="{{ route('certificates.index') }}" style="color: inherit; text-decoration: none;">Certificates & Clearances</a>
+    <a href="{{ route('certificates.index') }}" style="color: inherit; text-decoration: none;">Certificates</a>
     <i data-lucide="chevron-right"></i>
     <strong>Issue Certificate</strong>
 @endsection
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('certificates.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 12px;">
-            <i data-lucide="arrow-left"></i> Back to Certificates
-        </a>
-        <h1 style="font-size: 24px; color: var(--ink);">Issue New Certificate / Clearance</h1>
+        <h1 style="font-size: 24px; color: var(--ink);">Issue certificate</h1>
         <p style="color: var(--muted-soft); font-size: 13px;">Generate an official document for a registered barangay resident.</p>
     </div>
 
@@ -27,9 +24,9 @@
 
             <!-- Select Resident -->
             <div style="margin-bottom: 18px;">
-                <x-form.label for="resident_id" required>Select Resident</x-form.label>
+                <x-form.label for="resident_id" required>Resident</x-form.label>
                 <x-form.select name="resident_id" required>
-                    <option value="">-- Choose Resident --</option>
+                    <option value="">Choose a resident</option>
                     @foreach ($residents as $resident)
                         <option value="{{ $resident->id }}" {{ (old('resident_id', $selectedResidentId) == $resident->id) ? 'selected' : '' }}>
                             {{ $resident->last_name }}, {{ $resident->first_name }} {{ $resident->middle_name }} ({{ $resident->address }})
@@ -42,9 +39,9 @@
             <!-- Certificate Type & Date Issued -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
                 <div>
-                    <x-form.label for="certificate_type" required>Certificate Type</x-form.label>
+                    <x-form.label for="certificate_type" required>Document type</x-form.label>
                     <x-form.select name="certificate_type" required>
-                        <option value="">-- Select Document Type --</option>
+                        <option value="">Select type</option>
                         <option value="Barangay Clearance" {{ old('certificate_type') == 'Barangay Clearance' ? 'selected' : '' }}>Barangay Clearance</option>
                         <option value="Certificate of Residency" {{ old('certificate_type') == 'Certificate of Residency' ? 'selected' : '' }}>Certificate of Residency</option>
                         <option value="Certificate of Indigency" {{ old('certificate_type') == 'Certificate of Indigency' ? 'selected' : '' }}>Certificate of Indigency</option>
@@ -62,14 +59,14 @@
 
             <!-- Purpose -->
             <div style="margin-bottom: 24px;">
-                <x-form.label for="purpose" required>Purpose / Reason</x-form.label>
+                <x-form.label for="purpose" required>Purpose</x-form.label>
                 <x-form.input type="text" name="purpose" value="{{ old('purpose') }}" required placeholder="e.g. Local Employment, Scholarship Application, Bank Account Requirement" />
                 <x-form.error :message="$errors->first('purpose')" />
             </div>
 
             <!-- Submit Buttons -->
             <x-form.actions :cancel-url="route('certificates.index')">
-                <x-slot:submit>Issue & Preview Certificate</x-slot:submit>
+                <x-slot:submit>Issue certificate</x-slot:submit>
             </x-form.actions>
         </form>
     </div>

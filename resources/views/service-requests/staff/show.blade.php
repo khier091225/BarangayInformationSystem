@@ -1,6 +1,3 @@
-<div>
-    <!-- I have not failed. I've just found 10,000 ways that won't work. - Thomas Edison -->
-</div>
 @extends('layouts.app')
 
 @section('title', 'Review Resident Request | Barangay Information System')
@@ -10,8 +7,7 @@
 @endsection
 
 @section('content')
-    <a href="{{ route('service-requests.index') }}" style="color: var(--accent); font-size: 13px;">← Back to requests</a>
-    <div style="margin: 18px 0 24px;">
+    <div style="margin: 0 0 24px;">
         <div class="eyebrow">REQUEST #{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}</div>
         <h1 style="font-size: 26px; color: var(--ink); margin: 4px 0 8px;">{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</h1>
         <p style="color: var(--muted-soft); font-size: 13px;">Submitted {{ $serviceRequest->created_at->format('M d, Y h:i A') }} · Status: <x-request-status :status="$serviceRequest->status" /></p>
@@ -20,13 +16,12 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: start;">
         <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 24px;">
             <h2 style="font-size: 18px; margin-top: 0;">Request details</h2>
-            <p><strong>Resident:</strong> <a href="{{ route('residents.show', $serviceRequest->resident) }}">{{ $serviceRequest->resident->full_name }}</a></p>
+            <p><strong>{{ $serviceRequest->type === 'blotter' ? 'Complainant' : 'Resident' }}:</strong> <a href="{{ route('residents.show', $serviceRequest->resident) }}">{{ $serviceRequest->resident->full_name }}</a></p>
             <p><strong>Address:</strong> {{ $serviceRequest->resident->address }}</p>
             @if ($serviceRequest->type === 'certificate')
                 <p><strong>Document:</strong> {{ $serviceRequest->certificate_type }}</p>
                 <p><strong>Purpose:</strong> {{ $serviceRequest->purpose }}</p>
             @else
-                <p><strong>Complainant:</strong> {{ $serviceRequest->resident->full_name }}</p>
                 <p><strong>Respondent:</strong> {{ $serviceRequest->respondent }}</p>
                 <p><strong>Incident date:</strong> {{ $serviceRequest->incident_date->format('M d, Y') }}</p>
                 <p style="white-space: pre-wrap;"><strong>Incident:</strong> {{ $serviceRequest->incident }}</p>
@@ -52,7 +47,6 @@
                 </form>
             @else
                 <h2 style="font-size: 18px; margin-top: 0;">Review outcome</h2>
-                <p><strong>Status:</strong> <x-request-status :status="$serviceRequest->status" /></p>
                 <p><strong>Reviewed by:</strong> {{ $serviceRequest->reviewer?->name ?? 'Staff account unavailable' }}</p>
                 <p style="white-space: pre-wrap;"><strong>Message to resident:</strong> {{ $serviceRequest->response_note ?: 'No message provided.' }}</p>
                 @if ($serviceRequest->certificate)

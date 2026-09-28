@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    File New Blotter | Barangay Information System
+    Record Blotter | Barangay Information System
 @endsection
 
 @section('main-style', 'max-width: 800px;')
@@ -9,16 +9,12 @@
 @section('breadcrumb')
     <a href="{{ route('blotters.index') }}" style="color: inherit; text-decoration: none;">Blotter Records</a>
     <i data-lucide="chevron-right"></i>
-    <strong>File New Complaint</strong>
+    <strong>Record blotter</strong>
 @endsection
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('blotters.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 12px;">
-            <i data-lucide="arrow-left"></i> Back to Blotters
-        </a>
-        <h1 style="font-size: 24px; color: var(--ink);">File New Blotter Report</h1>
-        <p style="color: var(--muted-soft); font-size: 13px;">Fill in the details of the complaint or incident below.</p>
+        <h1 style="font-size: 24px; color: var(--ink);">Record blotter</h1>
     </div>
 
     <!-- Form Card -->
@@ -52,9 +48,9 @@
                 <div>
                     <x-form.label for="status" required>Status</x-form.label>
                     <x-form.select name="status" required>
-                        <option value="Pending" {{ old('status') == 'Pending' ? 'selected' : '' }}>Pending (Ongoing hearing)</option>
-                        <option value="Settled" {{ old('status') == 'Settled' ? 'selected' : '' }}>Settled (Resolved)</option>
-                        <option value="Dismissed" {{ old('status') == 'Dismissed' ? 'selected' : '' }}>Dismissed (Dropped/Dismissed)</option>
+                        <option value="Pending" {{ old('status') == 'Pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="Settled" {{ old('status') == 'Settled' ? 'selected' : '' }}>Settled</option>
+                        <option value="Dismissed" {{ old('status') == 'Dismissed' ? 'selected' : '' }}>Dismissed</option>
                     </x-form.select>
                     <x-form.error :message="$errors->first('status')" />
                 </div>
@@ -69,7 +65,7 @@
 
             <!-- Submit Buttons -->
             <x-form.actions :cancel-url="route('blotters.index')">
-                <x-slot:submit>Save Blotter Report</x-slot:submit>
+                <x-slot:submit>Save blotter record</x-slot:submit>
             </x-form.actions>
         </form>
     </div>

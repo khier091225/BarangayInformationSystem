@@ -40,12 +40,11 @@
                     <a href="{{ route('profile.edit') }}" class="sidebar-profile" aria-label="Manage your profile">
                         <div class="staff-avatar-wrapper">
                             <span class="staff-avatar" aria-hidden="true"><i data-lucide="user-round"></i></span>
-                            <span class="status-indicator-dot" aria-label="Session active"></span>
                         </div>
                         <div class="sidebar-user-meta">
                             <strong class="sidebar-user-name">{{ auth()->user()->name }}</strong>
                             <span class="sidebar-user-role">
-                                <i data-lucide="badge-check" aria-hidden="true"></i> Signed-in staff
+                                <i data-lucide="badge-check" aria-hidden="true"></i> Barangay staff
                             </span>
                         </div>
                     </a>
@@ -58,16 +57,15 @@
             @section('topbar')
             <header class="workspace-topbar">
                 <div class="workspace-breadcrumb">
+                    <button type="button" class="icon-button sidebar-toggle" aria-label="Open sidebar" aria-controls="workspace-navigation" aria-expanded="false">
+                        <i data-lucide="panel-left" aria-hidden="true"></i>
+                    </button>
                     @yield('breadcrumb')
                 </div>
                 <div class="topbar-actions">
-                    <div class="topbar-session-badge" aria-label="Signed-in session active">
-                        <span class="status-indicator-dot" aria-hidden="true"></span>
-                        <span>Signed in</span>
-                    </div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="topbar-logout-btn" data-logout-trigger aria-label="Log out of session">
+                        <button type="submit" class="topbar-logout-btn" aria-label="Log out">
                             <i data-lucide="log-out" aria-hidden="true"></i>
                             <span>Log out</span>
                         </button>
@@ -91,29 +89,6 @@
                 @yield('content')
             </main>
         </div>
-
-        <!-- Logout Confirmation Modal -->
-        <dialog class="logout-confirm-dialog" id="logout-confirm-dialog" aria-labelledby="logout-dialog-title" aria-describedby="logout-dialog-desc">
-            <div class="logout-dialog-header">
-                <div class="logout-dialog-icon">
-                    <i data-lucide="log-out" aria-hidden="true"></i>
-                </div>
-                <div>
-                    <h2 id="logout-dialog-title">Log out of Dashboard?</h2>
-                    <p id="logout-dialog-desc">You are about to exit the administrative portal. Any unsaved edits will be discarded.</p>
-                </div>
-            </div>
-            <div class="logout-dialog-actions">
-                <button type="button" class="logout-dialog-cancel-btn" id="cancel-logout-btn">Stay in Dashboard</button>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="logout-dialog-confirm-btn" id="confirm-logout-link">
-                        <i data-lucide="log-out" aria-hidden="true"></i>
-                        <span>Log out</span>
-                    </button>
-                </form>
-            </div>
-        </dialog>
 
         @stack('scripts')
     </body>

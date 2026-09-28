@@ -24,6 +24,13 @@
             width: 100% !important;
             max-width: 100% !important;
         }
+        .certificate-preview-scroll {
+            overflow: visible !important;
+        }
+    }
+    .certificate-preview-scroll {
+        max-width: 100%;
+        overflow-x: auto;
     }
     .certificate-sheet {
         background: white;
@@ -121,19 +128,25 @@
 @section('topbar')
     <!-- Top Actions Toolbar (Hidden during print) -->
     <div class="action-bar no-print" style="padding: 18px 34px; background: var(--surface); border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center;">
-        <a href="{{ route('certificates.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--accent); text-decoration: none; font-weight: 500;">
-            <i data-lucide="arrow-left"></i> Back to Certificates
-        </a>
+        <div style="display: inline-flex; align-items: center; gap: 12px;">
+            <button type="button" class="icon-button sidebar-toggle" aria-label="Open sidebar" aria-controls="workspace-navigation" aria-expanded="false">
+                <i data-lucide="panel-left" aria-hidden="true"></i>
+            </button>
+            <a href="{{ route('certificates.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--accent); text-decoration: none; font-weight: 500;">
+                <i data-lucide="arrow-left"></i> Back to certificates
+            </a>
+        </div>
 
         <div style="display: flex; gap: 12px;">
             <button onclick="window.print()" class="button button-primary" style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; padding: 10px 20px;">
-                <i data-lucide="printer"></i> Print Certificate (PDF)
+                <i data-lucide="printer"></i> Print certificate
             </button>
         </div>
     </div>
 @endsection
 
 @section('content')
+    <div class="certificate-preview-scroll">
     <div class="certificate-sheet">
         <!-- Republic Letterhead -->
         <div class="cert-header">
@@ -210,5 +223,6 @@
                 <div style="font-size: 11px; color: #666; margin-top: 2px;">Official Seal of Barangay</div>
             </div>
         </div>
+    </div>
     </div>
 @endsection

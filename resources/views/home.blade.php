@@ -132,7 +132,7 @@
     <section class="home-hero relative min-h-[85vh] flex items-center pt-10 pb-20 lg:pt-0 overflow-hidden bg-slate-900">
         <!-- Background Image with tuned dark overlay -->
         <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/25 to-slate-900/75 z-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/30 to-slate-900/70 z-10"></div>
             <img src="{{ asset('images/maxresdefault.jpg') }}" alt="Barangay Kay-Anlog Calamba Panoramic View" class="w-full h-full object-cover object-center opacity-55 mix-blend-overlay">
         </div>
         
@@ -150,7 +150,7 @@
                 </h2>
                 
                 <p class="text-base sm:text-lg text-white/90 mb-8 max-w-xl leading-relaxed font-normal drop-shadow-sm">
-                    Welcome to the official digital portal of Barangay Kay-Anlog, Calamba City. Request certificates online, verify household records, and connect with your local barangay government anytime.
+                    Welcome to the official portal of Barangay Kay-Anlog, Calamba City. Request barangay documents and file blotter reports through your resident account.
                 </p>
                 
                 <!-- CTA Action Buttons -->
@@ -159,12 +159,12 @@
                         @if (auth()->user()->role === 'staff')
                             <a href="{{ route('dashboard') }}" class="inline-flex justify-center items-center gap-2 px-7 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-900/30 hover:-translate-y-0.5">
                                 <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                                Open Staff Dashboard
+                                Open staff workspace
                             </a>
                         @else
                             <a href="{{ route('account.requests.certificate.create') }}" class="inline-flex justify-center items-center gap-2 px-7 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-900/30 hover:-translate-y-0.5">
                                 <i data-lucide="file-check-2" class="w-5 h-5"></i>
-                                Request Document Online
+                                Request a document
                             </a>
                             <a href="{{ route('account') }}" class="inline-flex justify-center items-center gap-2 px-6 py-3.5 bg-white/15 hover:bg-white/25 backdrop-blur-md text-white border border-white/30 font-semibold rounded-xl transition-all shadow-lg shadow-black/20 hover:-translate-y-0.5">
                                 <i data-lucide="user-round" class="w-5 h-5"></i>
@@ -174,11 +174,11 @@
                     @else
                         <a href="{{ route('login') }}" class="inline-flex justify-center items-center gap-2 px-7 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-900/30 hover:-translate-y-0.5">
                             <i data-lucide="file-check-2" class="w-5 h-5"></i>
-                            Request Certificate
+                            Request a document
                         </a>
                         <a href="{{ route('register') }}" class="inline-flex justify-center items-center gap-2 px-6 py-3.5 bg-white/15 hover:bg-white/25 backdrop-blur-md text-white border border-white/30 font-semibold rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-black/20">
                             <i data-lucide="user-round-plus" class="w-5 h-5"></i>
-                            Resident Registration
+                            Create resident account
                         </a>
                     @endauth
                 </div>
@@ -291,9 +291,7 @@
     <section id="how-it-works" class="py-16 bg-white border-b border-slate-200">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="max-w-2xl mx-auto text-center mb-12">
-                <span class="text-xs font-bold tracking-widest text-emerald-600 uppercase mb-2 block">Step-By-Step Citizen Guide</span>
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">How Online E-Services Work</h2>
-                <p class="text-sm sm:text-base text-slate-600 mt-2">Get your official documents processed in 3 hassle-free steps.</p>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">How requests work</h2>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 relative">
@@ -303,7 +301,7 @@
                         1
                     </div>
                     <h3 class="text-lg font-bold text-slate-900 mb-2">Choose Service</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">Select Barangay Clearance, Certificate of Residency, or Certificate of Indigency according to your transaction.</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">Choose a document to request or submit an incident report.</p>
                 </div>
 
                 <!-- Step 2 -->
@@ -312,7 +310,7 @@
                         2
                     </div>
                     <h3 class="text-lg font-bold text-slate-900 mb-2">Submit Online</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">Sign in or register your resident account, fill out the required purpose, and submit your request in seconds.</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">Sign in to your verified resident account and send the required details.</p>
                 </div>
 
                 <!-- Step 3 -->
@@ -320,8 +318,8 @@
                     <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white font-extrabold flex items-center justify-center text-lg mb-5 shadow-md shadow-emerald-900/10">
                         3
                     </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2">Claim Document</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">Track live approval status from your resident dashboard and claim your certified copy at the Barangay Hall.</p>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Track your request</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">Check My requests for staff updates. If a document is issued, contact the barangay office about collection.</p>
                 </div>
             </div>
         </div>
@@ -331,9 +329,7 @@
     <section id="services" class="py-20 relative bg-slate-50">
         <div class="container mx-auto px-4 lg:px-8 relative z-10">
             <div class="max-w-2xl mx-auto text-center mb-14">
-                <span class="text-xs font-bold tracking-widest text-emerald-600 uppercase mb-2.5 block">Official Documents</span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">Quick Barangay Services</h2>
-                <p class="text-base text-slate-600">Select any service to view required documents, turnaround times, and fee guidelines.</p>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
@@ -601,7 +597,7 @@
                             <li><a href="{{ auth()->user()->role === 'staff' ? route('dashboard') : route('account') }}" class="hover:text-emerald-700 transition-colors font-semibold text-emerald-700">Go to Dashboard</a></li>
                         @else
                             <li><a href="{{ route('login') }}" class="hover:text-emerald-700 transition-colors">Staff &amp; Resident Sign In</a></li>
-                            <li><a href="{{ route('register') }}" class="hover:text-emerald-700 transition-colors">Resident Registration</a></li>
+                            <li><a href="{{ route('register') }}" class="hover:text-emerald-700 transition-colors">Create resident account</a></li>
                         @endauth
                         <li><a href="#officials" class="hover:text-emerald-700 transition-colors">Barangay Officials Roster</a></li>
                         <li><a href="#emergency" class="hover:text-emerald-700 transition-colors">24/7 Emergency Hotlines</a></li>

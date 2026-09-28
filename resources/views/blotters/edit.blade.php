@@ -9,15 +9,12 @@
 @section('breadcrumb')
     <a href="{{ route('blotters.index') }}" style="color: inherit; text-decoration: none;">Blotter Records</a>
     <i data-lucide="chevron-right"></i>
-    <strong>Edit Case #{{ $blotter->id }}</strong>
+    <strong>Edit blotter #{{ $blotter->id }}</strong>
 @endsection
 
 @section('content')
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('blotters.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 12px;">
-            <i data-lucide="arrow-left"></i> Back to Blotters
-        </a>
-        <h1 style="font-size: 24px; color: var(--ink);">Edit Blotter Report #{{ $blotter->id }}</h1>
+        <h1 style="font-size: 24px; color: var(--ink);">Edit blotter #{{ $blotter->id }}</h1>
         <p style="color: var(--muted-soft); font-size: 13px;">Update hearing status or incident details below.</p>
     </div>
 
@@ -53,9 +50,9 @@
                 <div>
                     <x-form.label for="status" required>Status</x-form.label>
                     <x-form.select name="status" required>
-                        <option value="Pending" {{ old('status', $blotter->status) == 'Pending' ? 'selected' : '' }}>Pending (Ongoing hearing)</option>
-                        <option value="Settled" {{ old('status', $blotter->status) == 'Settled' ? 'selected' : '' }}>Settled (Resolved)</option>
-                        <option value="Dismissed" {{ old('status', $blotter->status) == 'Dismissed' ? 'selected' : '' }}>Dismissed (Dropped/Dismissed)</option>
+                        <option value="Pending" {{ old('status', $blotter->status) == 'Pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="Settled" {{ old('status', $blotter->status) == 'Settled' ? 'selected' : '' }}>Settled</option>
+                        <option value="Dismissed" {{ old('status', $blotter->status) == 'Dismissed' ? 'selected' : '' }}>Dismissed</option>
                     </x-form.select>
                     <x-form.error :message="$errors->first('status')" />
                 </div>
@@ -70,7 +67,7 @@
 
             <!-- Submit Buttons -->
             <x-form.actions :cancel-url="route('blotters.index')">
-                <x-slot:submit>Update Blotter Report</x-slot:submit>
+                <x-slot:submit>Update blotter record</x-slot:submit>
             </x-form.actions>
         </form>
     </div>
