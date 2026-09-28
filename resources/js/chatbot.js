@@ -5,6 +5,7 @@ export default function initializeProjectChatbot() {
     const launcher = root.querySelector('[data-chat-open]');
     const panel = root.querySelector('[data-chat-panel]');
     const closeButton = root.querySelector('[data-chat-close]');
+    const scrollRegion = root.querySelector('[data-chat-scroll]');
     const messages = root.querySelector('[data-chat-messages]');
     const prompts = root.querySelector('[data-chat-prompts]');
     const form = root.querySelector('[data-chat-form]');
@@ -29,7 +30,7 @@ export default function initializeProjectChatbot() {
         if (pending) message.classList.add('project-chat__message--pending');
         message.textContent = value;
         messages.append(message);
-        messages.scrollTop = messages.scrollHeight;
+        scrollRegion.scrollTop = scrollRegion.scrollHeight;
         return message;
     }
 
@@ -71,7 +72,7 @@ export default function initializeProjectChatbot() {
             pending.textContent = 'I could not connect right now. Please check your connection and try again.';
         } finally {
             pending.classList.remove('project-chat__message--pending');
-            messages.scrollTop = messages.scrollHeight;
+            scrollRegion.scrollTop = scrollRegion.scrollHeight;
             busy = false;
             submit.disabled = false;
             input.disabled = false;

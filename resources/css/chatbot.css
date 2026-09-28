@@ -12,42 +12,54 @@
 .project-chat__launcher {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: .65rem;
-    min-height: 3.25rem;
-    padding: .75rem 1.15rem;
+    gap: .7rem;
+    min-height: 3.75rem;
+    padding: .35rem .95rem .35rem .4rem;
     border: 1px solid var(--accent-active);
     border-radius: 999px;
     background: var(--accent);
-    color: #fff;
-    box-shadow: 0 12px 28px rgb(20 54 35 / 20%);
-    font-size: .9rem;
-    font-weight: 700;
+    color: var(--surface);
+    box-shadow: 0 0 0 3px var(--surface), 0 12px 30px rgb(20 54 35 / 26%);
     cursor: pointer;
-    transition: background .2s, transform .2s, box-shadow .2s;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
 }
 
-.project-chat__launcher:hover,
-.project-chat__launcher[aria-expanded="true"] {
+.project-chat__launcher:hover {
+    border-color: var(--accent-active);
     background: var(--accent-hover);
-    box-shadow: 0 15px 30px rgb(20 54 35 / 25%);
-    transform: translateY(-2px);
+    box-shadow: 0 0 0 3px var(--surface), 0 16px 34px rgb(20 54 35 / 30%);
+    transform: translateY(-3px);
 }
 
-.project-chat__launcher svg { width: 1.2rem; height: 1.2rem; }
+.project-chat__launcher[aria-expanded="true"] { display: none; }
+
+.project-chat__launcher-icon {
+    display: grid;
+    place-items: center;
+    width: 2.7rem;
+    height: 2.7rem;
+    flex: none;
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--accent);
+}
+
+.project-chat__launcher-icon svg { width: 1.3rem; height: 1.3rem; }
+.project-chat__launcher-copy { display: grid; gap: .05rem; text-align: left; }
+.project-chat__launcher-copy strong { font-size: .86rem; line-height: 1.25; }
+.project-chat__launcher-copy small { color: var(--color-emerald-100); font-size: .71rem; line-height: 1.25; }
 
 .project-chat__panel {
     display: flex;
     flex-direction: column;
-    width: min(23.5rem, calc(100vw - 2rem));
+    width: min(24rem, calc(100vw - 2rem));
     height: min(35rem, calc(100dvh - 6.5rem));
     min-height: min(23rem, calc(100dvh - 6.5rem));
-    margin-bottom: .75rem;
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: 1.25rem;
     background: var(--surface);
-    box-shadow: 0 22px 65px rgb(17 48 31 / 22%);
+    box-shadow: 0 24px 65px rgb(17 48 31 / 22%);
 }
 
 .project-chat__panel[hidden] { display: none; }
@@ -56,9 +68,9 @@
     display: flex;
     align-items: center;
     gap: .75rem;
-    padding: .9rem 1rem;
+    padding: .95rem 1rem;
     border-bottom: 1px solid var(--line);
-    background: var(--surface);
+    background: linear-gradient(115deg, var(--surface), var(--accent-soft));
 }
 
 .project-chat__symbol {
@@ -68,20 +80,20 @@
     height: 2.45rem;
     flex: none;
     border-radius: .75rem;
-    background: var(--accent-soft);
-    color: var(--accent);
+    background: var(--accent);
+    color: var(--surface);
 }
 
 .project-chat__symbol svg { width: 1.3rem; height: 1.3rem; }
 .project-chat__heading { display: grid; gap: .1rem; min-width: 0; }
 .project-chat__heading strong { color: var(--ink); font-size: .96rem; line-height: 1.2; }
-.project-chat__heading small { color: var(--muted); font-size: .76rem; line-height: 1.2; }
+.project-chat__heading small { color: var(--muted); font-size: .72rem; line-height: 1.2; }
 
 .project-chat__close {
     display: grid;
     place-items: center;
-    width: 2.2rem;
-    height: 2.2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     margin-left: auto;
     border: 0;
     border-radius: .65rem;
@@ -93,16 +105,22 @@
 .project-chat__close:hover { background: var(--hover); color: var(--ink); }
 .project-chat__close svg { width: 1.15rem; height: 1.15rem; }
 
-.project-chat__messages {
+.project-chat__conversation {
     display: flex;
     flex: 1;
     flex-direction: column;
-    gap: .75rem;
+    gap: .8rem;
     min-height: 0;
     padding: 1rem;
     overflow-y: auto;
     background: var(--color-page);
     scrollbar-color: var(--line-strong) transparent;
+}
+
+.project-chat__messages {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
 }
 
 .project-chat__message {
@@ -134,11 +152,16 @@
     display: flex;
     flex-wrap: wrap;
     gap: .4rem;
-    padding: .75rem 1rem .25rem;
-    background: var(--surface);
 }
 
 .project-chat__prompts[hidden] { display: none; }
+
+.project-chat__prompts-label {
+    width: 100%;
+    color: var(--muted);
+    font-size: .71rem;
+    font-weight: 650;
+}
 
 .project-chat__prompts button {
     padding: .4rem .65rem;
@@ -192,8 +215,8 @@
 .project-chat__form button {
     display: grid;
     place-items: center;
-    width: 2rem;
-    height: 2rem;
+    width: 2.35rem;
+    height: 2.35rem;
     flex: none;
     border: 0;
     border-radius: .6rem;
@@ -222,14 +245,43 @@
 
 @media (max-width: 520px) {
     .project-chat {
-        right: max(.75rem, env(safe-area-inset-right));
-        bottom: max(.75rem, env(safe-area-inset-bottom));
+        right: max(1rem, env(safe-area-inset-right));
+        bottom: max(1rem, env(safe-area-inset-bottom));
     }
 
-    .project-chat__panel {
-        width: calc(100vw - 1.5rem);
-        height: min(35rem, calc(100dvh - 5.5rem));
+    .project-chat__launcher {
+        justify-content: center;
+        width: 3.75rem;
+        min-height: 3.75rem;
+        padding: 0;
+        border: 2px solid var(--surface);
+        background: var(--accent);
+        box-shadow: 0 0 0 2px var(--accent-active), 0 12px 28px rgb(20 54 35 / 30%);
     }
+
+    .project-chat__launcher:hover {
+        border-color: var(--surface);
+        background: var(--accent-hover);
+    }
+
+    .project-chat__launcher-icon {
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        color: var(--surface);
+    }
+
+    .project-chat__launcher-copy { display: none; }
+
+    .project-chat__panel {
+        width: calc(100vw - 2rem);
+        height: min(38rem, calc(100dvh - 2rem));
+        min-height: min(23rem, calc(100dvh - 2rem));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .project-chat__launcher { transition: none; }
 }
 
 @media print {
