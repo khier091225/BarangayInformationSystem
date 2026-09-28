@@ -13,9 +13,9 @@
         <a class="skip-link" href="#resident-main">Skip to content</a>
         <header class="resident-header">
             <div class="resident-header-inner">
-                <a class="resident-brand" href="{{ route('account') }}" aria-label="Barangay Information System, dashboard">
+                <a class="resident-brand" href="{{ route('account') }}" aria-label="Barangay Kay-Anlog, dashboard">
                     <span class="resident-brand-mark"><i data-lucide="landmark" aria-hidden="true"></i></span>
-                    <span><strong>Barangay</strong><small>RESIDENT PORTAL</small></span>
+                    <span><strong>Barangay Kay-Anlog</strong><small>RESIDENT PORTAL</small></span>
                 </a>
 
                 <nav class="resident-nav" aria-label="Resident navigation">
@@ -43,7 +43,7 @@
                 <div role="status" class="resident-alert resident-alert-success"><i data-lucide="badge-check" aria-hidden="true"></i><span>{{ session('success') }}</span></div>
             @endif
             @yield('content')
-            <footer class="resident-footer"><span>Barangay Information System</span><span>Services for your community</span></footer>
+            <footer class="resident-footer"><span>Barangay Kay-Anlog Information System</span><span>Services for your community</span></footer>
         </main>
     </body>
 </html>

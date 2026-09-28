@@ -1,6 +1,3 @@
-<div>
-    <!-- He who is contented is rich. - Laozi -->
-</div>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -44,7 +41,15 @@
                 <div class="auth-panel">
                     @yield('content')
                 </div>
-                <p class="auth-main-footer">Barangay Information System · Secure access for your community</p>
+                <div class="auth-main-footer">
+                    <div>Barangay Information System &middot; Secure access for your community</div>
+                    <div class="lg:hidden mt-2">
+                        <a href="{{ route('home') }}" class="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-emerald-700 transition-colors font-medium">
+                            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                            <span>Return to Public Homepage</span>
+                        </a>
+                    </div>
+                </div>
             </main>
         </div>
     </body>

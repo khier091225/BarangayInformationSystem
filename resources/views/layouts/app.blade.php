@@ -15,7 +15,7 @@
         <aside class="workspace-sidebar" id="workspace-navigation" aria-label="Workspace navigation">
             <a href="{{ route('dashboard') }}" class="brand workspace-brand">
                 <span class="brand-mark"><i data-lucide="landmark"></i></span>
-                <span class="brand-name">Barangay<span>INFORMATION SYSTEM</span></span>
+                <span class="brand-name">Barangay Kay-Anlog<span>INFORMATION SYSTEM</span></span>
             </a>
             <div class="workspace-label">STAFF WORKSPACE</div>
             <nav class="workspace-nav" aria-label="Main workspace">
@@ -31,6 +31,11 @@
                 <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.*')" icon="user-round">My profile</x-nav-link>
             </nav>
             <div class="sidebar-bottom">
+                <a href="{{ route('home') }}" class="public-site-link" target="_blank" title="View Public Portal">
+                    <i data-lucide="globe"></i>
+                    <span>Public Portal</span>
+                    <i data-lucide="arrow-up-right"></i>
+                </a>
                 <div class="sidebar-user-card">
                     <a href="{{ route('profile.edit') }}" class="sidebar-profile" aria-label="Manage your profile">
                         <div class="staff-avatar-wrapper">
