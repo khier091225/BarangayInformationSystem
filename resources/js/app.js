@@ -1,10 +1,12 @@
-import { createIcons, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, ClipboardList, Clock, Download, ExternalLink, FileCheck2, Files, Flag, Globe, HandHeart, HeartHandshake, HeartPulse, House, Inbox, Info, Landmark, LayoutDashboard, LogIn, LogOut, MapPin, Megaphone, Menu, MessagesSquare, NotebookPen, PanelLeft, Phone, Plus, Search, SearchX, ShieldCheck, Sprout, TrendingUp, UserRound, UserRoundPlus, UsersRound, X, Zap } from 'lucide';
+import { createIcons, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, ClipboardList, Clock, Download, ExternalLink, FileCheck2, Files, Flag, Globe, HandHeart, HeartHandshake, HeartPulse, House, Inbox, Info, Landmark, LayoutDashboard, LogIn, LogOut, MapPin, Megaphone, Menu, MessageSquareWarning, MessagesSquare, NotebookPen, PanelLeft, Phone, Plus, Search, SearchX, ShieldCheck, Sprout, TrendingUp, UserRound, UserRoundPlus, UsersRound, X, Zap } from 'lucide';
 import initializeWorkspace from './workspace';
+import initializeResidentNavigation from './resident-navigation';
 import initializeProjectChatbot from './chatbot';
 
-createIcons({ icons: { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, ClipboardList, Clock, Download, ExternalLink, FileCheck2, Files, Flag, Globe, HandHeart, HeartHandshake, HeartPulse, House, Inbox, Info, Landmark, LayoutDashboard, LogIn, LogOut, MapPin, Megaphone, Menu, MessagesSquare, NotebookPen, PanelLeft, Phone, Plus, Search, SearchX, ShieldCheck, Sprout, TrendingUp, UserRound, UserRoundPlus, UsersRound, X, Zap } });
+createIcons({ icons: { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, ClipboardList, Clock, Download, ExternalLink, FileCheck2, Files, Flag, Globe, HandHeart, HeartHandshake, HeartPulse, House, Inbox, Info, Landmark, LayoutDashboard, LogIn, LogOut, MapPin, Megaphone, Menu, MessageSquareWarning, MessagesSquare, NotebookPen, PanelLeft, Phone, Plus, Search, SearchX, ShieldCheck, Sprout, TrendingUp, UserRound, UserRoundPlus, UsersRound, X, Zap } });
 
 initializeWorkspace();
+initializeResidentNavigation();
 initializeProjectChatbot();
 
 document.querySelectorAll('[data-registration-code-form]').forEach(form => {
