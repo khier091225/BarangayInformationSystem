@@ -46,6 +46,29 @@
         color: #111;
         position: relative;
     }
+    .cert-watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 0;
+        width: 95mm;
+        max-width: 45%;
+        height: auto;
+        opacity: 0.09;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    @media print {
+        .cert-watermark {
+            top: 120mm;
+        }
+    }
+    .certificate-sheet > :not(.cert-watermark) {
+        position: relative;
+        z-index: 1;
+    }
     .cert-header {
         text-align: center;
         border-bottom: 2px solid var(--accent-hover);
@@ -149,6 +172,7 @@
 @section('content')
     <div class="certificate-preview-scroll">
     <div class="certificate-sheet">
+        <img class="cert-watermark" src="{{ asset('images/Logo_kay-anlog.jpg') }}" alt="" aria-hidden="true" width="313" height="318">
         <!-- Republic Letterhead -->
         <div class="cert-header">
             <h3>Republic of the Philippines</h3>
