@@ -1,4 +1,6 @@
-.staff-profile { --overview-muted: var(--muted-soft); max-width: 59rem; margin-inline: auto; }
+.staff-profile { max-width: 59rem; margin-inline: auto; }
+.staff-profile-heading { margin-bottom: 1.5rem; }
+.staff-profile-heading h1 { color: var(--ink); font-size: 1.625rem; font-weight: 600; line-height: 1.25; letter-spacing: -.02em; }
 .profile-panel { padding: 1.4rem; border: 1px solid var(--line); border-radius: .95rem; background: var(--surface); }
 .profile-panel + .profile-panel { margin-top: 1.2rem; }
 .profile-panel-heading { display: flex; align-items: flex-start; gap: .8rem; margin-bottom: 1.25rem; }

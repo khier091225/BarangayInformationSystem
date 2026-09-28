@@ -14,6 +14,28 @@ class StaffServiceRequestTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_staff_request_list_shows_status_counts_and_appropriate_actions(): void
+    {
+        $resident = Resident::factory()->create();
+        ServiceRequest::factory()->for($resident)->count(2)->create();
+        ServiceRequest::factory()->for($resident)->create(['status' => ServiceRequest::STATUS_COMPLETED]);
+        $this->actingAs(User::factory()->create());
+
+        $this->get(route('service-requests.index'))
+            ->assertOk()
+            ->assertViewHas('statusCounts', [
+                ServiceRequest::STATUS_PENDING => 2,
+                ServiceRequest::STATUS_COMPLETED => 1,
+                ServiceRequest::STATUS_DECLINED => 0,
+            ])
+            ->assertSee('Review');
+
+        $this->get(route('service-requests.index', ['status' => ServiceRequest::STATUS_COMPLETED]))
+            ->assertOk()
+            ->assertSee('View details')
+            ->assertDontSee('Review</a>', false);
+    }
+
     public function test_staff_completes_a_document_request_once_and_creates_a_certificate(): void
     {
         $resident = Resident::factory()->create();

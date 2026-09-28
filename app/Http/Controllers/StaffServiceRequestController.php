@@ -20,6 +20,17 @@ class StaffServiceRequestController extends Controller
         ]);
         $status = $filters['status'] ?? ServiceRequest::STATUS_PENDING;
 
+        $totals = ServiceRequest::query()
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        $statusCounts = [
+            ServiceRequest::STATUS_PENDING => (int) ($totals[ServiceRequest::STATUS_PENDING] ?? 0),
+            ServiceRequest::STATUS_COMPLETED => (int) ($totals[ServiceRequest::STATUS_COMPLETED] ?? 0),
+            ServiceRequest::STATUS_DECLINED => (int) ($totals[ServiceRequest::STATUS_DECLINED] ?? 0),
+        ];
+
         $requests = ServiceRequest::query()
             ->with('resident')
             ->where('status', $status)
@@ -27,7 +38,7 @@ class StaffServiceRequestController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('service-requests.staff.index', compact('requests', 'status'));
+        return view('service-requests.staff.index', compact('requests', 'status', 'statusCounts'));
     }
 
     public function show(ServiceRequest $serviceRequest): View

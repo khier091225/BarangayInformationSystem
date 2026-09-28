@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="staff-profile">
-        <header class="overview-heading">
+        <header class="staff-profile-heading">
             <div><h1>My profile</h1></div>
         </header>
 
