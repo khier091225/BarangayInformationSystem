@@ -50,6 +50,7 @@ class IncidentReportTest extends TestCase
         $this->assertSame($occurredAt, $report->occurred_at->timezone('Asia/Manila')->format('Y-m-d\TH:i'));
         $this->assertSame(1, $report->updates()->count());
         $this->assertSame(0, Blotter::query()->count());
+        $this->get(route('account'))->assertOk()->assertSee($report->reference_number);
         $this->get(route('account.incidents.index'))->assertOk()->assertSee($report->reference_number);
         $this->get(route('account.incidents.show', $report))->assertOk()->assertSee('Report received for staff review.');
         Queue::assertNothingPushed();

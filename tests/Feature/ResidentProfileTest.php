@@ -28,7 +28,7 @@ class ResidentProfileTest extends TestCase
 
         $this->get(route('account'))->assertOk()
             ->assertSee(route('account.profile.edit'), false)
-            ->assertSee('Manage profile');
+            ->assertSee('My profile');
     }
 
     public function test_guests_staff_and_unverified_residents_cannot_access_resident_profile(): void

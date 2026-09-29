@@ -7,7 +7,9 @@
     <div class="resident-page-heading">
         <div>
             <h1>File a blotter report</h1>
+            <p>Describe the incident for barangay staff to review before it becomes an official blotter record.</p>
         </div>
+        <a href="{{ route('account.requests.index') }}" class="resident-inline-link">My requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
     </div>
 
     <section class="resident-card resident-form-card resident-service-form" aria-label="Blotter report form">

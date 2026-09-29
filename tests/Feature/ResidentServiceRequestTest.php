@@ -24,6 +24,7 @@ class ResidentServiceRequestTest extends TestCase
         $this->get(route('account'))->assertOk()
             ->assertSee('Request a document')
             ->assertSee('File a blotter report')
+            ->assertSee('Recent activity')
             ->assertViewHas('latestReviewedRequest', null)
             ->assertViewHas('requestCounts', ['total' => 0, 'pending' => 0, 'completed' => 0, 'declined' => 0]);
         $this->get(route('account.requests.certificate.create'))->assertOk()
@@ -121,7 +122,7 @@ class ResidentServiceRequestTest extends TestCase
         $this->assertSame(0, ServiceRequest::query()->count());
     }
 
-    public function test_dashboard_prioritizes_updates_and_shows_only_the_residents_counts_and_staff_response(): void
+    public function test_dashboard_shows_recent_owned_activity_and_latest_staff_response(): void
     {
         $this->freezeTime();
         $resident = Resident::factory()->create();
@@ -147,15 +148,16 @@ class ResidentServiceRequestTest extends TestCase
         ]);
 
         $response = $this->get(route('account'))->assertOk()
-            ->assertSee('Latest staff update')
+            ->assertSee('Recent activity')
             ->assertSee($completed->response_note)
             ->assertDontSee($otherRequest->response_note)
+            ->assertSee(route('account.requests.show', $completed), false)
             ->assertSee(route('account.requests.index', ['status' => 'Declined']), false);
 
         $this->assertSame(['total' => 4, 'pending' => 2, 'completed' => 1, 'declined' => 1], $response->viewData('requestCounts'));
         $this->assertTrue($response->viewData('latestReviewedRequest')->is($completed));
-        $this->assertTrue($response->viewData('recentRequests')->first()->is($completed));
-        $this->assertCount(4, $response->viewData('recentRequests'));
+        $this->assertCount(2, $response->viewData('recentRequests'));
+        $this->assertFalse($response->viewData('recentRequests')->contains('id', $completed->id));
     }
 
     public function test_request_history_filters_only_owned_records_and_preserves_status_across_pages(): void

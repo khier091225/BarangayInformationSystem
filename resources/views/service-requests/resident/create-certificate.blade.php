@@ -7,7 +7,9 @@
     <div class="resident-page-heading">
         <div>
             <h1>Request a barangay document</h1>
+            <p>Choose the document you need and enter its purpose. Barangay staff will review your request.</p>
         </div>
+        <a href="{{ route('account.requests.index') }}" class="resident-inline-link">My requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
     </div>
 
     <section class="resident-card resident-form-card resident-service-form" aria-label="Document request form">
