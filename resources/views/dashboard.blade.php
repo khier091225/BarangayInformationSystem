@@ -2,12 +2,6 @@
 
 @section('title', 'Dashboard | Barangay Information System')
 
-@section('breadcrumb')
-    <span>Staff workspace</span>
-    <i data-lucide="chevron-right" aria-hidden="true"></i>
-    <strong>Overview</strong>
-@endsection
-
 @section('content')
     <div class="staff-overview">
         <header class="overview-heading">

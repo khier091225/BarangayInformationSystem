@@ -9,7 +9,7 @@
 @push('styles')
 <style>
     @media print {
-        .skip-link, .no-print, .workspace-sidebar, .workspace-topbar, .action-bar {
+        .skip-link, .no-print, .workspace-sidebar, .workspace-mobile-header, .action-bar {
             display: none !important;
         }
         body, .workspace-page, .workspace-shell, .workspace-main {

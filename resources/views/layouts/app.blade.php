@@ -51,32 +51,31 @@
                         </div>
                     </a>
                 </div>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="sidebar-logout"><i data-lucide="log-out" aria-hidden="true"></i> Log out</button>
+                </form>
             </div>
         </aside>
         <div class="sidebar-backdrop" hidden></div>
 
         <div class="workspace-shell">
             @section('topbar')
-            <header class="workspace-topbar">
-                <div class="workspace-breadcrumb">
-                    <button type="button" class="icon-button sidebar-toggle" aria-label="Open sidebar" aria-controls="workspace-navigation" aria-expanded="false">
-                        <i data-lucide="panel-left" aria-hidden="true"></i>
-                    </button>
-                    @yield('breadcrumb')
-                </div>
-                <div class="topbar-actions">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="topbar-logout-btn" aria-label="Log out">
-                            <i data-lucide="log-out" aria-hidden="true"></i>
-                            <span>Log out</span>
-                        </button>
-                    </form>
-                </div>
+            <header class="workspace-mobile-header">
+                <button type="button" class="icon-button sidebar-toggle" aria-label="Open sidebar" aria-controls="workspace-navigation" aria-expanded="false">
+                    <i data-lucide="panel-left" aria-hidden="true"></i>
+                </button>
+                <a href="{{ route('dashboard') }}" class="workspace-mobile-brand" aria-label="Barangay Kay-Anlog, staff dashboard">
+                    <x-brand-seal />
+                    <span>Barangay Kay-Anlog<small>STAFF WORKSPACE</small></span>
+                </a>
             </header>
             @show
 
             <main class="workspace-main" id="workspace-main" tabindex="-1" style="@yield('main-style')">
+                @hasSection('breadcrumb')
+                    <nav class="workspace-breadcrumb" aria-label="Breadcrumb">@yield('breadcrumb')</nav>
+                @endif
                 @if (session('success'))
                     <div class="no-print" role="status" style="background: var(--success-soft); color: var(--accent-hover); border: 1px solid var(--success-line); padding: 12px 18px; border-radius: 6px; margin-bottom: 20px; font-weight: 500;">
                         {{ session('success') }}
