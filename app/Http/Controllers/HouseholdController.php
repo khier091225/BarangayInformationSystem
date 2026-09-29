@@ -46,13 +46,15 @@ class HouseholdController extends Controller
             'address' => 'required|string|max:255',
         ]);
 
-        $household = DB::transaction(function () use ($validated): Household {
+        $creationYear = now('Asia/Manila')->year;
+
+        $household = DB::transaction(function () use ($validated, $creationYear): Household {
             $household = Household::create([
                 ...$validated,
                 'household_number' => 'PENDING-'.Str::uuid(),
             ]);
 
-            $baseNumber = sprintf('HH-%d-%06d', now()->year, $household->id);
+            $baseNumber = sprintf('HH-%d-%06d', $creationYear, $household->id);
             $householdNumber = $baseNumber;
             $suffix = 1;
 

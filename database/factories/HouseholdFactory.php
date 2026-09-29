@@ -9,7 +9,7 @@ class HouseholdFactory extends Factory
     public function definition(): array
     {
         return [
-            'household_number' => 'HH-'.now()->year.'-'.fake()->unique()->numerify('####'),
+            'household_number' => 'HH-'.now('Asia/Manila')->year.'-'.fake()->unique()->numerify('####'),
             'household_head' => fake()->name(),
             'address' => fake()->streetAddress().', Purok '.fake()->numberBetween(1, 7),
         ];

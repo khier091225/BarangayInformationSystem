@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Household;
 use App\Models\User;
+use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -105,6 +106,19 @@ class HouseholdTest extends TestCase
             'household_head' => 'New Household',
             'household_number' => $reservedNumber.'-1',
         ]);
+    }
+
+    public function test_generated_number_uses_the_barangay_calendar_year(): void
+    {
+        $this->travelTo(CarbonImmutable::parse('2030-12-31 16:30:00', 'UTC'));
+
+        $this->post(route('households.store'), [
+            'household_head' => 'New Year Household',
+            'address' => 'Purok 4',
+        ])->assertRedirect(route('households.index'));
+
+        $household = Household::sole();
+        $this->assertSame(sprintf('HH-2031-%06d', $household->id), $household->household_number);
     }
 
     public function test_household_details_can_be_viewed(): void
