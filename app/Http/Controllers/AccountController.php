@@ -44,7 +44,7 @@ class AccountController extends Controller
             }
 
             $recentRequests = $query->latest('updated_at')->latest('id')
-                ->limit($latestReviewedRequest === null ? 3 : 2)->get();
+                ->limit($latestReviewedRequest === null ? 4 : 3)->get();
         }
 
         return view('account', compact('user', 'recentRequests', 'latestReviewedRequest', 'latestIncidentReport', 'requestCounts'));

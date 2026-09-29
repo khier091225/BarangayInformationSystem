@@ -74,20 +74,35 @@
 .resident-inline-link svg { width: .95rem; height: .95rem; }
 .resident-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
 .resident-section-heading h2 { font-size: 1.2rem; font-weight: 730; letter-spacing: -.025em; line-height: 1.3; }
+.resident-section-heading p { margin-top: .25rem; color: var(--muted); font-size: .78rem; line-height: 1.5; }
 .resident-services { scroll-margin-top: 1.5rem; }
-.resident-service-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
-.resident-service-card { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr) 1rem; align-items: center; gap: .75rem; min-width: 0; min-height: 5.4rem; padding: .95rem 1rem; border: 1px solid var(--line); border-radius: .85rem; background: var(--surface); color: var(--ink); transition: background .18s, border-color .18s; }
+.resident-service-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.resident-service-card { display: flex; flex-direction: column; min-width: 0; min-height: 12rem; padding: 1.25rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--surface); color: var(--ink); transition: background .18s, border-color .18s; }
 .resident-service-card:hover { border-color: var(--success-line); background: var(--surface-soft); }
-.resident-service-icon { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: .7rem; background: var(--accent-soft); color: var(--accent); }
+.resident-service-card:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.resident-service-documents { border-color: var(--accent-hover); background: var(--accent-hover); color: var(--surface); }
+.resident-service-documents:hover { border-color: var(--accent-active); background: var(--accent-active); }
+.resident-service-top { display: flex; align-items: center; gap: .6rem; margin-bottom: 1rem; color: var(--muted); }
+.resident-service-top > span:nth-child(2) { font-size: .65rem; font-weight: 740; letter-spacing: .11em; }
+.resident-service-top > svg:last-child { width: 1rem; height: 1rem; margin-left: auto; }
+.resident-service-icon { display: grid; place-items: center; width: 2.35rem; height: 2.35rem; flex: none; border-radius: .65rem; background: var(--accent-soft); color: var(--accent); }
 .resident-service-icon svg { width: 1.15rem; height: 1.15rem; }
+.resident-service-documents .resident-service-top { color: var(--accent-soft); }
+.resident-service-documents .resident-service-icon { background: rgb(255 255 255 / 16%); color: var(--surface); }
 .resident-service-report .resident-service-icon { background: var(--warning-soft); color: var(--warning); }
+.resident-service-report .resident-service-top { color: var(--warning); }
 .resident-service-incident .resident-service-icon { background: var(--info-soft); color: var(--info); }
-.resident-service-copy { display: grid; gap: .2rem; min-width: 0; }
-.resident-service-copy strong { font-size: .91rem; font-weight: 710; line-height: 1.35; }
-.resident-service-copy small { color: var(--muted); font-size: .72rem; line-height: 1.45; }
-.resident-service-card > svg:last-child { width: 1rem; height: 1rem; color: var(--accent); }
+.resident-service-incident .resident-service-top { color: var(--info); }
+.resident-service-card > strong { font-size: 1.2rem; font-weight: 710; line-height: 1.3; letter-spacing: -.025em; }
+.resident-service-description { display: block; margin-top: .45rem; color: var(--muted); font-size: .81rem; line-height: 1.55; }
+.resident-service-documents .resident-service-description { color: var(--accent-soft); }
+.resident-service-action { display: inline-flex; align-items: center; gap: .45rem; margin-top: auto; padding-top: 1rem; color: var(--accent); font-size: .79rem; font-weight: 720; }
+.resident-service-action svg { width: .95rem; height: .95rem; }
+.resident-service-documents .resident-service-action { color: var(--surface); }
+.resident-service-card:hover .resident-service-action { text-decoration: underline; text-underline-offset: .2em; }
 
-.resident-request-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 1.25rem; overflow: hidden; border: 1px solid var(--line); border-radius: .85rem; background: var(--surface); }
+.resident-dashboard-overview { margin-top: 1.6rem; }
+.resident-request-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: hidden; border: 1px solid var(--line); border-radius: .85rem; background: var(--surface); }
 .resident-request-count { display: grid; align-content: center; gap: .15rem; min-width: 0; min-height: 4.5rem; padding: .65rem 1.1rem; border-right: 1px solid var(--line); }
 .resident-request-count:last-child { border-right: 0; }
 .resident-request-count:hover { background: var(--surface-soft); }
@@ -97,7 +112,7 @@
 .resident-request-count-completed strong { color: var(--success); }
 .resident-request-count-declined strong { color: var(--danger); }
 
-.resident-dashboard-activity { margin-top: 1.35rem; }
+.resident-dashboard-activity { margin-top: 1.6rem; }
 .resident-dashboard-activity-heading { align-items: center; flex-wrap: wrap; gap: .5rem 1rem; }
 .resident-dashboard-activity-links { display: flex; flex-wrap: wrap; gap: .25rem 1rem; }
 .resident-dashboard-activity-links .resident-inline-link { min-height: 2rem; }
@@ -109,7 +124,9 @@
 .resident-dashboard-highlight-copy small { overflow-wrap: anywhere; color: var(--muted); font-size: .76rem; line-height: 1.5; }
 .resident-dashboard-highlight > svg:last-child { width: 1rem; height: 1rem; color: var(--accent); }
 .resident-dashboard-list-title { margin-top: .35rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .72rem; font-weight: 720; letter-spacing: .06em; text-transform: uppercase; }
-.resident-dashboard-empty { margin-top: .5rem; padding: 1rem 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .84rem; line-height: 1.6; }
+.resident-dashboard-empty { display: flex; align-items: flex-start; gap: .85rem; margin-top: .5rem; padding: 1.2rem; border: 1px dashed var(--line-strong); border-radius: .75rem; background: var(--canvas); }
+.resident-dashboard-empty strong { display: block; color: var(--ink); font-size: .88rem; font-weight: 700; }
+.resident-dashboard-empty p { margin-top: .25rem; color: var(--muted); font-size: .79rem; line-height: 1.6; }
 
 .resident-content-grid { display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(16rem, 1fr); gap: 1rem; align-items: start; margin-top: 1.4rem; }
 .resident-card { min-width: 0; padding: 1.4rem; border: 1px solid var(--resident-line); border-radius: 1rem; background: var(--surface); }
@@ -301,7 +318,8 @@
     .resident-header-inner { padding-inline: 1.25rem; }
     .resident-main { padding: 1.5rem 1.25rem .5rem; }
     .resident-welcome { align-items: flex-start; flex-direction: column; gap: .9rem; }
-    .resident-service-grid { grid-template-columns: 1fr; }
+    .resident-service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .resident-service-incident { grid-column: 1 / -1; }
     .resident-content-grid, .resident-verification-grid { grid-template-columns: 1fr; }
     .resident-page-heading { align-items: flex-start; flex-direction: column; }
     .resident-request-layout { grid-template-columns: 1fr; }
@@ -317,7 +335,11 @@
     .resident-menu-toggle span { display: none; }
     .resident-welcome h1 { font-size: 1.8rem; }
     .resident-welcome p { font-size: .84rem; }
-    .resident-service-card { min-height: 4.9rem; padding: .85rem; }
+    .resident-service-grid { grid-template-columns: 1fr; }
+    .resident-service-incident { grid-column: auto; }
+    .resident-service-card { min-height: 0; padding: 1.05rem; }
+    .resident-service-top { margin-bottom: .7rem; }
+    .resident-service-action { padding-top: .7rem; }
     .resident-request-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .resident-request-count:nth-child(2) { border-right: 0; }
     .resident-request-count:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }

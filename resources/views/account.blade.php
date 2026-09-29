@@ -39,32 +39,38 @@
         </div>
     @else
         <section class="resident-services" id="resident-services" aria-labelledby="services-title">
-            <div class="resident-section-heading"><h2 id="services-title">Start here</h2></div>
+            <div class="resident-section-heading"><div><h2 id="services-title">What would you like to do?</h2><p>Choose a service to get started.</p></div></div>
             <div class="resident-service-grid">
                 <a href="{{ route('account.requests.certificate.create') }}" class="resident-service-card resident-service-documents">
-                    <span class="resident-service-icon"><i data-lucide="files" aria-hidden="true"></i></span>
-                    <span class="resident-service-copy"><strong>Request a document</strong><small>Clearance or certificates</small></span>
-                    <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+                    <span class="resident-service-top"><span class="resident-service-icon"><i data-lucide="files" aria-hidden="true"></i></span><span>DOCUMENTS</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+                    <strong>Request a document</strong>
+                    <span class="resident-service-description">Apply for barangay clearance, residency, indigency, or business clearance.</span>
+                    <span class="resident-service-action">Start request <i data-lucide="arrow-right" aria-hidden="true"></i></span>
                 </a>
                 <a href="{{ route('account.requests.blotter.create') }}" class="resident-service-card resident-service-report">
-                    <span class="resident-service-icon"><i data-lucide="notebook-pen" aria-hidden="true"></i></span>
-                    <span class="resident-service-copy"><strong>File a blotter report</strong><small>Request an official incident record</small></span>
-                    <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+                    <span class="resident-service-top"><span class="resident-service-icon"><i data-lucide="notebook-pen" aria-hidden="true"></i></span><span>FORMAL RECORD</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+                    <strong>File a blotter report</strong>
+                    <span class="resident-service-description">Share incident details for staff to review before an official record is made.</span>
+                    <span class="resident-service-action">File report <i data-lucide="arrow-right" aria-hidden="true"></i></span>
                 </a>
                 <a href="{{ route('account.incidents.create') }}" class="resident-service-card resident-service-incident">
-                    <span class="resident-service-icon"><i data-lucide="message-square-warning" aria-hidden="true"></i></span>
-                    <span class="resident-service-copy"><strong>Report an incident</strong><small>Alert the barangay about a concern</small></span>
-                    <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+                    <span class="resident-service-top"><span class="resident-service-icon"><i data-lucide="message-square-warning" aria-hidden="true"></i></span><span>ONLINE SUMBONG</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+                    <strong>Report an incident</strong>
+                    <span class="resident-service-description">Alert the barangay about a community concern and follow its response.</span>
+                    <span class="resident-service-action">Start report <i data-lucide="arrow-right" aria-hidden="true"></i></span>
                 </a>
             </div>
         </section>
 
-        <nav class="resident-request-summary" aria-label="Request status filters">
-            <a href="{{ route('account.requests.index') }}" class="resident-request-count"><span>Total requests</span><strong>{{ number_format($requestCounts['total']) }}</strong></a>
-            <a href="{{ route('account.requests.index', ['status' => 'Pending']) }}" class="resident-request-count resident-request-count-pending"><span>Pending</span><strong>{{ number_format($requestCounts['pending']) }}</strong></a>
-            <a href="{{ route('account.requests.index', ['status' => 'Completed']) }}" class="resident-request-count resident-request-count-completed"><span>Completed</span><strong>{{ number_format($requestCounts['completed']) }}</strong></a>
-            <a href="{{ route('account.requests.index', ['status' => 'Declined']) }}" class="resident-request-count resident-request-count-declined"><span>Declined</span><strong>{{ number_format($requestCounts['declined']) }}</strong></a>
-        </nav>
+        <section class="resident-dashboard-overview" aria-labelledby="request-overview-title">
+            <div class="resident-section-heading"><div><h2 id="request-overview-title">Request overview</h2><p>Document and blotter requests at a glance.</p></div></div>
+            <nav class="resident-request-summary" aria-label="Request status filters">
+                <a href="{{ route('account.requests.index') }}" class="resident-request-count"><span>Total requests</span><strong>{{ number_format($requestCounts['total']) }}</strong></a>
+                <a href="{{ route('account.requests.index', ['status' => 'Pending']) }}" class="resident-request-count resident-request-count-pending"><span>Pending</span><strong>{{ number_format($requestCounts['pending']) }}</strong></a>
+                <a href="{{ route('account.requests.index', ['status' => 'Completed']) }}" class="resident-request-count resident-request-count-completed"><span>Completed</span><strong>{{ number_format($requestCounts['completed']) }}</strong></a>
+                <a href="{{ route('account.requests.index', ['status' => 'Declined']) }}" class="resident-request-count resident-request-count-declined"><span>Declined</span><strong>{{ number_format($requestCounts['declined']) }}</strong></a>
+            </nav>
+        </section>
 
         <section class="resident-card resident-dashboard-activity" aria-labelledby="activity-title">
             <div class="resident-card-heading resident-dashboard-activity-heading">
@@ -109,7 +115,7 @@
                     @endforeach
                 </ul>
             @elseif (! $latestReviewedRequest && ! $latestIncidentReport)
-                <p class="resident-dashboard-empty">Nothing submitted yet. Choose a service above to get started.</p>
+                <div class="resident-dashboard-empty"><span class="resident-section-icon"><i data-lucide="inbox" aria-hidden="true"></i></span><div><strong>No activity yet</strong><p>Your requests, reports, and staff updates will appear here after you submit them.</p></div></div>
             @endif
         </section>
     @endif

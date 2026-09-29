@@ -156,7 +156,7 @@ class ResidentServiceRequestTest extends TestCase
 
         $this->assertSame(['total' => 4, 'pending' => 2, 'completed' => 1, 'declined' => 1], $response->viewData('requestCounts'));
         $this->assertTrue($response->viewData('latestReviewedRequest')->is($completed));
-        $this->assertCount(2, $response->viewData('recentRequests'));
+        $this->assertCount(3, $response->viewData('recentRequests'));
         $this->assertFalse($response->viewData('recentRequests')->contains('id', $completed->id));
     }
 
