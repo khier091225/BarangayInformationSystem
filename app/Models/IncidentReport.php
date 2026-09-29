@@ -23,6 +23,12 @@ class IncidentReport extends Model
 
     public const STATUS_CLOSED = 'Closed';
 
+    public const ACTIVE_STATUSES = [
+        self::STATUS_SUBMITTED,
+        self::STATUS_ASSIGNED,
+        self::STATUS_RESPONDING,
+    ];
+
     public const CATEGORY_TEAMS = [
         'noise_complaint' => ['Noise Complaint', 'tanod'],
         'domestic_disturbance' => ['Domestic Disturbance', 'leadership'],

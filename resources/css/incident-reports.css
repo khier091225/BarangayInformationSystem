@@ -3,10 +3,6 @@
 .incident-status-assigned, .incident-status-responding { color: var(--info); background: var(--info-soft); }
 .incident-status-resolved { color: var(--success); background: var(--success-soft); }
 .incident-status-closed { color: var(--muted); background: var(--surface-soft); }
-.resident-service-incident { color: var(--info); background: var(--info-soft); border-color: var(--info-line); }
-.resident-service-incident:hover { border-color: var(--info); box-shadow: 0 8px 24px rgb(40 88 129 / 11%); }
-.resident-service-incident .resident-service-top, .resident-service-incident .resident-service-description { color: var(--info); }
-.resident-service-incident .resident-service-icon { background: var(--surface); color: var(--info); }
 .incident-dashboard-update { display: flex; align-items: center; flex-wrap: wrap; gap: .8rem 1rem; margin-top: 1rem; }
 .incident-dashboard-update > div { min-width: 12rem; flex: 1; }
 .incident-dashboard-update h2 { margin-top: .2rem; font-size: .98rem; font-weight: 720; }
@@ -97,10 +93,6 @@
 @media (max-width: 900px) {
     .incident-detail-grid { grid-template-columns: 1fr; }
 }
-@media (max-width: 1000px) {
-    .resident-service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .resident-service-incident { grid-column: 1 / -1; }
-}
 @media (max-width: 760px) {
     .overview-attention-links { flex-wrap: wrap; }
     .overview-attention-links a { flex: 1 1 9rem; }
@@ -117,8 +109,6 @@
     .incident-table td small { overflow-wrap: anywhere; }
 }
 @media (max-width: 560px) {
-    .resident-service-grid { grid-template-columns: 1fr; }
-    .resident-service-incident { grid-column: auto; }
     .resident-nav { overflow-x: auto; }
     .resident-nav a { flex: none; }
     .incident-dashboard-update > .resident-inline-link { width: 100%; }

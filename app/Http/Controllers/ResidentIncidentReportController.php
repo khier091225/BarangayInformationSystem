@@ -17,11 +17,13 @@ class ResidentIncidentReportController extends Controller
 {
     public function index(Request $request): View
     {
-        $filters = $request->validate(['status' => 'nullable|in:Submitted,Assigned,Responding,Resolved,Closed']);
+        $filters = $request->validate(['status' => 'nullable|in:Active,Submitted,Assigned,Responding,Resolved,Closed']);
         $status = $filters['status'] ?? null;
         $query = IncidentReport::query()->where('resident_id', $request->user()->resident_id);
 
-        if ($status !== null) {
+        if ($status === 'Active') {
+            $query->whereIn('status', IncidentReport::ACTIVE_STATUSES);
+        } elseif ($status !== null) {
             $query->where('status', $status);
         }
 

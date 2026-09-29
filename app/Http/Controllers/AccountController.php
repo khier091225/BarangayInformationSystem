@@ -22,10 +22,19 @@ class AccountController extends Controller
         $latestReviewedRequest = null;
         $latestIncidentReport = null;
         $requestCounts = ['total' => 0, 'pending' => 0, 'completed' => 0, 'declined' => 0];
+        $incidentCounts = ['total' => 0, 'active' => 0];
 
         if ($user->role === 'resident' && $user->resident_id !== null) {
             $latestIncidentReport = IncidentReport::query()->where('resident_id', $user->resident_id)
                 ->latest('updated_at')->first();
+            $incidentStatusTotals = IncidentReport::query()->where('resident_id', $user->resident_id)
+                ->select('status')->selectRaw('COUNT(*) as total')
+                ->groupBy('status')->pluck('total', 'status');
+            $incidentCounts = [
+                'total' => (int) $incidentStatusTotals->sum(),
+                'active' => (int) collect(IncidentReport::ACTIVE_STATUSES)
+                    ->sum(fn (string $status): int => (int) ($incidentStatusTotals[$status] ?? 0)),
+            ];
             $query = ServiceRequest::query()->where('resident_id', $user->resident_id);
             $latestReviewedRequest = (clone $query)
                 ->whereIn('status', [ServiceRequest::STATUS_COMPLETED, ServiceRequest::STATUS_DECLINED])
@@ -47,7 +56,7 @@ class AccountController extends Controller
                 ->limit($latestReviewedRequest === null ? 4 : 3)->get();
         }
 
-        return view('account', compact('user', 'recentRequests', 'latestReviewedRequest', 'latestIncidentReport', 'requestCounts'));
+        return view('account', compact('user', 'recentRequests', 'latestReviewedRequest', 'latestIncidentReport', 'requestCounts', 'incidentCounts'));
     }
 
     public function verify(VerifyResidentRequest $request): RedirectResponse

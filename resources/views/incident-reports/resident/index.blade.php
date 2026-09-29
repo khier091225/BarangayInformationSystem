@@ -10,6 +10,7 @@
     <section class="resident-card incident-list-card" aria-label="Your incident reports">
         <nav class="resident-history-filters" aria-label="Filter reports by status">
             <a href="{{ route('account.incidents.index') }}" @if ($status === null) aria-current="page" @endif>All reports</a>
+            <a href="{{ route('account.incidents.index', ['status' => 'Active']) }}" @if ($status === 'Active') aria-current="page" @endif>In progress</a>
             @foreach (['Submitted', 'Assigned', 'Responding', 'Resolved', 'Closed'] as $option)
                 <a href="{{ route('account.incidents.index', ['status' => $option]) }}" @if ($status === $option) aria-current="page" @endif>{{ $option }}</a>
             @endforeach

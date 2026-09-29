@@ -8,6 +8,7 @@ use App\Mail\IncidentReportAlert;
 use App\Models\Blotter;
 use App\Models\IncidentReport;
 use App\Models\Resident;
+use App\Models\ServiceRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\Request;
@@ -21,6 +22,38 @@ use Tests\TestCase;
 class IncidentReportTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_resident_dashboard_counts_only_own_activity_and_active_reports_filter_matches(): void
+    {
+        $resident = Resident::factory()->create();
+        $this->actingAs(User::factory()->resident()->create(['resident_id' => $resident->id]));
+        ServiceRequest::factory()->for($resident)->count(2)->create();
+        ServiceRequest::factory()->for($resident)->create(['status' => ServiceRequest::STATUS_COMPLETED]);
+        ServiceRequest::factory()->create();
+
+        $submitted = IncidentReport::factory()->for($resident)->create(['status' => IncidentReport::STATUS_SUBMITTED]);
+        $assigned = IncidentReport::factory()->for($resident)->create(['status' => IncidentReport::STATUS_ASSIGNED]);
+        $responding = IncidentReport::factory()->for($resident)->create(['status' => IncidentReport::STATUS_RESPONDING]);
+        $resolved = IncidentReport::factory()->for($resident)->create(['status' => IncidentReport::STATUS_RESOLVED]);
+        $otherResidentReport = IncidentReport::factory()->create();
+
+        $dashboard = $this->get(route('account'))->assertOk()
+            ->assertSee('Your activity in progress')
+            ->assertSee(route('account.requests.index', ['status' => 'Pending']), false)
+            ->assertSee(route('account.incidents.index', ['status' => 'Active']), false);
+
+        $this->assertSame(['total' => 3, 'pending' => 2, 'completed' => 1, 'declined' => 0], $dashboard->viewData('requestCounts'));
+        $this->assertSame(['total' => 4, 'active' => 3], $dashboard->viewData('incidentCounts'));
+
+        $activeReports = $this->get(route('account.incidents.index', ['status' => 'Active']))->assertOk()
+            ->assertSee($submitted->reference_number)
+            ->assertSee($assigned->reference_number)
+            ->assertSee($responding->reference_number)
+            ->assertDontSee($resolved->reference_number)
+            ->assertDontSee($otherResidentReport->reference_number);
+
+        $this->assertSame(3, $activeReports->viewData('reports')->total());
+    }
 
     public function test_verified_resident_can_submit_and_track_an_incident_without_creating_a_blotter(): void
     {
