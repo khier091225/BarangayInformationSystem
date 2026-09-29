@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Household;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class HouseholdController extends Controller
@@ -36,18 +39,35 @@ class HouseholdController extends Controller
         return view('households.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'household_number' => 'required|string|max:255|unique:households,household_number',
             'household_head' => 'required|string|max:255',
             'address' => 'required|string|max:255',
         ]);
 
-        Household::create($validated);
+        $household = DB::transaction(function () use ($validated): Household {
+            $household = Household::create([
+                ...$validated,
+                'household_number' => 'PENDING-'.Str::uuid(),
+            ]);
+
+            $baseNumber = sprintf('HH-%d-%06d', now()->year, $household->id);
+            $householdNumber = $baseNumber;
+            $suffix = 1;
+
+            while (Household::where('household_number', $householdNumber)->exists()) {
+                $householdNumber = $baseNumber.'-'.$suffix;
+                $suffix++;
+            }
+
+            $household->update(['household_number' => $householdNumber]);
+
+            return $household;
+        });
 
         return redirect()->route('households.index')
-            ->with('success', 'Household added successfully!');
+            ->with('success', "Household {$household->household_number} added successfully!");
     }
 
     public function show(Household $household)
@@ -62,10 +82,9 @@ class HouseholdController extends Controller
         return view('households.edit', compact('household'));
     }
 
-    public function update(Request $request, Household $household)
+    public function update(Request $request, Household $household): RedirectResponse
     {
         $validated = $request->validate([
-            'household_number' => 'required|string|max:255|unique:households,household_number,'.$household->id,
             'household_head' => 'required|string|max:255',
             'address' => 'required|string|max:255',
         ]);

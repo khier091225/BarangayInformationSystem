@@ -23,11 +23,10 @@
             @csrf
             @method('PUT')
 
-            <!-- Household Number -->
             <div style="margin-bottom: 18px;">
-                <x-form.label for="household_number" required>Household Number</x-form.label>
-                <x-form.input type="text" name="household_number" value="{{ old('household_number', $household->household_number) }}" required />
-                <x-form.error :message="$errors->first('household_number')" />
+                <span style="display: block; margin-bottom: 6px; color: var(--muted); font-size: 13px; font-weight: 600;">Household Number</span>
+                <strong style="display: block; color: var(--ink); font-size: 15px;">{{ $household->household_number }}</strong>
+                <small style="display: block; margin-top: 4px; color: var(--muted-soft);">Assigned by the system and cannot be changed.</small>
             </div>
 
             <!-- Household Head -->

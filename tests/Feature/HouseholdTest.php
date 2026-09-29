@@ -34,12 +34,15 @@ class HouseholdTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Add New Household');
+        $response->assertSee('Its number will be assigned automatically when you save.');
+        $response->assertDontSee('name="household_number"', false);
     }
 
     public function test_new_household_can_be_stored(): void
     {
+        $this->travelTo(now()->setDate(2030, 6, 15));
+
         $data = [
-            'household_number' => 'HH-2026-999',
             'household_head' => 'Emilio Aguinaldo',
             'address' => 'Kawit, Cavite St.',
         ];
@@ -47,9 +50,60 @@ class HouseholdTest extends TestCase
         $response = $this->post(route('households.store'), $data);
 
         $response->assertRedirect(route('households.index'));
+        $household = Household::sole();
+        $expectedNumber = sprintf('HH-2030-%06d', $household->id);
+
+        $response->assertSessionHas('success', "Household {$expectedNumber} added successfully!");
         $this->assertDatabaseHas('households', [
-            'household_number' => 'HH-2026-999',
+            'household_number' => $expectedNumber,
             'household_head' => 'Emilio Aguinaldo',
+        ]);
+    }
+
+    public function test_household_number_cannot_be_supplied_or_changed_by_staff(): void
+    {
+        $response = $this->post(route('households.store'), [
+            'household_number' => 'HH-OVERRIDE',
+            'household_head' => 'First Household',
+            'address' => 'Purok 1',
+        ]);
+
+        $response->assertRedirect(route('households.index'));
+        $household = Household::sole();
+        $this->assertNotSame('HH-OVERRIDE', $household->household_number);
+
+        $this->get(route('households.edit', $household))->assertOk()
+            ->assertSee($household->household_number)
+            ->assertDontSee('name="household_number"', false);
+
+        $this->put(route('households.update', $household), [
+            'household_number' => 'HH-CHANGED',
+            'household_head' => 'Updated Household',
+            'address' => 'Purok 2',
+        ])->assertRedirect(route('households.index'));
+
+        $household->refresh();
+        $this->assertSame('Updated Household', $household->household_head);
+        $this->assertNotSame('HH-CHANGED', $household->household_number);
+    }
+
+    public function test_generated_number_does_not_replace_an_existing_household_number(): void
+    {
+        $this->travelTo(now()->setDate(2030, 6, 15));
+
+        $existing = Household::factory()->create();
+        $reservedNumber = sprintf('HH-2030-%06d', $existing->id + 1);
+        $existing->update(['household_number' => $reservedNumber]);
+
+        $this->post(route('households.store'), [
+            'household_head' => 'New Household',
+            'address' => 'Purok 3',
+        ])->assertRedirect(route('households.index'));
+
+        $this->assertSame($reservedNumber, $existing->fresh()->household_number);
+        $this->assertDatabaseHas('households', [
+            'household_head' => 'New Household',
+            'household_number' => $reservedNumber.'-1',
         ]);
     }
 
@@ -83,7 +137,7 @@ class HouseholdTest extends TestCase
         $response->assertRedirect(route('households.index'));
         $this->assertDatabaseHas('households', [
             'id' => $household->id,
-            'household_number' => 'HH-2026-010-EDITED',
+            'household_number' => 'HH-2026-010',
             'household_head' => 'Apolinario Mabini Sr.',
         ]);
     }
