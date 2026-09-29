@@ -4,6 +4,7 @@
 
 @section('content')
     <div class="resident-detail-page">
+        <div class="resident-detail-back"><a href="{{ route('account.requests.index') }}" class="resident-inline-link"><i data-lucide="arrow-left" aria-hidden="true"></i> My requests</a></div>
         <header class="resident-request-heading">
             <span class="resident-request-type-icon"><i data-lucide="{{ $serviceRequest->type === 'certificate' ? 'files' : 'notebook-pen' }}" aria-hidden="true"></i></span>
             <div>
@@ -12,7 +13,7 @@
                     <x-request-status :status="$serviceRequest->status" />
                 </div>
                 <h1>{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</h1>
-                <p>Submitted {{ $serviceRequest->created_at->format('M j, Y') }}</p>
+                <p>Submitted {{ $serviceRequest->created_at->timezone('Asia/Manila')->format('M j, Y') }}</p>
             </div>
         </header>
 
@@ -61,7 +62,7 @@
                         <div>
                             <h2 id="staff-message-title">Message from barangay staff</h2>
                             @if ($serviceRequest->response_note && $serviceRequest->reviewed_at)
-                                <p><time datetime="{{ $serviceRequest->reviewed_at->toIso8601String() }}">{{ $serviceRequest->reviewed_at->format('M j, Y \a\t g:i A') }}</time></p>
+                                <p><time datetime="{{ $serviceRequest->reviewed_at->toIso8601String() }}">{{ $serviceRequest->reviewed_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time></p>
                             @endif
                         </div>
                     </div>
@@ -83,7 +84,7 @@
                     <ol class="resident-progress" aria-label="Request progress">
                         <li class="resident-progress-done">
                             <span class="resident-progress-number"><i data-lucide="check" aria-hidden="true"></i></span>
-                            <div><strong>Request submitted</strong><time datetime="{{ $serviceRequest->created_at->toIso8601String() }}">{{ $serviceRequest->created_at->format('M j, Y \a\t g:i A') }}</time></div>
+                            <div><strong>Request submitted</strong><time datetime="{{ $serviceRequest->created_at->toIso8601String() }}">{{ $serviceRequest->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time></div>
                         </li>
                         <li class="{{ $serviceRequest->status === 'Pending' ? 'resident-progress-current' : 'resident-progress-done' }}" @if ($serviceRequest->status === 'Pending') aria-current="step" @endif>
                             <span class="resident-progress-number">
@@ -98,7 +99,7 @@
                                 @if ($serviceRequest->status === 'Pending')
                                     <span class="resident-progress-label">Current step</span>
                                 @elseif ($serviceRequest->reviewed_at)
-                                    <time datetime="{{ $serviceRequest->reviewed_at->toIso8601String() }}">{{ $serviceRequest->reviewed_at->format('M j, Y \a\t g:i A') }}</time>
+                                    <time datetime="{{ $serviceRequest->reviewed_at->toIso8601String() }}">{{ $serviceRequest->reviewed_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time>
                                 @endif
                             </div>
                         </li>

@@ -17,7 +17,7 @@
         <div class="resident-form-intro">
             <span class="resident-section-icon"><i data-lucide="message-square-warning" aria-hidden="true"></i></span>
             <div><span>Submitting as</span><strong>{{ auth()->user()->name }}</strong></div>
-            <p>Just the essentials first.</p>
+            <p>Fields marked * are required.</p>
         </div>
         <form method="POST" action="{{ route('account.incidents.store') }}" enctype="multipart/form-data" class="resident-form">
             @csrf
@@ -49,7 +49,7 @@
                 <div class="complaint-optional-body">
                     <div class="resident-field">
                         <x-form.label for="occurred_at">When did it happen?</x-form.label>
-                        <x-form.input name="occurred_at" type="datetime-local" :value="old('occurred_at')" max="{{ now('Asia/Manila')->format('Y-m-d\TH:i') }}" :aria-invalid="$errors->has('occurred_at') ? 'true' : 'false'" :aria-describedby="$errors->has('occurred_at') ? 'occurred-at-error' : 'incident-date-help'" />
+                        <x-form.input name="occurred_at" type="datetime-local" :value="old('occurred_at')" max="{{ now('Asia/Manila')->format('Y-m-d\TH:i') }}" :aria-invalid="$errors->has('occurred_at') ? 'true' : 'false'" :aria-describedby="$errors->has('occurred_at') ? 'incident-date-help occurred-at-error' : 'incident-date-help'" />
                         <p id="incident-date-help" class="incident-field-help">Leave blank to use the time you submit this report.</p>
                         <x-form.error id="occurred-at-error" :message="$errors->first('occurred_at')" />
                     </div>
@@ -67,7 +67,7 @@
             </details>
             <aside class="resident-form-guidance" aria-labelledby="incident-help-title">
                 <i data-lucide="info" aria-hidden="true"></i>
-                <div><h2 id="incident-help-title">For immediate danger</h2><p>Contact emergency services or the barangay office directly. Online reports may not be reviewed immediately. Formal blotter reports remain available separately in <a href="{{ route('account.requests.blotter.create') }}">My requests</a>.</p></div>
+                <div><h2 id="incident-help-title">For immediate danger</h2><p>Contact emergency services or the barangay office directly. Online reports may not be reviewed immediately. For a formal blotter record, you can <a href="{{ route('account.requests.blotter.create') }}">file a blotter report</a> separately.</p></div>
             </aside>
             <div class="resident-form-actions"><button type="submit" class="resident-button resident-button-primary">Submit report <i data-lucide="arrow-right" aria-hidden="true"></i></button><a href="{{ route('account') }}" class="resident-button resident-button-outline">Cancel</a></div>
         </form>

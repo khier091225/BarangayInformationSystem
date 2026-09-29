@@ -16,7 +16,7 @@
         <div class="resident-form-intro">
             <span class="resident-section-icon"><i data-lucide="user-round" aria-hidden="true"></i></span>
             <div><span>Complainant</span><strong>{{ auth()->user()->name }}</strong></div>
-            <p>Start with what happened.</p>
+            <p>Fields marked * are required.</p>
         </div>
         <form method="POST" action="{{ route('account.requests.blotter.store') }}" class="resident-form">
             @csrf
@@ -37,7 +37,7 @@
                     </div>
                     <div class="resident-field">
                         <x-form.label for="incident_date">Date of incident</x-form.label>
-                        <x-form.input name="incident_date" type="date" :value="old('incident_date')" max="{{ today('Asia/Manila')->toDateString() }}" :aria-invalid="$errors->has('incident_date') ? 'true' : 'false'" :aria-describedby="$errors->has('incident_date') ? 'incident-date-error' : 'blotter-date-help'" />
+                        <x-form.input name="incident_date" type="date" :value="old('incident_date')" max="{{ today('Asia/Manila')->toDateString() }}" :aria-invalid="$errors->has('incident_date') ? 'true' : 'false'" :aria-describedby="$errors->has('incident_date') ? 'blotter-date-help incident-date-error' : 'blotter-date-help'" />
                         <p id="blotter-date-help" class="incident-field-help">Leave blank if it happened today.</p>
                         <x-form.error id="incident-date-error" :message="$errors->first('incident_date')" />
                     </div>

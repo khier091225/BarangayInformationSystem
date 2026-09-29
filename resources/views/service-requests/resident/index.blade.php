@@ -5,17 +5,17 @@
 @section('content')
     <div class="resident-page-heading">
         <div><h1>My requests</h1><p>Follow your submissions and read updates from barangay staff.</p></div>
-        <a href="{{ route('account') }}#resident-services" class="resident-button resident-button-primary"><i data-lucide="plus" aria-hidden="true"></i> New request</a>
+        <a href="{{ route('account') }}#resident-services" class="resident-button resident-button-primary"><i data-lucide="plus" aria-hidden="true"></i> Choose a service</a>
     </div>
 
     <section class="resident-card resident-history-card" aria-label="Submitted requests">
-        <nav class="resident-status-filters" aria-label="Filter requests by status">
+        <nav class="resident-history-filters" aria-label="Filter requests by status">
             <a href="{{ route('account.requests.index') }}" @if ($status === null) aria-current="page" @endif>All requests</a>
             @foreach (['Pending', 'Completed', 'Declined'] as $requestStatus)
                 <a href="{{ route('account.requests.index', ['status' => $requestStatus]) }}" @if ($status === $requestStatus) aria-current="page" @endif>{{ $requestStatus }}</a>
             @endforeach
         </nav>
-        <div class="resident-history-summary"><span>{{ number_format($requests->total()) }} {{ \Illuminate\Support\Str::plural('request', $requests->total()) }}</span><span>Most recently updated first</span></div>
+        <div class="resident-history-summary"><span>@if ($requests->isEmpty()){{ number_format($requests->total()) }} {{ \Illuminate\Support\Str::plural('request', $requests->total()) }}@else Showing {{ $requests->firstItem() }}–{{ $requests->lastItem() }} of {{ number_format($requests->total()) }} {{ \Illuminate\Support\Str::plural('request', $requests->total()) }} @endif</span><span>Most recently updated first</span></div>
         @if ($requests->isEmpty())
             <div class="resident-empty-state resident-history-empty">
                 <span class="resident-empty-icon"><i data-lucide="inbox" aria-hidden="true"></i></span>
@@ -30,7 +30,7 @@
         @else
             <ul class="resident-request-list">
                 @foreach ($requests as $serviceRequest)
-                        <li><x-resident-request-item :service-request="$serviceRequest" :show-status="$status === null" /></li>
+                    <li><x-resident-request-item :service-request="$serviceRequest" /></li>
                 @endforeach
             </ul>
         @endif

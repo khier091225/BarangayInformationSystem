@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="incident-detail-page">
-        <div class="incident-detail-back"><a href="{{ route('account.incidents.index') }}" class="resident-inline-link"><i data-lucide="arrow-left" aria-hidden="true"></i> My incident reports</a></div>
+        <div class="resident-detail-back"><a href="{{ route('account.incidents.index') }}" class="resident-inline-link"><i data-lucide="arrow-left" aria-hidden="true"></i> My reports</a></div>
         <header class="resident-request-heading">
             <span class="resident-request-type-icon"><i data-lucide="message-square-warning" aria-hidden="true"></i></span>
             <div><div class="resident-request-meta"><span class="resident-kicker resident-kicker-dark">{{ $incidentReport->reference_number }}</span><x-incident-status :status="$incidentReport->status" /></div><h1>{{ $incidentReport->categoryLabel() }}</h1><p>Submitted {{ $incidentReport->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</p></div>

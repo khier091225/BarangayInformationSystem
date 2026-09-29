@@ -85,7 +85,7 @@
                 <a href="{{ route('account.requests.show', $latestReviewedRequest) }}" class="resident-dashboard-highlight">
                     <span class="resident-section-icon"><i data-lucide="messages-square" aria-hidden="true"></i></span>
                     <span class="resident-dashboard-highlight-copy">
-                        <span class="resident-dashboard-eyebrow">STAFF UPDATE · {{ $latestReviewedRequest->reviewed_at->format('M j, Y') }}</span>
+                        <span class="resident-dashboard-eyebrow">STAFF UPDATE · {{ $latestReviewedRequest->reviewed_at->timezone('Asia/Manila')->format('M j, Y') }}</span>
                         <strong>{{ $latestReviewedRequest->type === 'certificate' ? $latestReviewedRequest->certificate_type : 'Blotter report' }}</strong>
                         <small>{{ \Illuminate\Support\Str::limit($latestReviewedRequest->response_note ?: ($latestReviewedRequest->status === 'Completed' ? 'Request completed. Open it for the next steps.' : 'Request declined. Open it for details.'), 130) }}</small>
                     </span>
@@ -100,7 +100,7 @@
                     <span class="resident-dashboard-highlight-copy">
                         <span class="resident-dashboard-eyebrow">INCIDENT REPORT · {{ $latestIncidentReport->reference_number }}</span>
                         <strong>{{ $latestIncidentReport->categoryLabel() }}</strong>
-                        <small>Updated {{ $latestIncidentReport->updated_at->format('M j, Y') }}</small>
+                        <small>Updated {{ $latestIncidentReport->updated_at->timezone('Asia/Manila')->format('M j, Y') }}</small>
                     </span>
                     <x-incident-status :status="$latestIncidentReport->status" />
                     <i data-lucide="arrow-right" aria-hidden="true"></i>
