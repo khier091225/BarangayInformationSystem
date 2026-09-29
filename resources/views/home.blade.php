@@ -131,7 +131,7 @@
     <section class="home-hero relative min-h-[85vh] flex items-center pt-10 pb-20 lg:pt-0 overflow-hidden bg-slate-900">
         <!-- Background Image with tuned dark overlay -->
         <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/30 to-slate-900/65 z-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/30 to-slate-900/70 z-10"></div>
             <img src="{{ asset('images/maxresdefault.jpg') }}" alt="Barangay Kay-Anlog Calamba Panoramic View" class="w-full h-full object-cover object-center opacity-55 mix-blend-overlay">
         </div>
         
