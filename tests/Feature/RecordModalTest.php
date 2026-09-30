@@ -1,0 +1,120 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\Blotter;
+use App\Models\Official;
+use App\Models\Resident;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\TestCase;
+
+class RecordModalTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(User::factory()->create());
+    }
+
+    /**
+     * @return array<string, array{string, string, string}>
+     */
+    public static function createModules(): array
+    {
+        return [
+            'residents' => ['residents', 'resident-create-dialog', 'first_name'],
+            'officials' => ['officials', 'official-create-dialog', 'name'],
+            'blotters' => ['blotters', 'blotter-create-dialog', 'complainant'],
+            'certificates' => ['certificates', 'certificate-create-dialog', 'resident_id'],
+        ];
+    }
+
+    /**
+     * @return array<string, array{string, class-string<Model>, string}>
+     */
+    public static function editModules(): array
+    {
+        return [
+            'residents' => ['residents', Resident::class, 'first_name'],
+            'officials' => ['officials', Official::class, 'name'],
+            'blotters' => ['blotters', Blotter::class, 'complainant'],
+        ];
+    }
+
+    #[DataProvider('createModules')]
+    public function test_create_modal_and_direct_page_share_the_store_form(string $module, string $dialogId, string $requiredField): void
+    {
+        $this->get(route($module.'.index'))->assertOk()
+            ->assertSee('href="'.route($module.'.create').'"', false)
+            ->assertSee('id="'.$dialogId.'"', false)
+            ->assertSee('action="'.route($module.'.store').'"', false)
+            ->assertSee('name="'.$requiredField.'"', false);
+
+        $this->get(route($module.'.create'))->assertOk()
+            ->assertSee('action="'.route($module.'.store').'"', false)
+            ->assertSee('name="'.$requiredField.'"', false)
+            ->assertDontSee('data-record-dialog', false);
+    }
+
+    #[DataProvider('createModules')]
+    public function test_invalid_create_submission_reopens_its_modal(string $module, string $dialogId, string $requiredField): void
+    {
+        $this->from(route($module.'.index'))->post(route($module.'.store'), [
+            '_record_form' => $module.'.create',
+            $requiredField => '',
+        ])->assertRedirect(route($module.'.index'))
+            ->assertSessionHasErrors($requiredField);
+
+        $response = $this->withCookie(config('session.cookie'), session()->getId())
+            ->get(route($module.'.index'));
+
+        $response->assertOk();
+        $this->assertMatchesRegularExpression('/<dialog id="'.$dialogId.'"[^>]*data-open-on-load/', $response->getContent());
+        $this->assertSame(1, substr_count($response->getContent(), 'data-open-on-load'));
+    }
+
+    #[DataProvider('editModules')]
+    public function test_edit_modal_and_direct_page_share_the_update_form(string $module, string $modelClass, string $requiredField): void
+    {
+        $record = $modelClass::factory()->create();
+        $dialogId = substr($module, 0, -1).'-edit-dialog-'.$record->getKey();
+
+        $this->get(route($module.'.index'))->assertOk()
+            ->assertSee('href="'.route($module.'.edit', $record).'"', false)
+            ->assertSee('id="'.$dialogId.'"', false)
+            ->assertSee('action="'.route($module.'.update', $record).'"', false)
+            ->assertSee('name="'.$requiredField.'"', false);
+
+        $this->get(route($module.'.edit', $record))->assertOk()
+            ->assertSee('action="'.route($module.'.update', $record).'"', false)
+            ->assertSee('name="'.$requiredField.'"', false)
+            ->assertDontSee('data-record-dialog', false);
+    }
+
+    #[DataProvider('editModules')]
+    public function test_invalid_edit_reopens_only_the_selected_record(string $module, string $modelClass, string $requiredField): void
+    {
+        $record = $modelClass::factory()->create();
+        $modelClass::factory()->create();
+        $dialogId = substr($module, 0, -1).'-edit-dialog-'.$record->getKey();
+
+        $this->from(route($module.'.index'))->put(route($module.'.update', $record), [
+            '_record_form' => $module.'.edit.'.$record->getKey(),
+            $requiredField => '',
+        ])->assertRedirect(route($module.'.index'))
+            ->assertSessionHasErrors($requiredField);
+
+        $response = $this->withCookie(config('session.cookie'), session()->getId())
+            ->get(route($module.'.index'));
+
+        $response->assertOk();
+        $this->assertMatchesRegularExpression('/<dialog id="'.$dialogId.'"[^>]*data-open-on-load/', $response->getContent());
+        $this->assertSame(1, substr_count($response->getContent(), 'data-open-on-load'));
+    }
+}

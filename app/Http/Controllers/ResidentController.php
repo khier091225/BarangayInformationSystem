@@ -49,8 +49,9 @@ class ResidentController extends Controller
         }
 
         $residents = $query->latest()->paginate(10)->withQueryString();
+        $households = Household::orderBy('household_number')->get();
 
-        return view('residents.index', compact('residents'));
+        return view('residents.index', compact('residents', 'households'));
     }
 
     /**

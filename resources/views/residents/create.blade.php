@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
-@section('title')
-    Register Resident | Barangay Information System
-@endsection
-
+@section('title', 'Register Resident | Barangay Information System')
 @section('main-style', 'max-width: 840px;')
 
 @section('breadcrumb')
@@ -17,107 +14,7 @@
         <h1 style="font-size: 24px; color: var(--ink);">Register New Resident</h1>
         <p style="color: var(--muted-soft); font-size: 13px;">Add a community resident to the barangay registry.</p>
     </div>
-
-    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-        <form method="POST" action="{{ route('residents.store') }}">
-            @csrf
-
-            <!-- Full Name Row (3 columns) -->
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 18px;">
-                <div>
-                    <x-form.label for="first_name" required>First Name</x-form.label>
-                    <x-form.input type="text" name="first_name" value="{{ old('first_name') }}" required placeholder="e.g. Juan" />
-                    <x-form.error :message="$errors->first('first_name')" />
-                </div>
-
-                <div>
-                    <x-form.label for="middle_name">Middle Name</x-form.label>
-                    <x-form.input type="text" name="middle_name" value="{{ old('middle_name') }}" placeholder="e.g. Santos" />
-                    <x-form.error :message="$errors->first('middle_name')" />
-                </div>
-
-                <div>
-                    <x-form.label for="last_name" required>Last Name</x-form.label>
-                    <x-form.input type="text" name="last_name" value="{{ old('last_name') }}" required placeholder="e.g. Dela Cruz" />
-                    <x-form.error :message="$errors->first('last_name')" />
-                </div>
-            </div>
-
-            <!-- Household Association & Birthdate -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
-                <div>
-                    <x-form.label for="household_id">Household (Optional)</x-form.label>
-                    <x-form.select name="household_id">
-                        <option value="">No household</option>
-                        @foreach ($households as $household)
-                            <option value="{{ $household->id }}" {{ old('household_id') == $household->id ? 'selected' : '' }}>
-                                {{ $household->household_number }} (Head: {{ $household->household_head }})
-                            </option>
-                        @endforeach
-                    </x-form.select>
-                    <x-form.error :message="$errors->first('household_id')" />
-                </div>
-
-                <div>
-                    <x-form.label for="birthdate" required>Birthdate</x-form.label>
-                    <x-form.input type="date" name="birthdate" value="{{ old('birthdate') }}" required max="{{ date('Y-m-d') }}" />
-                    <x-form.error :message="$errors->first('birthdate')" />
-                </div>
-            </div>
-
-            <!-- Gender & Civil Status -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
-                <div>
-                    <x-form.label for="gender" required>Gender</x-form.label>
-                    <x-form.select name="gender" required>
-                        <option value="">-- Select Gender --</option>
-                        <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
-                        <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
-                    </x-form.select>
-                    <x-form.error :message="$errors->first('gender')" />
-                </div>
-
-                <div>
-                    <x-form.label for="civil_status" required>Civil Status</x-form.label>
-                    <x-form.select name="civil_status" required>
-                        <option value="">-- Select Civil Status --</option>
-                        <option value="Single" {{ old('civil_status') == 'Single' ? 'selected' : '' }}>Single</option>
-                        <option value="Married" {{ old('civil_status') == 'Married' ? 'selected' : '' }}>Married</option>
-                        <option value="Widowed" {{ old('civil_status') == 'Widowed' ? 'selected' : '' }}>Widowed</option>
-                        <option value="Separated" {{ old('civil_status') == 'Separated' ? 'selected' : '' }}>Separated</option>
-                        <option value="Divorced" {{ old('civil_status') == 'Divorced' ? 'selected' : '' }}>Divorced</option>
-                    </x-form.select>
-                    <x-form.error :message="$errors->first('civil_status')" />
-                </div>
-            </div>
-
-            <!-- Address & Contact Number -->
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;">
-                <div>
-                    <x-form.label for="address" required>Address</x-form.label>
-                    <x-form.input type="text" name="address" value="{{ old('address') }}" required placeholder="e.g. Purok 4, Ilang-Ilang St." />
-                    <x-form.error :message="$errors->first('address')" />
-                </div>
-
-                <div>
-                    <x-form.label for="contact_number">Contact Number</x-form.label>
-                    <x-form.input type="text" name="contact_number" value="{{ old('contact_number') }}" placeholder="e.g. 09171234567" />
-                    <x-form.error :message="$errors->first('contact_number')" />
-                </div>
-            </div>
-
-            <!-- Voter Status Checkbox -->
-            <div style="margin-bottom: 26px; padding: 14px; background: var(--canvas); border: 1px solid var(--line); border-radius: 6px;">
-                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink);">
-                    <input type="checkbox" name="is_voter" value="1" {{ old('is_voter') ? 'checked' : '' }} style="width: 16px; height: 16px; accent-color: var(--accent);">
-                    <span>Registered voter</span>
-                </label>
-            </div>
-
-            <!-- Submit Buttons -->
-            <x-form.actions :cancel-url="route('residents.index')">
-                <x-slot:submit>Save Resident</x-slot:submit>
-            </x-form.actions>
-        </form>
+    <div class="record-form-page-card">
+        <x-residents.form :households="$households" />
     </div>
 @endsection

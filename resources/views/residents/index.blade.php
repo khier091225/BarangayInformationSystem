@@ -16,7 +16,7 @@
             <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Resident Registry</h1>
             <p style="color: var(--muted-soft); font-size: 13px;">Manage community residents, demographics, and voter registration records.</p>
         </div>
-        <a href="{{ route('residents.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="{{ route('residents.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="resident-create-dialog">
             <i data-lucide="user-plus"></i> Register Resident
         </a>
     </div>
@@ -112,7 +112,7 @@
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('residents.edit', [$resident]) }}" style="color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--input-line); border-radius: 4px;">
+                                <a href="{{ route('residents.edit', [$resident]) }}" style="color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--input-line); border-radius: 4px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="resident-edit-dialog-{{ $resident->getKey() }}">
                                     Edit
                                 </a>
                                 <form method="POST" action="{{ route('residents.destroy', [$resident]) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');" style="display: inline;">
@@ -139,4 +139,14 @@
     <div style="margin-top: 20px;">
         {{ $residents->links() }}
     </div>
+
+    <x-record-dialog id="resident-create-dialog" title="Register New Resident" description="Add a community resident to the barangay registry." icon="users-round" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'residents.create'">
+        <x-residents.form :households="$households" :modal="true" />
+    </x-record-dialog>
+
+    @foreach ($residents as $resident)
+        <x-record-dialog :id="'resident-edit-dialog-'.$resident->getKey()" title="Edit Resident" :description="'Update the details for '.$resident->full_name.'.'" icon="users-round" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'residents.edit.'.$resident->getKey()">
+            <x-residents.form :resident="$resident" :households="$households" :modal="true" />
+        </x-record-dialog>
+    @endforeach
 @endsection

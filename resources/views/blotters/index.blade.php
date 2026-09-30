@@ -16,7 +16,7 @@
             <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Blotter records</h1>
             <p style="color: var(--muted-soft); font-size: 13px;">Manage community disputes, complaints, and hearing records.</p>
         </div>
-        <a href="{{ route('blotters.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="{{ route('blotters.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="blotter-create-dialog">
             <i data-lucide="plus"></i> Record blotter
         </a>
     </div>
@@ -85,7 +85,7 @@
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('blotters.edit', [$blotter]) }}" style="color: var(--accent); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 4px;">
+                                <a href="{{ route('blotters.edit', [$blotter]) }}" style="color: var(--accent); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 4px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="blotter-edit-dialog-{{ $blotter->getKey() }}">
                                     Edit
                                 </a>
                                 <form method="POST" action="{{ route('blotters.destroy', [$blotter]) }}" onsubmit="return confirm('Are you sure you want to delete this blotter record?');" style="display: inline;">
@@ -112,4 +112,14 @@
     <div style="margin-top: 20px;">
         {{ $blotters->links() }}
     </div>
+
+    <x-record-dialog id="blotter-create-dialog" title="Record blotter" description="Record the complainant and what happened. New cases start as Pending." icon="notebook-pen" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'blotters.create'">
+        <x-blotters.create-form :modal="true" />
+    </x-record-dialog>
+
+    @foreach ($blotters as $blotter)
+        <x-record-dialog :id="'blotter-edit-dialog-'.$blotter->getKey()" title="Edit blotter record" :description="'Update case #'.$blotter->getKey().' and its hearing status.'" icon="notebook-pen" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'blotters.edit.'.$blotter->getKey()">
+            <x-blotters.edit-form :blotter="$blotter" :modal="true" />
+        </x-record-dialog>
+    @endforeach
 @endsection

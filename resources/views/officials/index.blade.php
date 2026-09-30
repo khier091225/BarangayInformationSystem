@@ -16,7 +16,7 @@
             <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Barangay Officials</h1>
             <p style="color: var(--muted-soft); font-size: 13px;">Manage elective and appointed community leaders, roles, and service terms.</p>
         </div>
-        <a href="{{ route('officials.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="{{ route('officials.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="official-create-dialog">
             <i data-lucide="user-plus"></i> Add Official
         </a>
     </div>
@@ -92,7 +92,7 @@
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('officials.edit', [$official]) }}" style="color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--input-line); border-radius: 4px;">
+                                <a href="{{ route('officials.edit', [$official]) }}" style="color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--input-line); border-radius: 4px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="official-edit-dialog-{{ $official->getKey() }}">
                                     Edit
                                 </a>
                                 <form method="POST" action="{{ route('officials.destroy', [$official]) }}" onsubmit="return confirm('Are you sure you want to remove this official?');" style="display: inline;">
@@ -119,4 +119,14 @@
     <div style="margin-top: 20px;">
         {{ $officials->links() }}
     </div>
+
+    <x-record-dialog id="official-create-dialog" title="Add New Official" description="Register an elective or appointed official to the barangay council." icon="badge-check" :open-on-load="$errors->any() && old('_record_form') === 'officials.create'">
+        <x-officials.form :modal="true" />
+    </x-record-dialog>
+
+    @foreach ($officials as $official)
+        <x-record-dialog :id="'official-edit-dialog-'.$official->getKey()" title="Edit Official" :description="'Update the details for '.$official->name.'.'" icon="badge-check" :open-on-load="$errors->any() && old('_record_form') === 'officials.edit.'.$official->getKey()">
+            <x-officials.form :official="$official" :modal="true" />
+        </x-record-dialog>
+    @endforeach
 @endsection

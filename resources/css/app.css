@@ -171,7 +171,7 @@
 .record-delete:hover { border-color: var(--danger); background: var(--danger-soft); color: var(--danger-hover); }
 .record-delete:focus-visible { outline-color: var(--danger); }
 .record-delete-large { padding: 9px 14px; border-radius: 6px; font-size: 13px; }
-:is(.button, .auth-submit, .resident-button, .overview-button, .search-button-primary, .record-delete):disabled { color: var(--disabled); background: var(--disabled-soft); border-color: var(--line); box-shadow: none; opacity: 1; transform: none; }
+:is(.button, .auth-submit, .resident-button, .search-button-primary, .record-delete):disabled { color: var(--disabled); background: var(--disabled-soft); border-color: var(--line); box-shadow: none; opacity: 1; transform: none; }
 .form-control { display: block; width: 100%; padding: 10px 12px; border: 1px solid var(--input-line); border-radius: 6px; background: var(--surface); color: var(--ink); font-size: 13px; box-sizing: border-box; }
 .form-control::placeholder { color: var(--muted-soft); opacity: 1; }
 .form-control:hover:not(:disabled) { border-color: var(--accent); }

@@ -16,7 +16,7 @@
             <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Certificates</h1>
             <p style="color: var(--muted-soft); font-size: 13px;">Issue and print barangay documents.</p>
         </div>
-        <a href="{{ route('certificates.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="{{ route('certificates.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="certificate-create-dialog">
             <i data-lucide="file-plus"></i> Issue Certificate
         </a>
     </div>
@@ -122,4 +122,8 @@
     <div style="margin-top: 20px;">
         {{ $certificates->links() }}
     </div>
+
+    <x-record-dialog id="certificate-create-dialog" title="Issue certificate" description="Generate an official document for a registered barangay resident." icon="files" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'certificates.create'">
+        <x-certificates.create-form :residents="$residents" :selected-resident-id="$selectedResidentId" :modal="true" />
+    </x-record-dialog>
 @endsection

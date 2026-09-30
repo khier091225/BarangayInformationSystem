@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
-@section('title')
-    Issue Certificate | Barangay Information System
-@endsection
-
+@section('title', 'Issue Certificate | Barangay Information System')
 @section('main-style', 'max-width: 750px;')
 
 @section('breadcrumb')
@@ -17,57 +14,7 @@
         <h1 style="font-size: 24px; color: var(--ink);">Issue certificate</h1>
         <p style="color: var(--muted-soft); font-size: 13px;">Generate an official document for a registered barangay resident.</p>
     </div>
-
-    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-        <form method="POST" action="{{ route('certificates.store') }}">
-            @csrf
-
-            <!-- Select Resident -->
-            <div style="margin-bottom: 18px;">
-                <x-form.label for="resident_id" required>Resident</x-form.label>
-                <x-form.select name="resident_id" required>
-                    <option value="">Choose a resident</option>
-                    @foreach ($residents as $resident)
-                        <option value="{{ $resident->id }}" {{ (old('resident_id', $selectedResidentId) == $resident->id) ? 'selected' : '' }}>
-                            {{ $resident->last_name }}, {{ $resident->first_name }} {{ $resident->middle_name }} ({{ $resident->address }})
-                        </option>
-                    @endforeach
-                </x-form.select>
-                <x-form.error :message="$errors->first('resident_id')" />
-            </div>
-
-            <!-- Certificate Type & Date Issued -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px;">
-                <div>
-                    <x-form.label for="certificate_type" required>Document type</x-form.label>
-                    <x-form.select name="certificate_type" required>
-                        <option value="">Select type</option>
-                        <option value="Barangay Clearance" {{ old('certificate_type') == 'Barangay Clearance' ? 'selected' : '' }}>Barangay Clearance</option>
-                        <option value="Certificate of Residency" {{ old('certificate_type') == 'Certificate of Residency' ? 'selected' : '' }}>Certificate of Residency</option>
-                        <option value="Certificate of Indigency" {{ old('certificate_type') == 'Certificate of Indigency' ? 'selected' : '' }}>Certificate of Indigency</option>
-                        <option value="Business Clearance" {{ old('certificate_type') == 'Business Clearance' ? 'selected' : '' }}>Business Clearance</option>
-                    </x-form.select>
-                    <x-form.error :message="$errors->first('certificate_type')" />
-                </div>
-
-                <div>
-                    <x-form.label for="date_issued" required>Date Issued</x-form.label>
-                    <x-form.input type="date" name="date_issued" value="{{ old('date_issued', date('Y-m-d')) }}" required />
-                    <x-form.error :message="$errors->first('date_issued')" />
-                </div>
-            </div>
-
-            <!-- Purpose -->
-            <div style="margin-bottom: 24px;">
-                <x-form.label for="purpose" required>Purpose</x-form.label>
-                <x-form.input type="text" name="purpose" value="{{ old('purpose') }}" required placeholder="e.g. Local Employment, Scholarship Application, Bank Account Requirement" />
-                <x-form.error :message="$errors->first('purpose')" />
-            </div>
-
-            <!-- Submit Buttons -->
-            <x-form.actions :cancel-url="route('certificates.index')">
-                <x-slot:submit>Issue certificate</x-slot:submit>
-            </x-form.actions>
-        </form>
+    <div class="record-form-page-card">
+        <x-certificates.create-form :residents="$residents" :selected-resident-id="$selectedResidentId" />
     </div>
 @endsection

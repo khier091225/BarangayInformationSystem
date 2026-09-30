@@ -9,10 +9,7 @@
                 <h1>Barangay overview</h1>
                 <p>A clear view of your community, services, and work awaiting review.</p>
             </div>
-            <div class="overview-heading-actions">
-                <span class="overview-date"><i data-lucide="calendar-days" aria-hidden="true"></i> {{ today()->format('D, M j, Y') }}</span>
-                <a href="{{ route('residents.create') }}" class="overview-button overview-button-primary"><i data-lucide="user-round-plus" aria-hidden="true"></i> Add resident</a>
-            </div>
+            <span class="overview-date"><i data-lucide="calendar-days" aria-hidden="true"></i> {{ today()->format('D, M j, Y') }}</span>
         </header>
 
         <div class="overview-toolbar">

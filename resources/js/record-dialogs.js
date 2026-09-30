@@ -1,5 +1,5 @@
-export default function initializeHouseholdDialogs() {
-    document.querySelectorAll('[data-household-dialog-trigger]').forEach(trigger => {
+export default function initializeRecordDialogs() {
+    document.querySelectorAll('[data-household-dialog-trigger], [data-record-dialog-trigger]').forEach(trigger => {
         const dialog = document.getElementById(trigger.getAttribute('aria-controls'));
 
         if (!dialog || typeof dialog.showModal !== 'function') return;
@@ -10,7 +10,7 @@ export default function initializeHouseholdDialogs() {
                 document.body.classList.add('dialog-open');
             }
 
-            (dialog.querySelector('[aria-invalid="true"]') ?? dialog.querySelector('[name="household_head"]'))
+            (dialog.querySelector('[aria-invalid="true"]') ?? dialog.querySelector('input:not([type="hidden"]), select, textarea'))
                 ?.focus({ preventScroll: true });
         }
 
@@ -21,7 +21,7 @@ export default function initializeHouseholdDialogs() {
             openDialog();
         });
 
-        dialog.querySelectorAll('[data-household-dialog-close]').forEach(button => {
+        dialog.querySelectorAll('[data-household-dialog-close], [data-record-dialog-close]').forEach(button => {
             button.addEventListener('click', () => dialog.close());
         });
 

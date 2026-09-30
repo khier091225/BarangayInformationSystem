@@ -47,8 +47,10 @@ class CertificateController extends Controller
         }
 
         $certificates = $query->latest('date_issued')->paginate(10)->withQueryString();
+        $residents = Resident::orderBy('last_name')->get();
+        $selectedResidentId = $request->query('resident_id');
 
-        return view('certificates.index', compact('certificates'));
+        return view('certificates.index', compact('certificates', 'residents', 'selectedResidentId'));
     }
 
     /**
