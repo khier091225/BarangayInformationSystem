@@ -14,10 +14,8 @@ class ProjectChatbotController extends Controller
             'message' => ['required', 'string', 'min:2', 'max:500'],
         ]);
 
-        $answer = $chatbot->reply(
-            $validated['message'],
-            $request->session()->get('chatbot_topics', []),
-        );
+        $history = $request->session()->get('chatbot_history', []);
+        $answer = $chatbot->reply($validated['message'], is_array($history) ? $history : []);
 
         if ($answer === null) {
             return response()->json([
@@ -25,7 +23,7 @@ class ProjectChatbotController extends Controller
             ], 503);
         }
 
-        $request->session()->put('chatbot_topics', $answer['topics']);
+        $request->session()->put('chatbot_history', $answer['history']);
 
         return response()->json(['reply' => $answer['reply']]);
     }
