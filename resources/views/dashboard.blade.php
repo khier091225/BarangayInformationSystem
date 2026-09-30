@@ -9,7 +9,10 @@
                 <h1>Barangay overview</h1>
                 <p>A clear view of your community, services, and work awaiting review.</p>
             </div>
-            <span class="overview-date"><i data-lucide="calendar-days" aria-hidden="true"></i> {{ today()->format('D, M j, Y') }}</span>
+            <time class="overview-date" datetime="{{ today('Asia/Manila')->toDateString() }}">
+                <span class="overview-date-icon"><i data-lucide="calendar-days" aria-hidden="true"></i></span>
+                <span class="overview-date-copy"><small>Today</small><strong>{{ today('Asia/Manila')->format('l, F j, Y') }}</strong></span>
+            </time>
         </header>
 
         <div class="overview-toolbar">
