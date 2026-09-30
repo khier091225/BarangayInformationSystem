@@ -429,19 +429,19 @@
                     @endphp
                     <div class="group bg-white rounded-2xl border {{ $isLeader ? 'border-emerald-300 ring-2 ring-emerald-500/10 shadow-md' : 'border-slate-200' }} text-center hover:shadow-xl hover:border-emerald-300 transition-all duration-300 relative overflow-hidden flex flex-col h-full">
                         <!-- Top Banner Accent -->
-                        <div class="h-16 w-full relative border-b border-slate-100 {{ $isLeader ? 'bg-gradient-to-r from-emerald-100 to-teal-100' : 'bg-slate-50' }}">
+                        <div class="h-20 w-full relative border-b border-slate-100 {{ $isLeader ? 'bg-gradient-to-r from-emerald-100 to-teal-100' : 'bg-slate-50' }}">
                             @if($isLeader)
                                 <span class="absolute top-2 right-2 text-[0.65rem] font-bold uppercase tracking-wider bg-emerald-700 text-white px-2 py-0.5 rounded-full">Punong Barangay</span>
                             @endif
                         </div>
                         
-                        <div class="px-5 pb-6 -mt-9 flex-grow flex flex-col items-center relative z-10">
+                        <div class="px-5 pb-6 -mt-12 flex-grow flex flex-col items-center relative z-10">
                             <!-- Avatar / Initials -->
-                            <div class="w-18 h-18 w-16 h-16 mx-auto rounded-full bg-white border-4 border-white shadow-md flex items-center justify-center overflow-hidden mb-3.5 group-hover:scale-105 transition-transform duration-300">
+                            <div class="w-28 h-28 mx-auto rounded-full bg-white border-4 border-white shadow-md flex items-center justify-center overflow-hidden mb-3.5 group-hover:scale-105 transition-transform duration-300">
                                 @if(!empty($official->image_path))
                                     <img src="{{ asset('storage/' . $official->image_path) }}" alt="{{ $official->name }}" class="w-full h-full object-cover">
                                 @else
-                                    <div class="w-full h-full {{ $isLeader ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-emerald-800' }} flex items-center justify-center font-bold text-lg">
+                                    <div class="w-full h-full {{ $isLeader ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-emerald-800' }} flex items-center justify-center font-bold text-2xl">
                                         {{ $initials ?: 'BO' }}
                                     </div>
                                 @endif

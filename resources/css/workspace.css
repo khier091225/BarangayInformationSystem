@@ -158,6 +158,11 @@
 .record-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1.125rem; }
 .record-form-grid--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .record-form-field { margin-bottom: 1.125rem; }
+.official-photo-preview { display: flex; align-items: center; gap: .75rem; margin-bottom: .75rem; padding: .65rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--canvas); }
+.official-photo-preview img { width: 3.5rem; height: 3.5rem; flex: none; border-radius: 50%; object-fit: cover; }
+.official-photo-preview label { display: inline-flex; align-items: center; gap: .5rem; color: var(--muted); font-size: .8125rem; cursor: pointer; }
+.official-photo-preview input { width: 1rem; height: 1rem; accent-color: var(--accent); }
+.official-photo-help { margin-top: .4rem; color: var(--muted); font-size: .75rem; line-height: 1.5; }
 .record-form-page-card { padding: 1.75rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 4px 12px rgb(0 0 0 / 3%); }
 .record-voter-field { margin-bottom: 1.5rem; padding: .875rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--canvas); }
 .record-voter-field label { display: flex; align-items: center; gap: .625rem; color: var(--ink); font-size: .8125rem; font-weight: 600; cursor: pointer; }

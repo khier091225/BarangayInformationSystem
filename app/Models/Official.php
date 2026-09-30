@@ -13,6 +13,7 @@ class Official extends Model
         'name',
         'position',
         'contact_number',
+        'image_path',
         'term_start',
         'term_end',
     ];

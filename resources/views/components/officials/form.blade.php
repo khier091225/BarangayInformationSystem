@@ -9,7 +9,7 @@
     $fieldId = fn (string $field): string => $modal ? str_replace('.', '-', $formContext).'-'.$field : $field;
 @endphp
 
-<form method="POST" action="{{ $editing ? route('officials.update', [$official]) : route('officials.store') }}">
+<form method="POST" action="{{ $editing ? route('officials.update', [$official]) : route('officials.store') }}" enctype="multipart/form-data">
     @csrf
     @if ($editing) @method('PUT') @endif
     @if ($modal) <input type="hidden" name="_record_form" value="{{ $formContext }}"> @endif
@@ -49,6 +49,20 @@
             <x-form.input type="date" name="term_end" :id="$fieldId('term_end')" :value="$value('term_end', $official?->term_end?->format('Y-m-d'))" :aria-invalid="$error('term_end') ? 'true' : 'false'" />
             <x-form.error :message="$error('term_end')" />
         </div>
+    </div>
+
+    <div class="record-form-field">
+        <x-form.label :for="$fieldId('photo')">Official photo</x-form.label>
+        @if ($editing && $official->image_path)
+            <div class="official-photo-preview">
+                <img src="{{ asset('storage/'.$official->image_path) }}" alt="Current photo of {{ $official->name }}" width="56" height="56">
+                <label for="{{ $fieldId('remove_photo') }}"><input type="checkbox" name="remove_photo" id="{{ $fieldId('remove_photo') }}" value="1" @checked($value('remove_photo', false))> Remove current photo</label>
+            </div>
+        @endif
+        <x-form.input type="file" name="photo" :id="$fieldId('photo')" accept="image/jpeg,image/png,image/webp" :aria-invalid="$error('photo') ? 'true' : 'false'" :aria-describedby="$fieldId('photo').'-help'" />
+        <p id="{{ $fieldId('photo') }}-help" class="official-photo-help">Optional. JPG, PNG, or WebP, up to 2 MB. This photo appears on the public homepage.</p>
+        <x-form.error :message="$error('photo')" />
+        <x-form.error :message="$error('remove_photo')" />
     </div>
 
     @if ($modal)

@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Official;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Throwable;
 
 class OfficialController extends Controller
 {
@@ -42,7 +45,7 @@ class OfficialController extends Controller
     /**
      * Show the form for creating a new official.
      */
-    public function create()
+    public function create(): View
     {
         return view('officials.create');
     }
@@ -50,7 +53,7 @@ class OfficialController extends Controller
     /**
      * Store a newly created official in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -58,9 +61,29 @@ class OfficialController extends Controller
             'contact_number' => 'nullable|string|max:50',
             'term_start' => 'nullable|date',
             'term_end' => 'nullable|date|after_or_equal:term_start',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        Official::create($validated);
+        unset($validated['photo']);
+        $photoPath = $request->file('photo')?->store('officials', 'public');
+
+        if ($photoPath === false) {
+            abort(500, 'The official photo could not be saved. Please try again.');
+        }
+
+        if ($photoPath !== null) {
+            $validated['image_path'] = $photoPath;
+        }
+
+        try {
+            Official::create($validated);
+        } catch (Throwable $exception) {
+            if ($photoPath !== null) {
+                Storage::disk('public')->delete($photoPath);
+            }
+
+            throw $exception;
+        }
 
         return redirect()->route('officials.index')
             ->with('success', 'Barangay official added successfully!');
@@ -69,7 +92,7 @@ class OfficialController extends Controller
     /**
      * Show the form for editing the specified official.
      */
-    public function edit(Official $official)
+    public function edit(Official $official): View
     {
         return view('officials.edit', compact('official'));
     }
@@ -77,7 +100,7 @@ class OfficialController extends Controller
     /**
      * Update the specified official in storage.
      */
-    public function update(Request $request, Official $official)
+    public function update(Request $request, Official $official): RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -85,9 +108,37 @@ class OfficialController extends Controller
             'contact_number' => 'nullable|string|max:50',
             'term_start' => 'nullable|date',
             'term_end' => 'nullable|date|after_or_equal:term_start',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'remove_photo' => 'nullable|boolean',
         ]);
 
-        $official->update($validated);
+        unset($validated['photo'], $validated['remove_photo']);
+        $photoPath = $request->file('photo')?->store('officials', 'public');
+
+        if ($photoPath === false) {
+            abort(500, 'The official photo could not be saved. Please try again.');
+        }
+
+        $removePhoto = $request->boolean('remove_photo');
+        $previousPhotoPath = $official->image_path;
+
+        if ($photoPath !== null || $removePhoto) {
+            $validated['image_path'] = $photoPath;
+        }
+
+        try {
+            $official->update($validated);
+        } catch (Throwable $exception) {
+            if ($photoPath !== null) {
+                Storage::disk('public')->delete($photoPath);
+            }
+
+            throw $exception;
+        }
+
+        if (($photoPath !== null || $removePhoto) && $previousPhotoPath !== null) {
+            Storage::disk('public')->delete($previousPhotoPath);
+        }
 
         return redirect()->route('officials.index')
             ->with('success', 'Barangay official updated successfully!');
@@ -96,9 +147,14 @@ class OfficialController extends Controller
     /**
      * Remove the specified official from storage.
      */
-    public function destroy(Official $official)
+    public function destroy(Official $official): RedirectResponse
     {
+        $photoPath = $official->image_path;
         $official->delete();
+
+        if ($photoPath !== null) {
+            Storage::disk('public')->delete($photoPath);
+        }
 
         return redirect()->route('officials.index')
             ->with('success', 'Barangay official removed successfully!');
