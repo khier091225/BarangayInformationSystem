@@ -10,7 +10,7 @@
             <h1>Report an incident</h1>
             <p>Tell barangay staff what happened. You can follow their response using your report reference.</p>
         </div>
-        <a href="{{ route('account.incidents.index') }}" class="resident-inline-link">My reports <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+        <a href="{{ route('account.incidents.index') }}" class="resident-button resident-button-primary">My reports <i data-lucide="arrow-right" aria-hidden="true"></i></a>
     </div>
 
     <section class="resident-card resident-form-card resident-service-form" aria-label="Incident report form">
@@ -19,10 +19,10 @@
             <div><span>Submitting as</span><strong>{{ auth()->user()->name }}</strong></div>
             <p>Fields marked * are required.</p>
         </div>
-        <form method="POST" action="{{ route('account.incidents.store') }}" enctype="multipart/form-data" class="resident-form">
+        <form method="POST" action="{{ route('account.incidents.store') }}" enctype="multipart/form-data" class="resident-form resident-service-grid">
             @csrf
             <div class="resident-form-fields">
-                <div class="resident-field">
+                <div class="resident-field resident-field-wide">
                     <x-form.label for="category" required>Category</x-form.label>
                     <x-form.select name="category" required :aria-invalid="$errors->has('category') ? 'true' : 'false'" :aria-describedby="$errors->has('category') ? 'category-error' : null">
                         <option value="">Choose the closest category</option>
@@ -65,7 +65,7 @@
                     </label>
                 </div>
             </details>
-            <aside class="resident-form-guidance" aria-labelledby="incident-help-title">
+            <aside class="resident-form-guidance resident-form-guidance-urgent" aria-labelledby="incident-help-title">
                 <i data-lucide="info" aria-hidden="true"></i>
                 <div><h2 id="incident-help-title">For immediate danger</h2><p>Contact emergency services or the barangay office directly. Online reports may not be reviewed immediately. For a formal blotter record, you can <a href="{{ route('account.requests.blotter.create') }}">file a blotter report</a> separately.</p></div>
             </aside>

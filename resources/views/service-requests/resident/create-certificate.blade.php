@@ -9,7 +9,7 @@
             <h1>Request a barangay document</h1>
             <p>Choose the document you need and enter its purpose. Barangay staff will review your request.</p>
         </div>
-        <a href="{{ route('account.requests.index') }}" class="resident-inline-link">My requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+        <a href="{{ route('account.requests.index', ['type' => 'certificate']) }}" class="resident-button resident-button-primary">My document requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
     </div>
 
     <section class="resident-card resident-form-card resident-service-form" aria-label="Document request form">
@@ -18,9 +18,9 @@
             <div><span>Requesting for</span><strong>{{ auth()->user()->name }}</strong></div>
             <p>Fields marked * are required.</p>
         </div>
-        <form method="POST" action="{{ route('account.requests.certificate.store') }}" class="resident-form">
+        <form method="POST" action="{{ route('account.requests.certificate.store') }}" class="resident-form resident-service-grid">
             @csrf
-            <div class="resident-form-fields">
+            <div class="resident-form-fields resident-form-fields-stacked">
                 <div class="resident-field">
                     <x-form.label for="certificate_type" required>Document type</x-form.label>
                     <x-form.select name="certificate_type" required :aria-invalid="$errors->has('certificate_type') ? 'true' : 'false'" :aria-describedby="$errors->has('certificate_type') ? 'certificate-type-error' : null">
@@ -39,7 +39,7 @@
             </div>
             <aside class="resident-form-guidance" aria-labelledby="request-help-title">
                 <i data-lucide="info" aria-hidden="true"></i>
-                <div><h2 id="request-help-title">What happens next?</h2><p>Staff will review your request. Follow its status in <a href="{{ route('account.requests.index') }}">My requests</a>. Once issued, contact the barangay office about collection.</p></div>
+                <div><h2 id="request-help-title">What happens next?</h2><p>Staff will review your request. Follow its status in <a href="{{ route('account.requests.index', ['type' => 'certificate']) }}">My document requests</a>. Once issued, contact the barangay office about collection.</p></div>
             </aside>
             <div class="resident-form-actions"><button type="submit" class="resident-button resident-button-primary">Submit document request <i data-lucide="arrow-right" aria-hidden="true"></i></button><a href="{{ route('account') }}" class="resident-button resident-button-outline">Cancel</a></div>
         </form>

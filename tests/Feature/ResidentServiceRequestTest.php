@@ -184,6 +184,34 @@ class ResidentServiceRequestTest extends TestCase
             ->assertViewHas('requests', fn (LengthAwarePaginator $page): bool => $page->total() === 0);
     }
 
+    public function test_document_and_blotter_buttons_open_their_own_request_filters(): void
+    {
+        $resident = Resident::factory()->create();
+        $this->actingAs(User::factory()->resident()->create(['resident_id' => $resident->id]));
+        $documentRequest = ServiceRequest::factory()->for($resident)->create(['status' => ServiceRequest::STATUS_COMPLETED]);
+        $blotterRequest = ServiceRequest::factory()->blotter()->for($resident)->create();
+        ServiceRequest::factory()->create();
+
+        $this->get(route('account.requests.certificate.create'))->assertOk()
+            ->assertSee('My document requests')
+            ->assertSee(route('account.requests.index', ['type' => ServiceRequest::TYPE_CERTIFICATE]), false);
+        $this->get(route('account.requests.blotter.create'))->assertOk()
+            ->assertSee('My blotter requests')
+            ->assertSee(route('account.requests.index', ['type' => ServiceRequest::TYPE_BLOTTER]), false);
+
+        $this->get(route('account.requests.index', ['type' => ServiceRequest::TYPE_CERTIFICATE]))->assertOk()
+            ->assertSee('My document requests')
+            ->assertViewHas('requests', fn (LengthAwarePaginator $page): bool => $page->total() === 1 && $page->getCollection()->sole()->is($documentRequest));
+
+        $this->get(route('account.requests.index', ['type' => ServiceRequest::TYPE_BLOTTER, 'status' => 'Pending']))->assertOk()
+            ->assertSee('My blotter requests')
+            ->assertSee(route('account.requests.index', ['type' => ServiceRequest::TYPE_BLOTTER, 'status' => 'Completed']))
+            ->assertViewHas('requests', fn (LengthAwarePaginator $page): bool => $page->total() === 1 && $page->getCollection()->sole()->is($blotterRequest));
+
+        $this->get(route('account.requests.index', ['type' => ServiceRequest::TYPE_BLOTTER, 'status' => 'Completed']))->assertOk()
+            ->assertSee('No completed blotter requests');
+    }
+
     public function test_request_history_rejects_an_unknown_status(): void
     {
         $resident = Resident::factory()->create();
@@ -191,5 +219,7 @@ class ResidentServiceRequestTest extends TestCase
 
         $this->getJson(route('account.requests.index', ['status' => 'Unknown']))
             ->assertUnprocessable()->assertJsonValidationErrors('status');
+        $this->getJson(route('account.requests.index', ['type' => 'unknown']))
+            ->assertUnprocessable()->assertJsonValidationErrors('type');
     }
 }

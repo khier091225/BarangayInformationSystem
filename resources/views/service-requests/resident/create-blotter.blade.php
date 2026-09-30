@@ -9,7 +9,7 @@
             <h1>File a blotter report</h1>
             <p>Describe the incident for barangay staff to review before it becomes an official blotter record.</p>
         </div>
-        <a href="{{ route('account.requests.index') }}" class="resident-inline-link">My requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+        <a href="{{ route('account.requests.index', ['type' => 'blotter']) }}" class="resident-button resident-button-primary">My blotter requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
     </div>
 
     <section class="resident-card resident-form-card resident-service-form" aria-label="Blotter report form">
@@ -18,7 +18,7 @@
             <div><span>Complainant</span><strong>{{ auth()->user()->name }}</strong></div>
             <p>Fields marked * are required.</p>
         </div>
-        <form method="POST" action="{{ route('account.requests.blotter.store') }}" class="resident-form">
+        <form method="POST" action="{{ route('account.requests.blotter.store') }}" class="resident-form resident-service-grid">
             @csrf
             <div class="resident-form-fields">
                 <div class="resident-field resident-field-wide">
@@ -45,7 +45,7 @@
             </details>
             <aside class="resident-form-guidance" aria-labelledby="blotter-help-title">
                 <i data-lucide="info" aria-hidden="true"></i>
-                <div><h2 id="blotter-help-title">Before you submit</h2><p>Include the place and what happened. You can add the person's name later through barangay staff if you do not know it now. Follow updates in <a href="{{ route('account.requests.index') }}">My requests</a>.</p></div>
+                <div><h2 id="blotter-help-title">Before you submit</h2><p>Include the place and what happened. You can add the person's name later through barangay staff if you do not know it now. Follow updates in <a href="{{ route('account.requests.index', ['type' => 'blotter']) }}">My blotter requests</a>.</p></div>
             </aside>
             <div class="resident-form-actions"><button type="submit" class="resident-button resident-button-primary">Submit blotter report <i data-lucide="arrow-right" aria-hidden="true"></i></button><a href="{{ route('account') }}" class="resident-button resident-button-outline">Cancel</a></div>
         </form>

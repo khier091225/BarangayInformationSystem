@@ -13,9 +13,22 @@ class ResidentServiceRequestController extends Controller
 {
     public function index(Request $request): View
     {
-        $filters = $request->validate(['status' => 'nullable|in:Pending,Completed,Declined']);
+        $filters = $request->validate([
+            'status' => 'nullable|in:Pending,Completed,Declined',
+            'type' => 'nullable|in:certificate,blotter',
+        ]);
         $status = $filters['status'] ?? null;
+        $type = $filters['type'] ?? null;
+        $requestLabel = match ($type) {
+            ServiceRequest::TYPE_CERTIFICATE => 'document requests',
+            ServiceRequest::TYPE_BLOTTER => 'blotter requests',
+            default => 'requests',
+        };
         $query = ServiceRequest::query()->where('resident_id', $request->user()->resident_id);
+
+        if ($type !== null) {
+            $query->where('type', $type);
+        }
 
         if ($status !== null) {
             $query->where('status', $status);
@@ -23,7 +36,7 @@ class ResidentServiceRequestController extends Controller
 
         $requests = $query->latest('updated_at')->latest('id')->paginate(10)->withQueryString();
 
-        return view('service-requests.resident.index', compact('requests', 'status'));
+        return view('service-requests.resident.index', compact('requests', 'status', 'type', 'requestLabel'));
     }
 
     public function createCertificate(): View
