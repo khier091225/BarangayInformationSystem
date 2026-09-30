@@ -19,27 +19,6 @@
     </div>
 
     <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-        <form method="POST" action="{{ route('households.store') }}">
-            @csrf
-
-            <!-- Household Head -->
-            <div style="margin-bottom: 18px;">
-                <x-form.label for="household_head" required>Household Head</x-form.label>
-                <x-form.input type="text" name="household_head" value="{{ old('household_head') }}" required placeholder="Full name of household head" />
-                <x-form.error :message="$errors->first('household_head')" />
-            </div>
-
-            <!-- Address -->
-            <div style="margin-bottom: 24px;">
-                <x-form.label for="address" required>Address</x-form.label>
-                <x-form.input type="text" name="address" value="{{ old('address') }}" required placeholder="e.g. 124 Rizal St., Purok 3" />
-                <x-form.error :message="$errors->first('address')" />
-            </div>
-
-            <!-- Submit Buttons -->
-            <x-form.actions :cancel-url="route('households.index')">
-                <x-slot:submit>Save Household</x-slot:submit>
-            </x-form.actions>
-        </form>
+        <x-households.create-form />
     </div>
 @endsection

@@ -2,12 +2,14 @@ import { createIcons, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, 
 import initializeWorkspace from './workspace';
 import initializeResidentNavigation from './resident-navigation';
 import initializeProjectChatbot from './chatbot';
+import initializeHouseholdDialogs from './household-dialogs';
 
 createIcons({ icons: { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, CircleX, ClipboardList, Clock, Download, ExternalLink, FileCheck2, Files, Flag, Globe, Grid2x2, HandHeart, HeartHandshake, HeartPulse, History, House, Inbox, Info, Landmark, LayoutDashboard, LogIn, LogOut, MapPin, Megaphone, Menu, MessageSquareWarning, MessagesSquare, NotebookPen, PanelLeft, Phone, Plus, Search, SearchX, ShieldCheck, Sprout, TrendingUp, UserRound, UserRoundPlus, UsersRound, X, Zap } });
 
 initializeWorkspace();
 initializeResidentNavigation();
 initializeProjectChatbot();
+initializeHouseholdDialogs();
 
 document.querySelectorAll('[data-registration-code-form]').forEach(form => {
     const submit = form.querySelector('[type="submit"]');

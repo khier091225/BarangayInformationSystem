@@ -15,7 +15,7 @@
         <div>
             <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Household Registry</h1>
         </div>
-        <a href="{{ route('households.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="{{ route('households.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;" data-household-dialog-trigger data-household-create-trigger aria-haspopup="dialog" aria-controls="household-create-dialog">
             <i data-lucide="plus"></i> Add Household
         </a>
     </div>
@@ -69,7 +69,7 @@
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
-                                <a href="{{ route('households.edit', [$household]) }}" style="color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--input-line); border-radius: 4px;">
+                                <a href="{{ route('households.edit', [$household]) }}" style="color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--input-line); border-radius: 4px;" data-household-dialog-trigger aria-haspopup="dialog" aria-controls="household-edit-dialog-{{ $household->getKey() }}">
                                     Edit
                                 </a>
                                 <form method="POST" action="{{ route('households.destroy', [$household]) }}" onsubmit="return confirm('Are you sure you want to delete this household?');" style="display: inline;">
@@ -96,4 +96,26 @@
     <div style="margin-top: 20px;">
         {{ $households->links() }}
     </div>
+
+    <dialog id="household-create-dialog" class="household-dialog" data-household-dialog data-household-create-dialog aria-labelledby="household-create-title" aria-describedby="household-create-description" @if (! old('_household_edit_id') && ($errors->has('household_head') || $errors->has('address'))) data-open-on-load @endif>
+        <div class="dialog-top">
+            <span class="household-dialog-icon" aria-hidden="true"><i data-lucide="house"></i></span>
+            <button type="button" class="icon-button" data-household-dialog-close aria-label="Close add household form"><i data-lucide="x" aria-hidden="true"></i></button>
+        </div>
+        <h2 id="household-create-title">Add New Household</h2>
+        <p id="household-create-description">Register a new household. Its number will be assigned automatically when you save.</p>
+        <x-households.create-form :modal="true" />
+    </dialog>
+
+    @foreach ($households as $household)
+        <dialog id="household-edit-dialog-{{ $household->getKey() }}" class="household-dialog" data-household-dialog aria-labelledby="household-edit-title-{{ $household->getKey() }}" aria-describedby="household-edit-description-{{ $household->getKey() }}" @if ($errors->any() && old('_household_edit_id') === (string) $household->getKey()) data-open-on-load @endif>
+            <div class="dialog-top">
+                <span class="household-dialog-icon" aria-hidden="true"><i data-lucide="house"></i></span>
+                <button type="button" class="icon-button" data-household-dialog-close aria-label="Close edit household form"><i data-lucide="x" aria-hidden="true"></i></button>
+            </div>
+            <h2 id="household-edit-title-{{ $household->getKey() }}">Edit Household</h2>
+            <p id="household-edit-description-{{ $household->getKey() }}">Update the details for {{ $household->household_number }}.</p>
+            <x-households.edit-form :household="$household" :modal="true" />
+        </dialog>
+    @endforeach
 @endsection

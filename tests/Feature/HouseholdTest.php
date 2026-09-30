@@ -27,6 +27,12 @@ class HouseholdTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Household Registry');
+        $response->assertSee('href="'.route('households.create').'"', false);
+        $response->assertSee('data-household-create-dialog', false);
+        $response->assertSee('action="'.route('households.store').'"', false);
+        $response->assertSee('name="household_head"', false);
+        $response->assertSee('name="address"', false);
+        $response->assertDontSee('data-open-on-load', false);
     }
 
     public function test_household_create_form_can_be_rendered(): void
@@ -36,7 +42,104 @@ class HouseholdTest extends TestCase
         $response->assertOk();
         $response->assertSee('Add New Household');
         $response->assertSee('Its number will be assigned automatically when you save.');
+        $response->assertSee('action="'.route('households.store').'"', false);
+        $response->assertSee('name="household_head"', false);
+        $response->assertSee('name="address"', false);
+        $response->assertDontSee('data-household-create-dialog', false);
         $response->assertDontSee('name="household_number"', false);
+    }
+
+    public function test_invalid_submission_from_modal_reopens_it_with_errors_and_old_input(): void
+    {
+        $this->from(route('households.index'))->post(route('households.store'), [
+            'household_head' => 'Test Household',
+            'address' => '',
+        ])->assertRedirect(route('households.index'))
+            ->assertSessionHasErrors('address');
+
+        $this->withCookie(config('session.cookie'), session()->getId())
+            ->get(route('households.index'))->assertOk()
+            ->assertSee('data-open-on-load', false)
+            ->assertSee('value="Test Household"', false)
+            ->assertSee('The address field is required.');
+
+        $this->assertDatabaseCount('households', 0);
+    }
+
+    public function test_invalid_submission_from_create_page_returns_to_that_page(): void
+    {
+        $this->from(route('households.create'))->post(route('households.store'), [
+            'household_head' => 'Test Household',
+            'address' => '',
+        ])->assertRedirect(route('households.create'))
+            ->assertSessionHasErrors('address');
+
+        $this->withCookie(config('session.cookie'), session()->getId())
+            ->get(route('households.create'))->assertOk()
+            ->assertSee('value="Test Household"', false)
+            ->assertSee('The address field is required.');
+    }
+
+    public function test_household_edit_modal_and_edit_page_use_the_same_prefilled_form(): void
+    {
+        $household = Household::factory()->create([
+            'household_head' => 'Original Head',
+            'address' => 'Purok 1',
+        ]);
+
+        $this->get(route('households.index'))->assertOk()
+            ->assertSee('href="'.route('households.edit', $household).'"', false)
+            ->assertSee('id="household-edit-dialog-'.$household->getKey().'"', false)
+            ->assertSee('action="'.route('households.update', $household).'"', false)
+            ->assertSee('id="household-edit-'.$household->getKey().'-household_head"', false)
+            ->assertSee('value="Original Head"', false);
+
+        $this->get(route('households.edit', $household))->assertOk()
+            ->assertSee('action="'.route('households.update', $household).'"', false)
+            ->assertSee('value="Original Head"', false)
+            ->assertSee('value="Purok 1"', false)
+            ->assertDontSee('data-household-dialog', false);
+    }
+
+    public function test_invalid_edit_from_modal_reopens_only_its_household_with_old_input(): void
+    {
+        $household = Household::factory()->create(['household_head' => 'First Head']);
+        $otherHousehold = Household::factory()->create(['household_head' => 'Second Head']);
+
+        $this->from(route('households.index'))->put(route('households.update', $household), [
+            '_household_edit_id' => (string) $household->getKey(),
+            'household_head' => 'Revised Head',
+            'address' => '',
+        ])->assertRedirect(route('households.index'))
+            ->assertSessionHasErrors('address');
+
+        $response = $this->withCookie(config('session.cookie'), session()->getId())
+            ->get(route('households.index'));
+
+        $response->assertOk()
+            ->assertSee('value="Revised Head"', false)
+            ->assertSee('value="Second Head"', false)
+            ->assertSee('The address field is required.');
+        $this->assertMatchesRegularExpression('/<dialog id="household-edit-dialog-'.$household->getKey().'"[^>]*data-open-on-load/', $response->getContent());
+        $this->assertSame(1, substr_count($response->getContent(), 'data-open-on-load'));
+        $this->assertSame('First Head', $household->fresh()->household_head);
+        $this->assertSame('Second Head', $otherHousehold->fresh()->household_head);
+    }
+
+    public function test_invalid_edit_from_full_page_returns_to_that_page(): void
+    {
+        $household = Household::factory()->create();
+
+        $this->from(route('households.edit', $household))->put(route('households.update', $household), [
+            'household_head' => 'Revised Head',
+            'address' => '',
+        ])->assertRedirect(route('households.edit', $household))
+            ->assertSessionHasErrors('address');
+
+        $this->withCookie(config('session.cookie'), session()->getId())
+            ->get(route('households.edit', $household))->assertOk()
+            ->assertSee('value="Revised Head"', false)
+            ->assertSee('The address field is required.');
     }
 
     public function test_new_household_can_be_stored(): void
