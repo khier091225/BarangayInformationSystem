@@ -15,7 +15,10 @@ class ProjectChatbotTest extends TestCase
 
     public function test_widget_is_available_across_public_auth_resident_and_staff_pages(): void
     {
-        $this->get(route('home'))->assertOk()->assertSee('data-project-chat', false);
+        $this->get(route('home'))->assertOk()
+            ->assertSee('data-project-chat', false)
+            ->assertSee('Pwede mong itanong')
+            ->assertSee('Paano mag-register?');
         $this->get(route('login'))->assertOk()->assertSee('data-project-chat', false);
 
         $resident = Resident::factory()->create();
@@ -52,6 +55,9 @@ class ProjectChatbotTest extends TestCase
                 && str_contains($request['system'], 'Only residents already recorded by barangay staff can register')
                 && str_contains($request['system'], 'There is currently no Add Staff or Admin account page')
                 && str_contains($request['system'], 'Add Household opens the full form at /households/create')
+                && str_contains($request['system'], 'Use everyday, colloquial Taglish by default')
+                && str_contains($request['system'], 'An English question by itself is NOT a request for an English answer')
+                && str_contains($request['system'], 'If the user explicitly asks you to answer in English')
                 && ! str_contains($request['system'], 'TL|registration');
         });
     }

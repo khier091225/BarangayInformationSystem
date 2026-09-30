@@ -44,7 +44,7 @@ export default function initializeProjectChatbot() {
         prompts.hidden = true;
         input.value = '';
         addMessage(message, 'user');
-        const pending = addMessage('Checking the BIS information…', 'assistant', true);
+        const pending = addMessage('Sandali, tinitingnan ko…', 'assistant', true);
 
         try {
             const response = await fetch(root.dataset.endpoint, {
@@ -59,17 +59,17 @@ export default function initializeProjectChatbot() {
             });
 
             if (response.status === 429) {
-                pending.textContent = 'Too many questions for now. Please wait a minute and try again.';
+                pending.textContent = 'Medyo sunod-sunod ang tanong. Wait muna ng isang minuto, tapos try ulit.';
             } else if (response.status === 419) {
-                pending.textContent = 'This page has expired. Please refresh it and try again.';
+                pending.textContent = 'Nag-expire ang page. I-refresh muna, tapos try ulit.';
             } else {
                 const data = await response.json();
                 pending.textContent = typeof data.reply === 'string'
                     ? data.reply
-                    : 'I could not answer right now. Please try again later.';
+                    : 'Hindi ako makasagot ngayon. Try ulit mamaya.';
             }
         } catch {
-            pending.textContent = 'I could not connect right now. Please check your connection and try again.';
+            pending.textContent = 'Hindi ako makakonekta ngayon. Check mo ang internet mo, tapos try ulit.';
         } finally {
             pending.classList.remove('project-chat__message--pending');
             scrollRegion.scrollTop = scrollRegion.scrollHeight;

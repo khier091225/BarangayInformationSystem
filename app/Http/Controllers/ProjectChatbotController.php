@@ -19,7 +19,7 @@ class ProjectChatbotController extends Controller
 
         if ($answer === null) {
             return response()->json([
-                'reply' => 'Project chat is temporarily unavailable. Please try again later or contact the barangay office.',
+                'reply' => 'Hindi muna available ang BIS chat ngayon. Try ulit mamaya o magtanong sa barangay office.',
             ], 503);
         }
 
