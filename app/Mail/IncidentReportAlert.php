@@ -27,7 +27,7 @@ class IncidentReportAlert extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "New barangay incident report {$this->referenceNumber}",
+            subject: "Incident report {$this->referenceNumber} | Barangay Kay-Anlog",
         );
     }
 
@@ -37,7 +37,8 @@ class IncidentReportAlert extends Mailable
     public function content(): Content
     {
         return new Content(
-            text: 'emails.incident-report-alert',
+            view: 'emails.incident-report-alert',
+            text: 'emails.incident-report-alert-text',
         );
     }
 }
