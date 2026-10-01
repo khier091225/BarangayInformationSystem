@@ -6,47 +6,85 @@ use App\Models\Certificate;
 use App\Models\Household;
 use App\Models\Official;
 use App\Models\Resident;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use RuntimeException;
 use Tests\TestCase;
 
 class SeedDataTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_seeder_creates_consistent_households_and_related_records(): void
+    public function test_default_seeder_restores_the_saved_records_and_uploads(): void
     {
+        Storage::fake('public');
+        Storage::fake('local');
+        $snapshot = json_decode(
+            File::get(database_path('seeders/data/current-database.json')),
+            true,
+            flags: JSON_THROW_ON_ERROR,
+        );
+
         $this->seed();
 
-        $this->assertDatabaseCount('users', 1);
-        $this->assertTrue(Hash::check('password', User::sole()->password));
-        $this->assertDatabaseCount('households', 10);
-        $this->assertDatabaseCount('officials', 7);
-        $this->assertDatabaseCount('blotters', 5);
+        foreach ($snapshot['tables'] as $table => $records) {
+            $this->assertDatabaseCount($table, count($records));
 
-        foreach (Household::with('residents')->get() as $household) {
-            $this->assertGreaterThanOrEqual(3, $household->residents->count());
-            $this->assertLessThanOrEqual(5, $household->residents->count());
-
-            $head = $household->residents->firstWhere('full_name', $household->household_head);
-            $this->assertNotNull($head);
-            $this->assertGreaterThanOrEqual(18, $head->birthdate->age);
-
-            foreach ($household->residents as $resident) {
-                $this->assertSame($household->address, $resident->address);
+            foreach ($records as $record) {
+                $this->assertDatabaseHas($table, $record);
             }
         }
 
-        $certificates = Certificate::with('resident')->get();
-        $this->assertCount(5, $certificates->pluck('resident_id')->unique());
-        $this->assertGreaterThanOrEqual(5, $certificates->count());
-        $this->assertLessThanOrEqual(10, $certificates->count());
-
-        foreach ($certificates as $certificate) {
-            $this->assertNotNull($certificate->resident);
-            $this->assertTrue($certificate->date_issued->greaterThanOrEqualTo($certificate->resident->birthdate));
+        foreach ($snapshot['files'] as $file) {
+            Storage::disk($file['disk'])->assertExists($file['path']);
+            $this->assertSame(
+                File::get(database_path('seeders/data/files/'.$file['disk'].'/'.$file['path'])),
+                Storage::disk($file['disk'])->get($file['path']),
+            );
         }
+
+        foreach (['sessions', 'password_reset_tokens', 'cache', 'jobs'] as $table) {
+            $this->assertDatabaseEmpty($table);
+        }
+
+        Storage::disk('local')->assertDirectoryEmpty('/');
+    }
+
+    public function test_seeding_refuses_to_mix_the_snapshot_with_existing_records(): void
+    {
+        Storage::fake('public');
+        $official = Official::factory()->create();
+
+        $this->assertThrows(
+            fn () => $this->seed(),
+            RuntimeException::class,
+            'The database snapshot requires empty application tables. Back up existing data before using php artisan migrate:fresh --seed.',
+        );
+
+        $this->assertDatabaseCount('officials', 1);
+        $this->assertModelExists($official);
+        $this->assertDatabaseEmpty('households');
+        $this->assertDatabaseEmpty('residents');
+        $this->assertDatabaseEmpty('users');
+        Storage::disk('public')->assertDirectoryEmpty('/');
+    }
+
+    public function test_a_failed_upload_restore_rolls_back_the_seeded_records(): void
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('officials', 'An existing file blocks this directory.');
+
+        $this->assertThrows(
+            fn () => $this->seed(),
+            RuntimeException::class,
+        );
+
+        foreach (['households', 'residents', 'users', 'officials', 'blotters', 'certificates', 'service_requests', 'incident_reports', 'incident_report_updates'] as $table) {
+            $this->assertDatabaseEmpty($table);
+        }
+
+        Storage::disk('public')->assertExists('officials');
     }
 
     public function test_minor_residents_are_single_and_not_voters_by_default(): void
