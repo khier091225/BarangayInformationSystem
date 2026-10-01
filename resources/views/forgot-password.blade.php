@@ -36,7 +36,7 @@
             @error('email')<p class="auth-error" id="recovery-email-error" role="alert">{{ $message }}</p>@enderror
         </div>
 
-        <button class="auth-submit" type="submit"><span>Send reset link</span><i data-lucide="arrow-right" aria-hidden="true"></i></button>
+        <button class="auth-submit" type="submit" data-loading-label="Sending reset link..."><span data-submit-label>Send reset link</span><i data-lucide="arrow-right" aria-hidden="true"></i></button>
     </form>
 
     <div class="auth-recovery-note" id="recovery-availability-note">
