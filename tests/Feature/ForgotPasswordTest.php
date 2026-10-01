@@ -7,6 +7,7 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Password;
 use Tests\TestCase;
 
 class ForgotPasswordTest extends TestCase
@@ -22,6 +23,7 @@ class ForgotPasswordTest extends TestCase
         $this->get(route('password.request'))->assertOk()
             ->assertSee('Forgot your password?')
             ->assertSee('Send reset link')
+            ->assertSee('Use your registered email')
             ->assertSee(route('password.email'), false)
             ->assertDontSee('Design-only screen');
     }
@@ -43,29 +45,52 @@ class ForgotPasswordTest extends TestCase
         $resident = User::factory()->resident()->create();
 
         foreach ([$staff, $resident] as $user) {
-            $this->post(route('password.email'), ['email' => $user->email])
-                ->assertRedirect()
-                ->assertSessionHas('status', 'If an account matches that email address, a password reset link has been sent.');
+            $this->from(route('password.request'))
+                ->post(route('password.email'), ['email' => $user->email])
+                ->assertRedirect(route('password.request'))
+                ->assertSessionHasNoErrors()
+                ->assertSessionHas('status', 'A password reset link has been sent to your email address.');
 
             Notification::assertSentTo($user, ResetPassword::class);
+            $this->assertDatabaseHas('password_reset_tokens', ['email' => $user->email]);
+
+            $this->get(route('password.request'))
+                ->assertSee('A password reset link has been sent to your email address.');
         }
     }
 
-    public function test_password_reset_request_does_not_reveal_whether_an_account_exists(): void
+    public function test_unregistered_email_shows_an_error_without_sending_a_reset_link(): void
     {
         Notification::fake();
 
+        $this->followingRedirects()->from(route('password.request'))
+            ->post(route('password.email'), ['email' => 'missing@example.test'])
+            ->assertSee('This email address is not registered.')
+            ->assertSee('missing@example.test')
+            ->assertSee('aria-invalid="true"', false)
+            ->assertDontSee('auth-alert--success', false);
+
+        Notification::assertNothingSent();
+        $this->assertDatabaseEmpty('password_reset_tokens');
+    }
+
+    public function test_requesting_another_link_too_soon_shows_an_error_and_keeps_the_existing_token(): void
+    {
+        $this->freezeTime();
+        Notification::fake();
         $user = User::factory()->create();
-        $message = 'If an account matches that email address, a password reset link has been sent.';
+        $token = Password::createToken($user);
 
-        $this->post(route('password.email'), ['email' => $user->email])
-            ->assertSessionHas('status', $message);
+        $this->from(route('password.request'))
+            ->post(route('password.email'), ['email' => $user->email])
+            ->assertRedirect(route('password.request'))
+            ->assertSessionHasErrors([
+                'email' => 'A reset link was recently sent. Please wait before requesting another one.',
+            ])
+            ->assertSessionMissing('status');
 
-        $this->post(route('password.email'), ['email' => 'missing@example.test'])
-            ->assertSessionHas('status', $message);
-
-        Notification::assertSentTo($user, ResetPassword::class);
-        Notification::assertCount(1);
+        Notification::assertNothingSent();
+        $this->assertTrue(Password::tokenExists($user, $token));
     }
 
     public function test_user_can_reset_their_password_with_a_valid_token(): void

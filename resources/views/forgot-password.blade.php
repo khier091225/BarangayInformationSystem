@@ -41,7 +41,7 @@
 
     <div class="auth-recovery-note" id="recovery-availability-note">
         <i data-lucide="info" aria-hidden="true"></i>
-        <p><strong>Protecting your account</strong><span>For privacy, the confirmation message is the same whether or not an account matches the email address.</span></p>
+        <p><strong>Use your registered email</strong><span>Enter the email address linked to your account. After requesting a reset link, check your inbox and spam folder.</span></p>
     </div>
 
 @endsection
