@@ -3,13 +3,16 @@ import initializeWorkspace from './workspace';
 import initializeResidentNavigation from './resident-navigation';
 import initializeProjectChatbot from './chatbot';
 import initializeRecordDialogs from './record-dialogs';
+import { closeDialog, initializeDialogMotion, initializeFormFeedback } from './motion';
 
 createIcons({ icons: { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, CircleX, ClipboardList, Clock, Download, ExternalLink, FileCheck2, FilePlus, Files, Flag, Globe, Grid2x2, HandHeart, HeartHandshake, HeartPulse, History, House, Inbox, Info, Landmark, LayoutDashboard, LogIn, LogOut, MapPin, Megaphone, Menu, MessageSquareWarning, MessagesSquare, NotebookPen, PanelLeft, Pencil, Phone, Plus, Printer, RotateCcw, Search, SearchX, ShieldCheck, Sprout, TrendingUp, UserPlus, UserRound, UserRoundPlus, UsersRound, X, Zap } });
 
 initializeWorkspace();
 initializeResidentNavigation();
 initializeProjectChatbot();
+initializeDialogMotion();
 initializeRecordDialogs();
+initializeFormFeedback();
 
 document.querySelectorAll('[data-registration-code-form]').forEach(form => {
     const submit = form.querySelector('[type="submit"]');
@@ -135,11 +138,10 @@ document.querySelectorAll('[data-detail-title]').forEach(button => {
         document.body.classList.add('dialog-open');
     });
 });
-document.querySelectorAll('.dialog-close').forEach(button => button.addEventListener('click', () => dialog.close()));
 dialog?.addEventListener('close', () => document.body.classList.remove('dialog-open'));
 dialog?.addEventListener('click', event => {
     const bounds = dialog.getBoundingClientRect();
-    if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.close();
+    if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) closeDialog(dialog);
 });
 
 document.querySelectorAll('[data-filter]').forEach(button => {

@@ -48,7 +48,7 @@
             </div>
             @error('password')<p class="auth-error" id="password-error" role="alert">{{ $message }}</p>@enderror
         </div>
-        <button class="auth-submit" type="submit"><span>Sign in</span><i data-lucide="arrow-right" aria-hidden="true"></i></button>
+        <button class="auth-submit" type="submit" data-loading-label="Signing in..."><span data-submit-label>Sign in</span><i data-lucide="arrow-right" aria-hidden="true"></i></button>
     </form>
 
     <p class="auth-switch">Verified resident without an account? <a href="{{ route('register') }}">Create one</a></p>

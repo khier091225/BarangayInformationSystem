@@ -6,6 +6,7 @@
 @import './staff-profile.css';
 @import './incident-reports.css';
 @import './chatbot.css';
+@import './motion.css';
 
 @source "../**/*.blade.php";
 @source "../**/*.js";

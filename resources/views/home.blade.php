@@ -139,7 +139,7 @@
             <!-- Left Copy -->
             <div class="w-full lg:w-1/2 text-white">
                 <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-400/25 backdrop-blur-md mb-6 sm:mb-8">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                     <span class="text-xs font-bold tracking-widest text-emerald-300 uppercase">Transparent Local Governance</span>
                 </div>
                 
@@ -209,7 +209,7 @@
                         </div>
                         <div class="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-400/25 whitespace-nowrap flex-shrink-0">
                             <span class="relative flex h-2 w-2 flex-shrink-0">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span class="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
                             </span>
                             <span class="text-[0.7rem] font-bold text-emerald-300 uppercase tracking-wider whitespace-nowrap">Live System</span>
@@ -222,7 +222,7 @@
                         <div class="bg-white/[0.04] border border-white/10 rounded-2xl p-4 sm:p-5 hover:bg-white/[0.08] hover:border-emerald-500/30 transition-all duration-300 group">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-[0.7rem] font-bold text-slate-300 uppercase tracking-wider">Residents</span>
-                                <div class="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center group-hover:scale-105 transition-transform">
                                     <i data-lucide="users-round" class="w-4 h-4"></i>
                                 </div>
                             </div>
@@ -234,7 +234,7 @@
                         <div class="bg-white/[0.04] border border-white/10 rounded-2xl p-4 sm:p-5 hover:bg-white/[0.08] hover:border-sky-500/30 transition-all duration-300 group">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-[0.7rem] font-bold text-slate-300 uppercase tracking-wider">Households</span>
-                                <div class="w-8 h-8 rounded-lg bg-sky-500/15 text-sky-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <div class="w-8 h-8 rounded-lg bg-sky-500/15 text-sky-400 flex items-center justify-center group-hover:scale-105 transition-transform">
                                     <i data-lucide="house" class="w-4 h-4"></i>
                                 </div>
                             </div>
@@ -246,7 +246,7 @@
                         <div class="bg-white/[0.04] border border-white/10 rounded-2xl p-4 sm:p-5 hover:bg-white/[0.08] hover:border-amber-500/30 transition-all duration-300 group">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-[0.7rem] font-bold text-slate-300 uppercase tracking-wider">Certificates</span>
-                                <div class="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <div class="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center group-hover:scale-105 transition-transform">
                                     <i data-lucide="file-check-2" class="w-4 h-4"></i>
                                 </div>
                             </div>
@@ -258,7 +258,7 @@
                         <div class="bg-white/[0.04] border border-white/10 rounded-2xl p-4 sm:p-5 hover:bg-white/[0.08] hover:border-teal-500/30 transition-all duration-300 group">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-[0.7rem] font-bold text-slate-300 uppercase tracking-wider">Turnaround</span>
-                                <div class="w-8 h-8 rounded-lg bg-teal-500/15 text-teal-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <div class="w-8 h-8 rounded-lg bg-teal-500/15 text-teal-400 flex items-center justify-center group-hover:scale-105 transition-transform">
                                     <i data-lucide="zap" class="w-4 h-4"></i>
                                 </div>
                             </div>
@@ -622,7 +622,7 @@
                 <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 border border-emerald-100 shadow-sm">
                     <i data-lucide="info" class="w-5 h-5"></i>
                 </div>
-                <button type="button" onclick="document.getElementById('service-dialog').close()" class="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors" aria-label="Close modal">
+                <button type="button" data-service-dialog-close class="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors" aria-label="Close modal">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -652,7 +652,7 @@
             </div>
             
             <div class="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-5 border-t border-slate-100">
-                <button type="button" onclick="document.getElementById('service-dialog').close()" class="w-full sm:w-auto px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">
+                <button type="button" data-service-dialog-close class="w-full sm:w-auto px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">
                     Close
                 </button>
                 @auth
@@ -677,22 +677,45 @@
         const closeIcon = document.getElementById('close-icon');
 
         if (menuBtn && mobileMenu) {
+            let closeTimer = null;
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+            function setMobileMenu(open) {
+                window.clearTimeout(closeTimer);
+                mobileMenu.removeAttribute('data-closing');
+                menuIcon.classList.toggle('hidden', open);
+                closeIcon.classList.toggle('hidden', !open);
+                menuBtn.setAttribute('aria-expanded', String(open));
+
+                if (open) {
+                    mobileMenu.classList.remove('hidden');
+                } else if (reducedMotion.matches || mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                } else {
+                    mobileMenu.setAttribute('data-closing', '');
+                    closeTimer = window.setTimeout(() => {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.removeAttribute('data-closing');
+                    }, 170);
+                }
+            }
+
             menuBtn.addEventListener('click', () => {
-                const isOpen = !mobileMenu.classList.contains('hidden');
-                mobileMenu.classList.toggle('hidden', isOpen);
-                menuIcon.classList.toggle('hidden', !isOpen);
-                closeIcon.classList.toggle('hidden', isOpen);
-                menuBtn.setAttribute('aria-expanded', String(!isOpen));
+                setMobileMenu(menuBtn.getAttribute('aria-expanded') !== 'true');
             });
 
             // Close on nav link click
             document.querySelectorAll('.mobile-nav-link').forEach(link => {
                 link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                    menuIcon.classList.remove('hidden');
-                    closeIcon.classList.add('hidden');
-                    menuBtn.setAttribute('aria-expanded', 'false');
+                    setMobileMenu(false);
                 });
+            });
+
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape' && menuBtn.getAttribute('aria-expanded') === 'true') {
+                    setMobileMenu(false);
+                    menuBtn.focus();
+                }
             });
         }
 

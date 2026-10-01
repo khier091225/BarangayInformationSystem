@@ -1,0 +1,189 @@
+:root {
+    --motion-fast: 160ms;
+    --motion-standard: 220ms;
+    --motion-enter: 320ms;
+    --motion-ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+@keyframes bis-enter {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bis-dialog-in {
+    from { opacity: 0; transform: translateY(8px) scale(.985); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes bis-dialog-out {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(4px) scale(.99); }
+}
+
+@keyframes bis-backdrop-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes bis-backdrop-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes bis-spinner {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes bis-menu-out {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-4px); }
+}
+
+:is(.workspace-main > :first-child, .resident-main > :first-child, .auth-panel, .home-hero > .container) {
+    animation: bis-enter var(--motion-enter) var(--motion-ease) backwards;
+}
+
+.overview-stats > .overview-stat {
+    animation: bis-enter var(--motion-enter) var(--motion-ease) backwards;
+}
+
+.overview-stats > .overview-stat:nth-child(2) { animation-delay: 45ms; }
+.overview-stats > .overview-stat:nth-child(3) { animation-delay: 90ms; }
+.overview-stats > .overview-stat:nth-child(4) { animation-delay: 135ms; }
+
+:is(.button, .auth-submit, .resident-button, .search-button-primary, .search-button-reset, .icon-button, .table-details, .record-delete, .sidebar-logout, .resident-logout, .resident-menu-toggle, .resident-sidebar-close, .profile-password-toggle, .resident-profile-password-toggle, .auth-password-toggle, .project-chat__launcher, .project-chat__close, .project-chat__form button) {
+    transition: background-color var(--motion-fast) var(--motion-ease), border-color var(--motion-fast) var(--motion-ease), color var(--motion-fast) var(--motion-ease), box-shadow var(--motion-fast) var(--motion-ease), transform var(--motion-fast) var(--motion-ease);
+}
+
+:is(.workspace-nav > a, .resident-side-nav a, .public-site-link, .resident-dashboard-service-link, .resident-dashboard-highlight, .resident-request-row, .incident-list-row, .staff-request-status, .overview-queue-item, .overview-panel-footer, .project-chat__prompts button) {
+    transition: background-color var(--motion-fast) var(--motion-ease), border-color var(--motion-fast) var(--motion-ease), color var(--motion-fast) var(--motion-ease), box-shadow var(--motion-fast) var(--motion-ease);
+}
+
+:is(.workspace-table tbody tr, .staff-requests-table tbody tr) {
+    transition: background-color var(--motion-fast) var(--motion-ease);
+}
+
+:is(.filter, .notice-item, .service-row, nav[aria-label="Pagination Navigation"] a) {
+    transition: background-color var(--motion-fast) var(--motion-ease), border-color var(--motion-fast) var(--motion-ease), color var(--motion-fast) var(--motion-ease);
+}
+
+:is(.form-control, .auth-input, .search-input-group, .search-select, .workspace-search, .overview-search, .resident-field input, .resident-field select, .resident-field textarea, .profile-field input) {
+    transition: border-color var(--motion-fast) var(--motion-ease), background-color var(--motion-fast) var(--motion-ease), box-shadow var(--motion-fast) var(--motion-ease), outline-color var(--motion-fast) var(--motion-ease);
+}
+
+:is(.form-error, .field-error, .auth-error, .resident-alert, .workspace-main > [role="status"], .workspace-main > [role="alert"], .workspace-toast) {
+    animation: bis-enter var(--motion-standard) var(--motion-ease) backwards;
+}
+
+dialog[open] { animation: bis-dialog-in var(--motion-standard) var(--motion-ease) both; }
+dialog[open]::backdrop { animation: bis-backdrop-in var(--motion-standard) ease-out both; }
+dialog[open][data-motion-closing] { animation: bis-dialog-out var(--motion-fast) ease-in both; }
+dialog[open][data-motion-closing]::backdrop { animation: bis-backdrop-out var(--motion-fast) ease-in both; }
+
+.project-chat__panel:not([hidden]) { animation: bis-dialog-in var(--motion-standard) var(--motion-ease) both; }
+.project-chat__panel.is-closing { animation: bis-dialog-out var(--motion-fast) ease-in both; }
+.project-chat__message { animation: bis-enter var(--motion-standard) var(--motion-ease) backwards; }
+
+:is(.resident-empty-state, .records-empty, .staff-requests-empty, .overview-empty, .resident-dashboard-empty, .resident-history-empty) {
+    animation: bis-enter var(--motion-enter) var(--motion-ease) backwards;
+}
+
+details[open] > :not(summary) { animation: bis-enter var(--motion-standard) var(--motion-ease) backwards; }
+
+@media (max-width: 1023px) {
+    #mobile-menu { position: absolute; inset: 100% 0 auto; }
+    #mobile-menu:not(.hidden) { animation: bis-enter var(--motion-standard) var(--motion-ease) backwards; }
+    #mobile-menu[data-closing] { animation: bis-menu-out var(--motion-fast) ease-in both; }
+}
+
+form[data-submitting] [data-active-submit] {
+    --submit-spinner: var(--accent);
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+    cursor: progress;
+}
+
+form[data-submitting] [data-active-submit] > * { visibility: hidden; }
+form[data-submitting] :is(.button-primary, .resident-button-primary, .auth-submit, .search-button-primary, .sidebar-logout, .resident-logout)[data-active-submit] {
+    --submit-spinner: var(--surface);
+}
+form[data-submitting] :is(.button-danger-outline, .record-delete)[data-active-submit] { --submit-spinner: var(--danger); }
+form[data-submitting] [data-active-submit]::after {
+    content: '';
+    position: absolute;
+    top: calc(50% - .45rem);
+    left: calc(50% - .45rem);
+    width: .9rem;
+    height: .9rem;
+    border: 2px solid var(--submit-spinner);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: bis-spinner .7s linear infinite;
+}
+
+form[data-submitting] .auth-submit[data-active-submit] { color: var(--surface) !important; }
+form[data-submitting] .auth-submit[data-active-submit] > [data-submit-label] { visibility: visible; }
+form[data-submitting] .auth-submit[data-active-submit] > svg { display: none; }
+form[data-submitting] .auth-submit[data-active-submit]::after {
+    position: static;
+    width: 1rem;
+    height: 1rem;
+    flex: none;
+}
+
+@media (hover: hover) {
+    :is(.button-primary, .resident-button-primary, .auth-submit, .search-button-primary):hover:not(:disabled):not([aria-disabled="true"]) {
+        transform: translateY(-1px);
+    }
+
+    :is(.button-primary, .resident-button-primary, .auth-submit, .search-button-primary):active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    .overview-stat:hover, #services .group:hover, #officials .group:hover {
+        transform: translateY(-2px);
+    }
+
+    .home-hero a:hover { transform: translateY(-1px); }
+    .project-chat__launcher:hover { transform: translateY(-1px); }
+}
+
+.overview-stat, #services .group, #officials .group {
+    transition: background-color var(--motion-standard) var(--motion-ease), border-color var(--motion-standard) var(--motion-ease), box-shadow var(--motion-standard) var(--motion-ease), transform var(--motion-standard) var(--motion-ease);
+}
+
+@media (max-width: 1099px) {
+    .resident-app-sidebar { transition: transform var(--motion-standard) var(--motion-ease), visibility var(--motion-standard); }
+}
+
+@media (max-width: 959px) {
+    .workspace-sidebar { transition: transform var(--motion-standard) var(--motion-ease), visibility var(--motion-standard); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :is(.auth-submit, .resident-button, .overview-stat, .project-chat__launcher, .home-hero a, #services .group, #officials .group):hover {
+        transform: none !important;
+    }
+
+    form[data-submitting] [data-active-submit]::after {
+        content: 'Submitting…';
+        top: 50%;
+        left: 50%;
+        width: auto;
+        height: auto;
+        border: 0;
+        border-radius: 0;
+        color: var(--submit-spinner);
+        font-size: .75rem;
+        font-weight: 700;
+        white-space: nowrap;
+        transform: translate(-50%, -50%);
+    }
+
+    form[data-submitting] .auth-submit[data-active-submit]::after { content: none; }
+}
+
+@media print {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}

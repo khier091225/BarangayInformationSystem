@@ -12,15 +12,34 @@ export default function initializeProjectChatbot() {
     const input = root.querySelector('[data-chat-input]');
     const submit = root.querySelector('[data-chat-submit]');
     const csrfToken = form.querySelector('input[name="_token"]').value;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let busy = false;
+    let closeTimer = null;
 
     function setOpen(open) {
-        panel.hidden = !open;
-        launcher.setAttribute('aria-expanded', String(open));
         if (open) {
+            window.clearTimeout(closeTimer);
+            panel.classList.remove('is-closing');
+            panel.hidden = false;
+            launcher.setAttribute('aria-expanded', 'true');
             input.focus();
-        } else {
+            return;
+        }
+
+        if (panel.hidden || panel.classList.contains('is-closing')) return;
+
+        function finishClose() {
+            panel.hidden = true;
+            panel.classList.remove('is-closing');
+            launcher.setAttribute('aria-expanded', 'false');
             launcher.focus();
+        }
+
+        if (reducedMotion.matches) {
+            finishClose();
+        } else {
+            panel.classList.add('is-closing');
+            closeTimer = window.setTimeout(finishClose, 170);
         }
     }
 

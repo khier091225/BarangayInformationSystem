@@ -1,3 +1,5 @@
+import { closeDialog } from './motion';
+
 export default function initializeRecordDialogs() {
     document.querySelectorAll('[data-household-dialog-trigger], [data-record-dialog-trigger]').forEach(trigger => {
         const dialog = document.getElementById(trigger.getAttribute('aria-controls'));
@@ -21,10 +23,6 @@ export default function initializeRecordDialogs() {
             openDialog();
         });
 
-        dialog.querySelectorAll('[data-household-dialog-close], [data-record-dialog-close]').forEach(button => {
-            button.addEventListener('click', () => dialog.close());
-        });
-
         dialog.addEventListener('close', () => {
             document.body.classList.remove('dialog-open');
             trigger.focus({ preventScroll: true });
@@ -35,7 +33,7 @@ export default function initializeRecordDialogs() {
 
             const bounds = dialog.getBoundingClientRect();
             if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) {
-                dialog.close();
+                closeDialog(dialog);
             }
         });
 

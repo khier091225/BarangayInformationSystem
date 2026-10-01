@@ -190,8 +190,8 @@
 .auth-submit {
     display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+    justify-content: center;
+    gap: .65rem;
     width: 100%;
     min-height: 3.2rem;
     margin-top: 1.55rem;
