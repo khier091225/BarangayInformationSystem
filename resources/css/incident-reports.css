@@ -6,6 +6,7 @@
 .incident-status-accepted, .incident-status-scheduled, .incident-status-mediation { color: var(--info); background: var(--info-soft); }
 .incident-status-settled { color: var(--success); background: var(--success-soft); }
 .incident-status-dismissed { color: var(--danger); background: var(--danger-soft); }
+.blotter-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .75rem; }
 .incident-dashboard-update { display: flex; align-items: center; flex-wrap: wrap; gap: .8rem 1rem; margin-top: 1rem; }
 .incident-dashboard-update > div { min-width: 12rem; flex: 1; }
 .incident-dashboard-update h2 { margin-top: .2rem; font-size: .98rem; font-weight: 720; }

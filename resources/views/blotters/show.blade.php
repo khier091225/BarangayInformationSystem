@@ -17,8 +17,10 @@
         <header class="staff-request-detail-heading">
             <span class="staff-request-detail-icon"><i data-lucide="notebook-pen" aria-hidden="true"></i></span>
             <div>
-                <div class="staff-request-detail-meta"><x-blotter-status :status="$blotter->status" /></div>
-                <h1>Blotter #{{ $blotter->id }}</h1>
+                <div class="blotter-title-row">
+                    <h1>Blotter #{{ $blotter->id }}</h1>
+                    <x-blotter-status :status="$blotter->status" />
+                </div>
                 <p>Review the case details and record each step of barangay mediation.</p>
             </div>
             <a href="{{ route('blotters.edit', [$blotter]) }}" class="button button-outline" style="margin-left: auto; text-decoration: none;">
@@ -45,45 +47,7 @@
                     </dl>
                 </section>
 
-                <section class="staff-request-detail-card incident-staff-timeline" aria-labelledby="blotter-history-title">
-                    <div class="staff-request-card-heading">
-                        <span class="staff-request-card-icon"><i data-lucide="history" aria-hidden="true"></i></span>
-                        <div><h2 id="blotter-history-title">Case history</h2><p>Recorded progress from filing through the final outcome</p></div>
-                    </div>
-                    <ol class="incident-timeline">
-                        <li>
-                            <span class="incident-timeline-dot" aria-hidden="true"></span>
-                            <div>
-                                <x-blotter-status :status="\App\Models\Blotter::STATUS_PENDING" />
-                                <time datetime="{{ $blotter->created_at->toIso8601String() }}">{{ $blotter->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time>
-                                <p>The blotter case was recorded and is waiting for staff review.</p>
-                            </div>
-                        </li>
-                        @foreach ($blotter->updates as $update)
-                            <li>
-                                <span class="incident-timeline-dot" aria-hidden="true"></span>
-                                <div>
-                                    <x-blotter-status :status="$update->status" />
-                                    <time datetime="{{ $update->created_at->toIso8601String() }}">{{ $update->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time>
-                                    <p>{{ $update->message }}</p>
-                                </div>
-                            </li>
-                        @endforeach
-                        @if ($blotter->updates->isEmpty() && $blotter->status !== \App\Models\Blotter::STATUS_PENDING)
-                            <li>
-                                <span class="incident-timeline-dot" aria-hidden="true"></span>
-                                <div>
-                                    <x-blotter-status :status="$blotter->status" />
-                                    <time datetime="{{ $blotter->updated_at->toIso8601String() }}">{{ $blotter->updated_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time>
-                                    <p>This status was carried over from the existing blotter record.</p>
-                                </div>
-                            </li>
-                        @endif
-                    </ol>
-                </section>
-            </div>
-
-            <aside class="staff-request-detail-card incident-action-card" aria-labelledby="blotter-action-title">
+                <section class="staff-request-detail-card incident-action-card" aria-labelledby="blotter-action-title">
                 <div class="staff-request-card-heading">
                     <span class="staff-request-card-icon"><i data-lucide="badge-check" aria-hidden="true"></i></span>
                     <div><h2 id="blotter-action-title">Handle this case</h2><p>{{ $blotter->serviceRequest ? 'Progress messages are visible to the resident.' : 'Move the case through the mediation process.' }}</p></div>
@@ -146,6 +110,44 @@
                         @endif
                     </p>
                 @endif
+                </section>
+            </div>
+
+            <aside class="staff-request-detail-card incident-staff-timeline" aria-labelledby="blotter-history-title">
+                <div class="staff-request-card-heading">
+                    <span class="staff-request-card-icon"><i data-lucide="history" aria-hidden="true"></i></span>
+                    <div><h2 id="blotter-history-title">Case history</h2><p>Recorded progress from filing through the final outcome</p></div>
+                </div>
+                <ol class="incident-timeline">
+                    <li>
+                        <span class="incident-timeline-dot" aria-hidden="true"></span>
+                        <div>
+                            <x-blotter-status :status="\App\Models\Blotter::STATUS_PENDING" />
+                            <time datetime="{{ $blotter->created_at->toIso8601String() }}">{{ $blotter->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time>
+                            <p>The blotter case was recorded and is waiting for staff review.</p>
+                        </div>
+                    </li>
+                    @foreach ($blotter->updates as $update)
+                        <li>
+                            <span class="incident-timeline-dot" aria-hidden="true"></span>
+                            <div>
+                                <x-blotter-status :status="$update->status" />
+                                <time datetime="{{ $update->created_at->toIso8601String() }}">{{ $update->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time>
+                                <p>{{ $update->message }}</p>
+                            </div>
+                        </li>
+                    @endforeach
+                    @if ($blotter->updates->isEmpty() && $blotter->status !== \App\Models\Blotter::STATUS_PENDING)
+                        <li>
+                            <span class="incident-timeline-dot" aria-hidden="true"></span>
+                            <div>
+                                <x-blotter-status :status="$blotter->status" />
+                                <time datetime="{{ $blotter->updated_at->toIso8601String() }}">{{ $blotter->updated_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time>
+                                <p>This status was carried over from the existing blotter record.</p>
+                            </div>
+                        </li>
+                    @endif
+                </ol>
             </aside>
         </div>
     </div>
