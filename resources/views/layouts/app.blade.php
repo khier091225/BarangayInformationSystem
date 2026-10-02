@@ -18,17 +18,18 @@
                 <x-brand-seal />
                 <span class="brand-name">Barangay<br> Kay-Anlog<span>INFORMATION SYSTEM</span></span>
             </a>
-            <div class="workspace-label">STAFF WORKSPACE</div>
             <nav class="workspace-nav" aria-label="Main workspace">
                 <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" icon="layout-dashboard">Overview</x-nav-link>
-                <span class="nav-group-label">BARANGAY MANAGEMENT</span>
+                <span class="nav-group-label">BARANGAY RECORDS</span>
                 <x-nav-link :href="route('residents.index')" :active="request()->routeIs('residents.*')" icon="users-round">Residents</x-nav-link>
-                <x-nav-link :href="route('service-requests.index')" :active="request()->routeIs('service-requests.*')" icon="inbox">Resident requests</x-nav-link>
-                <x-nav-link :href="route('incident-reports.index')" :active="request()->routeIs('incident-reports.*')" icon="message-square-warning">Incident reports</x-nav-link>
                 <x-nav-link :href="route('households.index')" :active="request()->routeIs('households.*')" icon="house">Households</x-nav-link>
-                <x-nav-link :href="route('certificates.index')" :active="request()->routeIs('certificates.*')" icon="files">Certificates</x-nav-link>
-                <x-nav-link :href="route('blotters.index')" :active="request()->routeIs('blotters.*')" icon="notebook-pen">Blotter records</x-nav-link>
                 <x-nav-link :href="route('officials.index')" :active="request()->routeIs('officials.*')" icon="badge-check">Officials</x-nav-link>
+                <span class="nav-group-label">REQUESTS &amp; DOCUMENTS</span>
+                <x-nav-link :href="route('service-requests.index')" :active="request()->routeIs('service-requests.*')" icon="inbox">Resident requests</x-nav-link>
+                <x-nav-link :href="route('certificates.index')" :active="request()->routeIs('certificates.*')" icon="files">Certificates</x-nav-link>
+                <span class="nav-group-label">CASE MANAGEMENT</span>
+                <x-nav-link :href="route('incident-reports.index')" :active="request()->routeIs('incident-reports.*')" icon="message-square-warning">Incident reports</x-nav-link>
+                <x-nav-link :href="route('blotters.index')" :active="request()->routeIs('blotters.*')" icon="notebook-pen">Blotter records</x-nav-link>
                 <span class="nav-group-label">ACCOUNT</span>
                 <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.*')" icon="user-round">My profile</x-nav-link>
             </nav>
@@ -65,9 +66,9 @@
                 <button type="button" class="icon-button sidebar-toggle" aria-label="Open sidebar" aria-controls="workspace-navigation" aria-expanded="false">
                     <i data-lucide="panel-left" aria-hidden="true"></i>
                 </button>
-                <a href="{{ route('dashboard') }}" class="workspace-mobile-brand" aria-label="Barangay Kay-Anlog, staff dashboard">
+                <a href="{{ route('dashboard') }}" class="workspace-mobile-brand" aria-label="Barangay Kay-Anlog admin dashboard">
                     <x-brand-seal />
-                    <span>Barangay Kay-Anlog<small>STAFF WORKSPACE</small></span>
+                    <span>Barangay Kay-Anlog</span>
                 </a>
             </header>
             @show
