@@ -21,7 +21,7 @@ class CertificateTest extends TestCase
     }
 
     #[DataProvider('supportedCertificateTypes')]
-    public function test_each_supported_certificate_type_can_be_issued(string $type): void
+    public function test_each_supported_certificate_type_can_be_issued(string $type, string $fee): void
     {
         $resident = Resident::factory()->create();
 
@@ -32,19 +32,23 @@ class CertificateTest extends TestCase
             'date_issued' => '2026-09-18',
         ])->assertSessionHasNoErrors()->assertRedirect();
 
-        $this->assertDatabaseHas('certificates', ['certificate_type' => $type, 'resident_id' => $resident->id]);
+        $this->assertDatabaseHas('certificates', [
+            'certificate_type' => $type,
+            'resident_id' => $resident->id,
+            'fee' => $fee,
+        ]);
     }
 
     /**
-     * @return array<string, array{string}>
+     * @return array<string, array{string, string}>
      */
     public static function supportedCertificateTypes(): array
     {
         return [
-            'clearance' => ['Barangay Clearance'],
-            'residency' => ['Certificate of Residency'],
-            'indigency' => ['Certificate of Indigency'],
-            'business' => ['Business Clearance'],
+            'clearance' => ['Barangay Clearance', '50.00'],
+            'residency' => ['Certificate of Residency', '50.00'],
+            'indigency' => ['Certificate of Indigency', '0.00'],
+            'business' => ['Business Clearance', '100.00'],
         ];
     }
 

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Resident;
 use App\Models\ServiceRequest;
+use App\Support\CertificateFees;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,6 +24,7 @@ class ServiceRequestFactory extends Factory
             'type' => ServiceRequest::TYPE_CERTIFICATE,
             'certificate_type' => 'Certificate of Residency',
             'purpose' => fake()->sentence(4),
+            'fee_amount' => CertificateFees::amountFor('Certificate of Residency'),
             'status' => ServiceRequest::STATUS_PENDING,
         ];
     }
@@ -33,6 +35,7 @@ class ServiceRequestFactory extends Factory
             'type' => ServiceRequest::TYPE_BLOTTER,
             'certificate_type' => null,
             'purpose' => null,
+            'fee_amount' => null,
             'respondent' => fake()->name(),
             'incident' => fake()->paragraph(),
             'incident_date' => now()->subDay()->toDateString(),

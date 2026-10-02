@@ -17,7 +17,7 @@
         </nav>
         <nav class="resident-history-filters" aria-label="Filter requests by status">
             <a href="{{ route('account.requests.index', array_filter(['type' => $type])) }}" @if ($status === null) aria-current="page" @endif>All statuses</a>
-            @foreach (['Pending', 'Completed', 'Declined'] as $requestStatus)
+            @foreach (['Pending', 'Awaiting Payment', 'Completed', 'Declined'] as $requestStatus)
                 <a href="{{ route('account.requests.index', array_filter(['type' => $type, 'status' => $requestStatus])) }}" @if ($status === $requestStatus) aria-current="page" @endif>{{ $requestStatus }}</a>
             @endforeach
         </nav>

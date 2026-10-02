@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Support\CertificateFees;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreCertificateRequest extends FormRequest
 {
@@ -12,13 +14,13 @@ class StoreCertificateRequest extends FormRequest
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     public function rules(): array
     {
         return [
             'resident_id' => 'required|exists:residents,id',
-            'certificate_type' => 'required|string|in:Barangay Clearance,Certificate of Residency,Certificate of Indigency,Business Clearance',
+            'certificate_type' => ['required', 'string', Rule::in(CertificateFees::types())],
             'purpose' => 'required|string|max:255',
             'date_issued' => 'required|date',
         ];

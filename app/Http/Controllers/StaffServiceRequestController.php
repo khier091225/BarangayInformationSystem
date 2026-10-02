@@ -6,6 +6,7 @@ use App\Http\Requests\ReviewServiceRequest;
 use App\Models\Blotter;
 use App\Models\Certificate;
 use App\Models\ServiceRequest;
+use App\Support\CertificateFees;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class StaffServiceRequestController extends Controller
     public function index(Request $request): View
     {
         $filters = $request->validate([
-            'status' => 'nullable|in:Pending,Completed,Declined',
+            'status' => 'nullable|in:Pending,Awaiting Payment,Completed,Declined',
         ]);
         $status = $filters['status'] ?? ServiceRequest::STATUS_PENDING;
 
@@ -27,6 +28,7 @@ class StaffServiceRequestController extends Controller
 
         $statusCounts = [
             ServiceRequest::STATUS_PENDING => (int) ($totals[ServiceRequest::STATUS_PENDING] ?? 0),
+            ServiceRequest::STATUS_AWAITING_PAYMENT => (int) ($totals[ServiceRequest::STATUS_AWAITING_PAYMENT] ?? 0),
             ServiceRequest::STATUS_COMPLETED => (int) ($totals[ServiceRequest::STATUS_COMPLETED] ?? 0),
             ServiceRequest::STATUS_DECLINED => (int) ($totals[ServiceRequest::STATUS_DECLINED] ?? 0),
         ];
@@ -43,41 +45,51 @@ class StaffServiceRequestController extends Controller
 
     public function show(ServiceRequest $serviceRequest): View
     {
-        $serviceRequest->load(['resident', 'reviewer', 'certificate', 'blotter']);
+        $serviceRequest->load(['resident', 'reviewer', 'certificate', 'blotter', 'latestPayment.recorder']);
+        $certificateFee = $serviceRequest->type === ServiceRequest::TYPE_CERTIFICATE
+            ? CertificateFees::amountFor($serviceRequest->certificate_type)
+            : null;
 
-        return view('service-requests.staff.show', compact('serviceRequest'));
+        return view('service-requests.staff.show', compact('serviceRequest', 'certificateFee'));
     }
 
     public function review(ReviewServiceRequest $request, ServiceRequest $serviceRequest): RedirectResponse
     {
         $validated = $request->validated();
-        $updated = DB::transaction(function () use ($request, $serviceRequest, $validated): bool {
+        $outcome = DB::transaction(function () use ($request, $serviceRequest, $validated): string {
             $lockedRequest = ServiceRequest::query()
                 ->with('resident')
                 ->lockForUpdate()
                 ->findOrFail($serviceRequest->id);
 
             if ($lockedRequest->status !== ServiceRequest::STATUS_PENDING) {
-                return false;
+                return 'already-reviewed';
             }
 
             $result = [
-                'status' => $validated['decision'] === 'complete'
-                    ? ServiceRequest::STATUS_COMPLETED
-                    : ServiceRequest::STATUS_DECLINED,
+                'status' => ServiceRequest::STATUS_DECLINED,
                 'response_note' => $validated['response_note'] ?? null,
                 'reviewed_by' => $request->user()->id,
                 'reviewed_at' => now(),
             ];
 
             if ($validated['decision'] === 'complete' && $lockedRequest->type === ServiceRequest::TYPE_CERTIFICATE) {
-                $certificate = Certificate::create([
-                    'resident_id' => $lockedRequest->resident_id,
-                    'certificate_type' => $lockedRequest->certificate_type,
-                    'purpose' => $lockedRequest->purpose,
-                    'date_issued' => today(),
-                ]);
-                $result['certificate_id'] = $certificate->id;
+                $feeAmount = CertificateFees::amountFor($lockedRequest->certificate_type);
+                $result['fee_amount'] = $feeAmount;
+
+                if ((float) $feeAmount > 0) {
+                    $result['status'] = ServiceRequest::STATUS_AWAITING_PAYMENT;
+                } else {
+                    $certificate = Certificate::create([
+                        'resident_id' => $lockedRequest->resident_id,
+                        'certificate_type' => $lockedRequest->certificate_type,
+                        'purpose' => $lockedRequest->purpose,
+                        'fee' => 0,
+                        'date_issued' => today(),
+                    ]);
+                    $result['status'] = ServiceRequest::STATUS_COMPLETED;
+                    $result['certificate_id'] = $certificate->id;
+                }
             } elseif ($validated['decision'] === 'complete' && $lockedRequest->type === ServiceRequest::TYPE_BLOTTER) {
                 $blotter = Blotter::create([
                     'complainant' => $lockedRequest->resident->full_name,
@@ -86,22 +98,27 @@ class StaffServiceRequestController extends Controller
                     'incident_date' => $lockedRequest->incident_date,
                     'status' => 'Pending',
                 ]);
+                $result['status'] = ServiceRequest::STATUS_COMPLETED;
                 $result['blotter_id'] = $blotter->id;
             }
 
             $lockedRequest->update($result);
 
-            return true;
+            return $result['status'] === ServiceRequest::STATUS_AWAITING_PAYMENT
+                ? 'awaiting-payment'
+                : ($validated['decision'] === 'complete' ? 'completed' : 'declined');
         });
 
-        if (! $updated) {
+        if ($outcome === 'already-reviewed') {
             return redirect()->route('service-requests.show', $serviceRequest)
                 ->with('warning', 'This request has already been reviewed.');
         }
 
         return redirect()->route('service-requests.show', $serviceRequest)
-            ->with('success', $validated['decision'] === 'complete'
-                ? 'Request completed and the official record was created.'
-                : 'Request declined. The resident can see your response.');
+            ->with('success', match ($outcome) {
+                'awaiting-payment' => 'Request approved. The resident can now generate the QRPH payment.',
+                'completed' => 'Request completed and the official record was created.',
+                default => 'Request declined. The resident can see your response.',
+            });
     }
 }

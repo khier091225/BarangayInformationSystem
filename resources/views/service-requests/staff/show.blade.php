@@ -41,6 +41,10 @@
                             <dt>Document requested</dt>
                             <dd>{{ $serviceRequest->certificate_type }}</dd>
                         </div>
+                        <div>
+                            <dt>Fixed document fee</dt>
+                            <dd>{{ (float) $certificateFee === 0.0 ? 'Free' : '₱'.number_format((float) $certificateFee, 2) }}</dd>
+                        </div>
                         <div class="staff-request-field-long">
                             <dt>Purpose</dt>
                             <dd>{{ $serviceRequest->purpose }}</dd>
@@ -64,11 +68,11 @@
 
             <section class="staff-request-detail-card staff-request-review-card" aria-labelledby="staff-request-review-title">
                 <div class="staff-request-card-heading">
-                    <span class="staff-request-card-icon"><i data-lucide="{{ $serviceRequest->status === 'Pending' ? 'clock' : 'badge-check' }}" aria-hidden="true"></i></span>
+                    <span class="staff-request-card-icon"><i data-lucide="{{ $serviceRequest->status === 'Pending' ? 'clock' : ($serviceRequest->status === 'Awaiting Payment' ? 'qr-code' : 'badge-check') }}" aria-hidden="true"></i></span>
                     <div>
-                        <h2 id="staff-request-review-title">{{ $serviceRequest->status === 'Pending' ? 'Review request' : 'Review outcome' }}</h2>
+                        <h2 id="staff-request-review-title">{{ $serviceRequest->status === 'Pending' ? 'Verify request' : 'Verification outcome' }}</h2>
                         @if ($serviceRequest->status === 'Pending')
-                            <p>Complete or decline this submission</p>
+                            <p>Approve or decline this submission</p>
                         @else
                             <p>Decision recorded by barangay staff</p>
                         @endif
@@ -76,7 +80,7 @@
                 </div>
 
                 @if ($serviceRequest->status === 'Pending')
-                    <p class="staff-request-review-help">Completing this request creates an official {{ $serviceRequest->type === 'certificate' ? 'certificate' : 'blotter' }} record. If you decline it, explain why in the message below.</p>
+                    <p class="staff-request-review-help">{{ $serviceRequest->type === 'certificate' ? 'Verify the request details. The fixed fee is applied automatically; free documents are issued immediately after approval.' : 'Completing this request creates an official blotter record.' }} If you decline it, explain why in the message below.</p>
                     <form method="POST" action="{{ route('service-requests.review', $serviceRequest) }}" class="staff-request-review-form">
                         @csrf
                         <div class="staff-request-review-field">
@@ -86,7 +90,7 @@
                             <x-form.error :message="$errors->first('response_note')" />
                         </div>
                         <div class="staff-request-review-actions">
-                            <button type="submit" name="decision" value="complete" class="button button-primary"><i data-lucide="check" aria-hidden="true"></i> Complete request</button>
+                            <button type="submit" name="decision" value="complete" class="button button-primary"><i data-lucide="check" aria-hidden="true"></i> {{ $serviceRequest->type === 'certificate' ? 'Approve request' : 'Complete request' }}</button>
                             <button type="submit" name="decision" value="decline" class="button button-danger-outline">Decline request</button>
                         </div>
                         <x-form.error :message="$errors->first('decision')" />
@@ -103,11 +107,50 @@
                                 <dd><time datetime="{{ $serviceRequest->reviewed_at->toIso8601String() }}">{{ $serviceRequest->reviewed_at->format('M j, Y \a\t g:i A') }}</time></dd>
                             </div>
                         @endif
+                        @if ($serviceRequest->type === 'certificate' && $serviceRequest->fee_amount !== null)
+                            <div>
+                                <dt>Document fee</dt>
+                                <dd>₱{{ number_format((float) $serviceRequest->fee_amount, 2) }}</dd>
+                            </div>
+                            <div>
+                                <dt>Payment method</dt>
+                                <dd>{{ $serviceRequest->latestPayment ? ($serviceRequest->latestPayment->provider === \App\Models\Payment::PROVIDER_CASH ? 'Cash' : 'QRPH') : ($serviceRequest->status === 'Awaiting Payment' ? 'Not selected yet' : 'Not required') }}</dd>
+                            </div>
+                            <div>
+                                <dt>Payment status</dt>
+                                <dd>{{ $serviceRequest->latestPayment ? ucfirst($serviceRequest->latestPayment->status) : ($serviceRequest->status === 'Awaiting Payment' ? 'Waiting for resident' : 'Not required') }}</dd>
+                            </div>
+                            @if ($serviceRequest->latestPayment?->receipt_number)
+                                <div><dt>Receipt number</dt><dd>{{ $serviceRequest->latestPayment->receipt_number }}</dd></div>
+                            @endif
+                            @if ($serviceRequest->latestPayment?->paid_at)
+                                <div><dt>Paid on</dt><dd>{{ $serviceRequest->latestPayment->paid_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</dd></div>
+                            @endif
+                        @endif
                         <div class="staff-request-field-long">
                             <dt>Message to resident</dt>
                             <dd>{{ $serviceRequest->response_note ?: 'No message was added.' }}</dd>
                         </div>
                     </dl>
+                    @if ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_CASH && $serviceRequest->latestPayment->status === \App\Models\Payment::STATUS_PENDING)
+                        <div class="staff-cash-payment">
+                            <div><h3>Record cash payment</h3><p>Confirm only after receiving the cash at the barangay hall.</p></div>
+                            <form method="POST" action="{{ route('payments.cash.confirm', $serviceRequest->latestPayment) }}" class="staff-request-review-form">
+                                @csrf
+                                <div class="staff-request-review-field">
+                                    <x-form.label for="receipt_number" required>Official receipt or reference number</x-form.label>
+                                    <x-form.input name="receipt_number" id="receipt_number" :value="old('receipt_number')" required maxlength="100" placeholder="e.g. OR-2026-00125" :aria-invalid="$errors->has('receipt_number') ? 'true' : null" />
+                                    <x-form.error :message="$errors->first('receipt_number')" />
+                                </div>
+                                <div class="staff-request-review-field">
+                                    <x-form.label for="payment_note">Payment note</x-form.label>
+                                    <x-form.textarea name="payment_note" id="payment_note" rows="3" maxlength="500" placeholder="Optional note about the cash payment" :aria-invalid="$errors->has('payment_note') ? 'true' : null">{{ old('payment_note') }}</x-form.textarea>
+                                    <x-form.error :message="$errors->first('payment_note')" />
+                                </div>
+                                <button type="submit" class="button button-primary"><i data-lucide="check" aria-hidden="true"></i> Record cash payment</button>
+                            </form>
+                        </div>
+                    @endif
                     @if ($serviceRequest->certificate)
                         <a href="{{ route('certificates.show', $serviceRequest->certificate) }}" class="staff-request-record-link">View issued certificate <i data-lucide="arrow-right" aria-hidden="true"></i></a>
                     @elseif ($serviceRequest->blotter)

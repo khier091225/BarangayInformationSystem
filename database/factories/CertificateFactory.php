@@ -3,26 +3,25 @@
 namespace Database\Factories;
 
 use App\Models\Resident;
+use App\Support\CertificateFees;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CertificateFactory extends Factory
 {
     public function definition(): array
     {
+        $certificateType = fake()->randomElement(CertificateFees::types());
+
         return [
             'resident_id' => Resident::factory(),
-            'certificate_type' => fake()->randomElement([
-                'Barangay Clearance',
-                'Certificate of Indigency',
-                'Certificate of Residency',
-                'Business Clearance',
-            ]),
+            'certificate_type' => $certificateType,
             'purpose' => fake()->randomElement([
                 'Job Application',
                 'Scholarship',
                 'Postal ID',
                 'Bank Account Opening',
             ]),
+            'fee' => CertificateFees::amountFor($certificateType),
             'date_issued' => today()->toDateString(),
         ];
     }

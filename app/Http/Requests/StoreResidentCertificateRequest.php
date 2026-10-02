@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Support\CertificateFees;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreResidentCertificateRequest extends FormRequest
 {
@@ -17,12 +19,12 @@ class StoreResidentCertificateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     public function rules(): array
     {
         return [
-            'certificate_type' => 'required|string|in:Barangay Clearance,Certificate of Residency,Certificate of Indigency,Business Clearance',
+            'certificate_type' => ['required', 'string', Rule::in(CertificateFees::types())],
             'purpose' => 'required|string|max:255',
         ];
     }

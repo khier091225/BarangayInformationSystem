@@ -120,6 +120,6 @@
     </div>
 
     <x-record-dialog id="certificate-create-dialog" title="Issue certificate" description="Generate an official document for a registered barangay resident." icon="files" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'certificates.create'">
-        <x-certificates.create-form :residents="$residents" :selected-resident-id="$selectedResidentId" :modal="true" />
+        <x-certificates.create-form :residents="$residents" :certificate-fees="$certificateFees" :selected-resident-id="$selectedResidentId" :modal="true" />
     </x-record-dialog>
 @endsection

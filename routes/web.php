@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BlotterController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DemoPaymentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HouseholdController;
 use App\Http\Controllers\IncidentAlertContactController;
@@ -29,6 +30,11 @@ Route::post('/chatbot/reply', ProjectChatbotController::class)
     ->middleware('throttle:8,1')->name('chatbot.reply');
 Route::redirect('/home', '/');
 Route::redirect('/portal', '/');
+
+Route::get('/demo-payments/{payment}', [DemoPaymentController::class, 'show'])
+    ->middleware('signed:relative')->name('demo-payments.show');
+Route::post('/demo-payments/{payment}/confirm', [DemoPaymentController::class, 'confirm'])
+    ->middleware('signed:relative')->name('demo-payments.confirm');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
@@ -66,6 +72,12 @@ Route::middleware(['auth', 'resident.verified'])->group(function (): void {
     Route::post('/account/requests/blotter', [ResidentServiceRequestController::class, 'storeBlotter'])
         ->middleware('throttle:5,1')->name('account.requests.blotter.store');
     Route::get('/account/requests/{serviceRequest}', [ResidentServiceRequestController::class, 'show'])->name('account.requests.show');
+    Route::post('/account/requests/{serviceRequest}/demo-payment', [DemoPaymentController::class, 'store'])
+        ->middleware('throttle:10,1')->name('account.requests.demo-payment.store');
+    Route::post('/account/requests/{serviceRequest}/cash-payment', [DemoPaymentController::class, 'storeCash'])
+        ->middleware('throttle:10,1')->name('account.requests.cash-payment.store');
+    Route::get('/account/demo-payments/{payment}/status', [DemoPaymentController::class, 'status'])
+        ->name('account.demo-payments.status');
     Route::get('/account/incidents', [ResidentIncidentReportController::class, 'index'])->name('account.incidents.index');
     Route::get('/account/incidents/create', [ResidentIncidentReportController::class, 'create'])->name('account.incidents.create');
     Route::post('/account/incidents', [ResidentIncidentReportController::class, 'store'])
@@ -85,6 +97,8 @@ Route::middleware('staff.session')->group(function (): void {
     Route::get('/service-requests', [StaffServiceRequestController::class, 'index'])->name('service-requests.index');
     Route::get('/service-requests/{serviceRequest}', [StaffServiceRequestController::class, 'show'])->name('service-requests.show');
     Route::post('/service-requests/{serviceRequest}/review', [StaffServiceRequestController::class, 'review'])->name('service-requests.review');
+    Route::post('/payments/{payment}/cash/confirm', [DemoPaymentController::class, 'confirmCash'])
+        ->name('payments.cash.confirm');
     Route::get('/incident-reports', [StaffIncidentReportController::class, 'index'])->name('incident-reports.index');
     Route::get('/incident-reports/alert-contacts', [IncidentAlertContactController::class, 'index'])
         ->name('incident-report-contacts.index');

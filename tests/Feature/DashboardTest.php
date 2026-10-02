@@ -85,7 +85,7 @@ class DashboardTest extends TestCase
             ->assertSee(route('blotters.index', ['status' => 'Pending']), false);
 
         $this->assertSame($pending->take(4)->modelKeys(), $response->viewData('pendingRequests')->modelKeys());
-        $this->assertSame(['Pending' => 5, 'Completed' => 2, 'Declined' => 1], $response->viewData('requestCounts'));
+        $this->assertSame(['Pending' => 5, 'Awaiting Payment' => 0, 'Completed' => 2, 'Declined' => 1], $response->viewData('requestCounts'));
         $this->assertSame(8, $response->viewData('totalServiceRequestCount'));
         $this->assertSame(5, $response->viewData('pendingServiceRequestCount'));
     }

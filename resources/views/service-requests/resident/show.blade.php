@@ -11,18 +11,21 @@
             </x-slot:actions>
         </x-workspace.page-header>
 
-        <section class="resident-request-status resident-request-status-{{ strtolower($serviceRequest->status) }}" aria-labelledby="request-status-title">
-            <span class="resident-request-status-icon"><i data-lucide="{{ $serviceRequest->status === 'Pending' ? 'calendar-clock' : ($serviceRequest->status === 'Completed' ? 'badge-check' : 'info') }}" aria-hidden="true"></i></span>
+        <section class="resident-request-status resident-request-status-{{ \Illuminate\Support\Str::slug($serviceRequest->status) }}" aria-labelledby="request-status-title">
+            <span class="resident-request-status-icon"><i data-lucide="{{ $serviceRequest->status === 'Pending' ? 'calendar-clock' : ($serviceRequest->status === 'Awaiting Payment' ? 'landmark' : ($serviceRequest->status === 'Completed' ? 'badge-check' : 'info')) }}" aria-hidden="true"></i></span>
             <div>
                 @if ($serviceRequest->status === 'Completed')
                     <h2 id="request-status-title">{{ $serviceRequest->type === 'certificate' ? 'Your document has been issued' : 'Your report has been recorded' }}</h2>
                     <p>{{ $serviceRequest->type === 'certificate' ? 'Contact barangay staff about collecting your document.' : 'Your report has been added to the official barangay blotter records. Contact staff for any follow-up on the incident.' }} @if ($serviceRequest->response_note) Check their message below for any instructions. @endif</p>
+                @elseif ($serviceRequest->status === 'Awaiting Payment')
+                    <h2 id="request-status-title">Payment required</h2>
+                    <p>Generate and scan the QRPH code below to complete the payment.</p>
                 @elseif ($serviceRequest->status === 'Declined')
                     <h2 id="request-status-title">This request was declined</h2>
                     <p>{{ $serviceRequest->response_note ? 'Read the staff message below for feedback. Contact the barangay office if you need clarification.' : 'Contact barangay staff for the reason and guidance on what to do next.' }}</p>
                 @else
-                    <h2 id="request-status-title">Waiting for staff review</h2>
-                    <p>Your request has been received. Barangay staff will review the details, and the result will appear on this page.</p>
+                    <h2 id="request-status-title">Waiting for verification</h2>
+                    <p>Your request has been received. Barangay staff will verify the details, and the result will appear on this page.</p>
                 @endif
             </div>
             @if ($serviceRequest->response_note)
@@ -39,7 +42,10 @@
                     </div>
                     <dl class="resident-detail-grid">
                         @if ($serviceRequest->type === 'certificate')
-                            <div class="resident-detail-wide"><dt>Document requested</dt><dd>{{ $serviceRequest->certificate_type }}</dd></div>
+                            <div><dt>Document requested</dt><dd>{{ $serviceRequest->certificate_type }}</dd></div>
+                            @if ($serviceRequest->fee_amount !== null)
+                                <div><dt>Document fee</dt><dd>₱{{ number_format((float) $serviceRequest->fee_amount, 2) }}</dd></div>
+                            @endif
                             <div class="resident-detail-description"><dt>Purpose of request</dt><dd>{{ $serviceRequest->purpose }}</dd></div>
                         @else
                             <div><dt>Respondent</dt><dd>{{ $serviceRequest->respondent }}</dd></div>
@@ -49,53 +55,86 @@
                     </dl>
                 </section>
 
+                @if ($serviceRequest->type === \App\Models\ServiceRequest::TYPE_CERTIFICATE && $serviceRequest->status === \App\Models\ServiceRequest::STATUS_AWAITING_PAYMENT)
+                    <section class="resident-card demo-qrph-card" aria-labelledby="payment-title">
+                        <div class="resident-detail-heading">
+                            <span class="resident-section-icon"><i data-lucide="landmark" aria-hidden="true"></i></span>
+                            <div><h2 id="payment-title">Payment</h2><p>Pay through QRPH or at the barangay hall.</p></div>
+                        </div>
+
+                        @if ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_DEMO_QRPH && $serviceRequest->latestPayment->status === \App\Models\Payment::STATUS_PENDING && $demoPaymentUrl)
+                            <div class="demo-qrph-active" data-demo-payment-monitor data-status-url="{{ route('account.demo-payments.status', $serviceRequest->latestPayment) }}">
+                                <div class="demo-qrph-code"><canvas data-demo-payment-qr data-qr-value="{{ $demoPaymentUrl }}" aria-label="QRPH payment code"></canvas></div>
+                                <div class="demo-qrph-copy">
+                                    <span class="demo-only-label"><i data-lucide="shield-check" aria-hidden="true"></i> QRPH PAYMENT</span>
+                                    <strong>₱{{ number_format((float) $serviceRequest->latestPayment->amount, 2) }}</strong>
+                                    <p>Scan this code with your phone camera, open the BIS payment page, then tap <b>Confirm payment</b>.</p>
+                                    <span class="demo-payment-live-status" data-demo-payment-status>Waiting for payment…</span>
+                                    <small>Expires {{ $serviceRequest->latestPayment->expires_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</small>
+                                    <a href="{{ $demoPaymentUrl }}" class="resident-inline-link" target="_blank" rel="noopener">Open payment page <i data-lucide="external-link" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                            <form method="POST" action="{{ route('account.requests.cash-payment.store', $serviceRequest) }}" class="payment-method-switch">
+                                @csrf
+                                <button type="submit" class="resident-button resident-button-outline"><i data-lucide="landmark" aria-hidden="true"></i> Pay cash instead</button>
+                            </form>
+                        @elseif ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_CASH && $serviceRequest->latestPayment->status === \App\Models\Payment::STATUS_PENDING)
+                            <div class="cash-payment-card" data-demo-payment-monitor data-status-url="{{ route('account.demo-payments.status', $serviceRequest->latestPayment) }}">
+                                <span class="cash-payment-icon"><i data-lucide="landmark" aria-hidden="true"></i></span>
+                                <div>
+                                    <span class="demo-only-label"><i data-lucide="check" aria-hidden="true"></i> CASH PAYMENT</span>
+                                    <strong>₱{{ number_format((float) $serviceRequest->latestPayment->amount, 2) }}</strong>
+                                    <p>Pay at the barangay hall and present request <b>#{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}</b>. Staff will record the receipt and confirm your payment.</p>
+                                    <span class="demo-payment-live-status" data-demo-payment-status>Waiting for staff confirmation…</span>
+                                </div>
+                            </div>
+                            <form method="POST" action="{{ route('account.requests.demo-payment.store', $serviceRequest) }}" class="payment-method-switch">
+                                @csrf
+                                <button type="submit" class="resident-button resident-button-outline"><i data-lucide="qr-code" aria-hidden="true"></i> Switch to QRPH</button>
+                            </form>
+                        @else
+                            @if ($serviceRequest->latestPayment?->status === \App\Models\Payment::STATUS_EXPIRED)
+                                <div class="demo-payment-expired"><i data-lucide="clock" aria-hidden="true"></i><span>The previous QR code expired. Generate a new one to continue.</span></div>
+                            @endif
+                            <div class="payment-method-intro"><strong>Amount due: ₱{{ number_format((float) $serviceRequest->fee_amount, 2) }}</strong><p>Choose how you want to pay.</p></div>
+                            <div class="payment-method-choices">
+                                <form method="POST" action="{{ route('account.requests.demo-payment.store', $serviceRequest) }}" class="payment-method-choice">
+                                    @csrf
+                                    <button type="submit"><span><i data-lucide="qr-code" aria-hidden="true"></i></span><strong>QRPH Payment</strong><small>Generate a QR code and confirm using your phone.</small></button>
+                                </form>
+                                <form method="POST" action="{{ route('account.requests.cash-payment.store', $serviceRequest) }}" class="payment-method-choice">
+                                    @csrf
+                                    <button type="submit"><span><i data-lucide="landmark" aria-hidden="true"></i></span><strong>Cash at Barangay Hall</strong><small>Pay in person and let staff record your receipt.</small></button>
+                                </form>
+                            </div>
+                        @endif
+                    </section>
+                @endif
+
                 @if ($serviceRequest->type === \App\Models\ServiceRequest::TYPE_BLOTTER && $serviceRequest->blotter)
                     <section class="resident-card incident-timeline-card" aria-labelledby="blotter-progress-title">
-                        <div class="resident-detail-heading">
-                            <span class="resident-section-icon"><i data-lucide="history" aria-hidden="true"></i></span>
-                            <div>
-                                <h2 id="blotter-progress-title">Blotter case progress</h2>
-                                <p>Current status: <x-blotter-status :status="$serviceRequest->blotter->status" /></p>
-                            </div>
-                        </div>
+                        <div class="resident-detail-heading"><span class="resident-section-icon"><i data-lucide="history" aria-hidden="true"></i></span><div><h2 id="blotter-progress-title">Blotter case progress</h2><p>Current status: <x-blotter-status :status="$serviceRequest->blotter->status" /></p></div></div>
                         @if ($serviceRequest->blotter->hearing_at)
                             <p class="incident-timeline-footnote">Mediation schedule: <strong>{{ $serviceRequest->blotter->hearing_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</strong></p>
                         @endif
                         <ol class="incident-timeline">
-                            <li>
-                                <span class="incident-timeline-dot" aria-hidden="true"></span>
-                                <div><x-blotter-status :status="\App\Models\Blotter::STATUS_PENDING" /><time datetime="{{ $serviceRequest->blotter->created_at->toIso8601String() }}">{{ $serviceRequest->blotter->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time><p>Your report was added to the official barangay blotter.</p></div>
-                            </li>
+                            <li><span class="incident-timeline-dot" aria-hidden="true"></span><div><x-blotter-status :status="\App\Models\Blotter::STATUS_PENDING" /><time datetime="{{ $serviceRequest->blotter->created_at->toIso8601String() }}">{{ $serviceRequest->blotter->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time><p>Your report was added to the official barangay blotter.</p></div></li>
                             @foreach ($serviceRequest->blotter->updates as $update)
-                                <li>
-                                    <span class="incident-timeline-dot" aria-hidden="true"></span>
-                                    <div><x-blotter-status :status="$update->status" /><time datetime="{{ $update->created_at->toIso8601String() }}">{{ $update->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time><p>{{ $update->message }}</p></div>
-                                </li>
+                                <li><span class="incident-timeline-dot" aria-hidden="true"></span><div><x-blotter-status :status="$update->status" /><time datetime="{{ $update->created_at->toIso8601String() }}">{{ $update->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time><p>{{ $update->message }}</p></div></li>
                             @endforeach
                         </ol>
                     </section>
                 @endif
 
                 @if ($serviceRequest->status !== 'Pending' || $serviceRequest->response_note)
-                <section id="staff-message" class="resident-card resident-staff-message" aria-labelledby="staff-message-title" tabindex="-1">
-                    <div class="resident-detail-heading">
-                        <span class="resident-section-icon"><i data-lucide="messages-square" aria-hidden="true"></i></span>
-                        <div>
-                            <h2 id="staff-message-title">Message from barangay staff</h2>
-                            @if ($serviceRequest->response_note && $serviceRequest->reviewed_at)
-                                <p><time datetime="{{ $serviceRequest->reviewed_at->toIso8601String() }}">{{ $serviceRequest->reviewed_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time></p>
-                            @endif
-                        </div>
-                    </div>
-                    @if ($serviceRequest->response_note)
-                        <p class="resident-staff-message-text">{{ $serviceRequest->response_note }}</p>
-                    @else
-                        <div class="resident-staff-message-empty">
-                            <strong>{{ $serviceRequest->status === 'Pending' ? 'No message yet' : 'No additional message' }}</strong>
-                            <p>{{ $serviceRequest->status === 'Pending' ? 'Any feedback from staff will appear here after your request is reviewed.' : 'Staff did not leave a message with this decision. You can contact the barangay office if you have questions.' }}</p>
-                        </div>
-                    @endif
-                </section>
+                    <section id="staff-message" class="resident-card resident-staff-message" aria-labelledby="staff-message-title" tabindex="-1">
+                        <div class="resident-detail-heading"><span class="resident-section-icon"><i data-lucide="messages-square" aria-hidden="true"></i></span><div><h2 id="staff-message-title">Message from barangay staff</h2>@if ($serviceRequest->response_note && $serviceRequest->reviewed_at)<p><time datetime="{{ $serviceRequest->reviewed_at->toIso8601String() }}">{{ $serviceRequest->reviewed_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time></p>@endif</div></div>
+                        @if ($serviceRequest->response_note)
+                            <p class="resident-staff-message-text">{{ $serviceRequest->response_note }}</p>
+                        @else
+                            <div class="resident-staff-message-empty"><strong>No additional message</strong><p>Staff did not leave a message with this decision. You can contact the barangay office if you have questions.</p></div>
+                        @endif
+                    </section>
                 @endif
             </div>
 
@@ -103,46 +142,23 @@
                 <section class="resident-card resident-progress-card" aria-labelledby="request-progress-title">
                     <div class="resident-progress-heading"><h2 id="request-progress-title">Request progress</h2></div>
                     <ol class="resident-progress" aria-label="Request progress">
-                        <li class="resident-progress-done">
-                            <span class="resident-progress-number"><i data-lucide="check" aria-hidden="true"></i></span>
-                            <div><strong>Request submitted</strong><time datetime="{{ $serviceRequest->created_at->toIso8601String() }}">{{ $serviceRequest->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time></div>
+                        <li class="resident-progress-done"><span class="resident-progress-number"><i data-lucide="check" aria-hidden="true"></i></span><div><strong>Request submitted</strong><time datetime="{{ $serviceRequest->created_at->toIso8601String() }}">{{ $serviceRequest->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time></div></li>
+                        <li class="{{ $serviceRequest->status === 'Pending' ? 'resident-progress-current' : ($serviceRequest->status === 'Declined' ? 'resident-progress-declined' : 'resident-progress-done') }}" @if (in_array($serviceRequest->status, ['Pending', 'Declined'], true)) aria-current="step" @endif>
+                            <span class="resident-progress-number"><i data-lucide="{{ $serviceRequest->status === 'Pending' ? 'calendar-clock' : ($serviceRequest->status === 'Declined' ? 'x' : 'check') }}" aria-hidden="true"></i></span>
+                            <div><strong>{{ $serviceRequest->status === 'Pending' ? 'Request verification' : ($serviceRequest->status === 'Declined' ? 'Request declined' : 'Request approved') }}</strong>@if ($serviceRequest->status === 'Pending')<span class="resident-progress-label">Current step</span>@elseif ($serviceRequest->reviewed_at)<time datetime="{{ $serviceRequest->reviewed_at->toIso8601String() }}">{{ $serviceRequest->reviewed_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time>@endif</div>
                         </li>
-                        <li class="{{ $serviceRequest->status === 'Pending' ? 'resident-progress-current' : 'resident-progress-done' }}" @if ($serviceRequest->status === 'Pending') aria-current="step" @endif>
-                            <span class="resident-progress-number">
-                                @if ($serviceRequest->status === 'Pending')
-                                    <i data-lucide="calendar-clock" aria-hidden="true"></i>
-                                @else
-                                    <i data-lucide="check" aria-hidden="true"></i>
-                                @endif
-                            </span>
-                            <div>
-                                <strong>Staff review</strong>
-                                @if ($serviceRequest->status === 'Pending')
-                                    <span class="resident-progress-label">Current step</span>
-                                @elseif ($serviceRequest->reviewed_at)
-                                    <time datetime="{{ $serviceRequest->reviewed_at->toIso8601String() }}">{{ $serviceRequest->reviewed_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time>
-                                @endif
-                            </div>
-                        </li>
-                        <li class="{{ $serviceRequest->status === 'Pending' ? 'resident-progress-upcoming' : ($serviceRequest->status === 'Declined' ? 'resident-progress-declined' : 'resident-progress-done') }}" @if ($serviceRequest->status !== 'Pending') aria-current="step" @endif>
-                            <span class="resident-progress-number">
-                                @if ($serviceRequest->status === 'Pending')
-                                    3
-                                @else
-                                    <i data-lucide="{{ $serviceRequest->status === 'Completed' ? 'check' : 'x' }}" aria-hidden="true"></i>
-                                @endif
-                            </span>
-                            <div>
-                                <strong>{{ $serviceRequest->status === 'Pending' ? 'Request result' : ($serviceRequest->status === 'Completed' ? ($serviceRequest->type === 'certificate' ? 'Document issued' : 'Report recorded') : 'Request declined') }}</strong>
-                            </div>
-                        </li>
+                        @if ($serviceRequest->status !== \App\Models\ServiceRequest::STATUS_DECLINED && $serviceRequest->type === \App\Models\ServiceRequest::TYPE_CERTIFICATE)
+                            <li class="{{ $serviceRequest->status === 'Awaiting Payment' ? 'resident-progress-current' : ($serviceRequest->status === 'Completed' ? 'resident-progress-done' : 'resident-progress-upcoming') }}" @if ($serviceRequest->status === 'Awaiting Payment') aria-current="step" @endif>
+                                <span class="resident-progress-number">@if ($serviceRequest->status === 'Completed')<i data-lucide="check" aria-hidden="true"></i>@elseif ($serviceRequest->status === 'Awaiting Payment')<i data-lucide="{{ $serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_CASH ? 'landmark' : 'qr-code' }}" aria-hidden="true"></i>@else 3 @endif</span>
+                                <div><strong>{{ (float) $serviceRequest->fee_amount === 0.0 ? 'Payment check' : ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_CASH ? 'Cash payment' : ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_DEMO_QRPH ? 'QRPH payment' : 'Choose payment method')) }}</strong>@if ($serviceRequest->status === 'Awaiting Payment')<span class="resident-progress-label">Current step</span>@endif</div>
+                            </li>
+                            <li class="{{ $serviceRequest->status === 'Completed' ? 'resident-progress-done' : 'resident-progress-upcoming' }}" @if ($serviceRequest->status === 'Completed') aria-current="step" @endif><span class="resident-progress-number">@if ($serviceRequest->status === 'Completed')<i data-lucide="check" aria-hidden="true"></i>@else 4 @endif</span><div><strong>Document issued</strong></div></li>
+                        @elseif ($serviceRequest->status !== \App\Models\ServiceRequest::STATUS_DECLINED)
+                            <li class="{{ $serviceRequest->status === 'Pending' ? 'resident-progress-upcoming' : ($serviceRequest->status === 'Declined' ? 'resident-progress-declined' : 'resident-progress-done') }}" @if ($serviceRequest->status !== 'Pending') aria-current="step" @endif><span class="resident-progress-number">@if ($serviceRequest->status === 'Pending') 3 @else <i data-lucide="{{ $serviceRequest->status === 'Completed' ? 'check' : 'x' }}" aria-hidden="true"></i> @endif</span><div><strong>{{ $serviceRequest->status === 'Completed' ? 'Report recorded' : ($serviceRequest->status === 'Declined' ? 'Request declined' : 'Request result') }}</strong></div></li>
+                        @endif
                     </ol>
                 </section>
-
-                <section class="resident-follow-up" aria-labelledby="follow-up-title">
-                    <i data-lucide="info" aria-hidden="true"></i>
-                    <div><h2 id="follow-up-title">Need to follow up?</h2><p>When contacting barangay staff, mention <strong>request #{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}</strong> so they can find your submission.</p></div>
-                </section>
+                <section class="resident-follow-up" aria-labelledby="follow-up-title"><i data-lucide="info" aria-hidden="true"></i><div><h2 id="follow-up-title">Need to follow up?</h2><p>When contacting barangay staff, mention <strong>request #{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}</strong> so they can find your submission.</p></div></section>
             </aside>
         </div>
     </div>

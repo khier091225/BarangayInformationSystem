@@ -7,6 +7,7 @@ use App\Models\Certificate;
 use App\Models\Official;
 use App\Models\Resident;
 use App\Models\ServiceRequest;
+use App\Support\CertificateFees;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -49,21 +50,23 @@ class CertificateController extends Controller
         $certificates = $query->latest('date_issued')->paginate(10)->withQueryString();
         $residents = Resident::orderBy('last_name')->get();
         $selectedResidentId = $request->query('resident_id');
+        $certificateFees = CertificateFees::rates();
 
-        return view('certificates.index', compact('certificates', 'residents', 'selectedResidentId'));
+        return view('certificates.index', compact('certificates', 'residents', 'selectedResidentId', 'certificateFees'));
     }
 
     /**
      * Show the form for issuing a new certificate.
      */
-    public function create(Request $request)
+    public function create(Request $request): View
     {
         // Pwedeng mag-pass ng resident_id galing sa profile view
         $selectedResidentId = $request->query('resident_id');
 
         $residents = Resident::orderBy('last_name')->get();
+        $certificateFees = CertificateFees::rates();
 
-        return view('certificates.create', compact('residents', 'selectedResidentId'));
+        return view('certificates.create', compact('residents', 'selectedResidentId', 'certificateFees'));
     }
 
     /**
@@ -72,6 +75,7 @@ class CertificateController extends Controller
     public function store(StoreCertificateRequest $request): RedirectResponse
     {
         $validated = $request->validated();
+        $validated['fee'] = CertificateFees::amountFor($validated['certificate_type']);
 
         $certificate = Certificate::create($validated);
 
@@ -82,7 +86,7 @@ class CertificateController extends Controller
     /**
      * Display the printable certificate document.
      */
-    public function show(Certificate $certificate)
+    public function show(Certificate $certificate): View
     {
         $certificate->load('resident.household');
 

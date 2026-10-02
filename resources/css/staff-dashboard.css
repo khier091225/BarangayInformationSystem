@@ -101,6 +101,7 @@
 .overview-request-total > span { color: var(--muted-soft); font-size: .76rem; }
 .overview-status-meter { display: flex; height: .65rem; margin: .9rem 1.35rem 1rem; overflow: hidden; border-radius: 99px; background: var(--surface-soft); }
 .overview-status-pending { background: var(--warning); }
+.overview-status-awaiting-payment { background: var(--info); }
 .overview-status-completed { background: var(--success); }
 .overview-status-declined { background: var(--danger); }
 .overview-status-list { margin: 0; padding: 0 1.35rem 1rem; list-style: none; }

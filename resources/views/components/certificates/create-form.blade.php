@@ -1,4 +1,4 @@
-@props(['residents', 'selectedResidentId' => null, 'modal' => false])
+@props(['residents', 'certificateFees', 'selectedResidentId' => null, 'modal' => false])
 
 @php
     $useOld = ! $modal || old('_record_form') === 'certificates.create';
@@ -27,8 +27,8 @@
             <x-form.label :for="$fieldId('certificate_type')" required>Document type</x-form.label>
             <x-form.select name="certificate_type" :id="$fieldId('certificate_type')" required :aria-invalid="$error('certificate_type') ? 'true' : 'false'">
                 <option value="">Select type</option>
-                @foreach (['Barangay Clearance', 'Certificate of Residency', 'Certificate of Indigency', 'Business Clearance'] as $type)
-                    <option value="{{ $type }}" @selected($value('certificate_type') === $type)>{{ $type }}</option>
+                @foreach ($certificateFees as $type => $fee)
+                    <option value="{{ $type }}" @selected($value('certificate_type') === $type)>{{ $type }} — {{ (float) $fee === 0.0 ? 'Free' : '₱'.number_format((float) $fee, 2) }}</option>
                 @endforeach
             </x-form.select>
             <x-form.error :message="$error('certificate_type')" />

@@ -29,6 +29,7 @@ class DashboardController extends Controller
             ->pluck('total', 'status');
         $requestCounts = [
             'Pending' => (int) ($requestTotals[ServiceRequest::STATUS_PENDING] ?? 0),
+            'Awaiting Payment' => (int) ($requestTotals[ServiceRequest::STATUS_AWAITING_PAYMENT] ?? 0),
             'Completed' => (int) ($requestTotals[ServiceRequest::STATUS_COMPLETED] ?? 0),
             'Declined' => (int) ($requestTotals[ServiceRequest::STATUS_DECLINED] ?? 0),
         ];

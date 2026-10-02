@@ -25,6 +25,7 @@ class StaffServiceRequestTest extends TestCase
             ->assertOk()
             ->assertViewHas('statusCounts', [
                 ServiceRequest::STATUS_PENDING => 2,
+                ServiceRequest::STATUS_AWAITING_PAYMENT => 0,
                 ServiceRequest::STATUS_COMPLETED => 1,
                 ServiceRequest::STATUS_DECLINED => 0,
             ])
@@ -40,14 +41,17 @@ class StaffServiceRequestTest extends TestCase
     {
         $resident = Resident::factory()->create();
         $residentUser = User::factory()->resident()->create(['resident_id' => $resident->id]);
-        $serviceRequest = ServiceRequest::factory()->for($resident)->create();
+        $serviceRequest = ServiceRequest::factory()->for($resident)->create([
+            'certificate_type' => 'Certificate of Indigency',
+            'fee_amount' => 0,
+        ]);
         $staff = User::factory()->create();
         $this->actingAs($staff);
 
         $this->get(route('service-requests.index'))->assertOk()
             ->assertSee($resident->full_name);
         $this->get(route('service-requests.show', $serviceRequest))->assertOk()
-            ->assertSee('Complete request');
+            ->assertSee('Approve request');
         $this->post(route('service-requests.review', $serviceRequest), [
             'decision' => 'complete',
             'response_note' => 'Please collect the document at the barangay hall.',

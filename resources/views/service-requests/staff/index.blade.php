@@ -13,9 +13,9 @@
         <nav class="staff-request-statuses" aria-label="Filter resident requests by status">
             @foreach ($statusCounts as $requestStatus => $count)
                 <a href="{{ route('service-requests.index', ['status' => $requestStatus]) }}"
-                    class="staff-request-status staff-request-status-{{ strtolower($requestStatus) }}"
+                    class="staff-request-status staff-request-status-{{ \Illuminate\Support\Str::slug($requestStatus) }}"
                     @if ($status === $requestStatus) aria-current="page" @endif>
-                    <span class="staff-request-status-icon"><i data-lucide="{{ $requestStatus === 'Pending' ? 'clock' : ($requestStatus === 'Completed' ? 'badge-check' : 'x') }}" aria-hidden="true"></i></span>
+                    <span class="staff-request-status-icon"><i data-lucide="{{ $requestStatus === 'Pending' ? 'clock' : ($requestStatus === 'Awaiting Payment' ? 'qr-code' : ($requestStatus === 'Completed' ? 'badge-check' : 'x')) }}" aria-hidden="true"></i></span>
                     <span class="staff-request-status-label">{{ $requestStatus }}</span>
                     <strong>{{ number_format($count) }}</strong>
                 </a>
@@ -44,7 +44,7 @@
                         <p>New requests from residents will appear here when they are submitted.</p>
                     @else
                         <h3>No {{ strtolower($status) }} requests yet</h3>
-                        <p>Requests will appear here after staff {{ $status === 'Completed' ? 'complete' : 'decline' }} them.</p>
+                        <p>Requests will appear here when they reach this stage.</p>
                     @endif
                 </div>
             @else

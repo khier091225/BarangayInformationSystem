@@ -12,6 +12,6 @@
 @section('content')
     <x-workspace.page-header title="Issue certificate" description="Generate an official document for a registered barangay resident." icon="file-plus" />
     <div class="record-form-page-card">
-        <x-certificates.create-form :residents="$residents" :selected-resident-id="$selectedResidentId" />
+        <x-certificates.create-form :residents="$residents" :certificate-fees="$certificateFees" :selected-resident-id="$selectedResidentId" />
     </div>
 @endsection

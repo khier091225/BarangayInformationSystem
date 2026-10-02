@@ -37,7 +37,7 @@ class AccountController extends Controller
             ];
             $query = ServiceRequest::query()->where('resident_id', $user->resident_id);
             $latestReviewedRequest = (clone $query)
-                ->whereIn('status', [ServiceRequest::STATUS_COMPLETED, ServiceRequest::STATUS_DECLINED])
+                ->whereIn('status', [ServiceRequest::STATUS_AWAITING_PAYMENT, ServiceRequest::STATUS_COMPLETED, ServiceRequest::STATUS_DECLINED])
                 ->whereNotNull('reviewed_at')->latest('reviewed_at')->latest('id')->first();
             $statusTotals = (clone $query)->select('status')->selectRaw('COUNT(*) as total')
                 ->groupBy('status')->pluck('total', 'status');

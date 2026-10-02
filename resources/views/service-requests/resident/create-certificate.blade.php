@@ -4,7 +4,7 @@
 @section('main-class', 'resident-main-form')
 
 @section('content')
-    <x-workspace.page-header title="Request a barangay document" description="Choose the document you need and enter its purpose. Barangay staff will review your request." icon="files">
+    <x-workspace.page-header title="Request a barangay document" description="Choose the document you need, check its fixed fee, and enter its purpose." icon="files">
         <x-slot:actions>
             <a href="{{ route('account.requests.index', ['type' => 'certificate']) }}" class="resident-button resident-button-primary"><i data-lucide="inbox" aria-hidden="true"></i> My document requests</a>
         </x-slot:actions>
@@ -23,8 +23,8 @@
                     <x-form.label for="certificate_type" required>Document type</x-form.label>
                     <x-form.select name="certificate_type" required :aria-invalid="$errors->has('certificate_type') ? 'true' : 'false'" :aria-describedby="$errors->has('certificate_type') ? 'certificate-type-error' : null">
                         <option value="">Select a document</option>
-                        @foreach (['Barangay Clearance', 'Certificate of Residency', 'Certificate of Indigency', 'Business Clearance'] as $type)
-                            <option value="{{ $type }}" @selected(old('certificate_type') === $type)>{{ $type }}</option>
+                        @foreach ($certificateFees as $type => $fee)
+                            <option value="{{ $type }}" @selected(old('certificate_type') === $type)>{{ $type }} — {{ (float) $fee === 0.0 ? 'Free' : '₱'.number_format((float) $fee, 2) }}</option>
                         @endforeach
                     </x-form.select>
                     <x-form.error id="certificate-type-error" :message="$errors->first('certificate_type')" />
@@ -37,7 +37,7 @@
             </div>
             <aside class="resident-form-guidance" aria-labelledby="request-help-title">
                 <i data-lucide="info" aria-hidden="true"></i>
-                <div><h2 id="request-help-title">What happens next?</h2><p>Staff will review your request. Follow its status in <a href="{{ route('account.requests.index', ['type' => 'certificate']) }}">My document requests</a>. Once issued, contact the barangay office about collection.</p></div>
+                <div><h2 id="request-help-title">What happens next?</h2><p>The displayed fee is fixed for the selected document. Staff will verify your request before payment. Follow its status in <a href="{{ route('account.requests.index', ['type' => 'certificate']) }}">My document requests</a>.</p></div>
             </aside>
             <div class="resident-form-actions"><button type="submit" class="resident-button resident-button-primary">Submit document request <i data-lucide="arrow-right" aria-hidden="true"></i></button><a href="{{ route('account') }}" class="resident-button resident-button-outline">Cancel</a></div>
         </form>

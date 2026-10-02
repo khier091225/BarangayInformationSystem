@@ -98,12 +98,12 @@
                 <div class="overview-request-total"><strong>{{ number_format($totalServiceRequestCount) }}</strong><span>total requests</span></div>
                 <div class="overview-status-meter" aria-hidden="true">
                     @foreach ($requestCounts as $status => $count)
-                        <span class="overview-status-{{ strtolower($status) }}" style="width: {{ $totalServiceRequestCount > 0 ? $count / $totalServiceRequestCount * 100 : 0 }}%;"></span>
+                        <span class="overview-status-{{ \Illuminate\Support\Str::slug($status) }}" style="width: {{ $totalServiceRequestCount > 0 ? $count / $totalServiceRequestCount * 100 : 0 }}%;"></span>
                     @endforeach
                 </div>
                 <ul class="overview-status-list">
                     @foreach ($requestCounts as $status => $count)
-                        <li><a href="{{ route('service-requests.index', ['status' => $status]) }}"><span class="overview-status-dot overview-status-{{ strtolower($status) }}" aria-hidden="true"></span><span>{{ $status }}</span><strong>{{ number_format($count) }}</strong><i data-lucide="chevron-right" aria-hidden="true"></i></a></li>
+                        <li><a href="{{ route('service-requests.index', ['status' => $status]) }}"><span class="overview-status-dot overview-status-{{ \Illuminate\Support\Str::slug($status) }}" aria-hidden="true"></span><span>{{ $status }}</span><strong>{{ number_format($count) }}</strong><i data-lucide="chevron-right" aria-hidden="true"></i></a></li>
                     @endforeach
                 </ul>
             </section>
