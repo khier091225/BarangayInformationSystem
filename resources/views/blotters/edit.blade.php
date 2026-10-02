@@ -12,7 +12,7 @@
 @section('content')
     <div style="margin-bottom: 24px;">
         <h1 style="font-size: 24px; color: var(--ink);">Edit blotter #{{ $blotter->id }}</h1>
-        <p style="color: var(--muted-soft); font-size: 13px;">Update hearing status or incident details below.</p>
+        <p style="color: var(--muted-soft); font-size: 13px;">Correct the names, incident date, or case information.</p>
     </div>
     <div class="record-form-page-card">
         <x-blotters.edit-form :blotter="$blotter" />

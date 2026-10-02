@@ -127,7 +127,7 @@
                 <div class="overview-record-list">
                     @forelse ($recentBlotters as $blotter)
                         <a href="{{ route('blotters.show', $blotter) }}" class="overview-record-item">
-                            <span><strong>{{ $blotter->complainant }}</strong><span>Respondent: {{ $blotter->respondent }}</span><small>{{ $blotter->incident_date->format('M j, Y') }} <span class="overview-case-status overview-case-{{ strtolower($blotter->status) }}">{{ $blotter->status }}</span></small></span><i data-lucide="arrow-up-right" aria-hidden="true"></i>
+                            <span><strong>{{ $blotter->complainant }}</strong><span>Respondent: {{ $blotter->respondent }}</span><small>{{ $blotter->incident_date->format('M j, Y') }} <span class="overview-case-status overview-case-{{ strtolower($blotter->status) }}">{{ $blotter->statusLabel() }}</span></small></span><i data-lucide="arrow-up-right" aria-hidden="true"></i>
                         </a>
                     @empty
                         <div class="overview-empty overview-empty-small"><span><i data-lucide="notebook-pen" aria-hidden="true"></i></span><p>No blotter records yet.</p><a href="{{ route('blotters.create') }}">Record a blotter <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>

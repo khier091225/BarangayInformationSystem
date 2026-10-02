@@ -26,21 +26,10 @@
         </div>
     </div>
 
-    <div class="record-form-grid">
-        <div>
-            <x-form.label :for="$fieldId('incident_date')" required>Incident Date</x-form.label>
-            <x-form.input type="date" name="incident_date" :id="$fieldId('incident_date')" :value="$value('incident_date', $blotter->incident_date?->format('Y-m-d'))" required :aria-invalid="$error('incident_date') ? 'true' : 'false'" />
-            <x-form.error :message="$error('incident_date')" />
-        </div>
-        <div>
-            <x-form.label :for="$fieldId('status')" required>Status</x-form.label>
-            <x-form.select name="status" :id="$fieldId('status')" required :aria-invalid="$error('status') ? 'true' : 'false'">
-                @foreach (['Pending', 'Settled', 'Dismissed'] as $status)
-                    <option value="{{ $status }}" @selected($value('status', $blotter->status) === $status)>{{ $status }}</option>
-                @endforeach
-            </x-form.select>
-            <x-form.error :message="$error('status')" />
-        </div>
+    <div class="record-form-field">
+        <x-form.label :for="$fieldId('incident_date')" required>Incident Date</x-form.label>
+        <x-form.input type="date" name="incident_date" :id="$fieldId('incident_date')" :value="$value('incident_date', $blotter->incident_date?->format('Y-m-d'))" required :aria-invalid="$error('incident_date') ? 'true' : 'false'" />
+        <x-form.error :message="$error('incident_date')" />
     </div>
 
     <div class="record-form-field">

@@ -89,6 +89,8 @@ Route::middleware('staff.session')->group(function (): void {
     Route::post('/incident-reports/{incidentReport}/status', [StaffIncidentReportController::class, 'update'])
         ->name('incident-reports.update');
     Route::resource('households', HouseholdController::class);
+    Route::post('/blotters/{blotter}/status', [BlotterController::class, 'updateStatus'])
+        ->name('blotters.status.update');
     Route::resource('blotters', BlotterController::class);
     Route::resource('officials', OfficialController::class)->except(['show']);
     Route::resource('certificates', CertificateController::class)->except(['edit', 'update']);

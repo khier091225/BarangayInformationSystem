@@ -47,10 +47,10 @@ class BlotterTest extends TestCase
         $this->assertDatabaseHas('blotters', $data);
 
         $blotter = Blotter::sole();
-        $this->get(route('blotters.edit', [$blotter]))->assertOk();
+        $this->get(route('blotters.edit', [$blotter]))->assertOk()->assertDontSee('name="status"', false);
         $data['status'] = 'Settled';
         $this->put(route('blotters.update', [$blotter]), $data)->assertRedirect(route('blotters.index'));
-        $this->assertSame('Settled', $blotter->fresh()->status);
+        $this->assertSame(Blotter::STATUS_PENDING, $blotter->fresh()->status);
     }
 
     public function test_staff_can_record_a_blotter_with_only_the_essential_fields(): void
@@ -79,11 +79,82 @@ class BlotterTest extends TestCase
             'incident_date' => 'invalid-date',
             'status' => 'Unsupported',
         ];
+        $invalidFields = ['complainant', 'respondent', 'incident', 'incident_date'];
 
-        $this->post(route('blotters.store'), $data)->assertSessionHasErrors(array_keys($data));
-        $this->put(route('blotters.update', [$blotter]), $data)->assertSessionHasErrors(array_keys($data));
+        $this->post(route('blotters.store'), $data)->assertSessionHasErrors($invalidFields)->assertSessionDoesntHaveErrors('status');
+        $this->put(route('blotters.update', [$blotter]), $data)->assertSessionHasErrors($invalidFields)->assertSessionDoesntHaveErrors('status');
         $this->assertDatabaseCount('blotters', 1);
         $this->assertSame('Pending', $blotter->fresh()->status);
+    }
+
+    public function test_assigned_staff_can_move_a_blotter_through_mediation_and_record_history(): void
+    {
+        $staff = User::factory()->create();
+        $otherStaff = User::factory()->create();
+        $blotter = Blotter::factory()->create(['status' => Blotter::STATUS_PENDING]);
+        $this->actingAs($staff);
+
+        $this->get(route('blotters.show', $blotter))->assertOk()
+            ->assertSee('Accept case')
+            ->assertSee('Case history');
+        $this->get(route('blotters.index'))->assertOk()->assertSee(route('blotters.show', $blotter), false);
+
+        $this->post(route('blotters.status.update', $blotter), [
+            'action' => 'accept',
+        ])->assertRedirect(route('blotters.show', $blotter));
+
+        $blotter->refresh();
+        $this->assertSame(Blotter::STATUS_ACCEPTED, $blotter->status);
+        $this->assertSame($staff->id, $blotter->assigned_to);
+        $this->assertNotNull($blotter->accepted_at);
+
+        $this->actingAs($otherStaff)
+            ->post(route('blotters.status.update', $blotter), [
+                'action' => 'schedule',
+                'hearing_at' => now()->addDay()->format('Y-m-d\TH:i'),
+            ])->assertForbidden();
+
+        $this->actingAs($staff)
+            ->post(route('blotters.status.update', $blotter), ['action' => 'schedule'])
+            ->assertSessionHasErrors('hearing_at');
+
+        $hearingAt = now()->addDay()->startOfHour();
+        $this->post(route('blotters.status.update', $blotter), [
+            'action' => 'schedule',
+            'hearing_at' => $hearingAt->format('Y-m-d\TH:i'),
+            'message' => 'Please attend the mediation at the barangay hall.',
+        ])->assertRedirect(route('blotters.show', $blotter));
+
+        $blotter->refresh();
+        $this->assertSame(Blotter::STATUS_SCHEDULED, $blotter->status);
+        $this->assertSame($hearingAt->format('Y-m-d H:i'), $blotter->hearing_at->format('Y-m-d H:i'));
+
+        $this->post(route('blotters.status.update', $blotter), [
+            'action' => 'start',
+        ])->assertRedirect(route('blotters.show', $blotter));
+        $this->assertSame(Blotter::STATUS_MEDIATION, $blotter->fresh()->status);
+
+        $this->post(route('blotters.status.update', $blotter), [
+            'action' => 'settle',
+            'message' => 'Both parties reached an agreement.',
+        ])->assertRedirect(route('blotters.show', $blotter));
+
+        $blotter->refresh();
+        $this->assertSame(Blotter::STATUS_SETTLED, $blotter->status);
+        $this->assertNotNull($blotter->closed_at);
+        $this->assertSame(
+            [Blotter::STATUS_ACCEPTED, Blotter::STATUS_SCHEDULED, Blotter::STATUS_MEDIATION, Blotter::STATUS_SETTLED],
+            $blotter->updates()->pluck('status')->all(),
+        );
+
+        $this->get(route('blotters.show', $blotter))->assertOk()
+            ->assertSee('Both parties reached an agreement.')
+            ->assertSee('This case is closed');
+
+        $this->post(route('blotters.status.update', $blotter), [
+            'action' => 'dismiss',
+        ])->assertSessionHas('warning');
+        $this->assertSame(Blotter::STATUS_SETTLED, $blotter->fresh()->status);
     }
 
     public function test_missing_blotter_returns_not_found(): void

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SaveBlotterRequest;
+use App\Http\Requests\UpdateBlotterStatusRequest;
 use App\Models\Blotter;
 use App\Models\ServiceRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class BlotterController extends Controller
@@ -16,7 +19,7 @@ class BlotterController extends Controller
     {
         $filters = $request->validate([
             'search' => 'nullable|string|max:255',
-            'status' => 'nullable|in:Pending,Settled,Dismissed',
+            'status' => ['nullable', Rule::in(Blotter::STATUSES)],
         ]);
 
         $query = Blotter::query();
@@ -53,15 +56,17 @@ class BlotterController extends Controller
             'respondent' => trim($validated['respondent'] ?? '') ?: 'Unknown',
             'incident' => $validated['incident'],
             'incident_date' => $validated['incident_date'] ?? today('Asia/Manila')->toDateString(),
-            'status' => 'Pending',
+            'status' => Blotter::STATUS_PENDING,
         ]);
 
         return redirect()->route('blotters.index')
             ->with('success', 'Blotter report recorded successfully!');
     }
 
-    public function show(Blotter $blotter)
+    public function show(Blotter $blotter): View
     {
+        $blotter->load(['assignee', 'updates.user', 'serviceRequest']);
+
         return view('blotters.show', compact('blotter'));
     }
 
@@ -78,6 +83,84 @@ class BlotterController extends Controller
 
         return redirect()->route('blotters.index')
             ->with('success', 'Blotter record updated successfully!');
+    }
+
+    public function updateStatus(UpdateBlotterStatusRequest $request, Blotter $blotter): RedirectResponse
+    {
+        $validated = $request->validated();
+        $updated = DB::transaction(function () use ($request, $blotter, $validated): bool {
+            $record = Blotter::query()->lockForUpdate()->findOrFail($blotter->id);
+            $action = $validated['action'];
+
+            if ($action === 'accept') {
+                if ($record->status !== Blotter::STATUS_PENDING) {
+                    return false;
+                }
+
+                $record->update([
+                    'status' => Blotter::STATUS_ACCEPTED,
+                    'assigned_to' => $request->user()->id,
+                    'accepted_at' => now(),
+                ]);
+                $message = filled($validated['message'] ?? null)
+                    ? $validated['message']
+                    : 'Your blotter case has been accepted for barangay mediation.';
+            } else {
+                abort_unless($record->assigned_to === $request->user()->id, 403);
+
+                $expectedStatus = match ($action) {
+                    'schedule' => Blotter::STATUS_ACCEPTED,
+                    'start' => Blotter::STATUS_SCHEDULED,
+                    'settle', 'dismiss' => Blotter::STATUS_MEDIATION,
+                };
+
+                if ($record->status !== $expectedStatus) {
+                    return false;
+                }
+
+                $changes = match ($action) {
+                    'schedule' => [
+                        'status' => Blotter::STATUS_SCHEDULED,
+                        'hearing_at' => $validated['hearing_at'],
+                    ],
+                    'start' => [
+                        'status' => Blotter::STATUS_MEDIATION,
+                        'mediation_started_at' => now(),
+                    ],
+                    'settle' => [
+                        'status' => Blotter::STATUS_SETTLED,
+                        'closed_at' => now(),
+                    ],
+                    'dismiss' => [
+                        'status' => Blotter::STATUS_DISMISSED,
+                        'closed_at' => now(),
+                    ],
+                };
+                $record->update($changes);
+
+                $message = filled($validated['message'] ?? null)
+                    ? $validated['message']
+                    : match ($action) {
+                        'schedule' => 'Barangay mediation has been scheduled for '.$record->hearing_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A').'.',
+                        'start' => 'Barangay mediation is now in progress.',
+                        'settle' => 'The blotter case has been marked as settled.',
+                        'dismiss' => 'The blotter case has been dismissed.',
+                    };
+            }
+
+            $record->updates()->create([
+                'user_id' => $request->user()->id,
+                'status' => $record->status,
+                'message' => $message,
+            ]);
+
+            return true;
+        });
+
+        return redirect()->route('blotters.show', $blotter)
+            ->with($updated ? 'success' : 'warning', $updated
+                ? 'Blotter case progress updated successfully.'
+                : 'This blotter case has already moved to another status.');
     }
 
     public function destroy(Blotter $blotter): RedirectResponse

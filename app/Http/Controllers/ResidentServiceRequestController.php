@@ -85,6 +85,7 @@ class ResidentServiceRequestController extends Controller
     public function show(Request $request, ServiceRequest $serviceRequest): View
     {
         abort_unless($serviceRequest->resident_id === $request->user()->resident_id, 404);
+        $serviceRequest->load('blotter.updates');
 
         return view('service-requests.resident.show', compact('serviceRequest'));
     }

@@ -23,7 +23,6 @@ class SaveBlotterRequest extends FormRequest
             'respondent' => $isCreating ? 'nullable|string|max:255' : 'required|string|max:255',
             'incident' => 'required|string',
             'incident_date' => $isCreating ? 'nullable|date' : 'required|date',
-            'status' => $isCreating ? 'sometimes|in:Pending,Settled,Dismissed' : 'required|in:Pending,Settled,Dismissed',
         ];
     }
 }

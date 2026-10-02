@@ -55,6 +55,33 @@
                     </dl>
                 </section>
 
+                @if ($serviceRequest->type === \App\Models\ServiceRequest::TYPE_BLOTTER && $serviceRequest->blotter)
+                    <section class="resident-card incident-timeline-card" aria-labelledby="blotter-progress-title">
+                        <div class="resident-detail-heading">
+                            <span class="resident-section-icon"><i data-lucide="history" aria-hidden="true"></i></span>
+                            <div>
+                                <h2 id="blotter-progress-title">Blotter case progress</h2>
+                                <p>Current status: <x-blotter-status :status="$serviceRequest->blotter->status" /></p>
+                            </div>
+                        </div>
+                        @if ($serviceRequest->blotter->hearing_at)
+                            <p class="incident-timeline-footnote">Mediation schedule: <strong>{{ $serviceRequest->blotter->hearing_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</strong></p>
+                        @endif
+                        <ol class="incident-timeline">
+                            <li>
+                                <span class="incident-timeline-dot" aria-hidden="true"></span>
+                                <div><x-blotter-status :status="\App\Models\Blotter::STATUS_PENDING" /><time datetime="{{ $serviceRequest->blotter->created_at->toIso8601String() }}">{{ $serviceRequest->blotter->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time><p>Your report was added to the official barangay blotter.</p></div>
+                            </li>
+                            @foreach ($serviceRequest->blotter->updates as $update)
+                                <li>
+                                    <span class="incident-timeline-dot" aria-hidden="true"></span>
+                                    <div><x-blotter-status :status="$update->status" /><time datetime="{{ $update->created_at->toIso8601String() }}">{{ $update->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time><p>{{ $update->message }}</p></div>
+                                </li>
+                            @endforeach
+                        </ol>
+                    </section>
+                @endif
+
                 @if ($serviceRequest->status !== 'Pending' || $serviceRequest->response_note)
                 <section id="staff-message" class="resident-card resident-staff-message" aria-labelledby="staff-message-title" tabindex="-1">
                     <div class="resident-detail-heading">

@@ -71,6 +71,39 @@ class ResidentServiceRequestTest extends TestCase
         $this->get(route('account.requests.index'))->assertOk()->assertSee('Blotter report');
     }
 
+    public function test_resident_can_follow_the_progress_of_their_completed_blotter_request(): void
+    {
+        $resident = Resident::factory()->create();
+        $staff = User::factory()->create();
+        $blotter = Blotter::factory()->create([
+            'status' => Blotter::STATUS_SCHEDULED,
+            'assigned_to' => $staff->id,
+            'accepted_at' => now()->subDay(),
+            'hearing_at' => now()->addDay(),
+        ]);
+        $blotter->updates()->create([
+            'user_id' => $staff->id,
+            'status' => Blotter::STATUS_ACCEPTED,
+            'message' => 'Your case was accepted for mediation.',
+        ]);
+        $blotter->updates()->create([
+            'user_id' => $staff->id,
+            'status' => Blotter::STATUS_SCHEDULED,
+            'message' => 'Please attend the scheduled mediation.',
+        ]);
+        $serviceRequest = ServiceRequest::factory()->blotter()->for($resident)->create([
+            'status' => ServiceRequest::STATUS_COMPLETED,
+            'blotter_id' => $blotter->id,
+        ]);
+        $this->actingAs(User::factory()->resident()->create(['resident_id' => $resident->id]));
+
+        $this->get(route('account.requests.show', $serviceRequest))->assertOk()
+            ->assertSee('Blotter case progress')
+            ->assertSee('Scheduled')
+            ->assertSee('Your case was accepted for mediation.')
+            ->assertSee('Please attend the scheduled mediation.');
+    }
+
     public function test_resident_can_file_a_blotter_with_only_the_incident_description(): void
     {
         $resident = Resident::factory()->create();

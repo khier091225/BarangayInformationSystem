@@ -29,11 +29,11 @@
                 <input type="search" name="search" value="{{ request('search') }}" placeholder="Search complainant, respondent, or incident..." aria-label="Search blotter records">
             </div>
             
-            <select name="status" class="search-select" aria-label="Filter by case status">
-                <option value="">All Statuses</option>
-                <option value="Pending" {{ request('status') == 'Pending' ? 'selected' : '' }}>Pending</option>
-                <option value="Settled" {{ request('status') == 'Settled' ? 'selected' : '' }}>Settled</option>
-                <option value="Dismissed" {{ request('status') == 'Dismissed' ? 'selected' : '' }}>Dismissed</option>
+                    <select name="status" class="search-select" aria-label="Filter by case status">
+                        <option value="">All Statuses</option>
+                        @foreach (\App\Models\Blotter::STATUSES as $status)
+                            <option value="{{ $status }}" @selected(request('status') === $status)>{{ $status === \App\Models\Blotter::STATUS_MEDIATION ? 'Under Mediation' : $status }}</option>
+                        @endforeach
             </select>
 
             <button type="submit" class="search-button-primary">
@@ -76,15 +76,13 @@
                             {{ $blotter->incident_date ? $blotter->incident_date->format('M d, Y') : '-' }}
                         </td>
                         <td style="padding: 14px 16px;">
-                            <span style="display: inline-block; padding: 4px 9px; border-radius: 4px; font-size: 11px; font-weight: 600;
-                                @if($blotter->status == 'Pending') background: var(--warning-soft); color: var(--warning);
-                                @elseif($blotter->status == 'Settled') background: var(--success-soft); color: var(--success);
-                                @else background: var(--danger-soft); color: var(--danger-hover); @endif">
-                                {{ $blotter->status }}
-                            </span>
+                            <x-blotter-status :status="$blotter->status" />
                         </td>
                         <td style="padding: 14px 16px; text-align: right;">
                             <div style="display: inline-flex; gap: 8px;">
+                                <a href="{{ route('blotters.show', [$blotter]) }}" style="color: var(--accent); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 4px;">
+                                    View
+                                </a>
                                 <a href="{{ route('blotters.edit', [$blotter]) }}" style="color: var(--accent); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 4px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="blotter-edit-dialog-{{ $blotter->getKey() }}">
                                     Edit
                                 </a>
