@@ -327,6 +327,7 @@
     .workspace-main { padding: 1.5rem 1rem 0; }
     .workspace-mobile-header { padding-inline: 1rem; }
     .workspace-mobile-brand { font-size: .82rem; }
+    .workspace-breadcrumb:has(> .incident-index-breadcrumb) { display: none; }
     .workspace-breadcrumb > span, .workspace-breadcrumb > svg { display: none; }
     .workspace-breadcrumb { gap: .5rem; }
     .workspace-breadcrumb:has(> a) > strong { display: none; }

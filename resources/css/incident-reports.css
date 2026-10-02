@@ -101,7 +101,7 @@
     .overview-attention-links { flex-wrap: wrap; }
     .overview-attention-links a { flex: 1 1 9rem; }
 }
-@media (max-width: 680px) {
+@media (max-width: 1199px) {
     .incident-table { display: block; min-width: 0; }
     .incident-table thead { display: none; }
     .incident-table tbody { display: grid; }
@@ -113,6 +113,8 @@
     .incident-table td small { overflow-wrap: anywhere; }
 }
 @media (max-width: 560px) {
+    .incident-staff-tabs { flex-wrap: wrap; overflow-x: visible; gap: .35rem .5rem; }
+    .incident-staff-tabs a { flex: 1 1 6.5rem; justify-content: center; }
     .resident-nav { overflow-x: auto; }
     .resident-nav a { flex: none; }
     .incident-dashboard-update > .resident-inline-link { width: 100%; }

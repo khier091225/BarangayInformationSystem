@@ -3,12 +3,12 @@
 @section('title', 'Incident Reports | Barangay Information System')
 
 @section('breadcrumb')
-    <span>Staff workspace</span><i data-lucide="chevron-right" aria-hidden="true"></i><strong>Incident reports</strong>
+    <span class="incident-index-breadcrumb">Case management</span><i data-lucide="chevron-right" aria-hidden="true"></i><strong>Incident reports</strong>
 @endsection
 
 @section('content')
     <div class="staff-requests-page">
-        <header class="staff-requests-heading"><div><h1>Incident reports</h1><p>Review online sumbong, accept a report, and keep residents informed as work progresses.</p></div><span class="staff-requests-total">{{ number_format($statusCounts->sum()) }} total reports</span></header>
+        <header class="staff-requests-heading"><div><h1>Incident reports</h1><p>Review incident reports submitted online, accept reports, and keep residents informed as work progresses.</p></div><span class="staff-requests-total">{{ number_format($statusCounts->sum()) }} total reports</span></header>
         <nav class="incident-filter-nav incident-staff-tabs" aria-label="Filter incident reports by status">
             @foreach (['Submitted', 'Assigned', 'Responding', 'Resolved', 'Closed'] as $option)
                 <a href="{{ route('incident-reports.index', ['status' => $option, 'team' => $team, 'search' => $search]) }}" @if ($status === $option) aria-current="page" @endif>{{ $option }} <span>{{ number_format($statusCounts[$option] ?? 0) }}</span></a>
