@@ -10,10 +10,7 @@
 @endsection
 
 @section('content')
-    <div style="margin-bottom: 24px;">
-        <h1 style="font-size: 24px; color: var(--ink);">Edit Official: {{ $official->name }}</h1>
-        <p style="color: var(--muted-soft); font-size: 13px;">Update official title, contact information, or term of service.</p>
-    </div>
+    <x-workspace.page-header :title="'Edit official: '.$official->name" description="Update the official title, contact information, or term of service." icon="pencil" />
     <div class="record-form-page-card">
         <x-officials.form :official="$official" />
     </div>

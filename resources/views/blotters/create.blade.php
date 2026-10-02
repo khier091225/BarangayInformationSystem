@@ -10,10 +10,7 @@
 @endsection
 
 @section('content')
-    <div style="margin-bottom: 24px;">
-        <h1 style="font-size: 24px; color: var(--ink);">Record blotter</h1>
-        <p style="color: var(--muted); font-size: 13px;">Record the complainant and what happened. New cases start as Pending.</p>
-    </div>
+    <x-workspace.page-header title="Record blotter" description="Record the complainant and what happened. New cases start as Pending." icon="notebook-pen" />
     <div class="staff-request-detail-card">
         <x-blotters.create-form />
     </div>

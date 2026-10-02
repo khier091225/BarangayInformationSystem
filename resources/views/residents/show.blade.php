@@ -11,25 +11,16 @@
 @endsection
 
 @section('content')
-    <div style="margin-bottom: 24px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">{{ $resident->full_name }}</h1>
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <a href="{{ route('residents.edit', [$resident]) }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                    <i data-lucide="pencil"></i> Edit resident
-                </a>
-                <form method="POST" action="{{ route('residents.destroy', [$resident]) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="record-delete record-delete-large">
-                        Delete
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
+    <x-workspace.page-header :title="$resident->full_name" description="Review the resident profile, household information, and account registration." icon="user-round">
+        <x-slot:actions>
+            <a href="{{ route('residents.edit', [$resident]) }}" class="button button-primary"><i data-lucide="pencil" aria-hidden="true"></i> Edit resident</a>
+            <form method="POST" action="{{ route('residents.destroy', [$resident]) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="record-delete record-delete-large">Delete</button>
+            </form>
+        </x-slot:actions>
+    </x-workspace.page-header>
 
     <section class="registration-card" aria-labelledby="registration-title">
         <h2 id="registration-title">Resident account registration</h2>

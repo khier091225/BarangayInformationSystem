@@ -11,15 +11,11 @@
 @endsection
 
 @section('content')
-    <div class="workspace-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <div>
-            <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Blotter records</h1>
-            <p style="color: var(--muted-soft); font-size: 13px;">Manage community disputes, complaints, and hearing records.</p>
-        </div>
-        <a href="{{ route('blotters.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="blotter-create-dialog">
-            <i data-lucide="plus"></i> Record blotter
-        </a>
-    </div>
+    <x-workspace.page-header title="Blotter records" description="Manage community disputes, complaints, and hearing records." icon="notebook-pen">
+        <x-slot:actions>
+            <a href="{{ route('blotters.create') }}" class="button button-primary" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="blotter-create-dialog"><i data-lucide="plus" aria-hidden="true"></i> Record blotter</a>
+        </x-slot:actions>
+    </x-workspace.page-header>
 
     <!-- Search & Filters -->
     <div class="search-filter-card">

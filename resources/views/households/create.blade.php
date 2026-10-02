@@ -13,10 +13,7 @@
 @endsection
 
 @section('content')
-    <div style="margin-bottom: 24px;">
-        <h1 style="font-size: 24px; color: var(--ink);">Add New Household</h1>
-        <p style="color: var(--muted-soft); font-size: 13px;">Register a new household. Its number will be assigned automatically when you save.</p>
-    </div>
+    <x-workspace.page-header title="Add new household" description="Register a new household. Its number will be assigned automatically when you save." icon="house" />
 
     <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
         <x-households.create-form />

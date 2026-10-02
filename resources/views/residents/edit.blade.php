@@ -10,10 +10,7 @@
 @endsection
 
 @section('content')
-    <div style="margin-bottom: 24px;">
-        <h1 style="font-size: 24px; color: var(--ink);">Edit Resident: {{ $resident->full_name }}</h1>
-        <p style="color: var(--muted-soft); font-size: 13px;">Update personal details, address, or voter status.</p>
-    </div>
+    <x-workspace.page-header :title="'Edit resident: '.$resident->full_name" description="Update personal details, address, or voter status." icon="pencil" />
     <div class="record-form-page-card">
         <x-residents.form :resident="$resident" :households="$households" />
     </div>

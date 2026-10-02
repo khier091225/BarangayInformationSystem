@@ -10,10 +10,7 @@
 @endsection
 
 @section('content')
-    <div style="margin-bottom: 24px;">
-        <h1 style="font-size: 24px; color: var(--ink);">Register New Resident</h1>
-        <p style="color: var(--muted-soft); font-size: 13px;">Add a community resident to the barangay registry.</p>
-    </div>
+    <x-workspace.page-header title="Register new resident" description="Add a community resident to the barangay registry." icon="user-plus" />
     <div class="record-form-page-card">
         <x-residents.form :households="$households" />
     </div>

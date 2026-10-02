@@ -13,10 +13,7 @@
 @endsection
 
 @section('content')
-    <div style="margin-bottom: 24px;">
-        <h1 style="font-size: 24px; color: var(--ink);">Edit Household</h1>
-        <p style="color: var(--muted-soft); font-size: 13px;">Update household information below.</p>
-    </div>
+    <x-workspace.page-header :title="'Edit household '.$household->household_number" description="Update the household head, address, and related information." icon="pencil" />
 
     <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
         <x-households.edit-form :household="$household" />

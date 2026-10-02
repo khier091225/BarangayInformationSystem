@@ -11,14 +11,11 @@
 @endsection
 
 @section('content')
-    <div class="workspace-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <div>
-            <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Household Registry</h1>
-        </div>
-        <a href="{{ route('households.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;" data-household-dialog-trigger data-household-create-trigger aria-haspopup="dialog" aria-controls="household-create-dialog">
-            <i data-lucide="plus"></i> Add Household
-        </a>
-    </div>
+    <x-workspace.page-header title="Household Registry" description="Manage household records, addresses, and registered family members." icon="house">
+        <x-slot:actions>
+            <a href="{{ route('households.create') }}" class="button button-primary" data-household-dialog-trigger data-household-create-trigger aria-haspopup="dialog" aria-controls="household-create-dialog"><i data-lucide="plus" aria-hidden="true"></i> Add household</a>
+        </x-slot:actions>
+    </x-workspace.page-header>
 
     <!-- Search & Filters -->
     <div class="search-filter-card">

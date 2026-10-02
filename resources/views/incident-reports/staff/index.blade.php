@@ -8,10 +8,11 @@
 
 @section('content')
     <div class="staff-requests-page">
-        <header class="staff-requests-heading">
-            <div><h1>Incident reports</h1><p>Review incident reports submitted online, accept reports, and keep residents informed as work progresses.</p></div>
-            <div class="incident-heading-actions"><a href="{{ route('incident-report-contacts.index') }}" class="button button-primary"><i data-lucide="bell" aria-hidden="true"></i> Alert contacts</a></div>
-        </header>
+        <x-workspace.page-header title="Incident reports" description="Review incident reports, accept cases, and keep residents updated." icon="message-square-warning">
+            <x-slot:actions>
+                <a href="{{ route('incident-report-contacts.index') }}" class="button button-primary"><i data-lucide="bell" aria-hidden="true"></i> Alert contacts</a>
+            </x-slot:actions>
+        </x-workspace.page-header>
         <nav class="incident-filter-nav incident-staff-tabs" aria-label="Filter incident reports by status">
             @foreach (['Submitted', 'Assigned', 'Responding', 'Resolved', 'Closed'] as $option)
                 <a href="{{ route('incident-reports.index', ['status' => $option, 'team' => $team, 'search' => $search]) }}" @if ($status === $option) aria-current="page" @endif>{{ $option }} <span>{{ number_format($statusCounts[$option] ?? 0) }}</span></a>

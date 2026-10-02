@@ -10,10 +10,7 @@
 @endsection
 
 @section('content')
-    <div style="margin-bottom: 24px;">
-        <h1 style="font-size: 24px; color: var(--ink);">Edit blotter #{{ $blotter->id }}</h1>
-        <p style="color: var(--muted-soft); font-size: 13px;">Correct the names, incident date, or case information.</p>
-    </div>
+    <x-workspace.page-header :title="'Edit blotter #'.$blotter->id" description="Correct the names, incident date, or case information." icon="pencil" />
     <div class="record-form-page-card">
         <x-blotters.edit-form :blotter="$blotter" />
     </div>

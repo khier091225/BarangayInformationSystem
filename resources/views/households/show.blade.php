@@ -11,17 +11,11 @@
 @endsection
 
 @section('content')
-    <div style="margin-bottom: 24px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h1 style="font-size: 24px; color: var(--ink);">Household: {{ $household->household_number }}</h1>
-                <p style="color: var(--muted-soft); font-size: 13px;">Household details and registered family members.</p>
-            </div>
-            <a href="{{ route('households.edit', [$household]) }}" class="button button-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                <i data-lucide="pencil"></i> Edit Household
-            </a>
-        </div>
-    </div>
+    <x-workspace.page-header :title="'Household: '.$household->household_number" description="Household details and registered family members." icon="house">
+        <x-slot:actions>
+            <a href="{{ route('households.edit', [$household]) }}" class="button button-primary"><i data-lucide="pencil" aria-hidden="true"></i> Edit household</a>
+        </x-slot:actions>
+    </x-workspace.page-header>
 
     <!-- Info Cards -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 20px; margin-bottom: 30px;">

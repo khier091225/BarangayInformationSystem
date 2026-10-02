@@ -8,12 +8,7 @@
 
 @section('content')
     <div class="staff-profile">
-        <header class="staff-profile-heading">
-            <div>
-                <h1>My profile</h1>
-                <p>Manage your staff account details and keep your password secure.</p>
-            </div>
-        </header>
+        <x-workspace.page-header title="My profile" description="Manage your staff account details and keep your password secure." icon="user-round" />
 
         <div class="staff-profile-grid">
             <section class="profile-panel" aria-labelledby="profile-details-title">

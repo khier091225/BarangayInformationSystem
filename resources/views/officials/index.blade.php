@@ -11,15 +11,11 @@
 @endsection
 
 @section('content')
-    <div class="workspace-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <div>
-            <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Barangay Officials</h1>
-            <p style="color: var(--muted-soft); font-size: 13px;">Manage elective and appointed community leaders, roles, and service terms.</p>
-        </div>
-        <a href="{{ route('officials.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="official-create-dialog">
-            <i data-lucide="user-plus"></i> Add Official
-        </a>
-    </div>
+    <x-workspace.page-header title="Barangay Officials" description="Manage elective and appointed community leaders, roles, and service terms." icon="badge-check">
+        <x-slot:actions>
+            <a href="{{ route('officials.create') }}" class="button button-primary" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="official-create-dialog"><i data-lucide="user-plus" aria-hidden="true"></i> Add official</a>
+        </x-slot:actions>
+    </x-workspace.page-header>
 
     <!-- Search & Filters -->
     <div class="search-filter-card">

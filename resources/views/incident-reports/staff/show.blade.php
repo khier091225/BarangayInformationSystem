@@ -8,7 +8,9 @@
 
 @section('content')
     <div class="staff-requests-page">
-        <header class="staff-request-detail-heading"><span class="staff-request-detail-icon"><i data-lucide="message-square-warning" aria-hidden="true"></i></span><div><div class="staff-request-detail-meta"><span>{{ $incidentReport->reference_number }}</span><x-incident-status :status="$incidentReport->status" /></div><h1>{{ $incidentReport->categoryLabel() }}</h1><p>Submitted {{ $incidentReport->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</p></div></header>
+        <x-workspace.page-header :title="$incidentReport->categoryLabel()" :description="$incidentReport->reference_number.' · Submitted '.$incidentReport->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A')" icon="message-square-warning">
+            <x-slot:status><x-incident-status :status="$incidentReport->status" /></x-slot:status>
+        </x-workspace.page-header>
         <div class="staff-request-detail-grid incident-staff-grid">
             <div class="incident-detail-main">
                 <section class="staff-request-detail-card" aria-labelledby="staff-incident-details-title">

@@ -14,19 +14,12 @@
 
 @section('content')
     <div class="staff-requests-page">
-        <header class="staff-request-detail-heading">
-            <span class="staff-request-detail-icon"><i data-lucide="notebook-pen" aria-hidden="true"></i></span>
-            <div>
-                <div class="blotter-title-row">
-                    <h1>Blotter #{{ $blotter->id }}</h1>
-                    <x-blotter-status :status="$blotter->status" />
-                </div>
-                <p>Review the case details and record each step of barangay mediation.</p>
-            </div>
-            <a href="{{ route('blotters.edit', [$blotter]) }}" class="button button-primary" style="margin-left: auto; text-decoration: none;">
-                <i data-lucide="pencil" aria-hidden="true"></i> Edit details
-            </a>
-        </header>
+        <x-workspace.page-header :title="'Blotter #'.$blotter->id" description="Review the case details and record each step of barangay mediation." icon="notebook-pen">
+            <x-slot:status><x-blotter-status :status="$blotter->status" /></x-slot:status>
+            <x-slot:actions>
+                <a href="{{ route('blotters.edit', [$blotter]) }}" class="button button-primary"><i data-lucide="pencil" aria-hidden="true"></i> Edit details</a>
+            </x-slot:actions>
+        </x-workspace.page-header>
 
         <div class="staff-request-detail-grid incident-staff-grid">
             <div class="incident-detail-main">

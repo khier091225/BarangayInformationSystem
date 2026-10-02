@@ -8,10 +8,11 @@
 
 @section('content')
     <div class="incident-contacts-page">
-        <header class="incident-contacts-heading">
-            <div><h1>Incident alert contacts</h1><p>Manage the duty phone and email used when a resident submits a new incident report.</p></div>
-            <a href="{{ route('incident-reports.index') }}" class="button button-primary"><i data-lucide="clipboard-list" aria-hidden="true"></i> Incident reports</a>
-        </header>
+        <x-workspace.page-header title="Incident alert contacts" description="Manage the duty phone and email used when a resident submits a new incident report." icon="bell">
+            <x-slot:actions>
+                <a href="{{ route('incident-reports.index') }}" class="button button-primary"><i data-lucide="clipboard-list" aria-hidden="true"></i> Incident reports</a>
+            </x-slot:actions>
+        </x-workspace.page-header>
 
         <div class="incident-contact-guidance" role="note">
             <i data-lucide="info" aria-hidden="true"></i>

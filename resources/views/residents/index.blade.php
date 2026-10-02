@@ -11,15 +11,11 @@
 @endsection
 
 @section('content')
-    <div class="workspace-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <div>
-            <h1 style="font-size: 26px; color: var(--ink); margin-top: 4px;">Resident Registry</h1>
-            <p style="color: var(--muted-soft); font-size: 13px;">Manage community residents, demographics, and voter registration records.</p>
-        </div>
-        <a href="{{ route('residents.create') }}" class="button button-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="resident-create-dialog">
-            <i data-lucide="user-plus"></i> Register Resident
-        </a>
-    </div>
+    <x-workspace.page-header title="Resident Registry" description="Manage community residents, demographics, and voter registration records." icon="users-round">
+        <x-slot:actions>
+            <a href="{{ route('residents.create') }}" class="button button-primary" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="resident-create-dialog"><i data-lucide="user-plus" aria-hidden="true"></i> Register resident</a>
+        </x-slot:actions>
+    </x-workspace.page-header>
 
     <!-- Search & Filters -->
     <div class="search-filter-card">

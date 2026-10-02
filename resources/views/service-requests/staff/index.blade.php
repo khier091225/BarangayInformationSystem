@@ -8,13 +8,7 @@
 
 @section('content')
     <div class="staff-requests-page">
-        <header class="staff-requests-heading">
-            <div>
-                <h1>Resident requests</h1>
-                <p>Review document requests and blotter reports submitted by residents.</p>
-            </div>
-            <span class="staff-requests-total">{{ number_format(array_sum($statusCounts)) }} total {{ \Illuminate\Support\Str::plural('request', array_sum($statusCounts)) }}</span>
-        </header>
+        <x-workspace.page-header title="Resident requests" description="Review document requests and blotter reports submitted by residents." icon="inbox" />
 
         <nav class="staff-request-statuses" aria-label="Filter resident requests by status">
             @foreach ($statusCounts as $requestStatus => $count)

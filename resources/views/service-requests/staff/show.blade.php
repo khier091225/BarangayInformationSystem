@@ -8,17 +8,9 @@
 
 @section('content')
     <div class="staff-requests-page staff-request-detail">
-        <header class="staff-request-detail-heading">
-            <span class="staff-request-detail-icon"><i data-lucide="{{ $serviceRequest->type === 'certificate' ? 'files' : 'notebook-pen' }}" aria-hidden="true"></i></span>
-            <div>
-                <div class="staff-request-detail-meta">
-                    <span>REQUEST #{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}</span>
-                    <x-request-status :status="$serviceRequest->status" />
-                </div>
-                <h1>{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</h1>
-                <p>Submitted <time datetime="{{ $serviceRequest->created_at->toIso8601String() }}">{{ $serviceRequest->created_at->format('M j, Y \a\t g:i A') }}</time></p>
-            </div>
-        </header>
+        <x-workspace.page-header :title="$serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report'" :description="'Request #'.str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT).' · Submitted '.$serviceRequest->created_at->format('M j, Y \a\t g:i A')" :icon="$serviceRequest->type === 'certificate' ? 'files' : 'notebook-pen'">
+            <x-slot:status><x-request-status :status="$serviceRequest->status" /></x-slot:status>
+        </x-workspace.page-header>
 
         <div class="staff-request-detail-grid">
             <section class="staff-request-detail-card" aria-labelledby="staff-request-details-title">
