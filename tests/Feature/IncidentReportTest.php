@@ -10,6 +10,7 @@ use App\Models\IncidentReport;
 use App\Models\Resident;
 use App\Models\ServiceRequest;
 use App\Models\User;
+use App\Support\IncidentAlertRecipients;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\UploadedFile;
@@ -241,7 +242,7 @@ class IncidentReportTest extends TestCase
         $report = IncidentReport::query()->firstOrFail();
         Queue::assertPushed(SendIncidentReportAlert::class, fn (SendIncidentReportAlert $job): bool => $job->connection === 'deferred');
 
-        (new SendIncidentReportAlert($report->id))->handle(app(PhilSms::class));
+        (new SendIncidentReportAlert($report->id))->handle(app(PhilSms::class), app(IncidentAlertRecipients::class));
         $this->assertSame('submitted', $report->fresh()->alert_sms_status);
         $this->assertSame('submitted', $report->fresh()->alert_email_status);
         Http::assertSent(fn (Request $request): bool => $request['recipient'] === '639912197679'

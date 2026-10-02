@@ -6,6 +6,7 @@ use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HouseholdController;
+use App\Http\Controllers\IncidentAlertContactController;
 use App\Http\Controllers\IncidentReportEvidenceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\NewPasswordController;
@@ -85,6 +86,10 @@ Route::middleware('staff.session')->group(function (): void {
     Route::get('/service-requests/{serviceRequest}', [StaffServiceRequestController::class, 'show'])->name('service-requests.show');
     Route::post('/service-requests/{serviceRequest}/review', [StaffServiceRequestController::class, 'review'])->name('service-requests.review');
     Route::get('/incident-reports', [StaffIncidentReportController::class, 'index'])->name('incident-reports.index');
+    Route::get('/incident-reports/alert-contacts', [IncidentAlertContactController::class, 'index'])
+        ->name('incident-report-contacts.index');
+    Route::patch('/incident-reports/alert-contacts/{team}', [IncidentAlertContactController::class, 'update'])
+        ->name('incident-report-contacts.update');
     Route::get('/incident-reports/{incidentReport}', [StaffIncidentReportController::class, 'show'])->name('incident-reports.show');
     Route::post('/incident-reports/{incidentReport}/status', [StaffIncidentReportController::class, 'update'])
         ->name('incident-reports.update');

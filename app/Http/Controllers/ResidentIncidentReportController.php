@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreIncidentReportRequest;
 use App\Jobs\SendIncidentReportAlert;
 use App\Models\IncidentReport;
+use App\Support\IncidentAlertRecipients;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -37,7 +38,7 @@ class ResidentIncidentReportController extends Controller
         return view('incident-reports.resident.create', ['categories' => IncidentReport::CATEGORY_TEAMS]);
     }
 
-    public function store(StoreIncidentReportRequest $request): RedirectResponse
+    public function store(StoreIncidentReportRequest $request, IncidentAlertRecipients $alertRecipients): RedirectResponse
     {
         $validated = $request->validated();
         $evidence = $request->file('evidence');
@@ -79,8 +80,7 @@ class ResidentIncidentReportController extends Controller
             throw $exception;
         }
 
-        if (filled(config("incident_reports.alerts.{$report->suggested_team}.phone"))
-            || filled(config("incident_reports.alerts.{$report->suggested_team}.email"))) {
+        if ($alertRecipients->hasConfiguredChannel($report->suggested_team)) {
             SendIncidentReportAlert::dispatch($report->id)->onConnection('deferred')->afterCommit();
         }
 

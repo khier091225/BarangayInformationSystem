@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Http\PhilSms;
 use App\Mail\IncidentReportAlert;
 use App\Models\IncidentReport;
+use App\Support\IncidentAlertRecipients;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Mail;
@@ -19,7 +20,7 @@ class SendIncidentReportAlert implements ShouldQueue
 
     public function __construct(public int $incidentReportId) {}
 
-    public function handle(PhilSms $sms): void
+    public function handle(PhilSms $sms, IncidentAlertRecipients $alertRecipients): void
     {
         $report = IncidentReport::query()->find($this->incidentReportId);
 
@@ -28,7 +29,7 @@ class SendIncidentReportAlert implements ShouldQueue
         }
 
         $report->loadMissing('resident');
-        $recipients = config("incident_reports.alerts.{$report->suggested_team}", []);
+        $recipients = $alertRecipients->forTeam($report->suggested_team);
         $phone = $sms->normalizePhoneNumber($recipients['phone'] ?? null);
         $email = $recipients['email'] ?? null;
         $location = $report->location;

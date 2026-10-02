@@ -23,7 +23,7 @@
                 </div>
                 <p>Review the case details and record each step of barangay mediation.</p>
             </div>
-            <a href="{{ route('blotters.edit', [$blotter]) }}" class="button button-outline" style="margin-left: auto; text-decoration: none;">
+            <a href="{{ route('blotters.edit', [$blotter]) }}" class="button button-primary" style="margin-left: auto; text-decoration: none;">
                 <i data-lucide="pencil" aria-hidden="true"></i> Edit details
             </a>
         </header>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateIncidentReportRequest;
 use App\Models\IncidentReport;
+use App\Support\IncidentAlertRecipients;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -48,13 +49,14 @@ class StaffIncidentReportController extends Controller
         return view('incident-reports.staff.index', compact('reports', 'status', 'team', 'search', 'statusCounts'));
     }
 
-    public function show(Request $request, IncidentReport $incidentReport): View
+    public function show(Request $request, IncidentReport $incidentReport, IncidentAlertRecipients $alertRecipients): View
     {
         $incidentReport->load(['resident', 'assignee', 'updates.user']);
         $canViewIdentity = ! $incidentReport->keep_identity_confidential
             || $incidentReport->assigned_to === $request->user()->id;
+        $alertRecipients = $alertRecipients->forTeam($incidentReport->suggested_team);
 
-        return view('incident-reports.staff.show', compact('incidentReport', 'canViewIdentity'));
+        return view('incident-reports.staff.show', compact('incidentReport', 'canViewIdentity', 'alertRecipients'));
     }
 
     public function update(UpdateIncidentReportRequest $request, IncidentReport $incidentReport): RedirectResponse
