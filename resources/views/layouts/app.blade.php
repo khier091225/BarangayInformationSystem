@@ -30,8 +30,6 @@
                 <span class="nav-group-label">CASE MANAGEMENT</span>
                 <x-nav-link :href="route('incident-reports.index')" :active="request()->routeIs('incident-reports.*')" icon="message-square-warning">Incident reports</x-nav-link>
                 <x-nav-link :href="route('blotters.index')" :active="request()->routeIs('blotters.*')" icon="notebook-pen">Blotter records</x-nav-link>
-                <span class="nav-group-label">ACCOUNT</span>
-                <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.*')" icon="user-round">My profile</x-nav-link>
             </nav>
             <div class="sidebar-bottom">
                 <a href="{{ route('home') }}" class="public-site-link" target="_blank" title="View Public Portal">
@@ -40,7 +38,7 @@
                     <i data-lucide="arrow-up-right"></i>
                 </a>
                 <div class="sidebar-user-card">
-                    <a href="{{ route('profile.edit') }}" class="sidebar-profile" aria-label="Manage your profile">
+                    <a href="{{ route('profile.edit') }}" class="sidebar-profile" aria-label="Manage your profile" @if (request()->routeIs('profile.*')) aria-current="page" @endif>
                         <div class="staff-avatar-wrapper">
                             <span class="staff-avatar" aria-hidden="true"><i data-lucide="user-round"></i></span>
                         </div>

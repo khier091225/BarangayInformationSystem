@@ -3,7 +3,7 @@
 @section('title', 'My Profile | Barangay Information System')
 
 @section('breadcrumb')
-    <span>Staff workspace</span><i data-lucide="chevron-right" aria-hidden="true"></i><strong>My profile</strong>
+    <span>Account</span><i data-lucide="chevron-right" aria-hidden="true"></i><strong>My profile</strong>
 @endsection
 
 @section('content')
@@ -34,7 +34,7 @@
                             <x-form.error id="email-error" :message="$errors->profile->first('email')" />
                         </div>
                     </div>
-                    <div class="profile-form-actions"><button type="submit" class="overview-button overview-button-primary"><i data-lucide="check" aria-hidden="true"></i> Save profile</button></div>
+                    <div class="profile-form-actions"><button type="submit" class="button button-primary"><i data-lucide="check" aria-hidden="true"></i> Save profile</button></div>
                 </form>
             </section>
 
@@ -70,7 +70,7 @@
                             <x-form.error id="password-confirmation-error" :message="$errors->password->first('password_confirmation')" />
                         </div>
                     </div>
-                    <div class="profile-form-actions"><button type="submit" class="overview-button overview-button-primary"><i data-lucide="badge-check" aria-hidden="true"></i> Change password</button></div>
+                    <div class="profile-form-actions"><button type="submit" class="button button-primary"><i data-lucide="badge-check" aria-hidden="true"></i> Change password</button></div>
                 </form>
             </section>
         </div>
