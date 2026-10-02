@@ -3,10 +3,11 @@
 @section('title', 'My Incident Reports | Barangay Information System')
 
 @section('content')
-    <div class="resident-page-heading">
-        <div><span class="resident-kicker resident-kicker-dark">ONLINE SUMBONG</span><h1>My reports</h1><p>Keep your reference number handy and check here for staff updates.</p></div>
-        <a href="{{ route('account.incidents.create') }}" class="resident-button resident-button-primary"><i data-lucide="message-square-plus" aria-hidden="true"></i> Report an incident</a>
-    </div>
+    <x-workspace.page-header title="My incident reports" description="Keep your reference number handy and check here for staff updates." icon="message-square-warning">
+        <x-slot:actions>
+            <a href="{{ route('account.incidents.create') }}" class="resident-button resident-button-primary"><i data-lucide="plus" aria-hidden="true"></i> Report an incident</a>
+        </x-slot:actions>
+    </x-workspace.page-header>
     <section class="resident-card incident-list-card" aria-label="Your incident reports">
         <nav class="resident-history-filters" aria-label="Filter reports by status">
             <a href="{{ route('account.incidents.index') }}" @if ($status === null) aria-current="page" @endif>All reports</a>

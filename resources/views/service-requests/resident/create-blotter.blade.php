@@ -4,13 +4,11 @@
 @section('main-class', 'resident-main-form')
 
 @section('content')
-    <div class="resident-page-heading">
-        <div>
-            <h1>File a blotter report</h1>
-            <p>Describe the incident for barangay staff to review before it becomes an official blotter record.</p>
-        </div>
-        <a href="{{ route('account.requests.index', ['type' => 'blotter']) }}" class="resident-button resident-button-primary">My blotter requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
-    </div>
+    <x-workspace.page-header title="File a blotter report" description="Describe the incident for barangay staff to review before it becomes an official blotter record." icon="notebook-pen">
+        <x-slot:actions>
+            <a href="{{ route('account.requests.index', ['type' => 'blotter']) }}" class="resident-button resident-button-primary"><i data-lucide="inbox" aria-hidden="true"></i> My blotter requests</a>
+        </x-slot:actions>
+    </x-workspace.page-header>
 
     <section class="resident-card resident-form-card resident-service-form" aria-label="Blotter report form">
         <div class="resident-form-intro">

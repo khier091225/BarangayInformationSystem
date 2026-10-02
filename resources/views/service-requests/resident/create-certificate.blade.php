@@ -4,13 +4,11 @@
 @section('main-class', 'resident-main-form')
 
 @section('content')
-    <div class="resident-page-heading">
-        <div>
-            <h1>Request a barangay document</h1>
-            <p>Choose the document you need and enter its purpose. Barangay staff will review your request.</p>
-        </div>
-        <a href="{{ route('account.requests.index', ['type' => 'certificate']) }}" class="resident-button resident-button-primary">My document requests <i data-lucide="arrow-right" aria-hidden="true"></i></a>
-    </div>
+    <x-workspace.page-header title="Request a barangay document" description="Choose the document you need and enter its purpose. Barangay staff will review your request." icon="files">
+        <x-slot:actions>
+            <a href="{{ route('account.requests.index', ['type' => 'certificate']) }}" class="resident-button resident-button-primary"><i data-lucide="inbox" aria-hidden="true"></i> My document requests</a>
+        </x-slot:actions>
+    </x-workspace.page-header>
 
     <section class="resident-card resident-form-card resident-service-form" aria-label="Document request form">
         <div class="resident-form-intro">

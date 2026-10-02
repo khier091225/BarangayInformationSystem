@@ -4,18 +4,12 @@
 
 @section('content')
     <div class="resident-detail-page">
-        <div class="resident-detail-back"><a href="{{ route('account.requests.index') }}" class="resident-inline-link"><i data-lucide="arrow-left" aria-hidden="true"></i> My requests</a></div>
-        <header class="resident-request-heading">
-            <span class="resident-request-type-icon"><i data-lucide="{{ $serviceRequest->type === 'certificate' ? 'files' : 'notebook-pen' }}" aria-hidden="true"></i></span>
-            <div>
-                <div class="resident-request-meta">
-                    <span class="resident-kicker resident-kicker-dark">REQUEST #{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}</span>
-                    <x-request-status :status="$serviceRequest->status" />
-                </div>
-                <h1>{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</h1>
-                <p>Submitted {{ $serviceRequest->created_at->timezone('Asia/Manila')->format('M j, Y') }}</p>
-            </div>
-        </header>
+        <x-workspace.page-header :title="$serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report'" :description="'Request #'.str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT).' · Submitted '.$serviceRequest->created_at->timezone('Asia/Manila')->format('M j, Y')" :icon="$serviceRequest->type === 'certificate' ? 'files' : 'notebook-pen'">
+            <x-slot:status><x-request-status :status="$serviceRequest->status" /></x-slot:status>
+            <x-slot:actions>
+                <a href="{{ route('account.requests.index') }}" class="resident-button resident-button-primary"><i data-lucide="arrow-left" aria-hidden="true"></i> My requests</a>
+            </x-slot:actions>
+        </x-workspace.page-header>
 
         <section class="resident-request-status resident-request-status-{{ strtolower($serviceRequest->status) }}" aria-labelledby="request-status-title">
             <span class="resident-request-status-icon"><i data-lucide="{{ $serviceRequest->status === 'Pending' ? 'calendar-clock' : ($serviceRequest->status === 'Completed' ? 'badge-check' : 'info') }}" aria-hidden="true"></i></span>

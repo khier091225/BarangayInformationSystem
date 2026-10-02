@@ -4,11 +4,12 @@
 
 @section('content')
     <div class="incident-detail-page">
-        <div class="resident-detail-back"><a href="{{ route('account.incidents.index') }}" class="resident-inline-link"><i data-lucide="arrow-left" aria-hidden="true"></i> My reports</a></div>
-        <header class="resident-request-heading">
-            <span class="resident-request-type-icon"><i data-lucide="message-square-warning" aria-hidden="true"></i></span>
-            <div><div class="resident-request-meta"><span class="resident-kicker resident-kicker-dark">{{ $incidentReport->reference_number }}</span><x-incident-status :status="$incidentReport->status" /></div><h1>{{ $incidentReport->categoryLabel() }}</h1><p>Submitted {{ $incidentReport->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</p></div>
-        </header>
+        <x-workspace.page-header :title="$incidentReport->categoryLabel()" :description="$incidentReport->reference_number.' · Submitted '.$incidentReport->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A')" icon="message-square-warning">
+            <x-slot:status><x-incident-status :status="$incidentReport->status" /></x-slot:status>
+            <x-slot:actions>
+                <a href="{{ route('account.incidents.index') }}" class="resident-button resident-button-primary"><i data-lucide="arrow-left" aria-hidden="true"></i> My reports</a>
+            </x-slot:actions>
+        </x-workspace.page-header>
 
         <section class="incident-status-banner incident-status-banner-{{ strtolower($incidentReport->status) }}" aria-labelledby="incident-status-title">
             <i data-lucide="{{ $incidentReport->status === 'Closed' || $incidentReport->status === 'Resolved' ? 'badge-check' : 'messages-square' }}" aria-hidden="true"></i>

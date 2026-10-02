@@ -5,12 +5,7 @@
 @section('main-class', 'resident-profile-page')
 
 @section('content')
-    <header class="resident-page-heading">
-        <div>
-            <h1>My profile</h1>
-            <p>Review the information linked to your barangay record and keep your account password secure.</p>
-        </div>
-    </header>
+    <x-workspace.page-header title="My profile" description="Review the information linked to your barangay record and keep your account password secure." icon="user-round" />
 
     <div class="resident-profile-grid">
         <section class="resident-card resident-profile-details" aria-labelledby="resident-profile-details-title">

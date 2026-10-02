@@ -3,10 +3,11 @@
 @section('title', 'My Requests | Barangay Information System')
 
 @section('content')
-    <div class="resident-page-heading">
-        <div><h1>My {{ $requestLabel }}</h1><p>Follow your submissions and read updates from barangay staff.</p></div>
-        <a href="{{ route('account') }}#resident-services" class="resident-button resident-button-primary"><i data-lucide="plus" aria-hidden="true"></i> Choose a service</a>
-    </div>
+    <x-workspace.page-header :title="'My '.$requestLabel" description="Follow your submissions and read updates from barangay staff." icon="inbox">
+        <x-slot:actions>
+            <a href="{{ route('account') }}#resident-services" class="resident-button resident-button-primary"><i data-lucide="plus" aria-hidden="true"></i> Choose a service</a>
+        </x-slot:actions>
+    </x-workspace.page-header>
 
     <section class="resident-card resident-history-card" aria-label="Submitted requests">
         <nav class="resident-history-type-filters" aria-label="Filter requests by type">

@@ -4,14 +4,11 @@
 @section('main-class', 'resident-main-form')
 
 @section('content')
-    <div class="resident-page-heading">
-        <div>
-            <span class="resident-kicker resident-kicker-dark">ONLINE SUMBONG</span>
-            <h1>Report an incident</h1>
-            <p>Tell barangay staff what happened. You can follow their response using your report reference.</p>
-        </div>
-        <a href="{{ route('account.incidents.index') }}" class="resident-button resident-button-primary">My reports <i data-lucide="arrow-right" aria-hidden="true"></i></a>
-    </div>
+    <x-workspace.page-header title="Report an incident" description="Tell barangay staff what happened. You can follow their response using your report reference." icon="message-square-warning">
+        <x-slot:actions>
+            <a href="{{ route('account.incidents.index') }}" class="resident-button resident-button-primary"><i data-lucide="clipboard-list" aria-hidden="true"></i> My reports</a>
+        </x-slot:actions>
+    </x-workspace.page-header>
 
     <section class="resident-card resident-form-card resident-service-form" aria-label="Incident report form">
         <div class="resident-form-intro">
