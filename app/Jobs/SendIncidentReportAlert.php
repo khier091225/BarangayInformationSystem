@@ -8,6 +8,7 @@ use App\Models\IncidentReport;
 use App\Support\IncidentAlertRecipients;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Throwable;
@@ -65,8 +66,16 @@ class SendIncidentReportAlert implements ShouldQueue
                     $report->keep_identity_confidential,
                 ));
                 $emailStatus = 'submitted';
-            } catch (Throwable) {
+            } catch (Throwable $exception) {
                 $emailStatus = 'failed';
+
+                Log::warning('Incident report email alert failed.', [
+                    'incident_report_id' => $report->id,
+                    'reference_number' => $report->reference_number,
+                    'team' => $report->suggested_team,
+                    'reason' => $this->emailFailureReason($exception),
+                    'exception' => $exception::class,
+                ]);
             }
         }
 
@@ -74,5 +83,17 @@ class SendIncidentReportAlert implements ShouldQueue
             'alert_sms_status' => $smsStatus,
             'alert_email_status' => $emailStatus,
         ])->save();
+    }
+
+    private function emailFailureReason(Throwable $exception): string
+    {
+        $message = Str::lower($exception->getMessage());
+
+        return match (true) {
+            Str::contains($message, ['535', 'authenticat', 'credential']) => 'authentication_failed',
+            Str::contains($message, ['certificate', 'tls', 'crypto']) => 'tls_failed',
+            Str::contains($message, ['timed out', 'connection', 'getaddrinfo', 'php_network_getaddresses']) => 'connection_failed',
+            default => 'mail_transport_error',
+        };
     }
 }

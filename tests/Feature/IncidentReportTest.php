@@ -263,8 +263,9 @@ class IncidentReportTest extends TestCase
         $this->actingAs(User::factory()->create())
             ->get(route('incident-reports.show', $report))
             ->assertOk()
-            ->assertSee('Alerts are attempted when the resident submits the report')
-            ->assertSee('Accepted by SMS service; phone delivery unverified');
+            ->assertSee('Handle this report')
+            ->assertSee('Status history')
+            ->assertDontSee('Duty alerts');
     }
 
     public function test_alert_is_attempted_after_submission_without_a_queue_worker(): void
