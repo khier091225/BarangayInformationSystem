@@ -38,6 +38,31 @@ class AuthTest extends TestCase
             ->assertRedirect(route('residents.index'));
     }
 
+    #[DataProvider('residentServiceForms')]
+    public function test_verified_resident_login_returns_to_the_selected_service_form(string $routeName, string $formHeading): void
+    {
+        $resident = Resident::factory()->create();
+        $user = User::factory()->resident()->for($resident)->create();
+
+        $this->get(route($routeName))->assertRedirect(route('login'));
+        $this->post(route('login.store'), ['email' => $user->email, 'password' => 'password'])
+            ->assertRedirect(route($routeName));
+
+        $this->assertAuthenticatedAs($user);
+        $this->get(route($routeName))->assertOk()->assertSee($formHeading);
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function residentServiceForms(): array
+    {
+        return [
+            'blotter report' => ['account.requests.blotter.create', 'File a blotter report'],
+            'document request' => ['account.requests.certificate.create', 'Request a document'],
+        ];
+    }
+
     public function test_invalid_credentials_keep_email_but_never_password(): void
     {
         $user = User::factory()->create();

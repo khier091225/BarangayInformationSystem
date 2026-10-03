@@ -27,6 +27,13 @@ class LoginController extends Controller
         $request->session()->regenerate();
 
         if (Auth::user()->role !== 'staff') {
+            if (Auth::user()->resident_id !== null && in_array($request->session()->get('url.intended'), [
+                route('account.requests.blotter.create'),
+                route('account.requests.certificate.create'),
+            ], true)) {
+                return redirect()->intended(route('account'));
+            }
+
             return redirect()->route('account');
         }
 

@@ -396,7 +396,7 @@
                         <p class="text-slate-300 text-sm sm:text-base leading-relaxed">Confidential documentation and mediation of neighborhood disputes, property matters, and peace and order concerns handled through community conciliation.</p>
                     </div>
                     <div class="relative z-10 flex-shrink-0">
-                        <button class="inline-flex justify-center items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3.5 rounded-xl transition-all shadow-md shadow-emerald-900/40 w-full sm:w-auto" onclick="showServiceModal('Blotter &amp; Incident Reporting', 'Formal documentation of incident reports and mediation under the Katarungang Pambarangay.', ['Personal appearance of Complainant/Incident Reporter', 'Valid Government ID', 'Narrative description of incident and involved parties'], 'Formal Hearing Schedule Assigned', 'Strictly confidential and handled by the Barangay Lupon')">
+                        <button class="inline-flex justify-center items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3.5 rounded-xl transition-all shadow-md shadow-emerald-900/40 w-full sm:w-auto" onclick="showServiceModal('Blotter &amp; Incident Reporting', 'Formal documentation of incident reports and mediation under the Katarungang Pambarangay.', ['Personal appearance of Complainant/Incident Reporter', 'Valid Government ID', 'Narrative description of incident and involved parties'], 'Formal Hearing Schedule Assigned', 'Strictly confidential and handled by the Barangay Lupon', @js(route('account.requests.blotter.create')))">
                             <span>View Mediation Guidelines</span>
                             <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </button>
@@ -655,15 +655,13 @@
                 <button type="button" data-service-dialog-close class="w-full sm:w-auto px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">
                     Close
                 </button>
-                @auth
-                    <a href="{{ route('account.requests.certificate.create') }}" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl transition-colors shadow-md shadow-emerald-900/15">
+                <a id="modal-request-link" href="{{ route('account.requests.certificate.create') }}" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl transition-colors shadow-md shadow-emerald-900/15">
+                    @auth
                         Request Online <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </a>
-                @else
-                    <a href="{{ route('login') }}" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl transition-colors shadow-md shadow-emerald-900/15">
+                    @else
                         Proceed to Request <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </a>
-                @endauth
+                    @endauth
+                </a>
             </div>
         </div>
     </dialog>
@@ -720,9 +718,10 @@
         }
 
         // Service Details Modal Function
-        function showServiceModal(title, description, checklist, turnaround, fees) {
+        function showServiceModal(title, description, checklist, turnaround, fees, requestUrl = @js(route('account.requests.certificate.create'))) {
             document.getElementById('modal-title').textContent = title;
             document.getElementById('modal-description').textContent = description;
+            document.getElementById('modal-request-link').href = requestUrl;
             
             const listEl = document.getElementById('modal-checklist');
             listEl.innerHTML = '';
