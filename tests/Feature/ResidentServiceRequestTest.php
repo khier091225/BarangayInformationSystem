@@ -26,7 +26,7 @@ class ResidentServiceRequestTest extends TestCase
             ->assertSee('File a blotter report')
             ->assertSee('Recent activity')
             ->assertViewHas('latestReviewedRequest', null)
-            ->assertViewHas('requestCounts', ['total' => 0, 'pending' => 0, 'completed' => 0, 'declined' => 0]);
+            ->assertViewHas('requestCounts', ['total' => 0, 'pending' => 0, 'awaiting_payment' => 0, 'completed' => 0, 'declined' => 0]);
         $this->get(route('account.requests.certificate.create'))->assertOk()
             ->assertSee('Business Clearance');
 
@@ -189,10 +189,33 @@ class ResidentServiceRequestTest extends TestCase
             ->assertSee(route('account.requests.show', $completed), false)
             ->assertSee(route('account.requests.index', ['status' => 'Declined']), false);
 
-        $this->assertSame(['total' => 4, 'pending' => 2, 'completed' => 1, 'declined' => 1], $response->viewData('requestCounts'));
+        $this->assertSame(['total' => 4, 'pending' => 2, 'awaiting_payment' => 0, 'completed' => 1, 'declined' => 1], $response->viewData('requestCounts'));
         $this->assertTrue($response->viewData('latestReviewedRequest')->is($completed));
         $this->assertCount(3, $response->viewData('recentRequests'));
         $this->assertFalse($response->viewData('recentRequests')->contains('id', $completed->id));
+    }
+
+    public function test_dashboard_shows_owned_requests_awaiting_payment_without_other_active_activity(): void
+    {
+        $resident = Resident::factory()->create();
+        $user = User::factory()->resident()->create(['resident_id' => $resident->id]);
+        ServiceRequest::factory()->for($resident)->count(2)->create([
+            'status' => ServiceRequest::STATUS_AWAITING_PAYMENT,
+        ]);
+        ServiceRequest::factory()->for($resident)->create(['status' => ServiceRequest::STATUS_COMPLETED]);
+        $otherRequest = ServiceRequest::factory()->create(['status' => ServiceRequest::STATUS_AWAITING_PAYMENT]);
+
+        $this->actingAs($user)->get(route('account'))
+            ->assertViewHas('requestCounts', ['total' => 3, 'pending' => 0, 'awaiting_payment' => 2, 'completed' => 1, 'declined' => 0])
+            ->assertSeeText('Awaiting payment')
+            ->assertSeeText('Follow requests awaiting staff review or payment, and incident reports being handled.')
+            ->assertDontSeeText('No pending requests, payments, or active incident reports right now.')
+            ->assertSee(route('account.requests.index', ['status' => ServiceRequest::STATUS_AWAITING_PAYMENT]), false);
+
+        $this->get(route('account.requests.index', ['status' => ServiceRequest::STATUS_AWAITING_PAYMENT]))
+            ->assertViewHas('status', ServiceRequest::STATUS_AWAITING_PAYMENT)
+            ->assertViewHas('requests', fn (LengthAwarePaginator $requests): bool => $requests->total() === 2)
+            ->assertDontSee(route('account.requests.show', $otherRequest), false);
     }
 
     public function test_request_history_filters_only_owned_records_and_preserves_status_across_pages(): void

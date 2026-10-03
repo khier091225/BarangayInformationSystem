@@ -21,7 +21,7 @@ class AccountController extends Controller
         $recentRequests = collect();
         $latestReviewedRequest = null;
         $latestIncidentReport = null;
-        $requestCounts = ['total' => 0, 'pending' => 0, 'completed' => 0, 'declined' => 0];
+        $requestCounts = ['total' => 0, 'pending' => 0, 'awaiting_payment' => 0, 'completed' => 0, 'declined' => 0];
         $incidentCounts = ['total' => 0, 'active' => 0];
 
         if ($user->role === 'resident' && $user->resident_id !== null) {
@@ -44,6 +44,7 @@ class AccountController extends Controller
             $requestCounts = [
                 'total' => (int) $statusTotals->sum(),
                 'pending' => (int) ($statusTotals[ServiceRequest::STATUS_PENDING] ?? 0),
+                'awaiting_payment' => (int) ($statusTotals[ServiceRequest::STATUS_AWAITING_PAYMENT] ?? 0),
                 'completed' => (int) ($statusTotals[ServiceRequest::STATUS_COMPLETED] ?? 0),
                 'declined' => (int) ($statusTotals[ServiceRequest::STATUS_DECLINED] ?? 0),
             ];

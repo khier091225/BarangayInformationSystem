@@ -43,7 +43,7 @@ class IncidentReportTest extends TestCase
             ->assertSee(route('account.requests.index', ['status' => 'Pending']), false)
             ->assertSee(route('account.incidents.index', ['status' => 'Active']), false);
 
-        $this->assertSame(['total' => 3, 'pending' => 2, 'completed' => 1, 'declined' => 0], $dashboard->viewData('requestCounts'));
+        $this->assertSame(['total' => 3, 'pending' => 2, 'awaiting_payment' => 0, 'completed' => 1, 'declined' => 0], $dashboard->viewData('requestCounts'));
         $this->assertSame(['total' => 4, 'active' => 3], $dashboard->viewData('incidentCounts'));
 
         $activeReports = $this->get(route('account.incidents.index', ['status' => 'Active']))->assertOk()

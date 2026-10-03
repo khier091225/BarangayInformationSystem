@@ -335,6 +335,7 @@
     .resident-menu-toggle span { display: none; }
     .resident-welcome h1 { font-size: 1.8rem; }
     .resident-welcome p { font-size: .84rem; }
+    .resident-attention .overview-attention-links a + a { border-left: 0; padding-left: 0; }
     .resident-dashboard-service-list { padding-inline: 1rem; }
     .resident-dashboard-service-link { gap: .6rem; }
     .resident-dashboard-service-help, .resident-dashboard-activity-body, .resident-dashboard-activity-links { padding-inline: 1rem; }

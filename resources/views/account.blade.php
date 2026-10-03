@@ -44,11 +44,12 @@
                     <span class="overview-attention-icon"><i data-lucide="calendar-clock" aria-hidden="true"></i></span>
                     <div>
                         <h2 id="resident-progress-title">Your activity in progress</h2>
-                        <p>{{ $requestCounts['pending'] + $incidentCounts['active'] > 0 ? 'Follow requests waiting for staff and incident reports being handled.' : 'No pending requests or active incident reports right now.' }}</p>
+                        <p>{{ $requestCounts['pending'] + $requestCounts['awaiting_payment'] + $incidentCounts['active'] > 0 ? 'Follow requests awaiting staff review or payment, and incident reports being handled.' : 'No pending requests, payments, or active incident reports right now.' }}</p>
                     </div>
                 </div>
                 <div class="overview-attention-links">
                     <a href="{{ route('account.requests.index', ['status' => 'Pending']) }}"><strong>{{ number_format($requestCounts['pending']) }}</strong><span>Pending requests</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+                    <a href="{{ route('account.requests.index', ['status' => 'Awaiting Payment']) }}"><strong>{{ number_format($requestCounts['awaiting_payment']) }}</strong><span>Awaiting payment</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
                     <a href="{{ route('account.incidents.index', ['status' => 'Active']) }}"><strong>{{ number_format($incidentCounts['active']) }}</strong><span>Active reports</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
                 </div>
             </div>
