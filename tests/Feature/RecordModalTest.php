@@ -6,6 +6,8 @@ use App\Models\Blotter;
 use App\Models\Official;
 use App\Models\Resident;
 use App\Models\User;
+use DOMDocument;
+use DOMXPath;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -77,6 +79,7 @@ class RecordModalTest extends TestCase
         $response->assertOk();
         $this->assertMatchesRegularExpression('/<dialog id="'.$dialogId.'"[^>]*data-open-on-load/', $response->getContent());
         $this->assertSame(1, substr_count($response->getContent(), 'data-open-on-load'));
+        $this->assertInvalidFieldsDescribeTheirErrors($response->getContent());
     }
 
     #[DataProvider('editModules')]
@@ -116,5 +119,33 @@ class RecordModalTest extends TestCase
         $response->assertOk();
         $this->assertMatchesRegularExpression('/<dialog id="'.$dialogId.'"[^>]*data-open-on-load/', $response->getContent());
         $this->assertSame(1, substr_count($response->getContent(), 'data-open-on-load'));
+        $this->assertInvalidFieldsDescribeTheirErrors($response->getContent());
+    }
+
+    private function assertInvalidFieldsDescribeTheirErrors(string $html): void
+    {
+        $document = new DOMDocument;
+        $document->loadHTML($html, LIBXML_NONET | LIBXML_NOERROR | LIBXML_NOWARNING);
+        $xpath = new DOMXPath($document);
+        $invalidFields = $xpath->query('//*[@aria-invalid="true"]');
+        $this->assertGreaterThan(0, $invalidFields->length);
+
+        foreach ($invalidFields as $field) {
+            $description = trim($field->getAttribute('aria-describedby'));
+            $this->assertNotSame('', $description, 'Invalid field '.$field->getAttribute('id').' must describe its error.');
+            $hasError = false;
+
+            foreach (preg_split('/\s+/', $description) as $descriptionId) {
+                $descriptions = $xpath->query('//*[@id="'.$descriptionId.'"]');
+                $this->assertCount(1, $descriptions, 'Description '.$descriptionId.' must identify exactly one element.');
+                $element = $descriptions->item(0);
+
+                if (str_contains(' '.$element->getAttribute('class').' ', ' form-error ') && trim($element->textContent) !== '') {
+                    $hasError = true;
+                }
+            }
+
+            $this->assertTrue($hasError, 'Invalid field '.$field->getAttribute('id').' must describe a visible validation message.');
+        }
     }
 }

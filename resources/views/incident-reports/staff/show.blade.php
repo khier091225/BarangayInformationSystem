@@ -41,8 +41,8 @@
                         <details class="complaint-optional-fields" @if ($errors->has('team') || $errors->has('message')) open @endif>
                             <summary>Change team or add a message <span>(optional)</span></summary>
                             <div class="complaint-optional-body">
-                                <div class="resident-field"><x-form.label for="team" required>Assign team</x-form.label><x-form.select name="team" required :aria-invalid="$errors->has('team') ? 'true' : 'false'">@foreach (\App\Models\IncidentReport::TEAM_LABELS as $value => $label)<option value="{{ $value }}" @selected(old('team', $incidentReport->suggested_team) === $value)>{{ $label }}</option>@endforeach</x-form.select><x-form.error :message="$errors->first('team')" /></div>
-                                <div class="resident-field"><x-form.label for="message">Message to resident</x-form.label><x-form.textarea name="message" rows="4" maxlength="2000" placeholder="Add a personal update if needed.">{{ old('message') }}</x-form.textarea><x-form.error :message="$errors->first('message')" /></div>
+                                <div class="resident-field"><x-form.label for="team" required>Assign team</x-form.label><x-form.select name="team" required :aria-invalid="$errors->has('team') ? 'true' : 'false'" :aria-describedby="$errors->has('team') ? 'team-error' : null">@foreach (\App\Models\IncidentReport::TEAM_LABELS as $value => $label)<option value="{{ $value }}" @selected(old('team', $incidentReport->suggested_team) === $value)>{{ $label }}</option>@endforeach</x-form.select><x-form.error :message="$errors->first('team')" :id="'team-error'" /></div>
+                                <div class="resident-field"><x-form.label for="message">Message to resident</x-form.label><x-form.textarea name="message" rows="4" maxlength="2000" placeholder="Add a personal update if needed." :aria-invalid="$errors->has('message') ? 'true' : 'false'" :aria-describedby="$errors->has('message') ? 'message-error' : null">{{ old('message') }}</x-form.textarea><x-form.error :message="$errors->first('message')" :id="'message-error'" /></div>
                             </div>
                         </details>
                         <button type="submit" class="button button-primary">Accept report <i data-lucide="arrow-right" aria-hidden="true"></i></button>
@@ -55,7 +55,7 @@
                         <p class="incident-action-help">The resident will see the new status. Add a personal note only if there is more to share.</p>
                         <details class="complaint-optional-fields" @if ($errors->has('message')) open @endif>
                             <summary>Add a message to the resident <span>(optional)</span></summary>
-                            <div class="complaint-optional-body"><div class="resident-field"><x-form.label for="message">Message to resident</x-form.label><x-form.textarea name="message" rows="4" maxlength="2000" placeholder="Share a helpful update if needed." :aria-invalid="$errors->has('message') ? 'true' : 'false'">{{ old('message') }}</x-form.textarea><x-form.error :message="$errors->first('message')" /></div></div>
+                            <div class="complaint-optional-body"><div class="resident-field"><x-form.label for="message">Message to resident</x-form.label><x-form.textarea name="message" rows="4" maxlength="2000" placeholder="Share a helpful update if needed." :aria-invalid="$errors->has('message') ? 'true' : 'false'" :aria-describedby="$errors->has('message') ? 'message-error' : null">{{ old('message') }}</x-form.textarea><x-form.error :message="$errors->first('message')" :id="'message-error'" /></div></div>
                         </details>
                         <button type="submit" class="button button-primary">Mark {{ $incidentReport->nextStatus() }} <i data-lucide="arrow-right" aria-hidden="true"></i></button>
                     </form>

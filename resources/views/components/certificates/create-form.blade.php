@@ -13,37 +13,37 @@
 
     <div class="record-form-field">
         <x-form.label :for="$fieldId('resident_id')" required>Resident</x-form.label>
-        <x-form.select name="resident_id" :id="$fieldId('resident_id')" required :aria-invalid="$error('resident_id') ? 'true' : 'false'">
+        <x-form.select name="resident_id" :id="$fieldId('resident_id')" required :aria-invalid="$error('resident_id') ? 'true' : 'false'" :aria-describedby="$error('resident_id') ? $fieldId('resident_id').'-error' : null">
             <option value="">Choose a resident</option>
             @foreach ($residents as $resident)
                 <option value="{{ $resident->id }}" @selected((string) $value('resident_id', $selectedResidentId) === (string) $resident->id)>{{ $resident->last_name }}, {{ $resident->first_name }} {{ $resident->middle_name }} ({{ $resident->address }})</option>
             @endforeach
         </x-form.select>
-        <x-form.error :message="$error('resident_id')" />
+        <x-form.error :message="$error('resident_id')" :id="$fieldId('resident_id').'-error'" />
     </div>
 
     <div class="record-form-grid">
         <div>
             <x-form.label :for="$fieldId('certificate_type')" required>Document type</x-form.label>
-            <x-form.select name="certificate_type" :id="$fieldId('certificate_type')" required :aria-invalid="$error('certificate_type') ? 'true' : 'false'">
+            <x-form.select name="certificate_type" :id="$fieldId('certificate_type')" required :aria-invalid="$error('certificate_type') ? 'true' : 'false'" :aria-describedby="$error('certificate_type') ? $fieldId('certificate_type').'-error' : null">
                 <option value="">Select type</option>
                 @foreach ($certificateFees as $type => $fee)
                     <option value="{{ $type }}" @selected($value('certificate_type') === $type)>{{ $type }} — {{ (float) $fee === 0.0 ? 'Free' : '₱'.number_format((float) $fee, 2) }}</option>
                 @endforeach
             </x-form.select>
-            <x-form.error :message="$error('certificate_type')" />
+            <x-form.error :message="$error('certificate_type')" :id="$fieldId('certificate_type').'-error'" />
         </div>
         <div>
             <x-form.label :for="$fieldId('date_issued')" required>Date Issued</x-form.label>
-            <x-form.input type="date" name="date_issued" :id="$fieldId('date_issued')" :value="$value('date_issued', date('Y-m-d'))" required :aria-invalid="$error('date_issued') ? 'true' : 'false'" />
-            <x-form.error :message="$error('date_issued')" />
+            <x-form.input type="date" name="date_issued" :id="$fieldId('date_issued')" :value="$value('date_issued', date('Y-m-d'))" required :aria-invalid="$error('date_issued') ? 'true' : 'false'" :aria-describedby="$error('date_issued') ? $fieldId('date_issued').'-error' : null" />
+            <x-form.error :message="$error('date_issued')" :id="$fieldId('date_issued').'-error'" />
         </div>
     </div>
 
     <div class="record-form-field">
         <x-form.label :for="$fieldId('purpose')" required>Purpose</x-form.label>
-        <x-form.input name="purpose" :id="$fieldId('purpose')" :value="$value('purpose')" required maxlength="255" placeholder="e.g. Local Employment, Scholarship Application, Bank Account Requirement" :aria-invalid="$error('purpose') ? 'true' : 'false'" />
-        <x-form.error :message="$error('purpose')" />
+        <x-form.input name="purpose" :id="$fieldId('purpose')" :value="$value('purpose')" required maxlength="255" placeholder="e.g. Local Employment, Scholarship Application, Bank Account Requirement" :aria-invalid="$error('purpose') ? 'true' : 'false'" :aria-describedby="$error('purpose') ? $fieldId('purpose').'-error' : null" />
+        <x-form.error :message="$error('purpose')" :id="$fieldId('purpose').'-error'" />
     </div>
 
     @if ($modal)

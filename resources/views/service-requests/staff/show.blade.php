@@ -85,9 +85,9 @@
                         @csrf
                         <div class="staff-request-review-field">
                             <x-form.label for="response_note">Message to resident</x-form.label>
-                            <x-form.textarea name="response_note" rows="4" maxlength="1000" placeholder="Add collection instructions or explain why the request was declined" aria-describedby="response_note_help" :aria-invalid="$errors->has('response_note') ? 'true' : null">{{ old('response_note') }}</x-form.textarea>
+                            <x-form.textarea name="response_note" rows="4" maxlength="1000" placeholder="Add collection instructions or explain why the request was declined" :aria-describedby="$errors->has('response_note') ? 'response_note_help response_note-error' : 'response_note_help'" :aria-invalid="$errors->has('response_note') ? 'true' : null">{{ old('response_note') }}</x-form.textarea>
                             <p id="response_note_help">Optional when completing; required when declining.</p>
-                            <x-form.error :message="$errors->first('response_note')" />
+                            <x-form.error :message="$errors->first('response_note')" :id="'response_note-error'" />
                         </div>
                         <div class="staff-request-review-actions">
                             <button type="submit" name="decision" value="complete" class="button button-primary"><i data-lucide="check" aria-hidden="true"></i> {{ $serviceRequest->type === 'certificate' ? 'Approve request' : 'Complete request' }}</button>
@@ -139,13 +139,13 @@
                                 @csrf
                                 <div class="staff-request-review-field">
                                     <x-form.label for="receipt_number" required>Official receipt or reference number</x-form.label>
-                                    <x-form.input name="receipt_number" id="receipt_number" :value="old('receipt_number')" required maxlength="100" placeholder="e.g. OR-2026-00125" :aria-invalid="$errors->has('receipt_number') ? 'true' : null" />
-                                    <x-form.error :message="$errors->first('receipt_number')" />
+                                    <x-form.input name="receipt_number" id="receipt_number" :value="old('receipt_number')" required maxlength="100" placeholder="e.g. OR-2026-00125" :aria-invalid="$errors->has('receipt_number') ? 'true' : null" :aria-describedby="$errors->has('receipt_number') ? 'receipt_number-error' : null" />
+                                    <x-form.error :message="$errors->first('receipt_number')" :id="'receipt_number-error'" />
                                 </div>
                                 <div class="staff-request-review-field">
                                     <x-form.label for="payment_note">Payment note</x-form.label>
-                                    <x-form.textarea name="payment_note" id="payment_note" rows="3" maxlength="500" placeholder="Optional note about the cash payment" :aria-invalid="$errors->has('payment_note') ? 'true' : null">{{ old('payment_note') }}</x-form.textarea>
-                                    <x-form.error :message="$errors->first('payment_note')" />
+                                    <x-form.textarea name="payment_note" id="payment_note" rows="3" maxlength="500" placeholder="Optional note about the cash payment" :aria-invalid="$errors->has('payment_note') ? 'true' : null" :aria-describedby="$errors->has('payment_note') ? 'payment_note-error' : null">{{ old('payment_note') }}</x-form.textarea>
+                                    <x-form.error :message="$errors->first('payment_note')" :id="'payment_note-error'" />
                                 </div>
                                 <button type="submit" class="button button-primary"><i data-lucide="check" aria-hidden="true"></i> Record cash payment</button>
                             </form>

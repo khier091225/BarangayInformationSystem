@@ -61,6 +61,8 @@ class HouseholdTest extends TestCase
             ->get(route('households.index'))->assertOk()
             ->assertSee('data-open-on-load', false)
             ->assertSee('value="Test Household"', false)
+            ->assertSee('aria-describedby="address-error"', false)
+            ->assertSee('id="address-error"', false)
             ->assertSee('The address field is required.');
 
         $this->assertDatabaseCount('households', 0);
@@ -77,6 +79,8 @@ class HouseholdTest extends TestCase
         $this->withCookie(config('session.cookie'), session()->getId())
             ->get(route('households.create'))->assertOk()
             ->assertSee('value="Test Household"', false)
+            ->assertSee('aria-describedby="address-error"', false)
+            ->assertSee('id="address-error"', false)
             ->assertSee('The address field is required.');
     }
 
@@ -119,6 +123,8 @@ class HouseholdTest extends TestCase
         $response->assertOk()
             ->assertSee('value="Revised Head"', false)
             ->assertSee('value="Second Head"', false)
+            ->assertSee('aria-describedby="household-edit-'.$household->getKey().'-address-error"', false)
+            ->assertSee('id="household-edit-'.$household->getKey().'-address-error"', false)
             ->assertSee('The address field is required.');
         $this->assertMatchesRegularExpression('/<dialog id="household-edit-dialog-'.$household->getKey().'"[^>]*data-open-on-load/', $response->getContent());
         $this->assertSame(1, substr_count($response->getContent(), 'data-open-on-load'));
@@ -139,6 +145,8 @@ class HouseholdTest extends TestCase
         $this->withCookie(config('session.cookie'), session()->getId())
             ->get(route('households.edit', $household))->assertOk()
             ->assertSee('value="Revised Head"', false)
+            ->assertSee('aria-describedby="address-error"', false)
+            ->assertSee('id="address-error"', false)
             ->assertSee('The address field is required.');
     }
 

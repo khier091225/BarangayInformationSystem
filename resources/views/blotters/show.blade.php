@@ -53,7 +53,7 @@
                         <p class="incident-action-help">Accepting assigns this case to you. You can then set its mediation schedule.</p>
                         <details class="complaint-optional-fields" @if ($errors->has('message')) open @endif>
                             <summary>Add an update message <span>(optional)</span></summary>
-                            <div class="complaint-optional-body"><div class="resident-field"><x-form.label for="message">Case update</x-form.label><x-form.textarea name="message" rows="4" maxlength="2000" placeholder="Add instructions or a short update." :aria-invalid="$errors->has('message') ? 'true' : 'false'">{{ old('message') }}</x-form.textarea><x-form.error :message="$errors->first('message')" /></div></div>
+                            <div class="complaint-optional-body"><div class="resident-field"><x-form.label for="message">Case update</x-form.label><x-form.textarea name="message" rows="4" maxlength="2000" placeholder="Add instructions or a short update." :aria-invalid="$errors->has('message') ? 'true' : 'false'" :aria-describedby="$errors->has('message') ? 'message-error' : null">{{ old('message') }}</x-form.textarea><x-form.error :message="$errors->first('message')" :id="'message-error'" /></div></div>
                         </details>
                         <button type="submit" class="button button-primary">Accept case <i data-lucide="arrow-right" aria-hidden="true"></i></button>
                     </form>
@@ -70,7 +70,7 @@
                         </div>
                         <details class="complaint-optional-fields" @if ($errors->has('message')) open @endif>
                             <summary>Add an update message <span>(optional)</span></summary>
-                            <div class="complaint-optional-body"><div class="resident-field"><x-form.label for="message">Case update</x-form.label><x-form.textarea name="message" rows="4" maxlength="2000">{{ old('message') }}</x-form.textarea><x-form.error :message="$errors->first('message')" /></div></div>
+                            <div class="complaint-optional-body"><div class="resident-field"><x-form.label for="message">Case update</x-form.label><x-form.textarea name="message" rows="4" maxlength="2000" :aria-invalid="$errors->has('message') ? 'true' : 'false'" :aria-describedby="$errors->has('message') ? 'message-error' : null">{{ old('message') }}</x-form.textarea><x-form.error :message="$errors->first('message')" :id="'message-error'" /></div></div>
                         </details>
                         <button type="submit" class="button button-primary"><i data-lucide="calendar-clock" aria-hidden="true"></i> Save schedule</button>
                     </form>
@@ -81,7 +81,7 @@
                         <p class="incident-action-help">Scheduled for <strong>{{ $blotter->hearing_at?->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</strong>. Start this step when the mediation session begins.</p>
                         <details class="complaint-optional-fields" @if ($errors->has('message')) open @endif>
                             <summary>Add an update message <span>(optional)</span></summary>
-                            <div class="complaint-optional-body"><div class="resident-field"><x-form.label for="message">Case update</x-form.label><x-form.textarea name="message" rows="4" maxlength="2000">{{ old('message') }}</x-form.textarea><x-form.error :message="$errors->first('message')" /></div></div>
+                            <div class="complaint-optional-body"><div class="resident-field"><x-form.label for="message">Case update</x-form.label><x-form.textarea name="message" rows="4" maxlength="2000" :aria-invalid="$errors->has('message') ? 'true' : 'false'" :aria-describedby="$errors->has('message') ? 'message-error' : null">{{ old('message') }}</x-form.textarea><x-form.error :message="$errors->first('message')" :id="'message-error'" /></div></div>
                         </details>
                         <button type="submit" class="button button-primary">Start mediation <i data-lucide="arrow-right" aria-hidden="true"></i></button>
                     </form>
@@ -89,7 +89,7 @@
                     <form method="POST" action="{{ route('blotters.status.update', $blotter) }}" class="incident-action-form">
                         @csrf
                         <p class="incident-action-help">Record the final outcome after mediation. This closes the case.</p>
-                        <div class="resident-field"><x-form.label for="message">Outcome notes</x-form.label><x-form.textarea name="message" rows="4" maxlength="2000" placeholder="Summarize the outcome or next instructions." :aria-invalid="$errors->has('message') ? 'true' : 'false'">{{ old('message') }}</x-form.textarea><x-form.error :message="$errors->first('message')" /></div>
+                        <div class="resident-field"><x-form.label for="message">Outcome notes</x-form.label><x-form.textarea name="message" rows="4" maxlength="2000" placeholder="Summarize the outcome or next instructions." :aria-invalid="$errors->has('message') ? 'true' : 'false'" :aria-describedby="$errors->has('message') ? 'message-error' : null">{{ old('message') }}</x-form.textarea><x-form.error :message="$errors->first('message')" :id="'message-error'" /></div>
                         <div class="staff-request-review-actions">
                             <button type="submit" name="action" value="settle" class="button button-primary"><i data-lucide="check" aria-hidden="true"></i> Mark settled</button>
                             <button type="submit" name="action" value="dismiss" class="button button-danger-outline">Dismiss case</button>

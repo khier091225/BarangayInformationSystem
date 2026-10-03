@@ -31,7 +31,7 @@ class IncidentAlertContactTest extends TestCase
         $this->actingAs($staff)->get(route('incident-report-contacts.index'))
             ->assertOk()
             ->assertSee('Incident alert contacts')
-            ->assertSee('Environment fallback')
+            ->assertSee('Default settings')
             ->assertSee('09912197679')
             ->assertSee('fallback@example.com');
 
@@ -65,7 +65,7 @@ class IncidentAlertContactTest extends TestCase
 
         $this->get(route('incident-report-contacts.index'))
             ->assertOk()
-            ->assertSee('Database managed')
+            ->assertSee('Saved contact')
             ->assertSee('Night Duty Officer')
             ->assertSee('duty@example.com')
             ->assertSee('Recent contact changes');
@@ -88,6 +88,7 @@ class IncidentAlertContactTest extends TestCase
 
         $this->actingAs($staff)->from(route('incident-report-contacts.index'))
             ->patch(route('incident-report-contacts.update', 'tanod'), [
+                'team_key' => 'tanod',
                 'contact_name' => 'Duty Officer',
                 'phone' => '12345',
                 'email' => 'invalid',
@@ -97,12 +98,25 @@ class IncidentAlertContactTest extends TestCase
             ])->assertRedirect(route('incident-report-contacts.index'))
             ->assertSessionHasErrors(['phone', 'email']);
 
+        $this->withCookie(config('session.cookie'), session()->getId())
+            ->get(route('incident-report-contacts.index'))
+            ->assertSee('aria-describedby="tanod_phone-error"', false)
+            ->assertSee('id="tanod_phone-error"', false)
+            ->assertSee('aria-describedby="tanod_email-error"', false)
+            ->assertSee('id="tanod_email-error"', false);
+
         $this->from(route('incident-report-contacts.index'))
             ->patch(route('incident-report-contacts.update', 'tanod'), [
+                'team_key' => 'tanod',
                 'sms_enabled' => '0',
                 'email_enabled' => '0',
                 'is_active' => '1',
             ])->assertSessionHasErrors('is_active');
+
+        $this->withCookie(config('session.cookie'), session()->getId())
+            ->get(route('incident-report-contacts.index'))
+            ->assertSee('aria-describedby="tanod_is_active-error"', false)
+            ->assertSee('id="tanod_is_active-error"', false);
 
         $this->assertDatabaseEmpty('incident_alert_contacts');
     }

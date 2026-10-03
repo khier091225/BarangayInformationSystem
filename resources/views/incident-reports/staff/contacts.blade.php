@@ -28,14 +28,14 @@
                 @endphp
                 <section class="incident-contact-card" id="contact-{{ $team }}" aria-labelledby="contact-{{ $team }}-title">
                     <div class="incident-contact-card-heading">
-                        <div><span class="incident-contact-team-icon"><i data-lucide="{{ $team === 'tanod' ? 'shield-check' : ($team === 'maintenance' ? 'building-2' : ($team === 'leadership' ? 'landmark' : 'files')) }}" aria-hidden="true"></i></span><div><h2 id="contact-{{ $team }}-title">{{ $card['label'] }}</h2><span class="incident-contact-source incident-contact-source-{{ $card['source'] }}">{{ $card['source'] === 'database' ? 'Database managed' : 'Environment fallback' }}</span></div></div>
+                        <div><span class="incident-contact-team-icon"><i data-lucide="{{ $team === 'tanod' ? 'shield-check' : ($team === 'maintenance' ? 'building-2' : ($team === 'leadership' ? 'landmark' : 'files')) }}" aria-hidden="true"></i></span><div><h2 id="contact-{{ $team }}-title">{{ $card['label'] }}</h2><span class="incident-contact-source incident-contact-source-{{ $card['source'] }}">{{ $card['source'] === 'database' ? 'Saved contact' : 'Default settings' }}</span></div></div>
                         @if ($card['contact'])
                             <span class="incident-contact-state {{ $card['contact']->is_active ? 'is-active' : 'is-inactive' }}">{{ $card['contact']->is_active ? 'Active' : 'Inactive' }}</span>
                         @endif
                     </div>
 
                     @if ($card['source'] === 'environment')
-                        <p class="incident-contact-fallback">Save this team to move its alert contact from the server environment into the database.</p>
+                        <p class="incident-contact-fallback">Check the details below, then select Save contact to manage this team's alerts here.</p>
                     @endif
 
                     <form method="POST" action="{{ route('incident-report-contacts.update', $team) }}" class="incident-contact-form">
@@ -46,18 +46,18 @@
                         <div class="incident-contact-fields">
                             <div class="incident-contact-field incident-contact-field-wide">
                                 <x-form.label for="{{ $team }}_contact_name">Contact person or desk</x-form.label>
-                                <x-form.input name="contact_name" id="{{ $team }}_contact_name" :value="$hasErrors ? old('contact_name') : $values['contact_name']" maxlength="100" placeholder="e.g. Duty Officer" autocomplete="off" :aria-invalid="$hasErrors && $errors->has('contact_name') ? 'true' : 'false'" />
-                                @if ($hasErrors)<x-form.error :message="$errors->first('contact_name')" />@endif
+                                <x-form.input name="contact_name" id="{{ $team }}_contact_name" :value="$hasErrors ? old('contact_name') : $values['contact_name']" maxlength="100" placeholder="e.g. Duty Officer" autocomplete="off" :aria-invalid="$hasErrors && $errors->has('contact_name') ? 'true' : 'false'" :aria-describedby="$hasErrors && $errors->has('contact_name') ? $team.'_contact_name-error' : null" />
+                                @if ($hasErrors)<x-form.error :message="$errors->first('contact_name')" :id="$team.'_contact_name-error'" />@endif
                             </div>
                             <div class="incident-contact-field">
                                 <x-form.label for="{{ $team }}_phone">Mobile number</x-form.label>
-                                <x-form.input name="phone" id="{{ $team }}_phone" type="tel" :value="$hasErrors ? old('phone') : $values['phone']" maxlength="32" inputmode="tel" placeholder="09XXXXXXXXX" autocomplete="off" :aria-invalid="$hasErrors && $errors->has('phone') ? 'true' : 'false'" />
-                                @if ($hasErrors)<x-form.error :message="$errors->first('phone')" />@endif
+                                <x-form.input name="phone" id="{{ $team }}_phone" type="tel" :value="$hasErrors ? old('phone') : $values['phone']" maxlength="32" inputmode="tel" placeholder="09XXXXXXXXX" autocomplete="off" :aria-invalid="$hasErrors && $errors->has('phone') ? 'true' : 'false'" :aria-describedby="$hasErrors && $errors->has('phone') ? $team.'_phone-error' : null" />
+                                @if ($hasErrors)<x-form.error :message="$errors->first('phone')" :id="$team.'_phone-error'" />@endif
                             </div>
                             <div class="incident-contact-field">
                                 <x-form.label for="{{ $team }}_email">Email address</x-form.label>
-                                <x-form.input name="email" id="{{ $team }}_email" type="email" :value="$hasErrors ? old('email') : $values['email']" maxlength="255" placeholder="e.g. duty@example.com" autocomplete="off" :aria-invalid="$hasErrors && $errors->has('email') ? 'true' : 'false'" />
-                                @if ($hasErrors)<x-form.error :message="$errors->first('email')" />@endif
+                                <x-form.input name="email" id="{{ $team }}_email" type="email" :value="$hasErrors ? old('email') : $values['email']" maxlength="255" placeholder="e.g. duty@example.com" autocomplete="off" :aria-invalid="$hasErrors && $errors->has('email') ? 'true' : 'false'" :aria-describedby="$hasErrors && $errors->has('email') ? $team.'_email-error' : null" />
+                                @if ($hasErrors)<x-form.error :message="$errors->first('email')" :id="$team.'_email-error'" />@endif
                             </div>
                         </div>
 
@@ -67,9 +67,9 @@
                             <input type="hidden" name="email_enabled" value="0">
                             <label><input type="checkbox" name="email_enabled" value="1" @checked($hasErrors ? old('email_enabled') : $values['email_enabled'])><span><strong>Email alerts</strong><small>Send new reports to the email address.</small></span></label>
                             <input type="hidden" name="is_active" value="0">
-                            <label><input type="checkbox" name="is_active" value="1" @checked($hasErrors ? old('is_active') : $values['is_active'])><span><strong>Active duty contact</strong><small>Allow enabled channels to receive future alerts.</small></span></label>
+                            <label><input type="checkbox" name="is_active" id="{{ $team }}_is_active" value="1" aria-invalid="{{ $hasErrors && $errors->has('is_active') ? 'true' : 'false' }}" @if ($hasErrors && $errors->has('is_active')) aria-describedby="{{ $team }}_is_active-error" @endif @checked($hasErrors ? old('is_active') : $values['is_active'])><span><strong>Active duty contact</strong><small>Allow enabled channels to receive future alerts.</small></span></label>
                         </div>
-                        @if ($hasErrors)<x-form.error :message="$errors->first('is_active')" />@endif
+                        @if ($hasErrors)<x-form.error :message="$errors->first('is_active')" :id="$team.'_is_active-error'" />@endif
 
                         <div class="incident-contact-actions">
                             <button type="submit" class="button button-primary"><i data-lucide="save" aria-hidden="true"></i> Save contact</button>
@@ -85,7 +85,7 @@
         <section class="incident-contact-history" aria-labelledby="incident-contact-history-title">
             <div class="incident-contact-history-heading"><div><h2 id="incident-contact-history-title">Recent contact changes</h2><p>The system records who updated duty contact settings.</p></div><span class="incident-contact-team-icon"><i data-lucide="history" aria-hidden="true"></i></span></div>
             @if ($recentChanges->isEmpty())
-                <p class="incident-contact-history-empty">No database-managed contact changes yet.</p>
+                <p class="incident-contact-history-empty">No contact changes yet.</p>
             @else
                 <ol>
                     @foreach ($recentChanges as $change)

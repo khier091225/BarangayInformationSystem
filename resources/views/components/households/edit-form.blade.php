@@ -20,14 +20,14 @@
 
     <div style="margin-bottom: 18px;">
         <x-form.label :for="$fieldPrefix.'household_head'" required>Household Head</x-form.label>
-        <x-form.input type="text" name="household_head" :id="$fieldPrefix.'household_head'" :value="$showOldInput ? old('household_head', $household->household_head) : $household->household_head" required maxlength="255" :aria-invalid="$showOldInput && $errors->has('household_head') ? 'true' : 'false'" />
-        <x-form.error :message="$showOldInput ? $errors->first('household_head') : null" />
+        <x-form.input type="text" name="household_head" :id="$fieldPrefix.'household_head'" :value="$showOldInput ? old('household_head', $household->household_head) : $household->household_head" required maxlength="255" :aria-invalid="$showOldInput && $errors->has('household_head') ? 'true' : 'false'" :aria-describedby="$showOldInput && $errors->has('household_head') ? $fieldPrefix.'household_head-error' : null" />
+        <x-form.error :message="$showOldInput ? $errors->first('household_head') : null" :id="$fieldPrefix.'household_head-error'" />
     </div>
 
     <div style="margin-bottom: 24px;">
         <x-form.label :for="$fieldPrefix.'address'" required>Address</x-form.label>
-        <x-form.input type="text" name="address" :id="$fieldPrefix.'address'" :value="$showOldInput ? old('address', $household->address) : $household->address" required maxlength="255" :aria-invalid="$showOldInput && $errors->has('address') ? 'true' : 'false'" />
-        <x-form.error :message="$showOldInput ? $errors->first('address') : null" />
+        <x-form.input type="text" name="address" :id="$fieldPrefix.'address'" :value="$showOldInput ? old('address', $household->address) : $household->address" required maxlength="255" :aria-invalid="$showOldInput && $errors->has('address') ? 'true' : 'false'" :aria-describedby="$showOldInput && $errors->has('address') ? $fieldPrefix.'address-error' : null" />
+        <x-form.error :message="$showOldInput ? $errors->first('address') : null" :id="$fieldPrefix.'address-error'" />
     </div>
 
     @if ($modal)

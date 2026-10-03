@@ -130,6 +130,10 @@ class StaffServiceRequestTest extends TestCase
 
         $this->post(route('service-requests.review', $serviceRequest), ['decision' => 'decline'])
             ->assertSessionHasErrors('response_note');
+        $this->withCookie(config('session.cookie'), session()->getId())
+            ->get(route('service-requests.show', $serviceRequest))
+            ->assertSee('aria-describedby="response_note_help response_note-error"', false)
+            ->assertSee('id="response_note-error"', false);
         $this->post(route('service-requests.review', $serviceRequest), [
             'decision' => 'decline',
             'response_note' => 'Please provide a clearer purpose.',
