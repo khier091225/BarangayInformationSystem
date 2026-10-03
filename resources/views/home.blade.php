@@ -489,7 +489,7 @@
                             <i data-lucide="building-2" class="w-6 h-6"></i>
                         </div>
                         <h3 class="text-lg font-bold mb-1">Barangay Hall</h3>
-                        <p class="text-sm text-emerald-100/60 leading-relaxed mb-4">Executive desk &amp; community patrols.</p>
+                        <p class="text-sm text-emerald-100/80 leading-relaxed mb-4">Executive desk &amp; community patrols.</p>
                     </div>
                     <div>
                         <p class="text-2xl font-black text-white tracking-tight mb-3">(02) 8123-4567</p>
@@ -506,7 +506,7 @@
                             <i data-lucide="badge-check" class="w-6 h-6"></i>
                         </div>
                         <h3 class="text-lg font-bold mb-1">Police Station</h3>
-                        <p class="text-sm text-emerald-100/60 leading-relaxed mb-4">Calamba City Police 911 dispatch.</p>
+                        <p class="text-sm text-emerald-100/80 leading-relaxed mb-4">Calamba City Police 911 dispatch.</p>
                     </div>
                     <div>
                         <p class="text-2xl font-black text-white tracking-tight mb-3">911</p>
@@ -523,7 +523,7 @@
                             <i data-lucide="bell" class="w-6 h-6"></i>
                         </div>
                         <h3 class="text-lg font-bold mb-1">Bureau of Fire (BFP)</h3>
-                        <p class="text-sm text-emerald-100/60 leading-relaxed mb-4">Calamba Fire Station responders.</p>
+                        <p class="text-sm text-emerald-100/80 leading-relaxed mb-4">Calamba Fire Station responders.</p>
                     </div>
                     <div>
                         <p class="text-2xl font-black text-white tracking-tight mb-3">160</p>
@@ -540,7 +540,7 @@
                             <i data-lucide="heart-pulse" class="w-6 h-6"></i>
                         </div>
                         <h3 class="text-lg font-bold mb-1">Health Center</h3>
-                        <p class="text-sm text-emerald-100/60 leading-relaxed mb-4">24/7 medical rescue &amp; ambulance.</p>
+                        <p class="text-sm text-emerald-100/80 leading-relaxed mb-4">24/7 medical rescue &amp; ambulance.</p>
                     </div>
                     <div>
                         <p class="text-2xl font-black text-white tracking-tight mb-3">0917-123-4567</p>
