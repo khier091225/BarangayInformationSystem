@@ -47,7 +47,7 @@
     </div>
 
     <!-- Data Table -->
-    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <x-workspace.table-scroll label="Certificate records">
         <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
             <thead>
                 <tr style="background: var(--canvas); border-bottom: 1px solid var(--line); text-align: left; color: var(--muted);">
@@ -113,7 +113,7 @@
                 @endforelse
             </tbody>
         </table>
-    </div>
+    </x-workspace.table-scroll>
 
     <div style="margin-top: 20px;">
         {{ $certificates->links() }}

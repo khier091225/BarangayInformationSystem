@@ -29,7 +29,7 @@
             @if ($reports->isEmpty())
                 <div class="staff-requests-empty"><span class="staff-requests-empty-icon"><i data-lucide="inbox" aria-hidden="true"></i></span><h3>No matching reports</h3><p>Try a different status, team, or search term.</p></div>
             @else
-                <div class="staff-requests-table-scroll">
+                <x-workspace.table-scroll label="Incident reports" :surface="false">
                     <table class="workspace-table incident-table">
                         <thead><tr><th scope="col">Reference</th><th scope="col">Category and location</th><th scope="col">Suggested team</th><th scope="col">Resident</th><th scope="col">Submitted</th><th scope="col">Action</th></tr></thead>
                         <tbody>
@@ -45,7 +45,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                </div>
+                </x-workspace.table-scroll>
             @endif
         </section>
         @if ($reports->hasPages())<div class="staff-requests-pagination">{{ $reports->links() }}</div>@endif

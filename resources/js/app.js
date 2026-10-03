@@ -1,13 +1,14 @@
-import { createIcons, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, CircleX, ClipboardList, Clock, Download, ExternalLink, FileCheck2, FilePlus, Files, Flag, Globe, Grid2x2, HandHeart, HeartHandshake, HeartPulse, History, House, Inbox, Info, Landmark, LayoutDashboard, LogIn, LogOut, MapPin, Megaphone, Menu, MessageSquareWarning, MessagesSquare, NotebookPen, PanelLeft, Pencil, Phone, Plus, Printer, QrCode, RotateCcw, Search, SearchX, ShieldCheck, Sprout, TrendingUp, UserPlus, UserRound, UserRoundPlus, UsersRound, X, Zap } from 'lucide';
+import { createIcons, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, CircleX, ClipboardList, Clock, Download, ExternalLink, FileCheck2, FilePlus, Files, Flag, Globe, Grid2x2, HandHeart, HeartHandshake, HeartPulse, History, House, Inbox, Info, Landmark, LayoutDashboard, LogIn, LogOut, MapPin, Megaphone, Menu, MessageSquareWarning, MessagesSquare, NotebookPen, PanelLeft, Pencil, Phone, Plus, Printer, QrCode, RotateCcw, Search, SearchX, ShieldCheck, Sprout, TrendingUp, UserPlus, UserRound, UserRoundPlus, UsersRound, X, Zap } from 'lucide';
 import initializeWorkspace from './workspace';
 import initializeResidentNavigation from './resident-navigation';
 import initializeProjectChatbot from './chatbot';
 import initializeRecordDialogs from './record-dialogs';
 import initializeDemoPayments from './demo-payment';
 import initializeCertificatePreview from './certificate-preview';
+import initializeTableScrolling from './table-scrolling';
 import { closeDialog, initializeDialogMotion, initializeFormFeedback } from './motion';
 
-createIcons({ icons: { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, CircleX, ClipboardList, Clock, Download, ExternalLink, FileCheck2, FilePlus, Files, Flag, Globe, Grid2x2, HandHeart, HeartHandshake, HeartPulse, History, House, Inbox, Info, Landmark, LayoutDashboard, LogIn, LogOut, MapPin, Megaphone, Menu, MessageSquareWarning, MessagesSquare, NotebookPen, PanelLeft, Pencil, Phone, Plus, Printer, QrCode, RotateCcw, Search, SearchX, ShieldCheck, Sprout, TrendingUp, UserPlus, UserRound, UserRoundPlus, UsersRound, X, Zap } });
+createIcons({ icons: { ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, CircleX, ClipboardList, Clock, Download, ExternalLink, FileCheck2, FilePlus, Files, Flag, Globe, Grid2x2, HandHeart, HeartHandshake, HeartPulse, History, House, Inbox, Info, Landmark, LayoutDashboard, LogIn, LogOut, MapPin, Megaphone, Menu, MessageSquareWarning, MessagesSquare, NotebookPen, PanelLeft, Pencil, Phone, Plus, Printer, QrCode, RotateCcw, Search, SearchX, ShieldCheck, Sprout, TrendingUp, UserPlus, UserRound, UserRoundPlus, UsersRound, X, Zap } });
 
 initializeWorkspace();
 initializeResidentNavigation();
@@ -17,6 +18,7 @@ initializeRecordDialogs();
 initializeFormFeedback();
 initializeDemoPayments();
 initializeCertificatePreview();
+initializeTableScrolling();
 
 document.querySelectorAll('[data-registration-code-form]').forEach(form => {
     const submit = form.querySelector('[type="submit"]');

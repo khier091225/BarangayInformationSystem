@@ -149,10 +149,12 @@
     </div>
 
     <!-- Certificates History Table -->
-    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow-x: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-        <div style="padding: 16px 20px; border-bottom: 1px solid var(--line); background: var(--canvas); display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="font-size: 15px; color: var(--ink); margin: 0;">Issued certificates</h3>
-        </div>
+    <x-workspace.table-scroll label="Issued certificates">
+        <x-slot:heading>
+            <div style="padding: 16px 20px; border-bottom: 1px solid var(--line); background: var(--canvas); display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-size: 15px; color: var(--ink); margin: 0;">Issued certificates</h3>
+            </div>
+        </x-slot:heading>
 
         <table class="workspace-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
             <thead>
@@ -180,5 +182,5 @@
                 @endforelse
             </tbody>
         </table>
-    </div>
+    </x-workspace.table-scroll>
 @endsection

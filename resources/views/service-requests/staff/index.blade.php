@@ -48,7 +48,7 @@
                     @endif
                 </div>
             @else
-                <div class="staff-requests-table-scroll">
+                <x-workspace.table-scroll label="Resident requests" :surface="false">
                     <table class="workspace-table staff-requests-table">
                         <thead>
                             <tr>
@@ -74,7 +74,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                </div>
+                </x-workspace.table-scroll>
             @endif
         </section>
 
