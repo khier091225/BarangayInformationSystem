@@ -21,7 +21,13 @@ export default function initializeResidentNavigation() {
         toggle.setAttribute('aria-label', shouldOpen ? 'Close resident navigation' : 'Open resident navigation');
 
         if (shouldOpen) {
-            sidebar.querySelector('a')?.focus({ preventScroll: true });
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    if (sidebar.classList.contains('open')) {
+                        sidebar.querySelector('a')?.focus({ preventScroll: true });
+                    }
+                });
+            });
         } else if (restoreFocus && !desktop.matches) {
             toggle.focus({ preventScroll: true });
         }
@@ -39,6 +45,7 @@ export default function initializeResidentNavigation() {
         if (!sidebar.classList.contains('open')) return;
 
         if (event.key === 'Escape') {
+            event.preventDefault();
             setOpen(false, true);
         }
 

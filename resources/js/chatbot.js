@@ -95,14 +95,17 @@ export default function initializeProjectChatbot() {
             busy = false;
             submit.disabled = false;
             input.disabled = false;
-            if (!panel.hidden) input.focus();
+            if (!panel.hidden && !root.inert) input.focus();
         }
     }
 
     launcher.addEventListener('click', () => setOpen(panel.hidden));
     closeButton.addEventListener('click', () => setOpen(false));
     document.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && !panel.hidden) setOpen(false);
+        if (event.key === 'Escape' && !event.defaultPrevented && !root.inert && !panel.hidden) {
+            event.preventDefault();
+            setOpen(false);
+        }
     });
     form.addEventListener('submit', event => {
         event.preventDefault();

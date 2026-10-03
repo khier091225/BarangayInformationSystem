@@ -6,6 +6,7 @@ export default function initializeWorkspace() {
     const sidebarToggle = select('.sidebar-toggle');
     const backdrop = select('.sidebar-backdrop');
     const shell = select('.workspace-shell');
+    const chatbot = select('[data-project-chat]');
 
     function setSidebar(open) {
         if (!sidebar) return;
@@ -14,9 +15,15 @@ export default function initializeWorkspace() {
         document.body.classList.toggle('sidebar-open', open);
         if (sidebarToggle) sidebarToggle.setAttribute('aria-expanded', String(open));
         if (shell) shell.inert = open;
+        if (chatbot) chatbot.inert = open;
         if (open) {
-            const firstLink = sidebar.querySelector('a');
-            if (firstLink) firstLink.focus();
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    if (sidebar.classList.contains('open')) {
+                        sidebar.querySelector('a')?.focus({ preventScroll: true });
+                    }
+                });
+            });
         }
     }
 
@@ -34,6 +41,7 @@ export default function initializeWorkspace() {
     document.addEventListener('keydown', event => {
         if (!sidebar || !sidebar.classList.contains('open')) return;
         if (event.key === 'Escape') {
+            event.preventDefault();
             setSidebar(false);
             if (sidebarToggle) sidebarToggle.focus();
         }

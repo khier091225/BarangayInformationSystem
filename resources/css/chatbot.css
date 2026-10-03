@@ -9,6 +9,11 @@
     font-family: var(--font-sans);
 }
 
+:is(.sidebar-open, .resident-navigation-open) .project-chat {
+    visibility: hidden;
+    pointer-events: none;
+}
+
 .project-chat__launcher {
     display: inline-flex;
     align-items: center;
@@ -282,6 +287,12 @@
 
 @media (prefers-reduced-motion: reduce) {
     .project-chat__launcher { transition: none; }
+}
+
+@media screen {
+    .workspace-page .workspace-shell {
+        padding-bottom: calc(6.25rem + env(safe-area-inset-bottom));
+    }
 }
 
 @media print {
