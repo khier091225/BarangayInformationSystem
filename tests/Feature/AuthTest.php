@@ -92,13 +92,75 @@ class AuthTest extends TestCase
 
     public function test_failed_login_attempts_are_throttled(): void
     {
+        $this->freezeTime();
+        $user = User::factory()->create();
+
         for ($attempt = 0; $attempt < 5; $attempt++) {
-            $this->post(route('login.store'), ['email' => 'unknown@example.test', 'password' => 'incorrect'])
+            $this->from(route('login'))->post(route('login.store'), ['email' => $user->email, 'password' => 'incorrect'])
                 ->assertSessionHasErrors('email');
         }
 
-        $this->post(route('login.store'), ['email' => 'unknown@example.test', 'password' => 'incorrect'])
-            ->assertStatus(429);
+        $this->post(route('login.store'), ['email' => $user->email, 'password' => 'password'])
+            ->assertRedirect(route('login'))
+            ->assertSessionHas('warning', 'Too many sign-in attempts. Please wait 60 seconds, then try again.')
+            ->assertSessionHasInput('email', $user->email)
+            ->assertSessionMissing('_old_input.password');
+        $this->assertGuest();
+
+        $this->withCookie(config('session.cookie'), session()->getId())
+            ->get(route('login'))
+            ->assertOk()
+            ->assertViewIs('login')
+            ->assertSee('Too many sign-in attempts. Please wait 60 seconds, then try again.')
+            ->assertSee($user->email)
+            ->assertSee(route('password.request'))
+            ->assertSee('action="'.route('login.store').'"', false)
+            ->assertDontSee('value="password"', false);
+
+        $this->travel(15)->seconds();
+        $this->post(route('login.store'), ['email' => $user->email, 'password' => 'password'])
+            ->assertRedirect(route('login'))
+            ->assertSessionHas('warning', 'Too many sign-in attempts. Please wait 45 seconds, then try again.');
+        $this->assertGuest();
+        $this->get(route('login'))->assertOk();
+
+        $this->travel(46)->seconds();
+        $this->post(route('login.store'), ['email' => $user->email, 'password' => 'password'])
+            ->assertRedirect(route('dashboard'));
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_json_login_attempts_keep_the_rate_limit_status_and_retry_headers(): void
+    {
+        $this->freezeTime();
+
+        for ($attempt = 0; $attempt < 5; $attempt++) {
+            $this->postJson(route('login.store'), ['email' => 'unknown@example.test', 'password' => 'incorrect'])
+                ->assertUnprocessable();
+        }
+
+        $this->postJson(route('login.store'), ['email' => 'unknown@example.test', 'password' => 'incorrect'])
+            ->assertStatus(429)
+            ->assertHeader('Retry-After', '60')
+            ->assertHeader('X-RateLimit-Remaining', '0')
+            ->assertJsonPath('message', 'Too Many Attempts.');
+        $this->assertGuest();
+    }
+
+    public function test_throttled_login_does_not_flash_an_invalid_email_array_or_password(): void
+    {
+        for ($attempt = 0; $attempt < 5; $attempt++) {
+            $this->post(route('login.store'), ['email' => 'unknown@example.test', 'password' => 'incorrect']);
+        }
+
+        $this->post(route('login.store'), ['email' => ['invalid@example.test'], 'password' => 'private-password'])
+            ->assertRedirect(route('login'))
+            ->assertSessionHasInput('email', '')
+            ->assertSessionMissing('_old_input.password');
+        $this->withCookie(config('session.cookie'), session()->getId())->get(route('login'))
+            ->assertOk()
+            ->assertDontSee('private-password');
+        $this->assertGuest();
     }
 
     #[DataProvider('protectedRoutes')]
