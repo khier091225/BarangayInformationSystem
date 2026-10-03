@@ -19,7 +19,13 @@
                     <p>{{ $serviceRequest->type === 'certificate' ? 'Contact barangay staff about collecting your document.' : 'Your report has been added to the official barangay blotter records. Contact staff for any follow-up on the incident.' }} @if ($serviceRequest->response_note) Check their message below for any instructions. @endif</p>
                 @elseif ($serviceRequest->status === 'Awaiting Payment')
                     <h2 id="request-status-title">Payment required</h2>
-                    <p>Generate and scan the QRPH code below to complete the payment.</p>
+                    @if ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_CASH && $serviceRequest->latestPayment->status === \App\Models\Payment::STATUS_PENDING)
+                        <p>Pay cash at the barangay hall and present your request number. Staff will confirm your payment.</p>
+                    @elseif ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_DEMO_QRPH && $serviceRequest->latestPayment->status === \App\Models\Payment::STATUS_PENDING && $demoPaymentUrl)
+                        <p>Scan the QRPH code below with your phone to continue payment.</p>
+                    @else
+                        <p>Choose QRPH or cash at the barangay hall below to complete your payment.</p>
+                    @endif
                 @elseif ($serviceRequest->status === 'Declined')
                     <h2 id="request-status-title">This request was declined</h2>
                     <p>{{ $serviceRequest->response_note ? 'Read the staff message below for feedback. Contact the barangay office if you need clarification.' : 'Contact barangay staff for the reason and guidance on what to do next.' }}</p>
@@ -94,7 +100,7 @@
                             </form>
                         @else
                             @if ($serviceRequest->latestPayment?->status === \App\Models\Payment::STATUS_EXPIRED)
-                                <div class="demo-payment-expired"><i data-lucide="clock" aria-hidden="true"></i><span>The previous QR code expired. Generate a new one to continue.</span></div>
+                                <div class="demo-payment-expired"><i data-lucide="clock" aria-hidden="true"></i><span>The previous QR code expired. Generate a new one or choose cash at the barangay hall.</span></div>
                             @endif
                             <div class="payment-method-intro"><strong>Amount due: ₱{{ number_format((float) $serviceRequest->fee_amount, 2) }}</strong><p>Choose how you want to pay.</p></div>
                             <div class="payment-method-choices">

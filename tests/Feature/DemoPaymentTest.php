@@ -35,6 +35,7 @@ class DemoPaymentTest extends TestCase
 
     public function test_resident_can_generate_one_active_demo_qr_payment(): void
     {
+        $this->freezeTime();
         [$residentUser, $serviceRequest] = $this->awaitingPaymentRequest();
 
         $this->actingAs($residentUser)
@@ -50,6 +51,7 @@ class DemoPaymentTest extends TestCase
             ->assertOk()
             ->assertSee('QRPH PAYMENT')
             ->assertSee('Pay cash instead')
+            ->assertSeeText('Scan the QRPH code below with your phone to continue payment.')
             ->assertDontSee('Demo')
             ->assertDontSee('simulate', false)
             ->assertSee('data-demo-payment-qr', false);
@@ -63,7 +65,9 @@ class DemoPaymentTest extends TestCase
             ->get(route('account.requests.show', $serviceRequest))
             ->assertOk()
             ->assertSee('QRPH Payment')
-            ->assertSee('Cash at Barangay Hall');
+            ->assertSee('Cash at Barangay Hall')
+            ->assertSeeText('Choose QRPH or cash at the barangay hall below to complete your payment.')
+            ->assertDontSeeText('Generate and scan the QRPH code below to complete the payment.');
 
         $this->post(route('account.requests.cash-payment.store', $serviceRequest))
             ->assertRedirect(route('account.requests.show', $serviceRequest));
@@ -77,7 +81,14 @@ class DemoPaymentTest extends TestCase
         $this->get(route('account.requests.show', $serviceRequest))->assertOk()
             ->assertSee('CASH PAYMENT')
             ->assertSee('Waiting for staff confirmation')
-            ->assertSee('Switch to QRPH');
+            ->assertSee('Switch to QRPH')
+            ->assertSeeText('Pay cash at the barangay hall and present your request number. Staff will confirm your payment.')
+            ->assertDontSeeText('Scan the QRPH code below with your phone to continue payment.')
+            ->assertDontSeeText('Generate and scan the QRPH code below to complete the payment.');
+
+        $this->get(route('account'))
+            ->assertSeeText('Request approved. Open it to view your payment options and instructions.')
+            ->assertDontSeeText('Open it to generate the QRPH payment.');
     }
 
     public function test_staff_records_cash_payment_and_issues_the_certificate(): void
@@ -111,6 +122,7 @@ class DemoPaymentTest extends TestCase
 
     public function test_resident_can_switch_from_cash_to_qrph_before_payment(): void
     {
+        $this->freezeTime();
         [$residentUser, $serviceRequest] = $this->awaitingPaymentRequest();
         $this->actingAs($residentUser)->post(route('account.requests.cash-payment.store', $serviceRequest));
         $cashPayment = Payment::query()->sole();
@@ -123,6 +135,10 @@ class DemoPaymentTest extends TestCase
             Payment::PROVIDER_DEMO_QRPH,
             $serviceRequest->payments()->latest('id')->firstOrFail()->provider,
         );
+
+        $this->get(route('account.requests.show', $serviceRequest))
+            ->assertSeeText('Scan the QRPH code below with your phone to continue payment.')
+            ->assertDontSeeText('Pay cash at the barangay hall and present your request number. Staff will confirm your payment.');
     }
 
     public function test_only_the_request_owner_can_create_or_check_a_payment(): void
@@ -192,10 +208,17 @@ class DemoPaymentTest extends TestCase
 
     public function test_an_expired_payment_is_replaced_with_a_new_qr_session(): void
     {
+        $this->freezeTime();
         [$residentUser, $serviceRequest] = $this->awaitingPaymentRequest();
         $expiredPayment = Payment::factory()->expired()->for($serviceRequest)->create();
 
         $this->actingAs($residentUser)
+            ->get(route('account.requests.show', $serviceRequest))
+            ->assertSeeText('Choose QRPH or cash at the barangay hall below to complete your payment.')
+            ->assertSeeText('The previous QR code expired. Generate a new one or choose cash at the barangay hall.')
+            ->assertDontSeeText('Scan the QRPH code below with your phone to continue payment.');
+
+        $this
             ->post(route('account.requests.demo-payment.store', $serviceRequest))
             ->assertRedirect();
 

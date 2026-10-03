@@ -98,7 +98,7 @@
                             <span class="resident-dashboard-highlight-copy">
                                 <span class="resident-dashboard-eyebrow">STAFF UPDATE · {{ $latestReviewedRequest->reviewed_at->timezone('Asia/Manila')->format('M j, Y') }}</span>
                                 <strong>{{ $latestReviewedRequest->type === 'certificate' ? $latestReviewedRequest->certificate_type : 'Blotter report' }}</strong>
-                                <small>{{ \Illuminate\Support\Str::limit($latestReviewedRequest->response_note ?: ($latestReviewedRequest->status === 'Awaiting Payment' ? 'Request approved. Open it to generate the QRPH payment.' : ($latestReviewedRequest->status === 'Completed' ? 'Request completed. Open it for the next steps.' : 'Request declined. Open it for details.')), 130) }}</small>
+                                <small>{{ \Illuminate\Support\Str::limit($latestReviewedRequest->response_note ?: ($latestReviewedRequest->status === 'Awaiting Payment' ? 'Request approved. Open it to view your payment options and instructions.' : ($latestReviewedRequest->status === 'Completed' ? 'Request completed. Open it for the next steps.' : 'Request declined. Open it for details.')), 130) }}</small>
                             </span>
                             <x-request-status :status="$latestReviewedRequest->status" />
                             <i data-lucide="arrow-right" aria-hidden="true"></i>
