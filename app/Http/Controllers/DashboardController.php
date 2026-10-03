@@ -40,7 +40,7 @@ class DashboardController extends Controller
             ->oldest()->orderBy('id')->limit(4)->get();
         $certificateActivity = $this->certificateActivity();
 
-        $recentCertificates = Certificate::with('resident')->whereDate('date_issued', '<=', today())
+        $recentCertificates = Certificate::with('resident')->whereDate('date_issued', '<=', today('Asia/Manila')->toDateString())
             ->latest('date_issued')->latest('id')->limit(3)->get();
         $recentBlotters = Blotter::latest()->limit(3)->get();
         $recentResidents = Resident::with('household')->latest()->limit(3)->get();
@@ -69,10 +69,10 @@ class DashboardController extends Controller
      */
     private function certificateActivity(): array
     {
-        $firstMonth = today()->toImmutable()->startOfMonth()->subMonths(5);
+        $firstMonth = today('Asia/Manila')->toImmutable()->startOfMonth()->subMonths(5);
         $query = Certificate::query()
             ->where('date_issued', '>=', $firstMonth->toDateString())
-            ->where('date_issued', '<', today()->addDay()->toDateString());
+            ->where('date_issued', '<', today('Asia/Manila')->addDay()->toDateString());
         $months = [];
 
         for ($index = 0; $index < 6; $index++) {

@@ -115,7 +115,7 @@
                     <section class="resident-card incident-timeline-card" aria-labelledby="blotter-progress-title">
                         <div class="resident-detail-heading"><span class="resident-section-icon"><i data-lucide="history" aria-hidden="true"></i></span><div><h2 id="blotter-progress-title">Blotter case progress</h2><p>Current status: <x-blotter-status :status="$serviceRequest->blotter->status" /></p></div></div>
                         @if ($serviceRequest->blotter->hearing_at)
-                            <p class="incident-timeline-footnote">Mediation schedule: <strong>{{ $serviceRequest->blotter->hearing_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</strong></p>
+                            <p class="incident-timeline-footnote">Mediation schedule (Philippine time): <strong>{{ $serviceRequest->blotter->hearing_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</strong></p>
                         @endif
                         <ol class="incident-timeline">
                             <li><span class="incident-timeline-dot" aria-hidden="true"></span><div><x-blotter-status :status="\App\Models\Blotter::STATUS_PENDING" /><time datetime="{{ $serviceRequest->blotter->created_at->toIso8601String() }}">{{ $serviceRequest->blotter->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time><p>Your report was added to the official barangay blotter.</p></div></li>

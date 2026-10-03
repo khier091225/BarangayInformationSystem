@@ -34,7 +34,7 @@
                         <div><dt>Incident date</dt><dd>{{ $blotter->incident_date?->format('M j, Y') ?? 'Not provided' }}</dd></div>
                         <div><dt>Assigned staff</dt><dd>{{ $blotter->assignee?->name ?? ($blotter->status === \App\Models\Blotter::STATUS_PENDING ? 'Awaiting acceptance' : 'Not recorded') }}</dd></div>
                         @if ($blotter->hearing_at)
-                            <div><dt>Mediation schedule</dt><dd><time datetime="{{ $blotter->hearing_at->toIso8601String() }}">{{ $blotter->hearing_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time></dd></div>
+                            <div><dt>Mediation schedule (Philippine time)</dt><dd><time datetime="{{ $blotter->hearing_at->toIso8601String() }}">{{ $blotter->hearing_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time></dd></div>
                         @endif
                         <div class="staff-request-field-long"><dt>Incident details</dt><dd>{{ $blotter->incident }}</dd></div>
                     </dl>
@@ -64,8 +64,9 @@
                         <p class="incident-action-help">Choose when the complainant and respondent should attend barangay mediation.</p>
                         <div class="resident-field">
                             <x-form.label for="hearing_at" required>Mediation schedule</x-form.label>
-                            <x-form.input type="datetime-local" name="hearing_at" :value="old('hearing_at')" :min="now('Asia/Manila')->format('Y-m-d\TH:i')" required :aria-invalid="$errors->has('hearing_at') ? 'true' : 'false'" />
-                            <x-form.error :message="$errors->first('hearing_at')" />
+                            <x-form.input type="datetime-local" name="hearing_at" :value="old('hearing_at')" :min="now('Asia/Manila')->format('Y-m-d\TH:i')" required :aria-invalid="$errors->has('hearing_at') ? 'true' : 'false'" :aria-describedby="$errors->has('hearing_at') ? 'hearing-at-help hearing-at-error' : 'hearing-at-help'" />
+                            <p id="hearing-at-help" class="incident-field-help">Use Philippine time (UTC+8). Residents will see the same scheduled time.</p>
+                            <x-form.error id="hearing-at-error" :message="$errors->first('hearing_at')" />
                         </div>
                         <details class="complaint-optional-fields" @if ($errors->has('message')) open @endif>
                             <summary>Add an update message <span>(optional)</span></summary>

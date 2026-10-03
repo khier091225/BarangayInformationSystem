@@ -79,7 +79,7 @@
                     @forelse ($pendingRequests as $serviceRequest)
                         <a class="overview-queue-item" href="{{ route('service-requests.show', $serviceRequest) }}">
                             <span class="overview-list-icon @if ($serviceRequest->type === 'blotter') overview-list-icon-amber @endif"><i data-lucide="{{ $serviceRequest->type === 'certificate' ? 'files' : 'notebook-pen' }}" aria-hidden="true"></i></span>
-                            <span class="overview-queue-copy"><strong>{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</strong><span>{{ $serviceRequest->resident?->full_name ?? 'Resident record unavailable' }}</span><small>#{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }} · {{ $serviceRequest->created_at->format('M j, Y') }}</small></span>
+                            <span class="overview-queue-copy"><strong>{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</strong><span>{{ $serviceRequest->resident?->full_name ?? 'Resident record unavailable' }}</span><small>#{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }} · {{ $serviceRequest->created_at->timezone('Asia/Manila')->format('M j, Y') }}</small></span>
                             <i data-lucide="chevron-right" aria-hidden="true"></i>
                         </a>
                     @empty
@@ -147,6 +147,6 @@
                 @endforelse
             </div>
         </section>
-        <footer class="overview-footer"><span>Barangay Information System</span><span>Records and totals as of {{ now()->format('M j, Y · g:i A') }}</span></footer>
+        <footer class="overview-footer"><span>Barangay Information System</span><span>Records and totals as of {{ now('Asia/Manila')->format('M j, Y · g:i A') }} (Philippine time)</span></footer>
     </div>
 @endsection

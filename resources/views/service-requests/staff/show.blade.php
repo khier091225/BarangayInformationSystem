@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="staff-requests-page staff-request-detail">
-        <x-workspace.page-header :title="$serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report'" :description="'Request #'.str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT).' · Submitted '.$serviceRequest->created_at->format('M j, Y \a\t g:i A')" :icon="$serviceRequest->type === 'certificate' ? 'files' : 'notebook-pen'">
+        <x-workspace.page-header :title="$serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report'" :description="'Request #'.str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT).' · Submitted '.$serviceRequest->created_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A')" :icon="$serviceRequest->type === 'certificate' ? 'files' : 'notebook-pen'">
             <x-slot:status><x-request-status :status="$serviceRequest->status" /></x-slot:status>
         </x-workspace.page-header>
 
@@ -104,7 +104,7 @@
                         @if ($serviceRequest->reviewed_at)
                             <div>
                                 <dt>Reviewed on</dt>
-                                <dd><time datetime="{{ $serviceRequest->reviewed_at->toIso8601String() }}">{{ $serviceRequest->reviewed_at->format('M j, Y \a\t g:i A') }}</time></dd>
+                                <dd><time datetime="{{ $serviceRequest->reviewed_at->toIso8601String() }}">{{ $serviceRequest->reviewed_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</time></dd>
                             </div>
                         @endif
                         @if ($serviceRequest->type === 'certificate' && $serviceRequest->fee_amount !== null)

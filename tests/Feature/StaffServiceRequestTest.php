@@ -8,6 +8,7 @@ use App\Models\Resident;
 use App\Models\ServiceRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class StaffServiceRequestTest extends TestCase
@@ -35,6 +36,34 @@ class StaffServiceRequestTest extends TestCase
             ->assertOk()
             ->assertSee('View details')
             ->assertDontSee('Review</a>', false);
+    }
+
+    public function test_staff_and_residents_see_the_same_philippine_submission_and_review_times(): void
+    {
+        $this->travelTo(Carbon::parse('2026-10-03 20:00:00', 'UTC'));
+        $staff = User::factory()->create();
+        $resident = Resident::factory()->create();
+        $residentUser = User::factory()->resident()->for($resident)->create();
+        $serviceRequest = ServiceRequest::factory()->for($resident)->create([
+            'status' => ServiceRequest::STATUS_COMPLETED,
+            'created_at' => '2026-10-03 18:30:00',
+            'reviewed_at' => '2026-10-03 19:00:00',
+            'reviewed_by' => $staff->id,
+            'response_note' => 'Please collect the document at the barangay hall.',
+        ]);
+
+        $this->actingAs($staff)->get(route('service-requests.show', $serviceRequest))
+            ->assertOk()
+            ->assertSee('Submitted Oct 4, 2026 at 2:30 AM')
+            ->assertSee('Oct 4, 2026 at 3:00 AM');
+        $this->get(route('service-requests.index', ['status' => ServiceRequest::STATUS_COMPLETED]))
+            ->assertOk()
+            ->assertSee('Oct 4, 2026');
+
+        $this->actingAs($residentUser)->get(route('account.requests.show', $serviceRequest))
+            ->assertOk()
+            ->assertSee('Oct 4, 2026 at 2:30 AM')
+            ->assertSee('Oct 4, 2026 at 3:00 AM');
     }
 
     public function test_staff_completes_a_document_request_once_and_creates_a_certificate(): void

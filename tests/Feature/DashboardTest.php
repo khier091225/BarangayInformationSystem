@@ -7,6 +7,7 @@ use App\Models\Resident;
 use App\Models\ServiceRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class DashboardTest extends TestCase
@@ -60,6 +61,31 @@ class DashboardTest extends TestCase
         $this->assertSame('January 2027', $activity['months'][5]['fullLabel']);
         $this->assertSame(7, $activity['total']);
         $this->assertSame(4, $activity['currentMonth']);
+    }
+
+    public function test_dashboard_dates_and_certificate_totals_follow_the_philippine_day_at_a_month_boundary(): void
+    {
+        $this->travelTo(Carbon::parse('2026-12-31 16:30:00', 'UTC'));
+        $resident = Resident::factory()->create();
+        $previousDayCertificate = Certificate::factory()->for($resident)->create(['date_issued' => '2026-12-31']);
+        $currentDayCertificate = Certificate::factory()->for($resident)->create(['date_issued' => '2027-01-01']);
+        Certificate::factory()->for($resident)->create(['date_issued' => '2027-01-02']);
+        $serviceRequest = ServiceRequest::factory()->for($resident)->create(['created_at' => '2026-12-31 16:15:00']);
+
+        $response = $this->actingAs(User::factory()->create())->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('Friday, January 1, 2027')
+            ->assertSee('Records and totals as of Jan 1, 2027 · 12:30 AM (Philippine time)')
+            ->assertSee('#'.str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT).' · Jan 1, 2027');
+
+        $activity = $response->viewData('certificateActivity');
+        $this->assertSame('January 2027', $activity['months'][5]['fullLabel']);
+        $this->assertSame(1, $activity['currentMonth']);
+        $this->assertSame(2, $activity['total']);
+        $this->assertSame(
+            [$currentDayCertificate->id, $previousDayCertificate->id],
+            $response->viewData('recentCertificates')->modelKeys(),
+        );
     }
 
     public function test_review_queue_prioritizes_oldest_pending_requests_and_counts_each_status(): void

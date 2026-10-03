@@ -68,7 +68,7 @@
                                         <span class="staff-request-document-icon"><i data-lucide="{{ $serviceRequest->type === 'certificate' ? 'files' : 'notebook-pen' }}" aria-hidden="true"></i></span>
                                         <span>{{ $serviceRequest->type === 'certificate' ? $serviceRequest->certificate_type : 'Blotter report' }}</span>
                                     </td>
-                                    <td class="staff-request-submitted"><time datetime="{{ $serviceRequest->created_at->toDateString() }}">{{ $serviceRequest->created_at->format('M j, Y') }}</time></td>
+                                    <td class="staff-request-submitted"><time datetime="{{ $serviceRequest->created_at->toIso8601String() }}">{{ $serviceRequest->created_at->timezone('Asia/Manila')->format('M j, Y') }}</time></td>
                                     <td class="staff-request-action"><a href="{{ route('service-requests.show', $serviceRequest) }}" class="staff-request-open">{{ $status === 'Pending' ? 'Review' : 'View details' }} <i data-lucide="arrow-right" aria-hidden="true"></i></a></td>
                                 </tr>
                             @endforeach

@@ -9,6 +9,7 @@ use App\Models\ServiceRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -121,7 +122,7 @@ class BlotterController extends Controller
                 $changes = match ($action) {
                     'schedule' => [
                         'status' => Blotter::STATUS_SCHEDULED,
-                        'hearing_at' => $validated['hearing_at'],
+                        'hearing_at' => Carbon::createFromFormat('!Y-m-d\TH:i', $validated['hearing_at'], 'Asia/Manila')->utc(),
                     ],
                     'start' => [
                         'status' => Blotter::STATUS_MEDIATION,
