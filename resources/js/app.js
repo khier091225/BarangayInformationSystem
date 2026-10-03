@@ -4,6 +4,7 @@ import initializeResidentNavigation from './resident-navigation';
 import initializeProjectChatbot from './chatbot';
 import initializeRecordDialogs from './record-dialogs';
 import initializeDemoPayments from './demo-payment';
+import initializeCertificatePreview from './certificate-preview';
 import { closeDialog, initializeDialogMotion, initializeFormFeedback } from './motion';
 
 createIcons({ icons: { ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BadgeCheck, Bell, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, Check, ChevronDown, ChevronRight, CircleX, ClipboardList, Clock, Download, ExternalLink, FileCheck2, FilePlus, Files, Flag, Globe, Grid2x2, HandHeart, HeartHandshake, HeartPulse, History, House, Inbox, Info, Landmark, LayoutDashboard, LogIn, LogOut, MapPin, Megaphone, Menu, MessageSquareWarning, MessagesSquare, NotebookPen, PanelLeft, Pencil, Phone, Plus, Printer, QrCode, RotateCcw, Search, SearchX, ShieldCheck, Sprout, TrendingUp, UserPlus, UserRound, UserRoundPlus, UsersRound, X, Zap } });
@@ -15,6 +16,7 @@ initializeDialogMotion();
 initializeRecordDialogs();
 initializeFormFeedback();
 initializeDemoPayments();
+initializeCertificatePreview();
 
 document.querySelectorAll('[data-registration-code-form]').forEach(form => {
     const submit = form.querySelector('[type="submit"]');

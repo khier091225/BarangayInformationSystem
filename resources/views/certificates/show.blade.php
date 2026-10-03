@@ -4,7 +4,7 @@
     {!! $certificate->certificate_type !!} - {!! $certificate->resident->full_name !!}
 @endsection
 
-@section('main-style', 'padding: 30px;')
+@section('main-style', 'padding: clamp(1rem, 3vw, 30px);')
 
 @push('styles')
 <style>
@@ -24,14 +24,79 @@
             min-height: 0 !important;
             width: 100% !important;
             max-width: 100% !important;
+            transform: none !important;
+        }
+        .certificate-preview-page {
+            width: auto !important;
+            height: auto !important;
+            overflow: visible !important;
         }
         .certificate-preview-scroll {
             overflow: visible !important;
+            outline: none !important;
         }
     }
+    .certificate-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 18px 34px;
+        border-bottom: 1px solid var(--line);
+        background: var(--surface);
+    }
+    .certificate-actions-navigation {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+    }
+    .certificate-back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .certificate-actions-print { display: flex; }
+    .certificate-actions-print .button { gap: 8px; padding: 10px 20px; }
+    .certificate-preview-tools {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: .75rem;
+        margin-bottom: 1rem;
+    }
+    .certificate-preview-tools[hidden] { display: none; }
+    .certificate-preview-modes { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .certificate-preview-modes .button { font-size: .8rem; }
+    .certificate-preview-scale { color: var(--muted); font-size: .8rem; font-variant-numeric: tabular-nums; }
     .certificate-preview-scroll {
         max-width: 100%;
         overflow-x: auto;
+    }
+    .certificate-preview-page { margin: 0 auto; }
+    @media screen {
+        .certificate-preview-page {
+            width: var(--certificate-preview-width, max-content);
+            height: var(--certificate-preview-height, auto);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        .certificate-sheet {
+            transform: scale(var(--certificate-preview-scale, 1));
+            transform-origin: top left;
+            box-shadow: none !important;
+        }
+    }
+    @media (max-width: 639px) {
+        .certificate-actions { padding: 1rem; }
+        .certificate-actions-print { width: 100%; }
+        .certificate-actions-print .button { width: 100%; }
     }
     .certificate-sheet {
         background: white;
@@ -151,18 +216,18 @@
 
 @section('topbar')
     <!-- Top Actions Toolbar (Hidden during print) -->
-    <div class="action-bar no-print" style="padding: 18px 34px; background: var(--surface); border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center;">
-        <div style="display: inline-flex; align-items: center; gap: 12px;">
+    <div class="action-bar certificate-actions no-print">
+        <div class="certificate-actions-navigation">
             <button type="button" class="icon-button sidebar-toggle" aria-label="Open sidebar" aria-controls="workspace-navigation" aria-expanded="false">
                 <i data-lucide="panel-left" aria-hidden="true"></i>
             </button>
-            <a href="{{ route('certificates.index') }}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--accent); text-decoration: none; font-weight: 500;">
+            <a href="{{ route('certificates.index') }}" class="certificate-back-link">
                 <i data-lucide="arrow-left"></i> Back to certificates
             </a>
         </div>
 
-        <div style="display: flex; gap: 12px;">
-            <button onclick="window.print()" class="button button-primary" style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; padding: 10px 20px;">
+        <div class="certificate-actions-print">
+            <button type="button" onclick="window.print()" class="button button-primary">
                 <i data-lucide="printer"></i> Print certificate
             </button>
         </div>
@@ -170,7 +235,16 @@
 @endsection
 
 @section('content')
-    <div class="certificate-preview-scroll">
+    <div class="certificate-preview" data-certificate-preview>
+        <div class="certificate-preview-tools no-print" data-certificate-preview-tools hidden>
+            <div class="certificate-preview-modes" role="group" aria-label="Certificate preview size">
+                <button type="button" class="button button-primary" data-certificate-preview-mode="fit" aria-pressed="true" aria-controls="certificate-preview-scroll">Fit to screen</button>
+                <button type="button" class="button button-outline" data-certificate-preview-mode="actual" aria-pressed="false" aria-controls="certificate-preview-scroll">Actual size</button>
+            </div>
+            <span class="certificate-preview-scale">Preview: <output data-certificate-preview-scale aria-live="polite">100%</output></span>
+        </div>
+    <div class="certificate-preview-scroll" id="certificate-preview-scroll" role="region" aria-label="Certificate preview" tabindex="0">
+    <div class="certificate-preview-page">
     <div class="certificate-sheet">
         <img class="cert-watermark" src="{{ asset('images/Logo_kay-anlog.jpg') }}" alt="" aria-hidden="true" width="313" height="318">
         <!-- Republic Letterhead -->
@@ -248,6 +322,8 @@
                 <div style="font-size: 11px; color: #666; margin-top: 2px;">Official Seal of Barangay</div>
             </div>
         </div>
+    </div>
+    </div>
     </div>
     </div>
 @endsection
