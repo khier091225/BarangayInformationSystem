@@ -23,12 +23,17 @@
         dialog {
             margin: auto;
         }
+        #home-main {
+            scroll-margin-top: 5rem;
+        }
         .home-hero :focus-visible, #emergency :focus-visible {
             outline-color: var(--sidebar-active);
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-emerald-200 selection:text-emerald-900">
+    <a class="skip-link" href="#home-main">Skip to content</a>
+
     <!-- Utility Bar -->
     <div class="bg-primary-active text-emerald-50 py-1.5 sm:py-2 border-b border-emerald-900/60 relative z-50">
         <div class="container mx-auto px-4 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-4 text-[0.7rem] sm:text-xs">
@@ -127,6 +132,7 @@
         </div>
     </header>
 
+    <main id="home-main" tabindex="-1">
     <!-- Hero Section -->
     <section class="home-hero relative min-h-[85vh] flex items-center pt-10 pb-20 lg:pt-0 overflow-hidden bg-slate-900">
         <!-- Background Image with tuned dark overlay -->
@@ -553,6 +559,8 @@
         </div>
     </section>
 
+    </main>
+
     <!-- Official Civic Footer -->
     <footer class="bg-white border-t border-slate-200 pt-12 pb-8">
         <div class="container mx-auto px-4 lg:px-8">
@@ -616,7 +624,7 @@
     </footer>
 
     <!-- Comprehensive Service Requirement Modal -->
-    <dialog id="service-dialog" class="w-full max-w-lg bg-white p-0 rounded-3xl overflow-hidden shadow-2xl backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm border border-slate-200">
+    <dialog id="service-dialog" aria-labelledby="modal-title" aria-describedby="modal-description" class="w-full max-w-lg bg-white p-0 rounded-3xl overflow-hidden shadow-2xl backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm border border-slate-200">
         <div class="p-6 sm:p-8">
             <div class="flex items-start justify-between mb-5">
                 <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 border border-emerald-100 shadow-sm">
