@@ -244,6 +244,53 @@ class HouseholdTest extends TestCase
         $response->assertOk();
         $response->assertSee('HH-2026-042');
         $response->assertSee('Andres Bonifacio');
+        $response->assertSee('aria-controls="household-edit-dialog-'.$household->getKey().'"', false);
+        $response->assertSee('action="'.route('households.update', $household).'"', false);
+        $response->assertSee('value="Andres Bonifacio"', false);
+        $response->assertDontSee('data-open-on-load', false);
+    }
+
+    public function test_invalid_edit_from_household_details_reopens_the_modal_with_old_input(): void
+    {
+        $household = Household::factory()->create();
+        $originalAttributes = $household->fresh()->getAttributes();
+        $detailsUrl = route('households.show', $household);
+
+        $this->from($detailsUrl)->put(route('households.update', $household), [
+            '_household_edit_id' => (string) $household->getKey(),
+            '_return_to' => 'households.show',
+            'household_head' => 'Revised Head',
+            'address' => '',
+        ])->assertRedirect($detailsUrl)->assertSessionHasErrors('address');
+
+        $response = $this->withCookie(config('session.cookie'), session()->getId())
+            ->get($detailsUrl)->assertOk()
+            ->assertSee('value="Revised Head"', false)
+            ->assertSee('aria-describedby="household-edit-'.$household->getKey().'-address-error"', false)
+            ->assertSee('The address field is required.');
+        $this->assertMatchesRegularExpression('/<dialog id="household-edit-dialog-'.$household->getKey().'"[^>]*data-open-on-load/', $response->getContent());
+        $this->assertSame($originalAttributes, $household->fresh()->getAttributes());
+    }
+
+    public function test_updating_from_household_details_returns_to_the_updated_household(): void
+    {
+        $household = Household::factory()->create();
+        $originalNumber = $household->household_number;
+
+        $this->put(route('households.update', $household), [
+            '_return_to' => 'households.show',
+            'household_head' => 'Updated Head',
+            'address' => 'Purok 5',
+        ])->assertSessionHasNoErrors()
+            ->assertRedirect(route('households.show', $household))
+            ->assertSessionHas('success', 'Household updated successfully!');
+
+        $this->assertDatabaseHas('households', [
+            'id' => $household->id,
+            'household_number' => $originalNumber,
+            'household_head' => 'Updated Head',
+            'address' => 'Purok 5',
+        ]);
     }
 
     public function test_household_details_can_be_updated(): void

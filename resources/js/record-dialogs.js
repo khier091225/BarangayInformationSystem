@@ -1,12 +1,17 @@
 import { closeDialog } from './motion';
 
 export default function initializeRecordDialogs() {
+    const dialogOpeners = new WeakMap();
+    const initializedDialogs = new WeakSet();
+
     document.querySelectorAll('[data-household-dialog-trigger], [data-record-dialog-trigger]').forEach(trigger => {
         const dialog = document.getElementById(trigger.getAttribute('aria-controls'));
 
         if (!dialog || typeof dialog.showModal !== 'function') return;
 
         function openDialog() {
+            dialogOpeners.set(dialog, trigger);
+
             if (!dialog.open) {
                 dialog.showModal();
                 document.body.classList.add('dialog-open');
@@ -23,9 +28,13 @@ export default function initializeRecordDialogs() {
             openDialog();
         });
 
+        if (initializedDialogs.has(dialog)) return;
+        initializedDialogs.add(dialog);
+
         dialog.addEventListener('close', () => {
             document.body.classList.remove('dialog-open');
-            trigger.focus({ preventScroll: true });
+            dialogOpeners.get(dialog)?.focus({ preventScroll: true });
+            dialogOpeners.delete(dialog);
         });
 
         dialog.addEventListener('click', event => {

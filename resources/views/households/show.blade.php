@@ -13,7 +13,7 @@
 @section('content')
     <x-workspace.page-header :title="'Household: '.$household->household_number" description="Household details and registered family members." icon="house">
         <x-slot:actions>
-            <a href="{{ route('households.edit', [$household]) }}" class="button button-primary"><i data-lucide="pencil" aria-hidden="true"></i> Edit household</a>
+            <a href="{{ route('households.edit', [$household]) }}" class="button button-primary" data-household-dialog-trigger aria-haspopup="dialog" aria-controls="household-edit-dialog-{{ $household->getKey() }}"><i data-lucide="pencil" aria-hidden="true"></i> Edit household</a>
         </x-slot:actions>
     </x-workspace.page-header>
 
@@ -84,4 +84,8 @@
             </tbody>
         </table>
     </x-workspace.table-scroll>
+
+    <x-record-dialog :id="'household-edit-dialog-'.$household->getKey()" title="Edit Household" :description="'Update the details for '.$household->household_number.'.'" icon="house" :open-on-load="$errors->any() && old('_household_edit_id') === (string) $household->getKey()">
+        <x-households.edit-form :household="$household" :modal="true" :return-to-details="true" />
+    </x-record-dialog>
 @endsection

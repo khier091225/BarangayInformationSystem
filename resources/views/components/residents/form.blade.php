@@ -1,4 +1,4 @@
-@props(['resident' => null, 'households' => [], 'modal' => false])
+@props(['resident' => null, 'households' => [], 'modal' => false, 'returnToProfile' => false])
 
 @php
     $editing = $resident !== null;
@@ -13,6 +13,7 @@
     @csrf
     @if ($editing) @method('PUT') @endif
     @if ($modal) <input type="hidden" name="_record_form" value="{{ $formContext }}"> @endif
+    @if ($editing && $returnToProfile) <input type="hidden" name="_return_to" value="residents.show"> @endif
 
     <div class="record-form-grid record-form-grid--three">
         <div>

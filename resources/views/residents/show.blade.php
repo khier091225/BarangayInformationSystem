@@ -13,7 +13,7 @@
 @section('content')
     <x-workspace.page-header :title="$resident->full_name" description="Review the resident profile, household information, and account registration." icon="user-round">
         <x-slot:actions>
-            <a href="{{ route('residents.edit', [$resident]) }}" class="button button-primary"><i data-lucide="pencil" aria-hidden="true"></i> Edit resident</a>
+            <a href="{{ route('residents.edit', [$resident]) }}" class="button button-primary" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="resident-edit-dialog-{{ $resident->getKey() }}"><i data-lucide="pencil" aria-hidden="true"></i> Edit resident</a>
             <form method="POST" action="{{ route('residents.destroy', [$resident]) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');">
                 @csrf
                 @method('DELETE')
@@ -31,7 +31,7 @@
 
             <div class="registration-recipient">
                 <div><span>REGISTERED MOBILE NUMBER</span><strong>{{ $registrationPhoneNumber ? '+'.$registrationPhoneNumber : ($resident->contact_number ?: 'No mobile number on record') }}</strong></div>
-                <a href="{{ route('residents.edit', $resident) }}">Update number <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+                <a href="{{ route('residents.edit', $resident) }}" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="resident-edit-dialog-{{ $resident->getKey() }}">Update number <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
             </div>
 
             @if (! $registrationPhoneNumber)
@@ -183,4 +183,8 @@
             </tbody>
         </table>
     </x-workspace.table-scroll>
+
+    <x-record-dialog :id="'resident-edit-dialog-'.$resident->getKey()" title="Edit Resident" :description="'Update the details for '.$resident->full_name.'.'" icon="users-round" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'residents.edit.'.$resident->getKey()">
+        <x-residents.form :resident="$resident" :households="$households" :modal="true" :return-to-profile="true" />
+    </x-record-dialog>
 @endsection

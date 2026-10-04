@@ -152,6 +152,33 @@ class ResidentTest extends TestCase
         ]);
     }
 
+    public function test_updating_from_the_profile_returns_to_the_updated_resident(): void
+    {
+        $resident = Resident::factory()->create();
+        $data = Resident::factory()->make(['household_id' => null, 'first_name' => 'Updated'])->getAttributes();
+        $data['_return_to'] = 'residents.show';
+
+        $this->put(route('residents.update', $resident), $data)
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('residents.show', $resident))
+            ->assertSessionHas('success', 'Resident details updated successfully!');
+
+        $this->assertDatabaseHas('residents', ['id' => $resident->id, 'first_name' => 'Updated']);
+    }
+
+    public function test_an_unrecognized_return_target_cannot_redirect_a_resident_update_off_site(): void
+    {
+        $resident = Resident::factory()->create();
+        $data = Resident::factory()->make(['household_id' => null, 'first_name' => 'Updated'])->getAttributes();
+        $data['_return_to'] = 'https://example.com';
+
+        $this->put(route('residents.update', $resident), $data)
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('residents.index'));
+
+        $this->assertDatabaseHas('residents', ['id' => $resident->id, 'first_name' => 'Updated']);
+    }
+
     public function test_resident_can_be_deleted(): void
     {
         $resident = Resident::factory()->create();

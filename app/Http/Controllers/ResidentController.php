@@ -88,6 +88,7 @@ class ResidentController extends Controller
 
         return view('residents.show', [
             'resident' => $resident,
+            'households' => Household::orderBy('household_number')->get(),
             'registrationPhoneNumber' => $sms->normalizePhoneNumber($resident->contact_number),
             'registrationSmsConfigured' => $sms->isConfigured(),
         ]);
@@ -113,6 +114,11 @@ class ResidentController extends Controller
         $validated['is_voter'] = $request->boolean('is_voter');
 
         $resident->update($validated);
+
+        if ($request->input('_return_to') === 'residents.show') {
+            return redirect()->route('residents.show', $resident)
+                ->with('success', 'Resident details updated successfully!');
+        }
 
         return redirect()->route('residents.index')
             ->with('success', 'Resident details updated successfully!');

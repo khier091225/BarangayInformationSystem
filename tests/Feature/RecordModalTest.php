@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Blotter;
+use App\Models\Household;
 use App\Models\Official;
 use App\Models\Resident;
 use App\Models\User;
@@ -120,6 +121,46 @@ class RecordModalTest extends TestCase
         $this->assertMatchesRegularExpression('/<dialog id="'.$dialogId.'"[^>]*data-open-on-load/', $response->getContent());
         $this->assertSame(1, substr_count($response->getContent(), 'data-open-on-load'));
         $this->assertInvalidFieldsDescribeTheirErrors($response->getContent());
+    }
+
+    public function test_resident_profile_provides_one_prefilled_edit_modal_for_both_edit_links(): void
+    {
+        $household = Household::factory()->create();
+        $resident = Resident::factory()->for($household)->create();
+        $dialogId = 'resident-edit-dialog-'.$resident->getKey();
+
+        $response = $this->get(route('residents.show', $resident))->assertOk();
+
+        $document = new DOMDocument;
+        $document->loadHTML($response->getContent(), LIBXML_NONET | LIBXML_NOERROR | LIBXML_NOWARNING);
+        $xpath = new DOMXPath($document);
+        $this->assertCount(1, $xpath->query('//dialog[@id="'.$dialogId.'"]'));
+        $this->assertCount(2, $xpath->query('//a[@aria-controls="'.$dialogId.'" and @aria-haspopup="dialog"]'));
+        $this->assertCount(1, $xpath->query('//dialog//form[@action="'.route('residents.update', $resident).'"]'));
+        $this->assertSame($resident->first_name, $xpath->query('//dialog//input[@name="first_name"]')->item(0)->getAttribute('value'));
+        $selectedHousehold = $xpath->query('//dialog//select[@name="household_id"]/option[@selected]');
+        $this->assertCount(1, $selectedHousehold);
+        $this->assertSame((string) $household->id, $selectedHousehold->item(0)->getAttribute('value'));
+    }
+
+    public function test_invalid_resident_profile_edit_reopens_the_modal_and_keeps_entered_values(): void
+    {
+        $resident = Resident::factory()->create();
+        $originalAttributes = $resident->fresh()->getAttributes();
+        $profileUrl = route('residents.show', $resident);
+
+        $this->from($profileUrl)->put(route('residents.update', $resident), [
+            '_record_form' => 'residents.edit.'.$resident->getKey(),
+            '_return_to' => 'residents.show',
+            'first_name' => '',
+            'middle_name' => 'Retained name',
+        ])->assertRedirect($profileUrl)->assertSessionHasErrors('first_name');
+
+        $response = $this->withCookie(config('session.cookie'), session()->getId())->get($profileUrl)->assertOk();
+        $this->assertMatchesRegularExpression('/<dialog id="resident-edit-dialog-'.$resident->getKey().'"[^>]*data-open-on-load/', $response->getContent());
+        $response->assertSee('value="Retained name"', false);
+        $this->assertInvalidFieldsDescribeTheirErrors($response->getContent());
+        $this->assertSame($originalAttributes, $resident->fresh()->getAttributes());
     }
 
     private function assertInvalidFieldsDescribeTheirErrors(string $html): void

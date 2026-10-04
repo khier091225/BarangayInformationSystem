@@ -1,4 +1,4 @@
-@props(['household', 'modal' => false])
+@props(['household', 'modal' => false, 'returnToDetails' => false])
 
 @php
     $fieldPrefix = $modal ? 'household-edit-'.$household->getKey().'-' : '';
@@ -10,6 +10,9 @@
     @method('PUT')
     @if ($modal)
         <input type="hidden" name="_household_edit_id" value="{{ $household->getKey() }}">
+    @endif
+    @if ($returnToDetails)
+        <input type="hidden" name="_return_to" value="households.show">
     @endif
 
     <div style="margin-bottom: 18px;">

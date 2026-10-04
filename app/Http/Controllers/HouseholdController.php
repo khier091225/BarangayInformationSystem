@@ -93,6 +93,11 @@ class HouseholdController extends Controller
 
         $household->update($validated);
 
+        if ($request->input('_return_to') === 'households.show') {
+            return redirect()->route('households.show', $household)
+                ->with('success', 'Household updated successfully!');
+        }
+
         return redirect()->route('households.index')
             ->with('success', 'Household updated successfully!');
     }
