@@ -15,6 +15,8 @@ class Payment extends Model
 
     public const PROVIDER_DEMO_QRPH = 'demo_qrph';
 
+    public const PROVIDER_PAYMONGO_QRPH = 'paymongo_qrph';
+
     public const PROVIDER_CASH = 'cash';
 
     public const STATUS_PENDING = 'pending';
@@ -36,6 +38,11 @@ class Payment extends Model
         'receipt_number',
         'payment_note',
         'recorded_by',
+        'provider_reference',
+        'provider_payment_id',
+        'provider_livemode',
+        'provider_checked_at',
+        'checkout_url',
     ];
 
     protected static function booted(): void
@@ -51,6 +58,8 @@ class Payment extends Model
             'amount' => 'decimal:2',
             'expires_at' => 'datetime',
             'paid_at' => 'datetime',
+            'provider_checked_at' => 'datetime',
+            'provider_livemode' => 'boolean',
         ];
     }
 
@@ -67,5 +76,12 @@ class Payment extends Model
     public function recorder(): BelongsTo
     {
         return $this->belongsTo(User::class, 'recorded_by');
+    }
+
+    public function amountInCentavos(): int
+    {
+        [$pesos, $centavos] = explode('.', $this->amount);
+
+        return ((int) $pesos * 100) + (int) $centavos;
     }
 }

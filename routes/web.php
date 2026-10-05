@@ -4,7 +4,6 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BlotterController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DemoPaymentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HouseholdController;
 use App\Http\Controllers\IncidentAlertContactController;
@@ -13,6 +12,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\NewPasswordController;
 use App\Http\Controllers\OfficialController;
 use App\Http\Controllers\PasswordResetLinkController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PayMongoWebhookController;
 use App\Http\Controllers\ProjectChatbotController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ResidentController;
@@ -31,10 +32,7 @@ Route::post('/chatbot/reply', ProjectChatbotController::class)
 Route::redirect('/home', '/');
 Route::redirect('/portal', '/');
 
-Route::get('/demo-payments/{payment}', [DemoPaymentController::class, 'show'])
-    ->middleware('signed:relative')->name('demo-payments.show');
-Route::post('/demo-payments/{payment}/confirm', [DemoPaymentController::class, 'confirm'])
-    ->middleware('signed:relative')->name('demo-payments.confirm');
+Route::post('/payments/webhook/paymongo', PayMongoWebhookController::class)->name('payments.webhook.paymongo');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
@@ -72,12 +70,14 @@ Route::middleware(['auth', 'resident.verified'])->group(function (): void {
     Route::post('/account/requests/blotter', [ResidentServiceRequestController::class, 'storeBlotter'])
         ->middleware('throttle:5,1')->name('account.requests.blotter.store');
     Route::get('/account/requests/{serviceRequest}', [ResidentServiceRequestController::class, 'show'])->name('account.requests.show');
-    Route::post('/account/requests/{serviceRequest}/demo-payment', [DemoPaymentController::class, 'store'])
-        ->middleware('throttle:10,1')->name('account.requests.demo-payment.store');
-    Route::post('/account/requests/{serviceRequest}/cash-payment', [DemoPaymentController::class, 'storeCash'])
+    Route::post('/account/requests/{serviceRequest}/payment', [PaymentController::class, 'store'])
+        ->middleware('throttle:10,1')->name('account.requests.payment.store');
+    Route::post('/account/requests/{serviceRequest}/cash-payment', [PaymentController::class, 'storeCash'])
         ->middleware('throttle:10,1')->name('account.requests.cash-payment.store');
-    Route::get('/account/demo-payments/{payment}/status', [DemoPaymentController::class, 'status'])
-        ->name('account.demo-payments.status');
+    Route::get('/account/payments/{payment}/status', [PaymentController::class, 'status'])
+        ->middleware('throttle:30,1')->name('account.payments.status');
+    Route::get('/account/payments/{payment}/return', [PaymentController::class, 'returnFromCheckout'])
+        ->middleware('throttle:10,1')->name('account.payments.return');
     Route::get('/account/incidents', [ResidentIncidentReportController::class, 'index'])->name('account.incidents.index');
     Route::get('/account/incidents/create', [ResidentIncidentReportController::class, 'create'])->name('account.incidents.create');
     Route::post('/account/incidents', [ResidentIncidentReportController::class, 'store'])
@@ -97,7 +97,7 @@ Route::middleware('staff.session')->group(function (): void {
     Route::get('/service-requests', [StaffServiceRequestController::class, 'index'])->name('service-requests.index');
     Route::get('/service-requests/{serviceRequest}', [StaffServiceRequestController::class, 'show'])->name('service-requests.show');
     Route::post('/service-requests/{serviceRequest}/review', [StaffServiceRequestController::class, 'review'])->name('service-requests.review');
-    Route::post('/payments/{payment}/cash/confirm', [DemoPaymentController::class, 'confirmCash'])
+    Route::post('/payments/{payment}/cash/confirm', [PaymentController::class, 'confirmCash'])
         ->name('payments.cash.confirm');
     Route::get('/incident-reports', [StaffIncidentReportController::class, 'index'])->name('incident-reports.index');
     Route::get('/incident-reports/alert-contacts', [IncidentAlertContactController::class, 'index'])

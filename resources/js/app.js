@@ -3,7 +3,7 @@ import initializeWorkspace from './workspace';
 import initializeResidentNavigation from './resident-navigation';
 import initializeProjectChatbot from './chatbot';
 import initializeRecordDialogs from './record-dialogs';
-import initializeDemoPayments from './demo-payment';
+import initializePayments from './payment';
 import initializeCertificatePreview from './certificate-preview';
 import initializeTableScrolling from './table-scrolling';
 import { closeDialog, initializeDialogMotion, initializeFormFeedback } from './motion';
@@ -16,7 +16,7 @@ initializeProjectChatbot();
 initializeDialogMotion();
 initializeRecordDialogs();
 initializeFormFeedback();
-initializeDemoPayments();
+initializePayments();
 initializeCertificatePreview();
 initializeTableScrolling();
 

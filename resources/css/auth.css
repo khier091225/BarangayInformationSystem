@@ -213,31 +213,6 @@
 .auth-story-feature svg { width: 1.1rem; height: 1.1rem; }
 .auth-story-feature strong { display: block; font-size: .9rem; }
 .auth-story-feature p { margin-top: .2rem; color: var(--sidebar-muted); font-size: .78rem; line-height: 1.55; }
-.demo-payment-page { font-variant-numeric: tabular-nums; }
-.auth-status { margin-top: 1rem; padding: .75rem .9rem; border: 1px solid var(--success-line); border-radius: .65rem; background: var(--success-soft); color: var(--success); font-size: .82rem; line-height: 1.55; }
-.auth-status.warning { border-color: var(--warning-line); background: var(--warning-soft); color: var(--warning); }
-.demo-payment-heading { display: flex; align-items: center; gap: .8rem; margin-top: 1.1rem; }
-.demo-payment-heading-icon { display: grid; place-items: center; width: 3rem; height: 3rem; flex: none; border-radius: .85rem; color: var(--accent); background: var(--accent-soft); }
-.demo-payment-heading-icon svg { width: 1.35rem; height: 1.35rem; }
-.demo-payment-heading p { color: var(--muted); font-size: .72rem; font-weight: 700; }
-.demo-payment-heading h1 { margin-top: .1rem; font-size: 1.55rem; }
-.demo-payment-summary { display: grid; gap: .8rem; margin: 1.35rem 0 0; }
-.demo-payment-summary > div { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding-bottom: .8rem; border-bottom: 1px solid var(--line); }
-.demo-payment-summary dt { color: var(--muted); font-size: .78rem; }
-.demo-payment-summary dd { margin: 0; color: var(--ink); font-size: .86rem; font-weight: 700; text-align: right; }
-.demo-payment-summary .demo-payment-total { padding: .9rem 1rem; border: 0; border-radius: .7rem; background: var(--surface-soft); }
-.demo-payment-summary .demo-payment-total dd { color: var(--accent); font-size: 1.4rem; letter-spacing: -.03em; }
-.demo-payment-notice { display: flex; align-items: flex-start; gap: .6rem; margin-top: 1.1rem; padding: .8rem .9rem; border: 1px solid var(--info-line); border-radius: .65rem; background: var(--info-soft); color: var(--info); }
-.demo-payment-notice svg { width: 1rem; height: 1rem; flex: none; margin-top: .15rem; }
-.demo-payment-notice p { color: var(--muted); font-size: .78rem; line-height: 1.6; }
-.demo-payment-form .auth-submit { margin-top: 1rem; }
-.demo-payment-expiry { margin-top: .7rem; color: var(--muted); font-size: .72rem; text-align: center; }
-.demo-payment-result { padding: 1.5rem .5rem .25rem; text-align: center; }
-.demo-payment-result > span { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; margin: 0 auto .8rem; border-radius: 50%; color: var(--warning); background: var(--warning-soft); }
-.demo-payment-result-paid > span { color: var(--success); background: var(--success-soft); }
-.demo-payment-result > span svg { width: 1.65rem; height: 1.65rem; }
-.demo-payment-result h2 { font-size: 1.15rem; }
-.demo-payment-result p { margin-top: .45rem; color: var(--muted); font-size: .82rem; line-height: 1.65; }
 .auth-switch { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .84rem; text-align: center; }
 .auth-switch a { color: var(--accent); font-weight: 750; }
 .auth-switch a:hover { text-decoration: underline; }

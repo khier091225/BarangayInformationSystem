@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\PayMongo;
 use App\Http\Requests\StoreResidentBlotterRequest;
 use App\Http\Requests\StoreResidentCertificateRequest;
-use App\Models\Payment;
 use App\Models\ServiceRequest;
 use App\Support\CertificateFees;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
 use Illuminate\View\View;
 
 class ResidentServiceRequestController extends Controller
@@ -88,33 +87,12 @@ class ResidentServiceRequestController extends Controller
             ->with('success', 'Your blotter report has been submitted for staff review.');
     }
 
-    public function show(Request $request, ServiceRequest $serviceRequest): View
+    public function show(Request $request, ServiceRequest $serviceRequest, PayMongo $gateway): View
     {
         abort_unless($serviceRequest->resident_id === $request->user()->resident_id, 404);
         $serviceRequest->load(['blotter.updates', 'latestPayment']);
-        $payment = $serviceRequest->latestPayment;
-        $demoPaymentUrl = null;
+        $onlinePaymentAvailable = $gateway->isConfigured();
 
-        if ($payment?->provider === Payment::PROVIDER_DEMO_QRPH
-            && $payment->status === Payment::STATUS_PENDING
-            && $payment->expires_at?->isPast()) {
-            $payment->update(['status' => Payment::STATUS_EXPIRED]);
-        }
-
-        if ($payment?->provider === Payment::PROVIDER_DEMO_QRPH
-            && $payment->status === Payment::STATUS_PENDING
-            && $payment->expires_at !== null) {
-            $relativePath = URL::temporarySignedRoute(
-                'demo-payments.show',
-                $payment->expires_at,
-                ['payment' => $payment],
-                absolute: false,
-            );
-            $publicBaseUrl = rtrim((string) config('demo_payments.public_url'), '/');
-            $demoPaymentUrl = ($publicBaseUrl !== '' ? $publicBaseUrl : $request->getSchemeAndHttpHost())
-                .'/'.ltrim($relativePath, '/');
-        }
-
-        return view('service-requests.resident.show', compact('serviceRequest', 'demoPaymentUrl'));
+        return view('service-requests.resident.show', compact('serviceRequest', 'onlinePaymentAvailable'));
     }
 }

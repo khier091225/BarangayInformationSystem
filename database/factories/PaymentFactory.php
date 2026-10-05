@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Payment;
 use App\Models\ServiceRequest;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Payment>
@@ -43,6 +44,16 @@ class PaymentFactory extends Factory
         return $this->state(fn (): array => [
             'provider' => Payment::PROVIDER_CASH,
             'expires_at' => null,
+        ]);
+    }
+
+    public function paymongo(): static
+    {
+        return $this->state(fn (): array => [
+            'provider' => Payment::PROVIDER_PAYMONGO_QRPH,
+            'provider_reference' => 'cs_'.Str::random(24),
+            'provider_livemode' => true,
+            'checkout_url' => fn (array $attributes): string => 'https://checkout.paymongo.com/'.$attributes['provider_reference'],
         ]);
     }
 

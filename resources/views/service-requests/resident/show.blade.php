@@ -21,10 +21,10 @@
                     <h2 id="request-status-title">Payment required</h2>
                     @if ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_CASH && $serviceRequest->latestPayment->status === \App\Models\Payment::STATUS_PENDING)
                         <p>Pay cash at the barangay hall and present your request number. Staff will confirm your payment.</p>
-                    @elseif ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_DEMO_QRPH && $serviceRequest->latestPayment->status === \App\Models\Payment::STATUS_PENDING && $demoPaymentUrl)
-                        <p>Scan the QRPH code below with your phone to continue payment.</p>
+                    @elseif ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_PAYMONGO_QRPH && $serviceRequest->latestPayment->status === \App\Models\Payment::STATUS_PENDING)
+                        <p>Pay through QR Ph using GCash, Maya, or your banking app. Confirmation is automatic.</p>
                     @else
-                        <p>Choose QRPH or cash at the barangay hall below to complete your payment.</p>
+                        <p>Choose QR Ph or cash at the barangay hall below to complete your payment.</p>
                     @endif
                 @elseif ($serviceRequest->status === 'Declined')
                     <h2 id="request-status-title">This request was declined</h2>
@@ -62,59 +62,7 @@
                 </section>
 
                 @if ($serviceRequest->type === \App\Models\ServiceRequest::TYPE_CERTIFICATE && $serviceRequest->status === \App\Models\ServiceRequest::STATUS_AWAITING_PAYMENT)
-                    <section class="resident-card demo-qrph-card" aria-labelledby="payment-title">
-                        <div class="resident-detail-heading">
-                            <span class="resident-section-icon"><i data-lucide="landmark" aria-hidden="true"></i></span>
-                            <div><h2 id="payment-title">Payment</h2><p>Pay through QRPH or at the barangay hall.</p></div>
-                        </div>
-
-                        @if ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_DEMO_QRPH && $serviceRequest->latestPayment->status === \App\Models\Payment::STATUS_PENDING && $demoPaymentUrl)
-                            <div class="demo-qrph-active" data-demo-payment-monitor data-status-url="{{ route('account.demo-payments.status', $serviceRequest->latestPayment) }}">
-                                <div class="demo-qrph-code"><canvas data-demo-payment-qr data-qr-value="{{ $demoPaymentUrl }}" aria-label="QRPH payment code"></canvas></div>
-                                <div class="demo-qrph-copy">
-                                    <span class="demo-only-label"><i data-lucide="shield-check" aria-hidden="true"></i> QRPH PAYMENT</span>
-                                    <strong>₱{{ number_format((float) $serviceRequest->latestPayment->amount, 2) }}</strong>
-                                    <p>Scan this code with your phone camera, open the BIS payment page, then tap <b>Confirm payment</b>.</p>
-                                    <span class="demo-payment-live-status" data-demo-payment-status>Waiting for payment…</span>
-                                    <small>Expires {{ $serviceRequest->latestPayment->expires_at->timezone('Asia/Manila')->format('M j, Y \a\t g:i A') }}</small>
-                                    <a href="{{ $demoPaymentUrl }}" class="resident-inline-link" target="_blank" rel="noopener">Open payment page <i data-lucide="external-link" aria-hidden="true"></i></a>
-                                </div>
-                            </div>
-                            <form method="POST" action="{{ route('account.requests.cash-payment.store', $serviceRequest) }}" class="payment-method-switch">
-                                @csrf
-                                <button type="submit" class="resident-button resident-button-outline"><i data-lucide="landmark" aria-hidden="true"></i> Pay cash instead</button>
-                            </form>
-                        @elseif ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_CASH && $serviceRequest->latestPayment->status === \App\Models\Payment::STATUS_PENDING)
-                            <div class="cash-payment-card" data-demo-payment-monitor data-status-url="{{ route('account.demo-payments.status', $serviceRequest->latestPayment) }}">
-                                <span class="cash-payment-icon"><i data-lucide="landmark" aria-hidden="true"></i></span>
-                                <div>
-                                    <span class="demo-only-label"><i data-lucide="check" aria-hidden="true"></i> CASH PAYMENT</span>
-                                    <strong>₱{{ number_format((float) $serviceRequest->latestPayment->amount, 2) }}</strong>
-                                    <p>Pay at the barangay hall and present request <b>#{{ str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT) }}</b>. Staff will record the receipt and confirm your payment.</p>
-                                    <span class="demo-payment-live-status" data-demo-payment-status>Waiting for staff confirmation…</span>
-                                </div>
-                            </div>
-                            <form method="POST" action="{{ route('account.requests.demo-payment.store', $serviceRequest) }}" class="payment-method-switch">
-                                @csrf
-                                <button type="submit" class="resident-button resident-button-outline"><i data-lucide="qr-code" aria-hidden="true"></i> Switch to QRPH</button>
-                            </form>
-                        @else
-                            @if ($serviceRequest->latestPayment?->status === \App\Models\Payment::STATUS_EXPIRED)
-                                <div class="demo-payment-expired"><i data-lucide="clock" aria-hidden="true"></i><span>The previous QR code expired. Generate a new one or choose cash at the barangay hall.</span></div>
-                            @endif
-                            <div class="payment-method-intro"><strong>Amount due: ₱{{ number_format((float) $serviceRequest->fee_amount, 2) }}</strong><p>Choose how you want to pay.</p></div>
-                            <div class="payment-method-choices">
-                                <form method="POST" action="{{ route('account.requests.demo-payment.store', $serviceRequest) }}" class="payment-method-choice">
-                                    @csrf
-                                    <button type="submit"><span><i data-lucide="qr-code" aria-hidden="true"></i></span><strong>QRPH Payment</strong><small>Generate a QR code and confirm using your phone.</small></button>
-                                </form>
-                                <form method="POST" action="{{ route('account.requests.cash-payment.store', $serviceRequest) }}" class="payment-method-choice">
-                                    @csrf
-                                    <button type="submit"><span><i data-lucide="landmark" aria-hidden="true"></i></span><strong>Cash at Barangay Hall</strong><small>Pay in person and let staff record your receipt.</small></button>
-                                </form>
-                            </div>
-                        @endif
-                    </section>
+                    <x-resident-payment :service-request="$serviceRequest" :online-payment-available="$onlinePaymentAvailable" />
                 @endif
 
                 @if ($serviceRequest->type === \App\Models\ServiceRequest::TYPE_BLOTTER && $serviceRequest->blotter)
@@ -156,7 +104,7 @@
                         @if ($serviceRequest->status !== \App\Models\ServiceRequest::STATUS_DECLINED && $serviceRequest->type === \App\Models\ServiceRequest::TYPE_CERTIFICATE)
                             <li class="{{ $serviceRequest->status === 'Awaiting Payment' ? 'resident-progress-current' : ($serviceRequest->status === 'Completed' ? 'resident-progress-done' : 'resident-progress-upcoming') }}" @if ($serviceRequest->status === 'Awaiting Payment') aria-current="step" @endif>
                                 <span class="resident-progress-number">@if ($serviceRequest->status === 'Completed')<i data-lucide="check" aria-hidden="true"></i>@elseif ($serviceRequest->status === 'Awaiting Payment')<i data-lucide="{{ $serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_CASH ? 'landmark' : 'qr-code' }}" aria-hidden="true"></i>@else 3 @endif</span>
-                                <div><strong>{{ (float) $serviceRequest->fee_amount === 0.0 ? 'Payment check' : ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_CASH ? 'Cash payment' : ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_DEMO_QRPH ? 'QRPH payment' : 'Choose payment method')) }}</strong>@if ($serviceRequest->status === 'Awaiting Payment')<span class="resident-progress-label">Current step</span>@endif</div>
+                                <div><strong>{{ (float) $serviceRequest->fee_amount === 0.0 ? 'Payment check' : ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_CASH ? 'Cash payment' : ($serviceRequest->latestPayment?->provider === \App\Models\Payment::PROVIDER_PAYMONGO_QRPH ? 'QR Ph payment' : 'Choose payment method')) }}</strong>@if ($serviceRequest->status === 'Awaiting Payment')<span class="resident-progress-label">Current step</span>@endif</div>
                             </li>
                             <li class="{{ $serviceRequest->status === 'Completed' ? 'resident-progress-done' : 'resident-progress-upcoming' }}" @if ($serviceRequest->status === 'Completed') aria-current="step" @endif><span class="resident-progress-number">@if ($serviceRequest->status === 'Completed')<i data-lucide="check" aria-hidden="true"></i>@else 4 @endif</span><div><strong>Document issued</strong></div></li>
                         @elseif ($serviceRequest->status !== \App\Models\ServiceRequest::STATUS_DECLINED)

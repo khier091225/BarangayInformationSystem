@@ -16,6 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->preventRequestForgery(except: ['payments/webhook/paymongo']);
+
         $middleware->alias([
             'staff.session' => EnsureStaffSession::class,
             'resident.verified' => EnsureVerifiedResident::class,
@@ -40,6 +42,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->with('warning', "Too many sign-in attempts. Please wait {$retryAfter} seconds, then try again.");
         });
         $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
+            fn (Request $request) => $request->is('api/*', 'payments/webhook/*') || $request->expectsJson(),
         );
     })->create();
