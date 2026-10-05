@@ -93,6 +93,96 @@ class ProjectChatbotTest extends TestCase
         Http::assertSentCount(2);
     }
 
+    public function test_formatted_page_names_are_returned_and_saved_as_plain_text(): void
+    {
+        config()->set('services.anthropic.key', 'test-key');
+        Http::preventStrayRequests();
+        Http::fake([
+            'https://api.anthropic.com/v1/messages' => Http::response([
+                'content' => [['type' => 'text', 'text' => 'Sige! Buksan ang **My Requests** para makita ang _status_ at `reference number` mo. 🙂']],
+            ]),
+        ]);
+
+        $this->postJson(route('chatbot.reply'), ['message' => 'Paano ko ma-track ang request ko?'])
+            ->assertOk()
+            ->assertJsonPath('reply', 'Sige! Buksan ang My Requests para makita ang status at reference number mo. 🙂')
+            ->assertSessionHas('chatbot_history', [
+                ['role' => 'user', 'content' => 'Paano ko ma-track ang request ko?'],
+                ['role' => 'assistant', 'content' => 'Sige! Buksan ang My Requests para makita ang status at reference number mo. 🙂'],
+            ]);
+
+        Http::assertSent(function (Request $request): bool {
+            return str_contains($request['system'], 'Reply in plain text only.')
+                && str_contains($request['system'], 'Give the answer first');
+        });
+    }
+
+    public function test_plain_text_replies_keep_steps_links_and_meaningful_characters_readable(): void
+    {
+        config()->set('services.anthropic.key', 'test-key');
+        Http::preventStrayRequests();
+        Http::fake([
+            'https://api.anthropic.com/v1/messages' => Http::response([
+                'content' => [['type' => 'text', 'text' => "### Ganito mag-track\n1. Buksan ang __My Requests__.\n2. Piliin ang [request](https://barangay.example/account/requests/1?ref=INC_2026_1).\n\n```text\nReference: INC-2026-000123\nhousehold_number\n```"]],
+            ]),
+        ]);
+
+        $this->postJson(route('chatbot.reply'), ['message' => 'Paano gamitin ang My Requests?'])
+            ->assertOk()
+            ->assertJsonPath('reply', "Ganito mag-track\n1. Buksan ang My Requests.\n2. Piliin ang request (https://barangay.example/account/requests/1?ref=INC_2026_1).\n\nReference: INC-2026-000123\nhousehold_number");
+
+        Http::assertSentCount(1);
+    }
+
+    public function test_old_formatted_assistant_history_is_cleaned_without_changing_user_messages(): void
+    {
+        config()->set('services.anthropic.key', 'test-key');
+        Http::preventStrayRequests();
+        Http::fake([
+            'https://api.anthropic.com/v1/messages' => Http::response([
+                'content' => [['type' => 'text', 'text' => 'Oo, sa **My Requests** makikita ang status.']],
+            ]),
+        ]);
+
+        $this->withSession(['chatbot_history' => [
+            ['role' => 'user', 'content' => 'Nasaan ang **status**?'],
+            ['role' => 'assistant', 'content' => 'Buksan ang **My Requests**.'],
+        ]])->postJson(route('chatbot.reply'), ['message' => 'sure ka ba?'])
+            ->assertOk()
+            ->assertJsonPath('reply', 'Oo, sa My Requests makikita ang status.')
+            ->assertSessionHas('chatbot_history', [
+                ['role' => 'user', 'content' => 'Nasaan ang **status**?'],
+                ['role' => 'assistant', 'content' => 'Buksan ang My Requests.'],
+                ['role' => 'user', 'content' => 'sure ka ba?'],
+                ['role' => 'assistant', 'content' => 'Oo, sa My Requests makikita ang status.'],
+            ]);
+
+        Http::assertSent(function (Request $request): bool {
+            return $request['messages'] === [
+                ['role' => 'user', 'content' => 'Nasaan ang **status**?'],
+                ['role' => 'assistant', 'content' => 'Buksan ang My Requests.'],
+                ['role' => 'user', 'content' => 'sure ka ba?'],
+            ];
+        });
+    }
+
+    public function test_formatting_without_reply_text_returns_a_temporary_error(): void
+    {
+        config()->set('services.anthropic.key', 'test-key');
+        Http::preventStrayRequests();
+        Http::fake([
+            'https://api.anthropic.com/v1/messages' => Http::response([
+                'content' => [['type' => 'text', 'text' => "```text\n```"]],
+            ]),
+        ]);
+
+        $this->postJson(route('chatbot.reply'), ['message' => 'Paano mag-register?'])
+            ->assertStatus(503)
+            ->assertSessionMissing('chatbot_history');
+
+        Http::assertSentCount(1);
+    }
+
     public function test_greeting_and_project_design_question_can_receive_conversational_replies(): void
     {
         config()->set('services.anthropic.key', 'test-key');
