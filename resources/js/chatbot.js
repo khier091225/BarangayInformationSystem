@@ -7,6 +7,9 @@ export default function initializeProjectChatbot() {
     const closeButton = root.querySelector('[data-chat-close]');
     const scrollRegion = root.querySelector('[data-chat-scroll]');
     const messages = root.querySelector('[data-chat-messages]');
+    const welcome = root.querySelector('[data-chat-welcome]');
+    const historyNote = root.querySelector('[data-chat-history-note]');
+    const historyLimit = Number(root.dataset.historyLimit);
     const prompts = root.querySelector('[data-chat-prompts]');
     const latestButton = root.querySelector('[data-chat-latest]');
     const form = root.querySelector('[data-chat-form]');
@@ -19,6 +22,69 @@ export default function initializeProjectChatbot() {
     const compactViewport = window.matchMedia('(max-width: 520px)');
     let busy = false;
     let closeTimer = null;
+    let historyVersion = 0;
+    let restoringHistory = false;
+    let savedHistory = JSON.stringify([...messages.querySelectorAll('[data-chat-history-entry]')].map(entry => ({
+        role: entry.dataset.role,
+        content: entry.querySelector('.project-chat__message').textContent,
+    })));
+
+    function renderHistory(history, force = false) {
+        if (!Array.isArray(history) || !history.every(message => message && ['user', 'assistant'].includes(message.role) && typeof message.content === 'string')) return;
+        const snapshot = JSON.stringify(history);
+        if (!force && snapshot === savedHistory) return;
+
+        const previousScroll = scrollRegion.scrollTop;
+        const followLatest = isNearLatest();
+        const existing = [...messages.querySelectorAll('[data-chat-history-entry]')];
+        const retained = new Set();
+        let previous = welcome;
+
+        history.forEach(item => {
+            let entry = existing.find(element => !retained.has(element)
+                && element.dataset.role === item.role
+                && element.querySelector('.project-chat__message').textContent === item.content
+                && !element.querySelector('[data-chat-retry]'));
+
+            if (!entry) entry = addMessage(item.content, item.role, false, false).parentElement;
+            retained.add(entry);
+            if (previous.nextElementSibling !== entry) previous.after(entry);
+            previous = entry;
+        });
+        existing.forEach(entry => { if (!retained.has(entry)) entry.remove(); });
+        welcome.hidden = history.length > 0;
+        prompts.hidden = history.length > 0;
+        historyNote.hidden = history.length < historyLimit;
+        savedHistory = snapshot;
+        if (followLatest) scrollToLatest();
+        else scrollRegion.scrollTop = previousScroll;
+        updateLatestButton();
+    }
+
+    async function restoreHistory() {
+        if (busy || restoringHistory) return;
+        restoringHistory = true;
+        const version = historyVersion;
+        const controller = new AbortController();
+        const timeout = window.setTimeout(() => controller.abort(), 10000);
+
+        try {
+            const response = await fetch(root.dataset.historyUrl, {
+                credentials: 'same-origin',
+                cache: 'no-store',
+                headers: { 'Accept': 'application/json' },
+                signal: controller.signal,
+            });
+            if (!response.ok) return;
+            const data = await response.json();
+            if (!busy && historyVersion === version) renderHistory(data.history);
+        } catch {
+            // The server-rendered conversation remains available if synchronization fails.
+        } finally {
+            window.clearTimeout(timeout);
+            restoringHistory = false;
+        }
+    }
 
     function updateViewport() {
         const viewport = window.visualViewport;
@@ -76,6 +142,7 @@ export default function initializeProjectChatbot() {
                 if (messages.children.length > 1) scrollToLatest();
                 else updateLatestButton();
             });
+            restoreHistory();
             return;
         }
 
@@ -109,9 +176,11 @@ export default function initializeProjectChatbot() {
         message.parentElement.querySelector('[data-chat-retry]')?.remove();
     }
 
-    function addMessage(value, role, pending = false) {
+    function addMessage(value, role, pending = false, scroll = true) {
         const entry = document.createElement('div');
         entry.className = 'project-chat__entry project-chat__entry--' + role;
+        entry.dataset.chatHistoryEntry = '';
+        entry.dataset.role = role;
         const label = document.createElement('span');
         label.className = 'project-chat__message-label';
         label.textContent = role === 'user' ? 'Ikaw' : 'BIS Assistant';
@@ -121,7 +190,7 @@ export default function initializeProjectChatbot() {
         entry.append(label, message);
         messages.append(entry);
         if (pending) setPending(message);
-        scrollToLatest();
+        if (scroll) scrollToLatest();
         return message;
     }
 
@@ -152,7 +221,9 @@ export default function initializeProjectChatbot() {
         }
 
         clearFeedback();
+        historyVersion++;
         busy = true;
+        welcome.hidden = true;
         prompts.hidden = true;
         let pending = retryMessage;
         if (pending) {
@@ -197,6 +268,8 @@ export default function initializeProjectChatbot() {
                     showFailure(pending, explanation, message);
                 } else {
                     pending.textContent = data.reply;
+                    pending.classList.remove('project-chat__message--pending');
+                    renderHistory(data.history, true);
                 }
             }
         } catch (error) {
@@ -251,6 +324,16 @@ export default function initializeProjectChatbot() {
     });
     window.visualViewport?.addEventListener('resize', updateViewport);
     window.visualViewport?.addEventListener('scroll', updateViewport);
+    window.addEventListener('pageshow', event => {
+        if (event.persisted) {
+            savedHistory = null;
+            renderHistory([]);
+            restoreHistory();
+        }
+    });
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && !panel.hidden) restoreHistory();
+    });
     updateViewport();
     updateComposer();
 }

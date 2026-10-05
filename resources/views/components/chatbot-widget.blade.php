@@ -18,7 +18,7 @@
     };
 @endphp
 
-<div class="project-chat" data-project-chat data-endpoint="{{ route('chatbot.reply') }}" lang="fil">
+<div class="project-chat" data-project-chat data-endpoint="{{ route('chatbot.reply') }}" data-history-url="{{ route('chatbot.history') }}" data-history-limit="{{ $chatHistoryLimit }}" lang="fil">
     <button class="project-chat__launcher" type="button" data-chat-open aria-expanded="false" aria-controls="project-chat-panel" aria-label="Open BIS Assistant">
         <span class="project-chat__launcher-icon"><i data-lucide="messages-square" aria-hidden="true"></i></span>
         <span class="project-chat__launcher-copy">
@@ -41,14 +41,21 @@
 
         <div class="project-chat__body">
             <div class="project-chat__conversation" data-chat-scroll tabindex="0" role="region" aria-label="Pag-uusap sa BIS Assistant">
+                <p class="project-chat__history-note" data-chat-history-note @if (count($chatHistory) < $chatHistoryLimit) hidden @endif>Huling {{ intdiv($chatHistoryLimit, 2) }} na tanong at sagot ang pinapanatili sa usapang ito.</p>
                 <div class="project-chat__messages" data-chat-messages role="log" aria-label="Chat messages" aria-live="polite" aria-relevant="additions text">
-                    <div class="project-chat__entry project-chat__entry--assistant">
+                    <div class="project-chat__entry project-chat__entry--assistant" data-chat-welcome @if ($chatHistory !== []) hidden @endif>
                         <span class="project-chat__message-label">BIS Assistant</span>
                         <p class="project-chat__message project-chat__message--assistant"><strong>Hi! Kumusta? 👋</strong><span>May tanong ka tungkol sa BIS? Pili ka sa ibaba o i-type lang ang tanong mo.</span></p>
                     </div>
+                    @foreach ($chatHistory as $message)
+                        <div class="project-chat__entry project-chat__entry--{{ $message['role'] }}" data-chat-history-entry data-role="{{ $message['role'] }}">
+                            <span class="project-chat__message-label">{{ $message['role'] === 'user' ? 'Ikaw' : 'BIS Assistant' }}</span>
+                            <p class="project-chat__message project-chat__message--{{ $message['role'] }}">{{ $message['content'] }}</p>
+                        </div>
+                    @endforeach
                 </div>
 
-                <div class="project-chat__prompts" data-chat-prompts aria-label="Suggested questions">
+                <div class="project-chat__prompts" data-chat-prompts aria-label="Suggested questions" @if ($chatHistory !== []) hidden @endif>
                     <span class="project-chat__prompts-label">Pwede mong itanong</span>
                     @foreach ($suggestions as $suggestion)
                         <button type="button" data-chat-prompt="{{ $suggestion['question'] }}"><i data-lucide="{{ $suggestion['icon'] }}" aria-hidden="true"></i><span>{{ $suggestion['label'] }}</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>

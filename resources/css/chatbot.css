@@ -118,6 +118,8 @@
 
 .project-chat__conversation:focus-visible { outline: 2px solid var(--focus); outline-offset: -3px; }
 
+.project-chat__history-note { margin: 0; color: var(--muted); font-size: .75rem; line-height: 1.5; }
+
 .project-chat__messages {
     display: flex;
     flex-direction: column;

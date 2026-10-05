@@ -8,6 +8,15 @@ use Illuminate\Http\Request;
 
 class ProjectChatbotController extends Controller
 {
+    public function history(Request $request, ProjectChatbot $chatbot): JsonResponse
+    {
+        $history = $request->session()->get('chatbot_history', []);
+
+        return response()->json([
+            'history' => $chatbot->recentHistory(is_array($history) ? $history : []),
+        ])->header('Cache-Control', 'private, no-store');
+    }
+
     public function __invoke(Request $request, ProjectChatbot $chatbot): JsonResponse
     {
         $validated = $request->validate([
@@ -25,6 +34,6 @@ class ProjectChatbotController extends Controller
 
         $request->session()->put('chatbot_history', $answer['history']);
 
-        return response()->json(['reply' => $answer['reply']]);
+        return response()->json($answer)->header('Cache-Control', 'private, no-store');
     }
 }

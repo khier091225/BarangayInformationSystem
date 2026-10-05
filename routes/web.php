@@ -29,6 +29,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('/chatbot/reply', ProjectChatbotController::class)
     ->middleware('throttle:8,1')->name('chatbot.reply');
+Route::get('/chatbot/history', [ProjectChatbotController::class, 'history'])
+    ->middleware('throttle:60,1')->name('chatbot.history');
 Route::redirect('/home', '/');
 Route::redirect('/portal', '/');
 

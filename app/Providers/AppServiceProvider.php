@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use App\Http\ProjectChatbot;
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\View as ViewInstance;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +25,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        View::composer('components.chatbot-widget', function (ViewInstance $view): void {
+            $history = request()->session()->get('chatbot_history', []);
+            $view->with('chatHistory', app(ProjectChatbot::class)->recentHistory(is_array($history) ? $history : []));
+            $view->with('chatHistoryLimit', ProjectChatbot::HISTORY_LIMIT);
+        });
+
         ResetPassword::toMailUsing(function (User $user, string $token): MailMessage {
             return (new MailMessage)
                 ->subject('Reset your password | Barangay Kay-Anlog')
