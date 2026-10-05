@@ -85,7 +85,7 @@
         </table>
     </x-workspace.table-scroll>
 
-    <x-record-dialog :id="'household-edit-dialog-'.$household->getKey()" title="Edit Household" :description="'Update the details for '.$household->household_number.'.'" icon="house" :open-on-load="$errors->any() && old('_household_edit_id') === (string) $household->getKey()">
+    <x-record-dialog :id="'household-edit-dialog-'.$household->getKey()" title="Edit household" :compact="true" icon="house" :open-on-load="$errors->any() && old('_household_edit_id') === (string) $household->getKey()">
         <x-households.edit-form :household="$household" :modal="true" :return-to-details="true" />
     </x-record-dialog>
 @endsection

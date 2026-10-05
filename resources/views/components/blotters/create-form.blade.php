@@ -10,6 +10,7 @@
 <form method="POST" action="{{ route('blotters.store') }}" class="complaint-staff-form">
     @csrf
     @if ($modal) <input type="hidden" name="_record_form" value="blotters.create"> @endif
+    @if ($modal) <div class="bis-dialog-body"> @endif
     <div class="resident-field">
         <x-form.label :for="$fieldId('complainant')" required>Complainant name</x-form.label>
         <x-form.input name="complainant" :id="$fieldId('complainant')" :value="$value('complainant')" required maxlength="255" placeholder="Full name of complainant" :aria-invalid="$error('complainant') ? 'true' : 'false'" :aria-describedby="$error('complainant') ? $fieldId('complainant').'-error' : null" />
@@ -37,6 +38,7 @@
         </div>
     </details>
     @if ($modal)
+        </div>
         <div class="form-component-actions">
             <button type="button" class="button button-outline" data-record-dialog-close>Cancel</button>
             <button type="submit" class="button button-primary">Save blotter record</button>

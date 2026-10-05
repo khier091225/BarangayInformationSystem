@@ -15,6 +15,7 @@
     @if ($modal) <input type="hidden" name="_record_form" value="{{ $formContext }}"> @endif
     @if ($editing && $returnToProfile) <input type="hidden" name="_return_to" value="residents.show"> @endif
 
+    @if ($modal) <div class="bis-dialog-body"> @endif
     <div class="record-form-grid record-form-grid--three">
         <div>
             <x-form.label :for="$fieldId('first_name')" required>First Name</x-form.label>
@@ -97,13 +98,14 @@
     </div>
 
     @if ($modal)
+        </div>
         <div class="form-component-actions">
             <button type="button" class="button button-outline" data-record-dialog-close>Cancel</button>
-            <button type="submit" class="button button-primary">{{ $editing ? 'Update Resident' : 'Save Resident' }}</button>
+            <button type="submit" class="button button-primary">{{ $editing ? 'Save changes' : 'Save resident' }}</button>
         </div>
     @else
         <x-form.actions :cancel-url="route('residents.index')">
-            <x-slot:submit>{{ $editing ? 'Update Resident' : 'Save Resident' }}</x-slot:submit>
+            <x-slot:submit>{{ $editing ? 'Save changes' : 'Save resident' }}</x-slot:submit>
         </x-form.actions>
     @endif
 </form>

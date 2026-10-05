@@ -7,6 +7,7 @@
 @import './incident-reports.css';
 @import './chatbot.css';
 @import './motion.css';
+@import './dialogs.css';
 
 @source "../**/*.blade.php";
 @source "../**/*.js";
@@ -195,12 +196,6 @@ textarea.form-control { line-height: 1.6; }
 .text-link { display: inline-flex; align-items: center; gap: .625rem; min-height: 2.75rem; color: var(--accent); font-size: 1rem; font-weight: 600; }
 .text-link:hover { text-decoration: underline; }
 .form-note { font-size: .875rem; color: var(--muted); line-height: 1.6; }
-dialog { width: min(34rem, calc(100% - 2rem)); max-height: calc(100svh - 2rem); overflow-y: auto; margin: auto; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.75rem; color: var(--ink); background: var(--surface); box-shadow: 0 1.5rem 5rem rgb(12 48 42 / 20%); }
-dialog::backdrop { background: rgb(12 48 42 / 65%); }
-.dialog-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
-dialog h2 { font-size: 1.5rem; font-weight: 600; line-height: 1.3; }
-dialog p { color: var(--muted); font-size: 1rem; line-height: 1.7; margin-block: 1rem 1.5rem; }
-body.dialog-open { overflow: hidden; }
 
 .public-page { background: var(--surface); }
 .utility-bar { background: var(--accent); color: #fff; }
@@ -327,7 +322,6 @@ body.dialog-open { overflow: hidden; }
     .demo-entry-main { padding-block: 1rem 2.5rem; }
     .demo-entry-panel { padding: 1.5rem; }
     .demo-entry-note { justify-content: flex-start; }
-    dialog { padding: 1.25rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -11,6 +11,7 @@
     @csrf
     @if ($modal) <input type="hidden" name="_record_form" value="certificates.create"> @endif
 
+    @if ($modal) <div class="bis-dialog-body"> @endif
     <div class="record-form-field">
         <x-form.label :for="$fieldId('resident_id')" required>Resident</x-form.label>
         <x-form.select name="resident_id" :id="$fieldId('resident_id')" required :aria-invalid="$error('resident_id') ? 'true' : 'false'" :aria-describedby="$error('resident_id') ? $fieldId('resident_id').'-error' : null">
@@ -47,6 +48,7 @@
     </div>
 
     @if ($modal)
+        </div>
         <div class="form-component-actions">
             <button type="button" class="button button-outline" data-record-dialog-close>Cancel</button>
             <button type="submit" class="button button-primary">Issue certificate</button>

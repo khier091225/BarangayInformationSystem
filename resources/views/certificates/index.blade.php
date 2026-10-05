@@ -94,7 +94,7 @@
                                 <a href="{{ route('certificates.show', [$cert]) }}" style="color: var(--accent); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 10px; border: 1px solid var(--line-strong); border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
                                     <i data-lucide="printer" style="width: 12px; height: 12px;"></i> View & Print
                                 </a>
-                                <form method="POST" action="{{ route('certificates.destroy', [$cert]) }}" onsubmit="return confirm('Are you sure you want to delete this certificate record?');" style="display: inline;">
+                                <form method="POST" action="{{ route('certificates.destroy', [$cert]) }}" onsubmit="return confirm('Are you sure you want to delete this certificate record?');" data-confirm-title="Delete certificate record?" data-confirm-message="Delete the certificate record for {{ $cert->certificate_type }} #{{ $cert->getKey() }}?" data-confirm-label="Delete certificate record" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="record-delete">
@@ -119,7 +119,7 @@
         {{ $certificates->links() }}
     </div>
 
-    <x-record-dialog id="certificate-create-dialog" title="Issue certificate" description="Generate an official document for a registered barangay resident." icon="files" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'certificates.create'">
+    <x-record-dialog id="certificate-create-dialog" title="Issue certificate" description="Create a document for a registered resident." icon="files" :open-on-load="$errors->any() && old('_record_form') === 'certificates.create'">
         <x-certificates.create-form :residents="$residents" :certificate-fees="$certificateFees" :selected-resident-id="$selectedResidentId" :modal="true" />
     </x-record-dialog>
 @endsection

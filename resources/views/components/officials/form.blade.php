@@ -14,6 +14,7 @@
     @if ($editing) @method('PUT') @endif
     @if ($modal) <input type="hidden" name="_record_form" value="{{ $formContext }}"> @endif
 
+    @if ($modal) <div class="bis-dialog-body"> @endif
     <div class="record-form-field">
         <x-form.label :for="$fieldId('name')" required>Full Name</x-form.label>
         <x-form.input name="name" :id="$fieldId('name')" :value="$value('name', $official?->name)" required maxlength="255" placeholder="e.g. Hon. Juan Dela Cruz" :aria-invalid="$error('name') ? 'true' : 'false'" :aria-describedby="$error('name') ? $fieldId('name').'-error' : null" />
@@ -66,13 +67,14 @@
     </div>
 
     @if ($modal)
+        </div>
         <div class="form-component-actions">
             <button type="button" class="button button-outline" data-record-dialog-close>Cancel</button>
-            <button type="submit" class="button button-primary">{{ $editing ? 'Update Official' : 'Save Official' }}</button>
+            <button type="submit" class="button button-primary">{{ $editing ? 'Save changes' : 'Save official' }}</button>
         </div>
     @else
         <x-form.actions :cancel-url="route('officials.index')">
-            <x-slot:submit>{{ $editing ? 'Update Official' : 'Save Official' }}</x-slot:submit>
+            <x-slot:submit>{{ $editing ? 'Save changes' : 'Save official' }}</x-slot:submit>
         </x-form.actions>
     @endif
 </form>

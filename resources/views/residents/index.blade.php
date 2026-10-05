@@ -111,7 +111,7 @@
                                 <a href="{{ route('residents.edit', [$resident]) }}" style="color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--input-line); border-radius: 4px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="resident-edit-dialog-{{ $resident->getKey() }}">
                                     Edit
                                 </a>
-                                <form method="POST" action="{{ route('residents.destroy', [$resident]) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');" style="display: inline;">
+                                <form method="POST" action="{{ route('residents.destroy', [$resident]) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');" data-confirm-title="Delete resident?" data-confirm-message="Delete the resident record for {{ $resident->full_name }}?" data-confirm-label="Delete resident" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="record-delete">
@@ -136,12 +136,12 @@
         {{ $residents->links() }}
     </div>
 
-    <x-record-dialog id="resident-create-dialog" title="Register New Resident" description="Add a community resident to the barangay registry." icon="users-round" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'residents.create'">
+    <x-record-dialog id="resident-create-dialog" title="Register resident" icon="users-round" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'residents.create'">
         <x-residents.form :households="$households" :modal="true" />
     </x-record-dialog>
 
     @foreach ($residents as $resident)
-        <x-record-dialog :id="'resident-edit-dialog-'.$resident->getKey()" title="Edit Resident" :description="'Update the details for '.$resident->full_name.'.'" icon="users-round" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'residents.edit.'.$resident->getKey()">
+        <x-record-dialog :id="'resident-edit-dialog-'.$resident->getKey()" title="Edit resident" :description="'Update the details for '.$resident->full_name.'.'" icon="users-round" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'residents.edit.'.$resident->getKey()">
             <x-residents.form :resident="$resident" :households="$households" :modal="true" />
         </x-record-dialog>
     @endforeach

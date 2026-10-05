@@ -14,7 +14,7 @@
     <x-workspace.page-header :title="$resident->full_name" description="Review the resident profile, household information, and account registration." icon="user-round">
         <x-slot:actions>
             <a href="{{ route('residents.edit', [$resident]) }}" class="button button-primary" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="resident-edit-dialog-{{ $resident->getKey() }}"><i data-lucide="pencil" aria-hidden="true"></i> Edit resident</a>
-            <form method="POST" action="{{ route('residents.destroy', [$resident]) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');">
+            <form method="POST" action="{{ route('residents.destroy', [$resident]) }}" onsubmit="return confirm('Are you sure you want to delete this resident record?');" data-confirm-title="Delete resident?" data-confirm-message="Delete the resident record for {{ $resident->full_name }}?" data-confirm-label="Delete resident">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="record-delete record-delete-large">Delete</button>
@@ -184,7 +184,7 @@
         </table>
     </x-workspace.table-scroll>
 
-    <x-record-dialog :id="'resident-edit-dialog-'.$resident->getKey()" title="Edit Resident" :description="'Update the details for '.$resident->full_name.'.'" icon="users-round" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'residents.edit.'.$resident->getKey()">
+    <x-record-dialog :id="'resident-edit-dialog-'.$resident->getKey()" title="Edit resident" :description="'Update the details for '.$resident->full_name.'.'" icon="users-round" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'residents.edit.'.$resident->getKey()">
         <x-residents.form :resident="$resident" :households="$households" :modal="true" :return-to-profile="true" />
     </x-record-dialog>
 @endsection

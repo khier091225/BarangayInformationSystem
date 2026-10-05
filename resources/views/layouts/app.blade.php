@@ -91,6 +91,7 @@
         </div>
 
         @stack('scripts')
+        <x-confirm-dialog />
         <x-chatbot-widget />
     </body>
 </html>

@@ -1,0 +1,78 @@
+.bis-dialog {
+    --dialog-width: 40rem;
+    --dialog-padding: 1.5rem;
+    width: min(var(--dialog-width), calc(100% - 2rem));
+    max-width: none;
+    max-height: calc(100dvh - 2rem);
+    margin: auto;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 1.5rem 5rem rgb(12 48 42 / 24%);
+}
+.bis-dialog[open] { display: flex; flex-direction: column; }
+.bis-dialog--wide { --dialog-width: 48rem; }
+.bis-dialog--compact { --dialog-width: 32rem; }
+.bis-dialog::backdrop { background: rgb(12 48 42 / 58%); backdrop-filter: blur(3px); }
+.bis-dialog-header { display: flex; align-items: flex-start; gap: .875rem; flex: none; padding: var(--dialog-padding); border-bottom: 1px solid var(--line); }
+.bis-dialog-icon { display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; flex: none; border: 1px solid var(--success-line); border-radius: .75rem; background: var(--accent-soft); color: var(--accent); }
+.bis-dialog-icon svg { width: 1.25rem; height: 1.25rem; }
+.bis-dialog-heading { flex: 1; min-width: 0; align-self: center; }
+.bis-dialog .bis-dialog-heading h2 { margin: 0; color: var(--ink); font-size: 1.25rem; line-height: 1.3; font-weight: 650; letter-spacing: -.02em; overflow-wrap: anywhere; }
+.bis-dialog-heading h2:focus { outline: none; }
+.bis-dialog .bis-dialog-heading p { margin: .375rem 0 0; color: var(--muted); font-size: .875rem; line-height: 1.5; overflow-wrap: anywhere; }
+.bis-dialog-close { display: inline-grid; place-items: center; flex: none; width: 2.75rem; height: 2.75rem; margin: -.25rem -.25rem 0 0; border: 1px solid transparent; border-radius: .625rem; color: var(--muted); background: transparent; cursor: pointer; }
+.bis-dialog-close svg { width: 1.25rem; height: 1.25rem; }
+.bis-dialog-close:hover { border-color: var(--line); color: var(--ink); background: var(--canvas); }
+.bis-dialog-close:active { background: var(--accent-soft); }
+.bis-dialog-body { min-height: 0; min-width: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--dialog-padding); scroll-padding-block: var(--dialog-padding); }
+.record-dialog > form { display: flex; flex-direction: column; gap: 0; min-height: 0; min-width: 0; overflow: hidden; }
+.bis-dialog-footer, .record-dialog .form-component-actions { display: flex; justify-content: flex-end; align-items: center; flex: none; flex-wrap: wrap; gap: .75rem; margin: 0; padding: 1rem var(--dialog-padding); border-top: 1px solid var(--line); background: var(--canvas); }
+.bis-dialog .button { min-height: 2.75rem; font-size: .875rem; }
+.bis-dialog .form-control { min-height: 2.75rem; font-size: .875rem; }
+.bis-dialog .form-label { font-size: .875rem; }
+.bis-dialog textarea.form-control { resize: vertical; }
+.bis-dialog .form-error { display: block; margin-top: .375rem; line-height: 1.5; font-size: .8125rem; }
+.record-dialog .bis-dialog-body > :last-child { margin-bottom: 0; }
+.record-dialog .record-form-grid > div { min-width: 0; }
+.record-dialog .official-photo-help, .record-dialog .incident-field-help { margin: .5rem 0 0; color: var(--muted); font-size: .8125rem; line-height: 1.5; }
+.record-dialog input[type="file"] { padding: .375rem; font-size: .8125rem; }
+.record-dialog input[type="file"]::file-selector-button { margin-right: .625rem; padding: .375rem .625rem; border: 0; border-radius: .25rem; background: var(--accent-soft); color: var(--accent); font: inherit; font-weight: 600; cursor: pointer; }
+.record-dialog .record-voter-field label { min-height: 1.75rem; font-size: .875rem; }
+.record-dialog .official-photo-preview label { min-height: 2.75rem; }
+.record-dialog .complaint-optional-fields { margin-bottom: 0; }
+.record-dialog .complaint-optional-fields summary { line-height: 1.5; }
+.record-reference { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .375rem 1rem; margin-bottom: 1.125rem; padding: .75rem 1rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--canvas); color: var(--muted); font-size: .875rem; }
+.record-reference strong { color: var(--ink); font-weight: 600; }
+.bis-dialog-message { margin: 0; color: var(--ink); font-size: .9375rem; line-height: 1.6; overflow-wrap: anywhere; }
+.bis-dialog-warning { margin: .75rem 0 0; color: var(--danger); font-size: .875rem; line-height: 1.5; }
+.bis-dialog--danger .bis-dialog-icon { color: var(--danger); background: var(--danger-soft); border-color: var(--danger-line); }
+.bis-dialog-destructive { color: #fff; background: var(--danger); }
+.bis-dialog-destructive:hover:not(:disabled) { background: var(--danger-hover); }
+.bis-dialog-destructive:focus-visible { outline-color: var(--danger); }
+.service-dialog-checklist { padding: 1.125rem; border: 1px solid var(--line); border-radius: .75rem; background: var(--canvas); }
+.bis-dialog .service-dialog-checklist h3 { display: flex; align-items: center; gap: .5rem; margin: 0 0 .875rem; color: var(--ink); font-size: .875rem; font-weight: 650; }
+.service-dialog-checklist h3 svg { width: 1.125rem; height: 1.125rem; color: var(--accent); }
+.service-dialog-checklist ul { display: grid; gap: .75rem; margin: 0; padding: 0; list-style: none; }
+.service-dialog-checklist li { display: flex; align-items: flex-start; gap: .625rem; color: var(--muted); font-size: .875rem; line-height: 1.5; }
+.service-dialog-check { flex: none; color: var(--accent); font-weight: 700; }
+.service-dialog-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; margin: 1.25rem 0 0; }
+.service-dialog-meta dt { margin-bottom: .375rem; color: var(--muted); font-size: .8125rem; }
+.service-dialog-meta dd { margin: 0; color: var(--ink); font-size: .875rem; font-weight: 600; line-height: 1.5; }
+body.dialog-open { overflow: hidden; }
+@media (max-width: 639px) {
+    .bis-dialog { --dialog-padding: 1rem; width: calc(100% - 1.5rem); max-height: calc(100dvh - 1.5rem); border-radius: .875rem; }
+    .bis-dialog-header { gap: .625rem; }
+    .bis-dialog-icon { width: 2.25rem; height: 2.25rem; border-radius: .625rem; }
+    .bis-dialog .bis-dialog-heading h2 { font-size: 1.125rem; }
+    .bis-dialog .bis-dialog-heading p { font-size: .8125rem; }
+    .bis-dialog-close { margin-top: -.25rem; }
+    .bis-dialog-footer, .record-dialog .form-component-actions { gap: .5rem; padding-block: .875rem; }
+    .bis-dialog-footer .button, .record-dialog .form-component-actions .button { flex: 1 1 auto; padding-inline: .875rem; }
+    .bis-dialog .form-control { font-size: 1rem; }
+    .service-dialog-meta { grid-template-columns: 1fr; gap: 1rem; }
+}
+@media print { .bis-dialog { display: none !important; } }

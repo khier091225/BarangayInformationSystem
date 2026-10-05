@@ -91,7 +91,7 @@
                                 <a href="{{ route('officials.edit', [$official]) }}" style="color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--input-line); border-radius: 4px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="official-edit-dialog-{{ $official->getKey() }}">
                                     Edit
                                 </a>
-                                <form method="POST" action="{{ route('officials.destroy', [$official]) }}" onsubmit="return confirm('Are you sure you want to remove this official?');" style="display: inline;">
+                                <form method="POST" action="{{ route('officials.destroy', [$official]) }}" onsubmit="return confirm('Are you sure you want to remove this official?');" data-confirm-title="Delete official?" data-confirm-message="Delete the official record for {{ $official->name }}?" data-confirm-label="Delete official" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="record-delete">
@@ -116,12 +116,12 @@
         {{ $officials->links() }}
     </div>
 
-    <x-record-dialog id="official-create-dialog" title="Add New Official" description="Register an elective or appointed official to the barangay council." icon="badge-check" :open-on-load="$errors->any() && old('_record_form') === 'officials.create'">
+    <x-record-dialog id="official-create-dialog" title="Add official" icon="badge-check" :open-on-load="$errors->any() && old('_record_form') === 'officials.create'">
         <x-officials.form :modal="true" />
     </x-record-dialog>
 
     @foreach ($officials as $official)
-        <x-record-dialog :id="'official-edit-dialog-'.$official->getKey()" title="Edit Official" :description="'Update the details for '.$official->name.'.'" icon="badge-check" :open-on-load="$errors->any() && old('_record_form') === 'officials.edit.'.$official->getKey()">
+        <x-record-dialog :id="'official-edit-dialog-'.$official->getKey()" title="Edit official" :description="'Update the details for '.$official->name.'.'" icon="badge-check" :open-on-load="$errors->any() && old('_record_form') === 'officials.edit.'.$official->getKey()">
             <x-officials.form :official="$official" :modal="true" />
         </x-record-dialog>
     @endforeach

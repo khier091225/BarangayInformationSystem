@@ -82,7 +82,7 @@
                                 <a href="{{ route('blotters.edit', [$blotter]) }}" style="color: var(--accent); text-decoration: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 4px;" data-record-dialog-trigger aria-haspopup="dialog" aria-controls="blotter-edit-dialog-{{ $blotter->getKey() }}">
                                     Edit
                                 </a>
-                                <form method="POST" action="{{ route('blotters.destroy', [$blotter]) }}" onsubmit="return confirm('Are you sure you want to delete this blotter record?');" style="display: inline;">
+                                <form method="POST" action="{{ route('blotters.destroy', [$blotter]) }}" onsubmit="return confirm('Are you sure you want to delete this blotter record?');" data-confirm-title="Delete blotter record?" data-confirm-message="Delete the blotter record for Case #{{ $blotter->getKey() }}?" data-confirm-label="Delete blotter record" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="record-delete">
@@ -107,12 +107,12 @@
         {{ $blotters->links() }}
     </div>
 
-    <x-record-dialog id="blotter-create-dialog" title="Record blotter" description="Record the complainant and what happened. New cases start as Pending." icon="notebook-pen" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'blotters.create'">
+    <x-record-dialog id="blotter-create-dialog" title="Record blotter" description="New cases start as Pending." icon="notebook-pen" :open-on-load="$errors->any() && old('_record_form') === 'blotters.create'">
         <x-blotters.create-form :modal="true" />
     </x-record-dialog>
 
     @foreach ($blotters as $blotter)
-        <x-record-dialog :id="'blotter-edit-dialog-'.$blotter->getKey()" title="Edit blotter record" :description="'Update case #'.$blotter->getKey().' and its hearing status.'" icon="notebook-pen" :wide="true" :open-on-load="$errors->any() && old('_record_form') === 'blotters.edit.'.$blotter->getKey()">
+        <x-record-dialog :id="'blotter-edit-dialog-'.$blotter->getKey()" title="Edit blotter record" :description="'Case #'.$blotter->getKey().' — '.$blotter->complainant" icon="notebook-pen" :open-on-load="$errors->any() && old('_record_form') === 'blotters.edit.'.$blotter->getKey()">
             <x-blotters.edit-form :blotter="$blotter" :modal="true" />
         </x-record-dialog>
     @endforeach

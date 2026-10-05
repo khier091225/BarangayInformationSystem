@@ -15,14 +15,6 @@
             -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid rgb(225 231 222 / 80%);
         }
-        dialog::backdrop {
-            background: rgb(12 48 42 / 65%);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-        }
-        dialog {
-            margin: auto;
-        }
         #home-main {
             scroll-margin-top: 5rem;
         }
@@ -623,56 +615,30 @@
         </div>
     </footer>
 
-    <!-- Comprehensive Service Requirement Modal -->
-    <dialog id="service-dialog" aria-labelledby="modal-title" aria-describedby="modal-description" class="w-full max-w-lg bg-white p-0 rounded-3xl overflow-hidden shadow-2xl backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm border border-slate-200">
-        <div class="p-6 sm:p-8">
-            <div class="flex items-start justify-between mb-5">
-                <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 border border-emerald-100 shadow-sm">
-                    <i data-lucide="info" class="w-5 h-5"></i>
+    <x-dialog id="service-dialog" title="Service details" description="" icon="files">
+        <div class="bis-dialog-body">
+            <section class="service-dialog-checklist" aria-labelledby="service-checklist-title">
+                <h3 id="service-checklist-title"><i data-lucide="clipboard-list" aria-hidden="true"></i> What to prepare</h3>
+                <ul id="modal-checklist"></ul>
+            </section>
+            <dl class="service-dialog-meta">
+                <div>
+                    <dt>Processing time</dt>
+                    <dd id="modal-turnaround"></dd>
                 </div>
-                <button type="button" data-service-dialog-close class="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors" aria-label="Close modal">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-            
-            <h3 id="modal-title" class="text-2xl font-extrabold text-slate-900 mb-2 tracking-tight"></h3>
-            <p id="modal-description" class="text-slate-600 text-sm leading-relaxed mb-5"></p>
-            
-            <!-- Requirements List Box -->
-            <div class="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200/80 mb-5">
-                <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                    <i data-lucide="clipboard-list" class="w-4 h-4 text-emerald-600"></i>
-                    Required Documents / Checklist
-                </h4>
-                <ul id="modal-checklist" class="space-y-2 text-xs sm:text-sm text-slate-700"></ul>
-            </div>
-
-            <!-- Meta Badges -->
-            <div class="grid grid-cols-2 gap-3 mb-6 text-xs">
-                <div class="bg-emerald-50/70 border border-emerald-100 p-3 rounded-xl">
-                    <span class="text-slate-500 font-medium block">Processing Time:</span>
-                    <strong id="modal-turnaround" class="text-emerald-800 font-bold"></strong>
+                <div>
+                    <dt>Fees</dt>
+                    <dd id="modal-fees"></dd>
                 </div>
-                <div class="bg-slate-100 p-3 rounded-xl border border-slate-200/70">
-                    <span class="text-slate-500 font-medium block">Fee Guidelines:</span>
-                    <strong id="modal-fees" class="text-slate-800 font-bold"></strong>
-                </div>
-            </div>
-            
-            <div class="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-5 border-t border-slate-100">
-                <button type="button" data-service-dialog-close class="w-full sm:w-auto px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">
-                    Close
-                </button>
-                <a id="modal-request-link" href="{{ route('account.requests.certificate.create') }}" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl transition-colors shadow-md shadow-emerald-900/15">
-                    @auth
-                        Request Online <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    @else
-                        Proceed to Request <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    @endauth
-                </a>
-            </div>
+            </dl>
         </div>
-    </dialog>
+        <x-slot:footer>
+            <button type="button" data-dialog-close class="button button-outline">Close</button>
+            <a id="modal-request-link" href="{{ route('account.requests.certificate.create') }}" class="button button-primary">
+                Request online <i data-lucide="arrow-right" aria-hidden="true"></i>
+            </a>
+        </x-slot:footer>
+    </x-dialog>
 
     <!-- Mobile Drawer & Modal Scripts -->
     <script>
@@ -727,23 +693,28 @@
 
         // Service Details Modal Function
         function showServiceModal(title, description, checklist, turnaround, fees, requestUrl = @js(route('account.requests.certificate.create'))) {
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-description').textContent = description;
+            document.getElementById('service-dialog-title').textContent = title;
+            document.getElementById('service-dialog-description').textContent = description;
             document.getElementById('modal-request-link').href = requestUrl;
             
             const listEl = document.getElementById('modal-checklist');
             listEl.innerHTML = '';
             checklist.forEach(item => {
                 const li = document.createElement('li');
-                li.className = 'flex items-start gap-2';
-                li.innerHTML = '<span class="text-emerald-600 font-bold">&check;</span><span>' + item + '</span>';
+                const check = document.createElement('span');
+                check.className = 'service-dialog-check';
+                check.setAttribute('aria-hidden', 'true');
+                check.textContent = '\u2713';
+                const text = document.createElement('span');
+                text.textContent = item;
+                li.append(check, text);
                 listEl.appendChild(li);
             });
 
             document.getElementById('modal-turnaround').textContent = turnaround;
             document.getElementById('modal-fees').textContent = fees;
 
-            document.getElementById('service-dialog').showModal();
+            document.getElementById('service-dialog').dispatchEvent(new Event('service-dialog:open'));
         }
     </script>
 <x-chatbot-widget />

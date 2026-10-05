@@ -13,6 +13,7 @@
     @method('PUT')
     @if ($modal) <input type="hidden" name="_record_form" value="{{ $formContext }}"> @endif
 
+    @if ($modal) <div class="bis-dialog-body"> @endif
     <div class="record-form-grid">
         <div>
             <x-form.label :for="$fieldId('complainant')" required>Complainant Name</x-form.label>
@@ -39,6 +40,7 @@
     </div>
 
     @if ($modal)
+        </div>
         <div class="form-component-actions">
             <button type="button" class="button button-outline" data-record-dialog-close>Cancel</button>
             <button type="submit" class="button button-primary">Update blotter record</button>
